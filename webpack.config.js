@@ -98,7 +98,8 @@ module.exports = [
             'editor': './src/playground/editor.jsx',
             'player': './src/playground/player.jsx',
             'fullscreen': './src/playground/fullscreen.jsx',
-            'embed': './src/playground/embed.jsx'
+            'embed': './src/playground/embed.jsx',
+            'packager': './src/playground/packager.jsx'
         },
         output: {
             path: path.resolve(__dirname, 'build')
@@ -111,21 +112,9 @@ module.exports = [
             rules: base.module.rules.concat([
                 {
                     test: /\.(svg|png|wav|gif|jpg|mp3)$/,
-                    loader: 'file-loader',
-                    options: {
-                        outputPath: 'static/assets/'
-                    }
+                    loader: 'url-loader'
                 }
             ])
-        },
-        optimization: {
-            splitChunks: {
-                chunks: 'all',
-                minChunks: 2
-            },
-            runtimeChunk: {
-                name: 'runtime'
-            }
         },
         plugins: base.plugins.concat([
             new webpack.DefinePlugin({
@@ -161,6 +150,13 @@ module.exports = [
                 filename: 'embed.html',
                 title: 'TurboWarp',
                 sentryConfig: process.env.SENTRY_CONFIG
+            }),
+            new HtmlWebpackPlugin({
+                chunks: ['packager'],
+                template: 'src/playground/packager.ejs',
+                filename: 'packager.html',
+                title: 'Packaged Project',
+                inject: false
             }),
             new HtmlWebpackPlugin({
                 chunks: [],
@@ -208,11 +204,7 @@ module.exports = [
                 rules: base.module.rules.concat([
                     {
                         test: /\.(svg|png|wav|gif|jpg|mp3)$/,
-                        loader: 'file-loader',
-                        options: {
-                            outputPath: 'static/assets/',
-                            publicPath: `${STATIC_PATH}/assets/`
-                        }
+                        loader: 'url-loader'
                     }
                 ])
             },
