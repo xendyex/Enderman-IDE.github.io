@@ -152,13 +152,6 @@ module.exports = [
                 sentryConfig: process.env.SENTRY_CONFIG
             }),
             new HtmlWebpackPlugin({
-                chunks: ['packager'],
-                template: 'src/playground/packager.ejs',
-                filename: 'packager.html',
-                title: 'Packaged Project',
-                inject: false
-            }),
-            new HtmlWebpackPlugin({
                 chunks: [],
                 template: 'src/playground/privacy.html',
                 filename: 'privacy.html'
