@@ -1,15 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import VirtualMachine from 'scratch-vm';
 
 import {
     openLoadingProject,
     closeLoadingProject
 } from '../reducers/modals';
+import {
+    setCloud
+} from '../reducers/tw';
 
 const TWPackagerHOC = function (WrappedComponent) {
     class PackagerComponent extends React.Component {
         componentDidMount () {
+            const options = window.__OPTIONS__;
+            if (options) {
+                this.props.vm.setCompilerOptions(options.compilerOptions);
+                this.props.vm.setFramerate(options.framerate);
+                this.props.vm.setTurboMode(options.turbo);
+                this.props.vm.renderer.setUseHighQualityPen(options.highQualityPen);
+            }
+
             // fetch the project data from the global variable that the packager stores it in
             // this will either convert the data: URI to an array buffer for us, or fetch it from another file
             const projectData = window.__PROJECT_DATA__;
@@ -35,6 +47,7 @@ const TWPackagerHOC = function (WrappedComponent) {
                 /* eslint-disable no-unused-vars */
                 onLoadingFinished,
                 onLoadingStarted,
+                onSetCloud,
                 vm,
                 /* eslint-enable no-unused-vars */
                 ...props
@@ -47,21 +60,18 @@ const TWPackagerHOC = function (WrappedComponent) {
         }
     }
     PackagerComponent.propTypes = {
-        vm: PropTypes.shape({
-            loadProject: PropTypes.func,
-            renderer: PropTypes.shape({
-                draw: PropTypes.func
-            })
-        }),
+        vm: PropTypes.instanceOf(VirtualMachine),
         onLoadingFinished: PropTypes.func,
-        onLoadingStarted: PropTypes.func
+        onLoadingStarted: PropTypes.func,
+        onSetCloud: PropTypes.func
     };
     const mapStateToProps = state => ({
         vm: state.scratchGui.vm
     });
     const mapDispatchToProps = dispatch => ({
         onLoadingStarted: () => dispatch(openLoadingProject()),
-        onLoadingFinished: () => dispatch(closeLoadingProject())
+        onLoadingFinished: () => dispatch(closeLoadingProject()),
+        onSetCloud: cloud => dispatch(setCloud(cloud))
     });
     return connect(
         mapStateToProps,
