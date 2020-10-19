@@ -178,7 +178,7 @@ const defaultMappings = {
             type: 'virtual_cursor',
             high: '+x',
             low: '-x',
-            sensitivity: 10,
+            sensitivity: 7,
             deadZone: 0.2
         },
         {
@@ -189,7 +189,7 @@ const defaultMappings = {
             type: 'virtual_cursor',
             high: '-y',
             low: '+y',
-            sensitivity: 10,
+            sensitivity: 7,
             deadZone: 0.2
         }
     ]
