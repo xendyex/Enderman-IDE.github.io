@@ -12,7 +12,7 @@ import {setProjectChanged, setProjectUnchanged} from '../reducers/project-change
 import {setRunningState, setTurboState, setStartedState} from '../reducers/vm-status';
 import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
-import {setFramerateState, setCompilerOptionsState} from '../reducers/tw';
+import {setFramerateState, setCompilerOptionsState, setVirtualCursorState} from '../reducers/tw';
 import GamepadLib from './tw-gamepadlib';
 
 /*
@@ -169,6 +169,7 @@ const vmListenerHOC = function (WrappedComponent) {
         }
         handleGamepadMouseMove (e) {
             const {x, y} = e.detail;
+            this.props.onVirtualCursorMoved(x, y);
             this.props.vm.postIOData('mouse', {
                 canvasWidth: 480,
                 x: x + 240,
@@ -225,6 +226,7 @@ const vmListenerHOC = function (WrappedComponent) {
         onTurboModeOn: PropTypes.func.isRequired,
         onFramerateChanged: PropTypes.func.isRequired,
         onCompilerOptionsChanged: PropTypes.func.isRequired,
+        onVirtualCursorMoved: PropTypes.func.isRequired,
         projectChanged: PropTypes.bool,
         shouldUpdateTargets: PropTypes.bool,
         shouldUpdateProjectChanged: PropTypes.bool,
@@ -266,6 +268,7 @@ const vmListenerHOC = function (WrappedComponent) {
         onTurboModeOff: () => dispatch(setTurboState(false)),
         onFramerateChanged: framerate => dispatch(setFramerateState(framerate)),
         onCompilerOptionsChanged: options => dispatch(setCompilerOptionsState(options)),
+        onVirtualCursorMoved: (x, y) => dispatch(setVirtualCursorState([x, y])),
         onShowExtensionAlert: data => {
             dispatch(showExtensionAlert(data));
         },

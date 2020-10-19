@@ -7,6 +7,7 @@ const SET_WINDOW_FULLSCREEN = 'tw/SET_WINDOW_FULLSCREEN';
 const SET_DIMENSIONS = 'tw/SET_DIMENSIONS';
 const SET_AUTHOR = 'tw/SET_AUTHOR';
 const SET_DESCRIPTION = 'tw/SET_DESCRIPTION';
+const SET_VIRTUAL_CURSOR_STATE = 'tw/SET_VIRTUAL_CURSOR_STATE';
 
 export const initialState = {
     framerate: 30,
@@ -26,7 +27,8 @@ export const initialState = {
     description: {
         instructions: '',
         credits: ''
-    }
+    },
+    virtualCursor: null
 };
 
 const reducer = function (state, action) {
@@ -67,6 +69,10 @@ const reducer = function (state, action) {
     case SET_DESCRIPTION:
         return Object.assign({}, state, {
             description: action.description
+        });
+    case SET_VIRTUAL_CURSOR_STATE:
+        return Object.assign({}, state, {
+            virtualCursor: action.virtualCursor
         });
     default:
         return state;
@@ -136,6 +142,13 @@ const setDescription = function (description) {
     };
 };
 
+const setVirtualCursorState = function (virtualCursor) {
+    return {
+        type: SET_VIRTUAL_CURSOR_STATE,
+        virtualCursor: virtualCursor
+    };
+};
+
 export {
     reducer as default,
     initialState as twInitialState,
@@ -147,5 +160,6 @@ export {
     setIsWindowFullScreen,
     setDimensions,
     setAuthor,
-    setDescription
+    setDescription,
+    setVirtualCursorState
 };

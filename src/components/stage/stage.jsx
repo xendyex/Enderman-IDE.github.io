@@ -29,6 +29,7 @@ const StageComponent = props => {
         onDeactivateColorPicker,
         onDoubleClick,
         onQuestionAnswered,
+        virtualCursor,
         ...boxProps
     } = props;
 
@@ -75,6 +76,14 @@ const StageComponent = props => {
                     </Box>
                     {isColorPicking && colorInfo ? (
                         <Loupe colorInfo={colorInfo} />
+                    ) : null}
+                    {virtualCursor ? (
+                        <div
+                            className={styles.virtualCursor}
+                            style={{
+                                transform: `translate(${virtualCursor[0] * stageDimensions.width / 480}px, ${-virtualCursor[1] * stageDimensions.height / 360}px)`
+                            }}
+                        />
                     ) : null}
                 </Box>
 
@@ -146,7 +155,8 @@ StageComponent.propTypes = {
     onQuestionAnswered: PropTypes.func,
     question: PropTypes.string,
     stageSize: PropTypes.oneOf(Object.keys(STAGE_DISPLAY_SIZES)).isRequired,
-    useEditorDragStyle: PropTypes.bool
+    useEditorDragStyle: PropTypes.bool,
+    virtualCursor: PropTypes.arrayOf(PropTypes.number)
 };
 StageComponent.defaultProps = {
     dragRef: () => {}
