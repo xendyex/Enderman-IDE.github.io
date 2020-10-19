@@ -159,7 +159,11 @@ const vmListenerHOC = function (WrappedComponent) {
         }
         handleGamepadMouseDown () {
             this.props.vm.postIOData('mouse', {
-                isDown: true
+                isDown: true,
+                canvasWidth: 480,
+                x: this.props.vm.runtime.ioDevices.mouse._clientX,
+                canvasHeight: 360,
+                y: this.props.vm.runtime.ioDevices.mouse._clientY
             });
         }
         handleGamepadMouseUp () {
