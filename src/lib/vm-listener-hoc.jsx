@@ -13,6 +13,7 @@ import {setRunningState, setTurboState, setStartedState} from '../reducers/vm-st
 import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
 import {setFramerateState, setCompilerOptionsState} from '../reducers/tw';
+import GamepadLib from './tw-gamepadlib';
 
 /*
  * Higher Order Component to manage events emitted by the VM
@@ -27,7 +28,12 @@ const vmListenerHOC = function (WrappedComponent) {
                 'handleKeyDown',
                 'handleKeyUp',
                 'handleProjectChanged',
-                'handleTargetsUpdate'
+                'handleTargetsUpdate',
+                'handleGamepadButtonDown',
+                'handleGamepadButtonUp',
+                'handleGamepadMouseDown',
+                'handleGamepadMouseUp',
+                'handleGamepadMouseMove'
             ]);
             // We have to start listening to the vm here rather than in
             // componentDidMount because the HOC mounts the wrapped component,
@@ -56,6 +62,17 @@ const vmListenerHOC = function (WrappedComponent) {
             if (this.props.attachKeyboardEvents) {
                 document.addEventListener('keydown', this.handleKeyDown);
                 document.addEventListener('keyup', this.handleKeyUp);
+
+                this.gamepadLib = new GamepadLib();
+                this.gamepadLib.virtualCursor.maxX = 240;
+                this.gamepadLib.virtualCursor.minX = -240;
+                this.gamepadLib.virtualCursor.maxY = 180;
+                this.gamepadLib.virtualCursor.minY = -180;
+                this.gamepadLib.addEventListener('keydown', this.handleGamepadButtonDown);
+                this.gamepadLib.addEventListener('keyup', this.handleGamepadButtonUp);
+                this.gamepadLib.addEventListener('mousedown', this.handleGamepadMouseDown);
+                this.gamepadLib.addEventListener('mouseup', this.handleGamepadMouseUp);
+                this.gamepadLib.addEventListener('mousemove', this.handleGamepadMouseMove);
             }
             this.props.vm.postIOData('userData', {username: this.props.username});
         }
@@ -125,6 +142,39 @@ const vmListenerHOC = function (WrappedComponent) {
             if (e.target !== document && e.target !== document.body) {
                 e.preventDefault();
             }
+        }
+        handleGamepadButtonDown (e) {
+            const key = e.detail;
+            this.props.vm.postIOData('keyboard', {
+                key: key,
+                isDown: true
+            });
+        }
+        handleGamepadButtonUp (e) {
+            const key = e.detail;
+            this.props.vm.postIOData('keyboard', {
+                key: key,
+                isDown: false
+            });
+        }
+        handleGamepadMouseDown () {
+            this.props.vm.postIOData('mouse', {
+                isDown: true
+            });
+        }
+        handleGamepadMouseUp () {
+            this.props.vm.postIOData('mouse', {
+                isDown: false
+            });
+        }
+        handleGamepadMouseMove (e) {
+            const {x, y} = e.detail;
+            this.props.vm.postIOData('mouse', {
+                canvasWidth: 480,
+                x: x + 240,
+                canvasHeight: 380,
+                y: 180 - y
+            });
         }
         render () {
             const {
