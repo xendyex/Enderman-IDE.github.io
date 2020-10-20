@@ -2,41 +2,60 @@ import inactiveImage from './inactive.png';
 import activeImage from './active.png';
 
 let root = null;
+let injected = false;
+let cursorContainer = null;
+let cursorImg = null;
 
-const cursorContainer = document.createElement('div');
-cursorContainer.style.userSelect = 'none';
-cursorContainer.style.pointerEvents = 'none';
-cursorContainer.style.willChange = 'transform';
-
-const cursorImg = document.createElement('img');
-cursorImg.style.display = 'block';
-cursorImg.style.transform = 'translate(-50%, -50%)';
-cursorImg.style.imageRendering = 'optimizeSpeed';
-cursorImg.style.imageRendering = 'crisp-edges';
-cursorImg.style.imageRendering = 'pixelated';
-cursorContainer.appendChild(cursorImg);
-
-const inject = el => {
-    root = el;
+const inject = () => {
+    if (!root) {
+        return;
+    }
+    if (!cursorContainer) {
+        cursorContainer = document.createElement('div');
+        cursorContainer.style.userSelect = 'none';
+        cursorContainer.style.pointerEvents = 'none';
+        cursorContainer.style.willChange = 'transform';
+    }
+    if (!cursorImg) {
+        cursorImg = document.createElement('img');
+        cursorImg.src = inactiveImage;
+        cursorImg.style.display = 'block';
+        cursorImg.style.transform = 'translate(-50%, -50%)';
+        cursorImg.style.imageRendering = 'optimizeSpeed';
+        cursorImg.style.imageRendering = 'crisp-edges';
+        cursorImg.style.imageRendering = 'pixelated';
+        cursorContainer.appendChild(cursorImg);
+    }
     root.appendChild(cursorContainer);
     root.style.position = 'absolute';
     root.style.top = '0';
     root.style.left = '0';
-    setDown(false);
-    setXY(0, 0);
+    injected = true;
+};
+
+const injectIfMissing = () => {
+    if (!injected) {
+        inject();
+    }
+};
+
+const makeVisible = () => {
+    injectIfMissing();
+    root.hidden = false;
 };
 
 const ref = el => {
-    if (el) {
-        inject(el);
+    if (root) {
+        while (root.firstChild) {
+            root.removeChild(root.firstChild);
+        }
     }
+    root = el;
+    injected = false;
 };
 
 const setDown = down => {
-    if (!root) {
-        return;
-    }
-    root.style.display = '';
+    makeVisible();
     if (down) {
         cursorImg.src = activeImage;
     } else {
@@ -45,10 +64,7 @@ const setDown = down => {
 };
 
 const setXY = (x, y) => {
-    if (!root) {
-        return;
-    }
-    root.style.display = '';
+    makeVisible();
     const stageX = 240 + x;
     const stageY = 180 - y;
     cursorContainer.style.transform = `translate(${stageX}px, ${stageY}px)`;
@@ -58,7 +74,7 @@ const hide = () => {
     if (!root) {
         return;
     }
-    root.style.display = 'none';
+    root.hidden = true;
 };
 
 export {
