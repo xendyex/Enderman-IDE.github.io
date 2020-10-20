@@ -180,7 +180,7 @@ const defaultMappings = {
             type: 'virtual_cursor',
             high: '+x',
             low: '-x',
-            sensitivity: 7,
+            sensitivity: 0.5,
             deadZone: 0.2
         },
         {
@@ -191,7 +191,7 @@ const defaultMappings = {
             type: 'virtual_cursor',
             high: '-y',
             low: '+y',
-            sensitivity: 7,
+            sensitivity: 0.5,
             deadZone: 0.2
         }
     ]
@@ -273,6 +273,8 @@ class GamepadLib extends EventTarget {
         this.update = this.update.bind(this);
 
         this.animationFrame = null;
+        this.currentTime = null;
+        this.deltaTime = 0;
 
         this.virtualCursor = {
             x: 0,
@@ -321,6 +323,7 @@ class GamepadLib extends EventTarget {
         if (this.gamepads.size === 0) {
             cancelAnimationFrame(this.animationFrame);
             this.animationFrame = null;
+            this.currentTime = null;
         }
     }
 
@@ -381,7 +384,7 @@ class GamepadLib extends EventTarget {
 
             const action = state === HIGH ? mapping.high : state === LOW ? mapping.low : null;
             const range = 1 - deadZone;
-            const speed = ((Math.abs(value) - deadZone) / range) * mapping.sensitivity;
+            const speed = ((Math.abs(value) - deadZone) / range) * mapping.sensitivity * this.deltaTime;
             if (action === '+x') {
                 this.virtualCursor.x += speed;
                 this.virtualCursor.modified = true;
@@ -398,7 +401,14 @@ class GamepadLib extends EventTarget {
         }
     }
 
-    update () {
+    update (time) {
+        if (this.currentTime === null) {
+            this.deltaTime = 60 / 1000;
+        } else {
+            this.deltaTime = time - this.currentTime;
+        }
+        this.currentTime = time;
+
         this.animationFrame = requestAnimationFrame(this.update);
         const gamepads = navigator.getGamepads();
 
