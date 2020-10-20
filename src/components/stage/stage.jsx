@@ -14,6 +14,8 @@ import {STAGE_DISPLAY_SIZES} from '../../lib/layout-constants.js';
 import {getStageDimensions} from '../../lib/screen-utils.js';
 import styles from './stage.css';
 
+import * as virtualCursor from '../../lib/tw-virtual-cursor/virtual-cursor';
+
 const StageComponent = props => {
     const {
         canvas,
@@ -29,7 +31,6 @@ const StageComponent = props => {
         onDeactivateColorPicker,
         onDoubleClick,
         onQuestionAnswered,
-        virtualCursor,
         ...boxProps
     } = props;
 
@@ -77,14 +78,7 @@ const StageComponent = props => {
                     {isColorPicking && colorInfo ? (
                         <Loupe colorInfo={colorInfo} />
                     ) : null}
-                    {virtualCursor ? (
-                        <div
-                            className={styles.virtualCursor}
-                            style={{
-                                transform: `translate(${virtualCursor[0] * stageDimensions.width / 480}px, ${-virtualCursor[1] * stageDimensions.height / 360}px)`
-                            }}
-                        />
-                    ) : null}
+                    <div ref={virtualCursor.ref} />
                 </Box>
 
                 {/* `stageOverlays` is for items that should *not* have their overflow contained within the stage */}
@@ -155,8 +149,7 @@ StageComponent.propTypes = {
     onQuestionAnswered: PropTypes.func,
     question: PropTypes.string,
     stageSize: PropTypes.oneOf(Object.keys(STAGE_DISPLAY_SIZES)).isRequired,
-    useEditorDragStyle: PropTypes.bool,
-    virtualCursor: PropTypes.arrayOf(PropTypes.number)
+    useEditorDragStyle: PropTypes.bool
 };
 StageComponent.defaultProps = {
     dragRef: () => {}

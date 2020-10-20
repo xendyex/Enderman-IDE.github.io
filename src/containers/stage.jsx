@@ -19,6 +19,7 @@ import {
 } from '../reducers/color-picker';
 
 import {setHighQualityPenState} from '../reducers/tw';
+import * as virtualCursor from '../lib/tw-virtual-cursor/virtual-cursor';
 
 const colorPickerRadius = 20;
 const dragThreshold = 3; // Same as the block drag threshold
@@ -93,8 +94,7 @@ class Stage extends React.Component {
             this.props.dimensions !== nextProps.dimensions ||
             this.state.question !== nextState.question ||
             this.props.micIndicator !== nextProps.micIndicator ||
-            this.props.isStarted !== nextProps.isStarted ||
-            this.props.virtualCursor !== nextProps.virtualCursor;
+            this.props.isStarted !== nextProps.isStarted;
     }
     componentDidUpdate (prevProps) {
         if (this.props.isColorPicking && !prevProps.isColorPicking) {
@@ -187,6 +187,7 @@ class Stage extends React.Component {
         this.props.vm.setEditingTarget(targetId);
     }
     onMouseMove (e) {
+        virtualCursor.hide(); // tw: mouse hides virtual cursor
         const {x, y} = getEventXY(e);
         const mousePosition = [x - this.rect.left, y - this.rect.top];
 
@@ -457,7 +458,6 @@ Stage.propTypes = {
     onDeactivateColorPicker: PropTypes.func,
     stageSize: PropTypes.oneOf(Object.keys(STAGE_DISPLAY_SIZES)).isRequired,
     useEditorDragStyle: PropTypes.bool,
-    virtualCursor: PropTypes.arrayOf(PropTypes.number),
     vm: PropTypes.instanceOf(VM).isRequired
 };
 
@@ -479,8 +479,7 @@ const mapStateToProps = state => ({
     isStarted: state.scratchGui.vmStatus.started,
     micIndicator: state.scratchGui.micIndicator,
     // Do not use editor drag style in fullscreen or player mode.
-    useEditorDragStyle: !(state.scratchGui.mode.isFullScreen || state.scratchGui.mode.isPlayerOnly),
-    virtualCursor: state.scratchGui.tw.virtualCursor
+    useEditorDragStyle: !(state.scratchGui.mode.isFullScreen || state.scratchGui.mode.isPlayerOnly)
 });
 
 const mapDispatchToProps = dispatch => ({

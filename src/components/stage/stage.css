@@ -152,13 +152,3 @@ stage doesn't "spill" out from under its rounded corners. instead, shift these o
     0% { opacity: 1; }
     100% { opacity: 0; }
 }
-
-.virtual-cursor {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 6px;
-    height: 6px;
-    border: 2px solid black;
-    background: white;
-}
