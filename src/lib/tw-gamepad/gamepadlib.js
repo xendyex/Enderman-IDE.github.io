@@ -180,7 +180,7 @@ const defaultMappings = {
             type: 'virtual_cursor',
             high: '+x',
             low: '-x',
-            sensitivity: 0.5,
+            sensitivity: 0.6,
             deadZone: 0.2
         },
         {
@@ -191,7 +191,7 @@ const defaultMappings = {
             type: 'virtual_cursor',
             high: '-y',
             low: '+y',
-            sensitivity: 0.5,
+            sensitivity: 0.6,
             deadZone: 0.2
         }
     ]
@@ -384,7 +384,9 @@ class GamepadLib extends EventTarget {
 
             const action = state === HIGH ? mapping.high : state === LOW ? mapping.low : null;
             const range = 1 - deadZone;
-            const speed = ((Math.abs(value) - deadZone) / range) * mapping.sensitivity * this.deltaTime;
+            // a value just beyond the deadzone should have a multiplier near 0, a value at 1/-1 should have a multiplier of 1
+            const multiplier = ((Math.abs(value) - deadZone) / range);
+            const speed = multiplier * multiplier * mapping.sensitivity * this.deltaTime;
             if (action === '+x') {
                 this.virtualCursor.x += speed;
                 this.virtualCursor.modified = true;
