@@ -1,8 +1,11 @@
-import log from './log';
+import log from '../log';
 
 const OFF = 0;
 const LOW = 1;
 const HIGH = 2;
+
+const BUTTON = 10;
+const AXIS = 11;
 
 /*
 Mapping types:
@@ -12,7 +15,7 @@ All key names will be interpreted as a KeyboardEvent.key value (https://develope
 high: "KeyName" is the name of the key to dispatch when a button reads a HIGH value
 low: "KeyName" is the name of the key to dispatch when a button reads a LOW value
 deadZone: 0.5 controls the minimum value necessary to be read in either + or - to trigger either high or low
-The high/low distinction is necessary for axis. Buttons will only use high
+The high/low distinction is necessary for axes. Buttons will only use high
 
 type: "mousedown" maps a button to control whether the mouse is down or not
 deadZone: 0.5 controls the minimum value to trigger a mousedown
@@ -41,8 +44,7 @@ const defaultMappings = {
             Xbox: B
             SNES-like: A
             */
-            type: 'key',
-            high: 'Escape'
+            type: 'none'
         }, {
             /*
             Button 2
@@ -202,13 +204,30 @@ const transformAndCopyMapping = mapping => {
         if (typeof copy.deadZone === 'undefined') {
             copy.deadZone = 0.5;
         }
+        if (typeof copy.high === 'undefined') {
+            copy.high = '';
+        }
+        if (typeof copy.low === 'undefined') {
+            copy.low = '';
+        }
     } else if (copy.type === 'mousedown') {
         copy._isDown = false;
         if (typeof copy.deadZone === 'undefined') {
             copy.deadZone = 0.5;
         }
     } else if (copy.type === 'virtual_cursor') {
-        // no-op
+        if (typeof copy.high === 'undefined') {
+            copy.high = '';
+        }
+        if (typeof copy.low === 'undefined') {
+            copy.low = '';
+        }
+        if (typeof copy.sensitivity === 'undefined') {
+            copy.sensitivity = 10;
+        }
+        if (typeof copy.deadZone === 'undefined') {
+            copy.deadZone = 0.5;
+        }
     } else if (copy.type === 'none') {
         // no-op
     } else {
@@ -265,6 +284,8 @@ class GamepadLib extends EventTarget {
             modified: false
         };
 
+        this._editor = null;
+
         this.addEventHandlers();
     }
 
@@ -272,7 +293,7 @@ class GamepadLib extends EventTarget {
         window.addEventListener('gamepadconnected', this.handleConnect);
         window.addEventListener('gamepaddisconnected', this.handleDisconnect);
     }
-    
+
     removeEventHandlers () {
         window.removeEventListener('gamepadconnected', this.handleConnect);
         window.removeEventListener('gamepaddisconnected', this.handleDisconnect);
@@ -282,17 +303,21 @@ class GamepadLib extends EventTarget {
         const gamepad = e.gamepad;
         const id = gamepad.id;
         log.info('connected', gamepad);
-        this.gamepads.set(id, new GamepadData(gamepad));
+        const gamepadData = new GamepadData(gamepad);
+        this.gamepads.set(id, gamepadData);
         if (this.animationFrame === null) {
             this.animationFrame = requestAnimationFrame(this.update);
         }
+        this.dispatchEvent(new CustomEvent('gamepadconnected', {detail: gamepadData}));
     }
 
     handleDisconnect (e) {
         const gamepad = e.gamepad;
         const id = gamepad.id;
         log.info('disconnected', gamepad);
+        const gamepadData = this.gamepads.get(id);
         this.gamepads.delete(id);
+        this.dispatchEvent(new CustomEvent('gamepaddisconnected', {detail: gamepadData}));
         if (this.gamepads.size === 0) {
             cancelAnimationFrame(this.animationFrame);
             this.animationFrame = null;
@@ -415,6 +440,208 @@ class GamepadLib extends EventTarget {
             }
             this.dispatchMouseMove(this.virtualCursor.x, this.virtualCursor.y);
         }
+    }
+
+    editor () {
+        if (!this._editor) {
+            // eslint-disable-next-line no-use-before-define
+            this._editor = new GamepadEditor(this);
+        }
+        return this._editor;
+    }
+}
+
+const removeAllChildren = el => {
+    while (el.firstChild) {
+        el.removeChild(el.firstChild);
+    }
+};
+
+class GamepadEditor {
+    constructor (gamepadLib) {
+        /** @type {GamepadLib} */
+        this.gamepadLib = gamepadLib;
+
+        this.root = document.createElement('div');
+        this.selector = document.createElement('select');
+        this.gamepadContainer = document.createElement('div');
+
+        this.root.appendChild(this.selector);
+        this.root.appendChild(this.gamepadContainer);
+
+        this.onSelectorChange = this.onSelectorChange.bind(this);
+        this.onGamepadsChange = this.onGamepadsChange.bind(this);
+
+        this.selector.onchange = this.onSelectorChange;
+        this.gamepadLib.addEventListener('gamepadconnected', this.onGamepadsChange);
+        this.gamepadLib.addEventListener('gamepaddisconnected', this.onGamepadsChange);
+
+        this.keys = [
+            'none',
+            ' ',
+            'ArrowUp',
+            'ArrowDown',
+            'ArrowLeft',
+            'ArrowRight',
+            'A',
+            'B',
+            'C',
+            'D',
+            'E',
+            'F',
+            'G',
+            'H',
+            'I',
+            'J',
+            'K',
+            'L',
+            'M',
+            'N',
+            'O',
+            'P',
+            'Q',
+            'R',
+            'S',
+            'T',
+            'U',
+            'V',
+            'W',
+            'X',
+            'Y',
+            'Z'
+        ];
+    }
+
+    onSelectorChange () {
+        this.updateContent();
+    }
+
+    onGamepadsChange () {
+        this.updateDropdown();
+        this.updateContent();
+    }
+
+    updateDropdown () {
+        removeAllChildren(this.selector);
+
+        for (const [id, gamepadData] of this.gamepadLib.gamepads.entries()) {
+            const option = document.createElement('option');
+            option.textContent = id;
+            option.value = id;
+            this.selector.appendChild(option);
+        }
+    }
+
+    createMappingTypeSelector (text, type) {
+        const option = document.createElement('option');
+        option.textContent = text;
+        option.value = type;
+        return option;
+    }
+
+    createKeySelector () {
+        const select = document.createElement('select');
+        for (const key of this.keys) {
+            const option = document.createElement('option');
+            option.textContent = key;
+            option.value = key;
+            select.appendChild(option);
+        }
+        return select;
+    }
+
+    createOptionForMapping (buttonType, mappingList, index) {
+        const mapping = mappingList[index];
+        const mappingType = mapping.type;
+
+        const container = document.createElement('div');
+
+        const typeSelector = document.createElement('select');
+        typeSelector.appendChild(this.createMappingTypeSelector('None', 'none'));
+        typeSelector.appendChild(this.createMappingTypeSelector('Key', 'key'));
+        typeSelector.appendChild(this.createMappingTypeSelector('Mouse click', 'mousedown'));
+        if (buttonType === AXIS) {
+            typeSelector.appendChild(this.createMappingTypeSelector('Virtual cursor', 'virtual_cursor'));
+        }
+        typeSelector.value = mappingType;
+        typeSelector.onchange = () => {
+            mappingList[index] = transformAndCopyMapping({
+                type: typeSelector.value
+            });
+            this.updateContent();
+        };
+        container.appendChild(typeSelector);
+
+        if (mappingType === 'key') {
+            const highSelector = this.createKeySelector();
+            highSelector.value = mapping.high;
+            container.appendChild(highSelector);
+
+            if (buttonType === AXIS) {
+                const lowSelector = this.createKeySelector();
+                lowSelector.value = mapping.low;
+                container.appendChild(lowSelector);
+            }
+        }
+
+        // if (mappingType === 'virtual_cursor') {
+
+        // }
+
+        return container;
+    }
+
+    updateContent () {
+        removeAllChildren(this.gamepadContainer);
+
+        const selectedId = this.selector.value;
+        if (!selectedId) {
+            const message = document.createElement('div');
+            message.textContent = 'No controllers.';
+            return message;
+        }
+
+        const gamepadData = this.gamepadLib.gamepads.get(selectedId);
+        if (!gamepadData) {
+            const message = document.createElement('div');
+            message.textContent = `Cannot find controllers: ${selectedId}`;
+            return message;
+        }
+
+        const buttonMappings = gamepadData.buttonMappings;
+        for (let i = 0; i < buttonMappings.length; i++) {
+            const container = document.createElement('div');
+            const label = document.createElement('div');
+            const options = document.createElement('div');
+
+            label.textContent = `Button ${i}`;
+            options.appendChild(this.createOptionForMapping(BUTTON, buttonMappings, i));
+
+            container.appendChild(label);
+            container.appendChild(options);
+            this.gamepadContainer.appendChild(container);
+        }
+
+        const axesMappings = gamepadData.axesMappings;
+        for (let i = 0; i < axesMappings.length; i++) {
+            const container = document.createElement('div');
+            const label = document.createElement('div');
+            const options = document.createElement('div');
+
+            label.textContent = `Axis ${i}`;
+            options.appendChild(this.createOptionForMapping(AXIS, axesMappings, i));
+
+            container.appendChild(label);
+            container.appendChild(options);
+            this.gamepadContainer.appendChild(container);
+        }
+    }
+
+    generateEditor () {
+        this.updateDropdown();
+        this.updateContent();
+
+        return this.root;
     }
 }
 

@@ -13,7 +13,7 @@ import {setRunningState, setTurboState, setStartedState} from '../reducers/vm-st
 import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
 import {setFramerateState, setCompilerOptionsState, setVirtualCursorState} from '../reducers/tw';
-import GamepadLib from './tw-gamepadlib';
+import GamepadLib from './tw-gamepad/gamepadlib';
 
 /*
  * Higher Order Component to manage events emitted by the VM
@@ -64,6 +64,7 @@ const vmListenerHOC = function (WrappedComponent) {
                 document.addEventListener('keyup', this.handleKeyUp);
 
                 this.gamepadLib = new GamepadLib();
+                window.gamepadLib = this.gamepadLib; // temporary
                 this.gamepadLib.virtualCursor.maxX = 240;
                 this.gamepadLib.virtualCursor.minX = -240;
                 this.gamepadLib.virtualCursor.maxY = 180;
