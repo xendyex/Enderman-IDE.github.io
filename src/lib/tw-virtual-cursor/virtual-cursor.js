@@ -6,9 +6,14 @@ let root = null;
 const cursorContainer = document.createElement('div');
 cursorContainer.style.userSelect = 'none';
 cursorContainer.style.pointerEvents = 'none';
+cursorContainer.style.willChange = 'transform';
+
 const cursorImg = document.createElement('img');
 cursorImg.style.display = 'block';
 cursorImg.style.transform = 'translate(-50%, -50%)';
+cursorImg.style.imageRendering = 'optimizeSpeed';
+cursorImg.style.imageRendering = 'crisp-edges';
+cursorImg.style.imageRendering = 'pixelated';
 cursorContainer.appendChild(cursorImg);
 
 const inject = el => {
@@ -46,7 +51,7 @@ const setXY = (x, y) => {
     root.style.display = '';
     const stageX = 240 + x;
     const stageY = 180 - y;
-    root.style.transform = `translate(${stageX}px, ${stageY}px)`;
+    cursorContainer.style.transform = `translate(${stageX}px, ${stageY}px)`;
 };
 
 const hide = () => {

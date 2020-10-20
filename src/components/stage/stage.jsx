@@ -14,6 +14,7 @@ import {STAGE_DISPLAY_SIZES} from '../../lib/layout-constants.js';
 import {getStageDimensions} from '../../lib/screen-utils.js';
 import styles from './stage.css';
 
+import {stageSizeToTransform} from '../../lib/screen-utils';
 import * as virtualCursor from '../../lib/tw-virtual-cursor/virtual-cursor';
 
 const StageComponent = props => {
@@ -78,7 +79,11 @@ const StageComponent = props => {
                     {isColorPicking && colorInfo ? (
                         <Loupe colorInfo={colorInfo} />
                     ) : null}
-                    <div ref={virtualCursor.ref} />
+                    {/* tw: virtual cursor is injected here */}
+                    <div
+                        ref={virtualCursor.ref}
+                        style={stageSizeToTransform(stageDimensions)}
+                    />
                 </Box>
 
                 {/* `stageOverlays` is for items that should *not* have their overflow contained within the stage */}
