@@ -24,6 +24,7 @@ import log from './log';
 import storage from './storage';
 
 import {MISSING_PROJECT_ID} from './tw-missing-project';
+import VM from 'scratch-vm';
 
 /* Higher Order Component to provide behavior for loading projects by id. If
  * there's no id, the default project is loaded.
@@ -70,12 +71,22 @@ const ProjectFetcherHOC = function (WrappedComponent) {
             }
         }
         fetchProject (projectId, loadingState) {
+            // tw: clear and stop the VM before fetching
+            // these will also happen later after the project is fetched, but fetching may take a while and
+            // the project shouldn't be running while fetching the new project
+            this.props.vm.clear();
+            this.props.vm.stop();
             return storage
                 .load(storage.AssetType.Project, projectId, storage.DataFormat.JSON)
                 .then(projectAsset => {
-                    // tw: If the project data appears to be HTML, then this project is missing. Load the "missing project" project instead.
-                    if (projectAsset && projectAsset.data && (projectAsset.data[0] === '<' || projectAsset.data[0] === '<'.charCodeAt(0))) {
-                        return storage.load(storage.AssetType.Project, MISSING_PROJECT_ID, storage.DataFormat.JSON);
+                    // tw: If the project data appears to be HTML, then the result is probably an nginx 404 page,
+                    // and the "missing project" project should be loaded instead.
+                    // See: https://projects.scratch.mit.edu/9999999999999999999999
+                    if (projectAsset && projectAsset.data) {
+                        const firstChar = projectAsset.data[0];
+                        if (firstChar === '<' || firstChar === '<'.charCodeAt(0)) {
+                            return storage.load(storage.AssetType.Project, MISSING_PROJECT_ID, storage.DataFormat.JSON);
+                        }
                     }
                     return projectAsset;
                 })
@@ -136,7 +147,8 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         projectHost: PropTypes.string,
         projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         reduxProjectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        setProjectId: PropTypes.func
+        setProjectId: PropTypes.func,
+        vm: PropTypes.instanceOf(VM)
     };
     ProjectFetcherComponent.defaultProps = {
         assetHost: 'https://assets.scratch.mit.edu',
@@ -149,7 +161,8 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         isLoadingProject: getIsLoading(state.scratchGui.projectState.loadingState),
         isShowingProject: getIsShowingProject(state.scratchGui.projectState.loadingState),
         loadingState: state.scratchGui.projectState.loadingState,
-        reduxProjectId: state.scratchGui.projectState.projectId
+        reduxProjectId: state.scratchGui.projectState.projectId,
+        vm: state.scratchGui.vm
     });
     const mapDispatchToProps = dispatch => ({
         onActivateTab: tab => dispatch(activateTab(tab)),

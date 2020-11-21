@@ -5,6 +5,10 @@ const SET_CLOUD = 'tw/SET_CLOUD';
 const SET_HIGH_QUALITY_PEN = 'tw/SET_HIGH_QUALITY_PEN';
 const SET_WINDOW_FULLSCREEN = 'tw/SET_WINDOW_FULLSCREEN';
 const SET_DIMENSIONS = 'tw/SET_DIMENSIONS';
+const SET_AUTHOR = 'tw/SET_AUTHOR';
+const SET_DESCRIPTION = 'tw/SET_DESCRIPTION';
+const ADD_COMPILE_ERROR = 'tw/ADD_COMPILE_ERROR';
+const CLEAR_COMPILE_ERRORS = 'tw/CLEAR_COMPILE_ERRORS';
 
 export const initialState = {
     framerate: 30,
@@ -16,7 +20,16 @@ export const initialState = {
         warpTimer: false
     },
     isWindowFullScreen: false,
-    dimensions: [0, 0]
+    dimensions: [0, 0],
+    author: {
+        username: '',
+        thumbnail: ''
+    },
+    description: {
+        instructions: '',
+        credits: ''
+    },
+    compileErrors: []
 };
 
 const reducer = function (state, action) {
@@ -49,6 +62,25 @@ const reducer = function (state, action) {
     case SET_DIMENSIONS:
         return Object.assign({}, state, {
             dimensions: action.dimensions
+        });
+    case SET_AUTHOR:
+        return Object.assign({}, state, {
+            author: action.author
+        });
+    case SET_DESCRIPTION:
+        return Object.assign({}, state, {
+            description: action.description
+        });
+    case ADD_COMPILE_ERROR:
+        return Object.assign({}, state, {
+            compileErrors: [
+                action.error,
+                ...state.compileErrors.slice(0, 4)
+            ]
+        });
+    case CLEAR_COMPILE_ERRORS:
+        return Object.assign({}, state, {
+            compileErrors: []
         });
     default:
         return state;
@@ -104,6 +136,33 @@ const setDimensions = function (dimensions) {
     };
 };
 
+const setAuthor = function (author) {
+    return {
+        type: SET_AUTHOR,
+        author: author
+    };
+};
+
+const setDescription = function (description) {
+    return {
+        type: SET_DESCRIPTION,
+        description: description
+    };
+};
+
+const addCompileError = function (error) {
+    return {
+        type: ADD_COMPILE_ERROR,
+        error: error
+    };
+};
+
+const clearCompileErrors = function () {
+    return {
+        type: CLEAR_COMPILE_ERRORS
+    };
+};
+
 export {
     reducer as default,
     initialState as twInitialState,
@@ -113,5 +172,9 @@ export {
     setCloud,
     setHighQualityPenState,
     setIsWindowFullScreen,
-    setDimensions
+    setDimensions,
+    setAuthor,
+    setDescription,
+    addCompileError,
+    clearCompileErrors
 };

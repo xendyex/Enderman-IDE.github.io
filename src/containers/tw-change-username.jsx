@@ -2,7 +2,16 @@ import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import {setUsername} from '../reducers/tw';
+
+const messages = defineMessages({
+    usernamePrompt: {
+        defaultMessage: 'New username:',
+        description: 'Prompt asking user to select new username',
+        id: 'tw.usernamePrompt'
+    }
+});
 
 class ChangeUsername extends React.Component {
     constructor (props) {
@@ -12,39 +21,27 @@ class ChangeUsername extends React.Component {
         ]);
     }
     changeUsername () {
-        // todo: translate
-        if (this.props.isProjectRunning) {
-            alert('Cannot change username when project is running.');
-        } else {
-            const newUsername = prompt('New username:', this.props.username);
-            if (newUsername === null) {
-                return;
-            }
-            this.props.onUsernameChange(newUsername);
+        // eslint-disable-next-line no-alert
+        const newUsername = prompt(this.props.intl.formatMessage(messages.usernamePrompt), this.props.username);
+        if (newUsername === null) {
+            return;
         }
+        this.props.onUsernameChange(newUsername);
     }
     render () {
-        const {
-            /* eslint-disable no-unused-vars */
-            children,
-            onUsernameChange,
-            /* eslint-enable no-unused-vars */
-            ...props
-        } = this.props;
-        return this.props.children(this.changeUsername, props);
+        return this.props.children(this.changeUsername);
     }
 }
 
 ChangeUsername.propTypes = {
     children: PropTypes.func,
     username: PropTypes.string,
-    isProjectRunning: PropTypes.bool,
-    onUsernameChange: PropTypes.func
+    onUsernameChange: PropTypes.func,
+    intl: intlShape.isRequired
 };
 
 const mapStateToProps = state => ({
-    username: state.scratchGui.tw.username,
-    isProjectRunning: state.scratchGui.vmStatus.running
+    username: state.scratchGui.tw.username
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -53,7 +50,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export default connect(
+export default injectIntl(connect(
     mapStateToProps,
     mapDispatchToProps
-)(ChangeUsername);
+)(ChangeUsername));

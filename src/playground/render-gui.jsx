@@ -1,41 +1,18 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import {connect} from 'react-redux';
 import GUI from '../containers/gui.jsx';
-
-const onClickLogo = () => {
-    location.hash = '';
-};
 
 const searchParams = new URLSearchParams(location.search);
 const cloudHost = searchParams.get('cloud_host') || 'wss://clouddata.turbowarp.org';
 
-const RenderGUI = ({isPlayerOnly, projectId}) => (
+const RenderGUI = props => (
     <GUI
-        onClickLogo={onClickLogo}
         cloudHost={cloudHost}
         canSave={false}
+        basePath={process.env.ROOT}
         canEditTitle
         enableCommunity
-        isPlayerOnly={isPlayerOnly}
-        projectId={projectId}
+        {...props}
     />
 );
 
-RenderGUI.propTypes = {
-    isPlayerOnly: PropTypes.bool,
-    projectId: PropTypes.string
-};
-
-const mapStateToProps = state => ({
-    isPlayerOnly: state.scratchGui.mode.isPlayerOnly
-});
-
-const mapDispatchToProps = dispatch => ({
-
-});
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(RenderGUI);
+export default RenderGUI;

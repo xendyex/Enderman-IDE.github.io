@@ -16,13 +16,12 @@ class Controls extends React.Component {
     }
     handleGreenFlagClick (e) {
         e.preventDefault();
-        // tw: implement alt click to change framerate
-        // this control flow lets shift+alt click do both turbo and framerate in one click
-        if (e.shiftKey || e.altKey) {
+        // tw: implement alt+click and right click to toggle FPS
+        if (e.shiftKey || e.altKey || e.type === 'contextmenu') {
             if (e.shiftKey) {
                 this.props.vm.setTurboMode(!this.props.turbo);
             }
-            if (e.altKey) {
+            if (e.altKey || e.type === 'contextmenu') {
                 if (this.props.framerate === 30) {
                     this.props.vm.setFramerate(60);
                 } else {
@@ -51,7 +50,7 @@ class Controls extends React.Component {
         return (
             <ControlsComponent
                 {...props}
-                active={projectRunning}
+                active={projectRunning && isStarted}
                 turbo={turbo}
                 onGreenFlagClick={this.handleGreenFlagClick}
                 onStopAllClick={this.handleStopAllClick}
@@ -69,7 +68,7 @@ Controls.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    isStarted: state.scratchGui.vmStatus.running,
+    isStarted: state.scratchGui.vmStatus.started,
     projectRunning: state.scratchGui.vmStatus.running,
     framerate: state.scratchGui.tw.framerate,
     turbo: state.scratchGui.vmStatus.turbo
