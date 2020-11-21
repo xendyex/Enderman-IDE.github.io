@@ -76,6 +76,13 @@ class Stage extends React.Component {
         }
         this.props.vm.attachV2SVGAdapter(new V2SVGAdapter());
         this.props.vm.attachV2BitmapAdapter(new V2BitmapAdapter());
+        this.locked = false;
+        document.addEventListener('pointerlockchange', () => {
+            this.locked = !!document.pointerLockElement;
+        });
+        document.addEventListener('pointerlockerror', () => {
+            alert('pointer lock error');
+        });
     }
     componentDidMount () {
         this.attachRectEvents();
@@ -186,7 +193,11 @@ class Stage extends React.Component {
         this.props.vm.setEditingTarget(targetId);
     }
     onMouseMove (e) {
-        const {x, y} = getEventXY(e);
+        let {x, y} = getEventXY(e);
+        if (this.locked) {
+            x += e.movementX;
+            y += e.movementY;
+        }
         const mousePosition = [x - this.rect.left, y - this.rect.top];
 
         if (this.props.isColorPicking) {
@@ -228,7 +239,11 @@ class Stage extends React.Component {
         this.props.vm.postIOData('mouse', coordinates);
     }
     onMouseUp (e) {
-        const {x, y} = getEventXY(e);
+        let {x, y} = getEventXY(e);
+        if (this.locked) {
+            x += e.movementX;
+            y += e.movementY;
+        }
         const mousePosition = [x - this.rect.left, y - this.rect.top];
         this.cancelMouseDownTimeout();
         this.setState({
@@ -265,8 +280,13 @@ class Stage extends React.Component {
         }
     }
     onMouseDown (e) {
+        this.canvas.requestPointerLock();
         this.updateRect();
-        const {x, y} = getEventXY(e);
+        let {x, y} = getEventXY(e);
+        if (this.locked) {
+            x += e.movementX;
+            y += e.movementY;
+        }
         const mousePosition = [x - this.rect.left, y - this.rect.top];
         if (this.props.isColorPicking) {
             // Set the pickX/Y for the color picker loop to pick up
