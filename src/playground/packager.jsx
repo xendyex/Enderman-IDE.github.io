@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import {compose} from 'redux';
 import AppStateHOC from '../lib/app-state-hoc.jsx';
-import TWFullScreenHOC from '../lib/tw-fullscreen-hoc.jsx';
+import TWFullScreenHOC from '../lib/tw-embed-fullscreen-hoc.jsx';
 import TWPackagerHOC from './tw-packager-hoc.jsx';
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 
