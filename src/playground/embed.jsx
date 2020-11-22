@@ -7,6 +7,7 @@ import AppStateHOC from '../lib/app-state-hoc.jsx';
 import TWEmbedFullScreenHOC from '../lib/tw-embed-fullscreen-hoc.jsx';
 import TWStateManagerHOC from '../lib/tw-state-manager-hoc.jsx';
 import TWFullscreenResizerHOC from '../lib/tw-fullscreen-resizer-hoc.jsx';
+import setupPostMessageAPI from '../lib/tw-postmessage-api';
 
 import GUI from './render-gui.jsx';
 import appTarget from './app-target';
@@ -40,6 +41,10 @@ const onProjectLoaded = () => {
     if (urlParams.has('autoplay')) {
         vm.start();
         vm.greenFlag();
+    }
+
+    if (urlParams.has('api')) {
+        setupPostMessageAPI(vm);
     }
 };
 
