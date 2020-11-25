@@ -31,7 +31,7 @@ import SixtyFPSToggler from '../../containers/tw-sixty-fps-toggler.jsx';
 import HighQualityPen from '../../containers/tw-high-quality-pen.jsx';
 import ChangeUsername from '../../containers/tw-change-username.jsx';
 import CloudVariablesToggler from '../../containers/tw-cloud-toggler.jsx';
-import CompilerOptions from '../../containers/tw-compiler-options.jsx';
+import VMOptions from '../../containers/tw-vm-options.jsx';
 import TWSaveStatus from './tw-save-status.jsx';
 
 import {openTipsLibrary} from '../../reducers/modals';
@@ -692,25 +692,32 @@ class MenuBar extends React.Component {
                                             )}
                                         </MenuItem>
                                     )}</HighQualityPen>
-                                    <CompilerOptions>{({toggleEnabled, toggleWarpTimer, compilerOptions}) => (
+                                    <VMOptions>{({
+                                        compilerEnabled,
+                                        toggleCompilerEnabled,
+                                        warpTimer,
+                                        toggleWarpTimer,
+                                        infiniteClones,
+                                        toggleInfiniteClones
+                                    }) => (
                                         <React.Fragment>
-                                            <MenuItem onClick={toggleEnabled}>
-                                                {compilerOptions.enabled ? (
+                                            <MenuItem onClick={toggleInfiniteClones}>
+                                                {infiniteClones ? (
                                                     <FormattedMessage
-                                                        defaultMessage="Disable Compiler"
-                                                        description="Menu bar item for disabling the compiler"
-                                                        id="tw.menuBar.compilerOff"
+                                                        defaultMessage="Turn off Infinite Clones"
+                                                        description="Menu bar item for turning off Infinite Clones"
+                                                        id="tw.menuBar.infiniteClonesOff"
                                                     />
                                                 ) : (
                                                     <FormattedMessage
-                                                        defaultMessage="Enable Compiler"
-                                                        description="Menu bar item for enabling the compiler"
-                                                        id="tw.menuBar.compilerOn"
+                                                        defaultMessage="Turn on Infinite Clones"
+                                                        description="Menu bar item for turning on Infinite Clones"
+                                                        id="tw.menuBar.infiniteClonesOn"
                                                     />
                                                 )}
                                             </MenuItem>
                                             <MenuItem onClick={toggleWarpTimer}>
-                                                {compilerOptions.warpTimer ? (
+                                                {warpTimer ? (
                                                     <FormattedMessage
                                                         defaultMessage="Turn off Warp Timer (Stuck Checking)"
                                                         description="Menu bar item for turning off Warp Timer"
@@ -724,8 +731,23 @@ class MenuBar extends React.Component {
                                                     />
                                                 )}
                                             </MenuItem>
+                                            <MenuItem onClick={toggleCompilerEnabled}>
+                                                {compilerEnabled ? (
+                                                    <FormattedMessage
+                                                        defaultMessage="Disable Compiler"
+                                                        description="Menu bar item for disabling the compiler"
+                                                        id="tw.menuBar.compilerOff"
+                                                    />
+                                                ) : (
+                                                    <FormattedMessage
+                                                        defaultMessage="Enable Compiler"
+                                                        description="Menu bar item for enabling the compiler"
+                                                        id="tw.menuBar.compilerOn"
+                                                    />
+                                                )}
+                                            </MenuItem>
                                         </React.Fragment>
-                                    )}</CompilerOptions>
+                                    )}</VMOptions>
                                 </MenuSection>
                             </MenuBarMenu>
                         </div>
