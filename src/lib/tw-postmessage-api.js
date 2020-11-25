@@ -6,10 +6,8 @@ const postMessageToParent = message => {
     window.parent.postMessage(message, '*');
 };
 
-const handleMessage = e => {
-    const data = e.data;
+const handleMessage = data => {
     const type = data.type;
-
     switch (type) {
     case 'set':
     case 'get': {
@@ -18,16 +16,36 @@ const handleMessage = e => {
         const variable = stage.lookupVariableByNameAndType(name, '');
         if (type === 'set') {
             variable.value = data.value;
-        } else {
-            postMessageToParent({
-                type: 'respond_to_get',
-                name,
-                value: variable.value
-            });
+            return {};
         }
-        break;
+        return {
+            value: variable.value
+        };
     }
     }
+    throw new Error('Invalid message');
+};
+
+const onMessage = e => {
+    const data = e.data;
+
+    let response = {};
+    try {
+        response = {
+            type: 'response',
+            success: true,
+            inResponseTo: data,
+            ...handleMessage(data)
+        };
+    } catch (err) {
+        response = {
+            type: 'response',
+            success: false,
+            inResponseTo: data
+        };
+    }
+
+    postMessageToParent(response);
 };
 
 const setupPostMessageAPI = _vm => {
@@ -36,7 +54,7 @@ const setupPostMessageAPI = _vm => {
     }
     vm = _vm;
 
-    window.addEventListener('message', handleMessage);
+    window.addEventListener('message', onMessage);
 
     vm.on('PROJECT_STARTED', () => {
         postMessageToParent({
