@@ -180,6 +180,9 @@ class Stage extends React.Component {
     }
     onPointerLockChange () {
         this.locked = !!document.pointerLockElement;
+        this.props.vm.postIOData('mouse', {
+            useMovement: this.locked
+        });
     }
     onPointerLockError () {
         alert('pointer lock error');
