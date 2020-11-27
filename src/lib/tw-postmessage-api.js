@@ -56,15 +56,10 @@ const setupPostMessageAPI = _vm => {
 
     window.addEventListener('message', onMessage);
 
-    vm.on('PROJECT_STARTED', () => {
+    vm.on('PROJECT_START', () => {
         postMessageToParent({
-            type: 'started'
+            type: 'start'
         });
-    });
-
-    postMessageToParent({
-        type: 'setup',
-        version: VERSION
     });
 };
 
