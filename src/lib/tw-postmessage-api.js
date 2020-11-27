@@ -56,7 +56,7 @@ const setupPostMessageAPI = _vm => {
 
     window.addEventListener('message', onMessage);
 
-    vm.on('PROJECT_START', () => {
+    vm.on('RUNTIME_STARTED', () => {
         postMessageToParent({
             type: 'start'
         });
