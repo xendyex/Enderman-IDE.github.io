@@ -38,13 +38,14 @@ const onVmInit = _vm => {
 
 const onProjectLoaded = () => {
     const urlParams = new URLSearchParams(location.search);
-    if (urlParams.has('autoplay')) {
-        vm.start();
-        vm.greenFlag();
-    }
 
     if (urlParams.has('api')) {
         setupPostMessageAPI(vm);
+    }
+
+    if (urlParams.has('autoplay')) {
+        vm.start();
+        vm.greenFlag();
     }
 };
 
