@@ -71,7 +71,7 @@ const cloudManagerHOC = function (WrappedComponent) {
             this.disconnectFromCloud();
         }
         canUseCloud (props) {
-            return !!(props.cloudHost && props.username && props.vm && props.projectId && props.hasCloudPermission);
+            return !!(props.cloudHost && props.username && props.vm && __OPTIONS__.projectId && props.hasCloudPermission);
         }
         shouldConnect (props) {
             return !this.isConnected() && this.canUseCloud(props) &&
@@ -83,7 +83,8 @@ const cloudManagerHOC = function (WrappedComponent) {
                 ( // Can no longer use cloud or cloud provider info is now stale
                     !this.canUseCloud(props) ||
                     !props.vm.runtime.hasCloudData() ||
-                    (props.projectId !== prevProps.projectId) ||
+                    // packager: projectId never changes
+                    // (props.projectId !== prevProps.projectId) ||
                     // tw: username changes are handled in "reconnect"
                     // (props.username !== prevProps.username) ||
                     // Editing someone else's project
@@ -103,7 +104,7 @@ const cloudManagerHOC = function (WrappedComponent) {
                 this.props.cloudHost,
                 this.props.vm,
                 this.props.username,
-                this.props.projectId);
+                __OPTIONS__.projectId);
             // tw: show warning when username is invalid
             this.cloudProvider.onInvalidUsername = this.onInvalidUsername;
             this.props.vm.setCloudProvider(this.cloudProvider);
