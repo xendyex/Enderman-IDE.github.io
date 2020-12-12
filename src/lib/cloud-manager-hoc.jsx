@@ -75,7 +75,8 @@ const cloudManagerHOC = function (WrappedComponent) {
         }
         shouldConnect (props) {
             return !this.isConnected() && this.canUseCloud(props) &&
-                props.isShowingWithId && props.vm.runtime.hasCloudData() &&
+                // packager: do not need to be "showing a project id" to use cloud variables
+                props.vm.runtime.hasCloudData() &&
                 props.canModifyCloudData;
         }
         shouldDisconnect (props, prevProps) {
