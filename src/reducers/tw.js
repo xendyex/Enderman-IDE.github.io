@@ -1,5 +1,6 @@
 const SET_FRAMERATE = 'tw/SET_FRAMERATE';
 const SET_COMPILER_OPTIONS = 'tw/SET_COMPILER_OPTIONS';
+const SET_RUNTIME_OPTIONS = 'tw/SET_RUNTIME_OPTIONS';
 const SET_USERNAME = 'tw/SET_USERNAME';
 const SET_CLOUD = 'tw/SET_CLOUD';
 const SET_HIGH_QUALITY_PEN = 'tw/SET_HIGH_QUALITY_PEN';
@@ -9,6 +10,7 @@ const SET_AUTHOR = 'tw/SET_AUTHOR';
 const SET_DESCRIPTION = 'tw/SET_DESCRIPTION';
 const ADD_COMPILE_ERROR = 'tw/ADD_COMPILE_ERROR';
 const CLEAR_COMPILE_ERRORS = 'tw/CLEAR_COMPILE_ERRORS';
+const SET_FILE_HANDLE = 'tw/SET_FILE_HANDLE';
 
 export const initialState = {
     framerate: 30,
@@ -18,6 +20,9 @@ export const initialState = {
     compilerOptions: {
         enabled: true,
         warpTimer: false
+    },
+    runtimeOptions: {
+        maxClones: 300
     },
     isWindowFullScreen: false,
     dimensions: [0, 0],
@@ -29,7 +34,8 @@ export const initialState = {
         instructions: '',
         credits: ''
     },
-    compileErrors: []
+    compileErrors: [],
+    fileHandle: null
 };
 
 const reducer = function (state, action) {
@@ -42,6 +48,10 @@ const reducer = function (state, action) {
     case SET_COMPILER_OPTIONS:
         return Object.assign({}, state, {
             compilerOptions: action.compilerOptions
+        });
+    case SET_RUNTIME_OPTIONS:
+        return Object.assign({}, state, {
+            runtimeOptions: action.runtimeOptions
         });
     case SET_USERNAME:
         return Object.assign({}, state, {
@@ -82,6 +92,10 @@ const reducer = function (state, action) {
         return Object.assign({}, state, {
             compileErrors: []
         });
+    case SET_FILE_HANDLE:
+        return Object.assign({}, state, {
+            fileHandle: action.fileHandle
+        });
     default:
         return state;
     }
@@ -98,6 +112,13 @@ const setCompilerOptionsState = function (compilerOptions) {
     return {
         type: SET_COMPILER_OPTIONS,
         compilerOptions: compilerOptions
+    };
+};
+
+const setRuntimeOptionsState = function (runtimeOptions) {
+    return {
+        type: SET_RUNTIME_OPTIONS,
+        runtimeOptions: runtimeOptions
     };
 };
 
@@ -163,11 +184,19 @@ const clearCompileErrors = function () {
     };
 };
 
+const setFileHandle = function (fileHandle) {
+    return {
+        type: SET_FILE_HANDLE,
+        fileHandle: fileHandle
+    };
+};
+
 export {
     reducer as default,
     initialState as twInitialState,
     setFramerateState,
     setCompilerOptionsState,
+    setRuntimeOptionsState,
     setUsername,
     setCloud,
     setHighQualityPenState,
@@ -176,5 +205,6 @@ export {
     setAuthor,
     setDescription,
     addCompileError,
-    clearCompileErrors
+    clearCompileErrors,
+    setFileHandle
 };

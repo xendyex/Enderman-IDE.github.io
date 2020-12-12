@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import VM from 'scratch-vm';
 import log from './log';
+import {defineMessages, intlShape, injectIntl} from 'react-intl';
 
 import {
     setUsername
@@ -21,6 +22,21 @@ import {
     setFullScreen
 } from '../reducers/mode';
 import * as progressMonitor from '../components/loader/tw-progress-monitor';
+
+/* eslint-disable no-alert */
+
+const messages = defineMessages({
+    invalidFPS: {
+        defaultMessage: 'fps URL parameter is invalid',
+        description: 'Alert displayed when fps URL parameter is invalid',
+        id: 'tw.invalidParameters.fps'
+    },
+    invalidClones: {
+        defaultMessage: 'clone URL parameter is invalid',
+        description: 'Alert displayed when clones URL parameter is invalid',
+        id: 'tw.invalidParameters.clones'
+    }
+});
 
 const USERNAME_KEY = 'tw:username';
 
@@ -131,9 +147,11 @@ class WildcardRouter extends Router {
     onhashchange () {
         const hashProjectId = readHashProjectId();
         if (hashProjectId) {
-            this.onSetProjectId(hashProjectId);
-            // Completely remove the hash
-            history.replaceState(null, null, `${location.pathname}${location.search}`);
+            const ok = this.onSetProjectId(hashProjectId);
+            if (ok) {
+                // Completely remove the hash
+                history.replaceState(null, null, `${location.pathname}${location.search}`);
+            }
         } else {
             // Do not detect page type here as it is already setup by index.html, editor.html, etc.
             this.parseURL(false);
@@ -243,14 +261,22 @@ const TWStateManager = function (WrappedComponent) {
             super(props);
             bindAll(this, [
                 'handleHashChange',
-                'handlePopState'
+                'handlePopState',
+                'onSetProjectId',
+                'onSetIsPlayerOnly',
+                'onSetIsFullScreen'
             ]);
         }
         componentDidMount () {
             const urlParams = new URLSearchParams(location.search);
 
             if (urlParams.has('fps')) {
-                this.props.vm.setFramerate(+urlParams.get('fps'));
+                const fps = +urlParams.get('fps');
+                if (Number.isNaN(fps) || fps < 0) {
+                    alert(this.props.intl.formatMessage(messages.invalidFPS));
+                } else {
+                    this.props.vm.setFramerate(fps);
+                }
             } else if (urlParams.has('60fps')) {
                 this.props.vm.setFramerate(60);
             }
@@ -263,10 +289,10 @@ const TWStateManager = function (WrappedComponent) {
             } else {
                 const persistentUsername = getLocalStorage(USERNAME_KEY);
                 if (persistentUsername === null) {
-                    const randomNumber = Math.random().toString();
-                    const randomId = randomNumber.substr(2, 6);
+                    const digits = 4;
+                    const randomNumber = Math.round(Math.random() * (10 ** digits));
+                    const randomId = randomNumber.toString().padStart(digits, '0');
                     const randomUsername = `player${randomId}`;
-                    setLocalStorage(USERNAME_KEY, randomUsername);
                     this.props.onSetUsername(randomUsername);
                 } else {
                     this.props.onSetUsername(persistentUsername);
@@ -281,10 +307,27 @@ const TWStateManager = function (WrappedComponent) {
                 this.props.vm.setTurboMode(true);
             }
 
-            if (urlParams.has('stuck')) {
+            if (urlParams.has('stuck') || urlParams.has('warp_timer')) {
                 this.props.vm.setCompilerOptions({
                     warpTimer: true
                 });
+            }
+
+            if (urlParams.has('nocompile')) {
+                this.props.vm.setCompilerOptions({
+                    enabled: false
+                });
+            }
+
+            if (urlParams.has('clones')) {
+                const clones = +urlParams.get('clones');
+                if (Number.isNaN(clones) || clones < 0) {
+                    alert(this.props.intl.formatMessage(messages.invalidClones));
+                } else {
+                    this.props.vm.setRuntimeOptions({
+                        maxClones: clones
+                    });
+                }
             }
 
             if (urlParams.has('project_url')) {
@@ -309,9 +352,9 @@ const TWStateManager = function (WrappedComponent) {
             }
 
             const routerCallbacks = {
-                onSetProjectId: this.props.onSetProjectId,
-                onSetIsPlayerOnly: this.props.onSetIsPlayerOnly,
-                onSetIsFullScreen: this.props.onSetIsFullScreen
+                onSetProjectId: this.onSetProjectId,
+                onSetIsPlayerOnly: this.onSetIsPlayerOnly,
+                onSetIsFullScreen: this.onSetIsFullScreen
             };
             this.router = createRouter(this.props.routingStyle, routerCallbacks);
             this.router.onhashchange();
@@ -351,11 +394,31 @@ const TWStateManager = function (WrappedComponent) {
         handlePopState () {
             this.router.onpathchange();
         }
+        onSetProjectId (id) {
+            if (`${id}` === `${this.props.reduxProjectId}`) {
+                return true;
+            }
+            if (this.props.projectChanged) {
+                if (!confirm('Are you sure you want to switch project?')) {
+                    return false;
+                }
+            }
+            this.props.onSetProjectId(id);
+            return true;
+        }
+        onSetIsPlayerOnly (isPlayerOnly) {
+            this.props.onSetIsPlayerOnly(isPlayerOnly);
+        }
+        onSetIsFullScreen (isFullScreen) {
+            this.props.onSetIsFullScreen(isFullScreen);
+        }
         render () {
             const {
                 /* eslint-disable no-unused-vars */
+                intl,
                 isFullScreen,
                 isPlayerOnly,
+                projectChanged,
                 onProjectFetchFinished,
                 onProjectFetchStarted,
                 onSetIsFullScreen,
@@ -377,8 +440,11 @@ const TWStateManager = function (WrappedComponent) {
         }
     }
     StateManagerComponent.propTypes = {
+        intl: intlShape,
         isFullScreen: PropTypes.bool,
         isPlayerOnly: PropTypes.bool,
+        projectChanged: PropTypes.bool,
+        projectId: PropTypes.string,
         onProjectFetchFinished: PropTypes.func,
         onProjectFetchStarted: PropTypes.func,
         onSetIsFullScreen: PropTypes.func,
@@ -396,6 +462,7 @@ const TWStateManager = function (WrappedComponent) {
     const mapStateToProps = state => ({
         isFullScreen: state.scratchGui.mode.isFullScreen,
         isPlayerOnly: state.scratchGui.mode.isPlayerOnly,
+        projectChanged: state.scratchGui.projectChanged,
         reduxProjectId: state.scratchGui.projectState.projectId,
         username: state.scratchGui.tw.username,
         vm: state.scratchGui.vm
@@ -408,10 +475,10 @@ const TWStateManager = function (WrappedComponent) {
         onSetProjectId: projectId => dispatch(setProjectId(projectId)),
         onSetUsername: username => dispatch(setUsername(username))
     });
-    return connect(
+    return injectIntl(connect(
         mapStateToProps,
         mapDispatchToProps
-    )(StateManagerComponent);
+    )(StateManagerComponent));
 };
 
 export {

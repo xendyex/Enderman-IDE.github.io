@@ -31,7 +31,7 @@ import SixtyFPSToggler from '../../containers/tw-sixty-fps-toggler.jsx';
 import HighQualityPen from '../../containers/tw-high-quality-pen.jsx';
 import ChangeUsername from '../../containers/tw-change-username.jsx';
 import CloudVariablesToggler from '../../containers/tw-cloud-toggler.jsx';
-import CompilerOptions from '../../containers/tw-compiler-options.jsx';
+import VMOptions from '../../containers/tw-vm-options.jsx';
 import TWSaveStatus from './tw-save-status.jsx';
 
 import {openTipsLibrary} from '../../reducers/modals';
@@ -526,17 +526,46 @@ class MenuBar extends React.Component {
                                                 </MenuItem>
                                             )}
                                         </SBFileUploader>
-                                        <SB3Downloader>{(className, downloadProjectCallback) => (
-                                            <MenuItem
-                                                className={className}
-                                                onClick={this.getSaveToComputerHandler(downloadProjectCallback)}
-                                            >
-                                                <FormattedMessage
-                                                    defaultMessage="Save to your computer"
-                                                    description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
-                                                    id="gui.menuBar.downloadToComputer"
-                                                />
-                                            </MenuItem>
+                                        <SB3Downloader>{(_className, downloadProject, extended) => (
+                                            <React.Fragment>
+                                                {extended.available && (
+                                                    <React.Fragment>
+                                                        {extended.name !== null && (
+                                                            <MenuItem onClick={this.getSaveToComputerHandler(extended.saveToLastFile)}>
+                                                                <FormattedMessage
+                                                                    defaultMessage="Save as {file}"
+                                                                    description="Menu bar item to save project to an existing file on the user's computer"
+                                                                    id="tw.menuBar.saveAs"
+                                                                    values={{
+                                                                        file: extended.name
+                                                                    }}
+                                                                />
+                                                            </MenuItem>
+                                                        )}
+                                                        <MenuItem onClick={this.getSaveToComputerHandler(extended.saveAsNew)}>
+                                                            <FormattedMessage
+                                                                defaultMessage="Save to your computer"
+                                                                description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
+                                                                id="gui.menuBar.downloadToComputer"
+                                                            />
+                                                        </MenuItem>
+                                                    </React.Fragment>
+                                                )}
+                                                <MenuItem onClick={this.getSaveToComputerHandler(downloadProject)}>
+                                                    <FormattedMessage
+                                                        defaultMessage="Save to your computer"
+                                                        description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
+                                                        id="gui.menuBar.downloadToComputer"
+                                                    />
+                                                    {extended.available && (
+                                                        <FormattedMessage
+                                                            defaultMessage=" (legacy)"
+                                                            description="Text that appears after 'Save project to your computer' on legacy button." // eslint-disable-line max-len
+                                                            id="tw.menuBar.downloadToComputerLegacyAppend"
+                                                        />
+                                                    )}
+                                                </MenuItem>
+                                            </React.Fragment>
                                         )}</SB3Downloader>
                                     </MenuSection>
                                 </MenuBarMenu>
@@ -593,13 +622,13 @@ class MenuBar extends React.Component {
                                         <MenuItem onClick={toggleSixtyFPS}>
                                             {isSixty ? (
                                                 <FormattedMessage
-                                                    defaultMessage="Turn off 60 FPS mode"
+                                                    defaultMessage="Turn off 60 FPS Mode"
                                                     description="Menu bar item for turning off 60 FPS mode"
                                                     id="tw.menuBar.60off"
                                                 />
                                             ) : (
                                                 <FormattedMessage
-                                                    defaultMessage="Turn on 60 FPS mode"
+                                                    defaultMessage="Turn on 60 FPS Mode"
                                                     description="Menu bar item for turning on 60 FPS mode"
                                                     id="tw.menuBar.60on"
                                                 />
@@ -692,10 +721,47 @@ class MenuBar extends React.Component {
                                             )}
                                         </MenuItem>
                                     )}</HighQualityPen>
-                                    <CompilerOptions>{({toggleEnabled, toggleWarpTimer, compilerOptions}) => (
+                                    <VMOptions>{({
+                                        compilerEnabled,
+                                        toggleCompilerEnabled,
+                                        warpTimer,
+                                        toggleWarpTimer,
+                                        infiniteClones,
+                                        toggleInfiniteClones
+                                    }) => (
                                         <React.Fragment>
-                                            <MenuItem onClick={toggleEnabled}>
-                                                {compilerOptions.enabled ? (
+                                            <MenuItem onClick={toggleInfiniteClones}>
+                                                {infiniteClones ? (
+                                                    <FormattedMessage
+                                                        defaultMessage="Turn off Infinite Clones"
+                                                        description="Menu bar item for turning off Infinite Clones"
+                                                        id="tw.menuBar.infiniteClonesOff"
+                                                    />
+                                                ) : (
+                                                    <FormattedMessage
+                                                        defaultMessage="Turn on Infinite Clones"
+                                                        description="Menu bar item for turning on Infinite Clones"
+                                                        id="tw.menuBar.infiniteClonesOn"
+                                                    />
+                                                )}
+                                            </MenuItem>
+                                            <MenuItem onClick={toggleWarpTimer}>
+                                                {warpTimer ? (
+                                                    <FormattedMessage
+                                                        defaultMessage="Turn off Warp Timer"
+                                                        description="Menu bar item for turning off Warp Timer"
+                                                        id="tw.menuBar.warpTimerOff"
+                                                    />
+                                                ) : (
+                                                    <FormattedMessage
+                                                        defaultMessage="Turn on Warp Timer"
+                                                        description="Menu bar item for turning on Warp Timer"
+                                                        id="tw.menuBar.warpTimerOn"
+                                                    />
+                                                )}
+                                            </MenuItem>
+                                            <MenuItem onClick={toggleCompilerEnabled}>
+                                                {compilerEnabled ? (
                                                     <FormattedMessage
                                                         defaultMessage="Disable Compiler"
                                                         description="Menu bar item for disabling the compiler"
@@ -709,23 +775,8 @@ class MenuBar extends React.Component {
                                                     />
                                                 )}
                                             </MenuItem>
-                                            <MenuItem onClick={toggleWarpTimer}>
-                                                {compilerOptions.warpTimer ? (
-                                                    <FormattedMessage
-                                                        defaultMessage="Turn off Warp Timer (Stuck Checking)"
-                                                        description="Menu bar item for turning off Warp Timer"
-                                                        id="tw.menuBar.warpTimerOff"
-                                                    />
-                                                ) : (
-                                                    <FormattedMessage
-                                                        defaultMessage="Turn on Warp Timer (Stuck Checking)"
-                                                        description="Menu bar item for turning on Warp Timer"
-                                                        id="tw.menuBar.warpTimerOn"
-                                                    />
-                                                )}
-                                            </MenuItem>
                                         </React.Fragment>
-                                    )}</CompilerOptions>
+                                    )}</VMOptions>
                                 </MenuSection>
                             </MenuBarMenu>
                         </div>
@@ -752,22 +803,15 @@ class MenuBar extends React.Component {
                                     <MenuItemLink href="https://github.com/TurboWarp">
                                         <FormattedMessage
                                             defaultMessage="Source Code"
-                                            description="Menu bar item for source code link"
-                                            id="tw.menuBar.code"
-                                        />
-                                    </MenuItemLink>
-                                    <MenuItemLink href="https://scratch.mit.edu/users/GarboMuffin/#comments">
-                                        <FormattedMessage
-                                            defaultMessage="Feedback & Bugs"
-                                            description="Menu bar item for feedback link"
-                                            id="tw.menuBar.feedback"
+                                            description="Link to source code"
+                                            id="tw.code"
                                         />
                                     </MenuItemLink>
                                     <MenuItemLink href="/privacy.html">
                                         <FormattedMessage
                                             defaultMessage="Privacy"
-                                            description="Menu bar item for privacy policy link"
-                                            id="tw.menuBar.privacy"
+                                            description="Link to privacy policy"
+                                            id="tw.privacy"
                                         />
                                     </MenuItemLink>
                                     <MenuItemLink href="https://github.com/TurboWarp/scratch-gui/wiki/Embedding">
@@ -784,7 +828,7 @@ class MenuBar extends React.Component {
                                             id="tw.menuBar.parameters"
                                         />
                                     </MenuItemLink>
-                                    <MenuItemLink href="https://github.com/TurboWarp/translations/issues/1">
+                                    <MenuItemLink href="https://github.com/TurboWarp/translations/issues/19">
                                         <FormattedMessage
                                             defaultMessage="Help Translate TurboWarp"
                                             description="Menu bar item for translating TurboWarp link"
@@ -886,8 +930,8 @@ class MenuBar extends React.Component {
                             <Button className={styles.feedbackButton}>
                                 <FormattedMessage
                                     defaultMessage="TurboWarp Feedback"
-                                    description="Text for the giving feedback button"
-                                    id="tw.feedback"
+                                    description="Button to give feedback in the menu bar"
+                                    id="tw.feedbackButton"
                                 />
                             </Button>
                         </a>
