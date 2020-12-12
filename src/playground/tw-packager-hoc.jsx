@@ -15,12 +15,10 @@ const TWPackagerHOC = function (WrappedComponent) {
     class PackagerComponent extends React.Component {
         componentDidMount () {
             const options = window.__OPTIONS__;
-            if (options) {
-                this.props.vm.setCompilerOptions(options.compilerOptions);
-                this.props.vm.setFramerate(options.framerate);
-                this.props.vm.setTurboMode(options.turbo);
-                this.props.vm.renderer.setUseHighQualityPen(options.highQualityPen);
-            }
+            this.props.vm.setCompilerOptions(options.compilerOptions);
+            this.props.vm.setFramerate(options.framerate);
+            this.props.vm.setTurboMode(options.turbo);
+            this.props.vm.renderer.setUseHighQualityPen(options.highQualityPen);
 
             // fetch the project data from the global variable that the packager stores it in
             // this will either convert the data: URI to an array buffer for us, or fetch it from another file
