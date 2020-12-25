@@ -13,6 +13,7 @@ import {setRunningState, setTurboState, setStartedState} from '../reducers/vm-st
 import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
 import GamepadLib from './tw-gamepad/gamepadlib';
+import TouchLib from './tw-touch/touchlib';
 import * as virtualCursor from './tw-gamepad/virtual-cursor';
 import {setFramerateState, setCompilerOptionsState, addCompileError, clearCompileErrors, setRuntimeOptionsState} from '../reducers/tw';
 import analytics from './analytics';
@@ -84,6 +85,10 @@ const vmListenerHOC = function (WrappedComponent) {
                 this.gamepadLib.addEventListener('mousedown', this.handleGamepadMouseDown);
                 this.gamepadLib.addEventListener('mouseup', this.handleGamepadMouseUp);
                 this.gamepadLib.addEventListener('mousemove', this.handleGamepadMouseMove);
+                
+                this.touchLib = new TouchLib();
+                this.touchLib.addEventListener('keydown', this.handleGamepadButtonDown);
+                this.touchLib.addEventListener('keyup', this.handleGamepadButtonUp);
             }
             this.props.vm.postIOData('userData', {username: this.props.username});
         }
