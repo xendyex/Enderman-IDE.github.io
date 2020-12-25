@@ -19,7 +19,7 @@ import {
 } from '../reducers/color-picker';
 
 import {setHighQualityPenState} from '../reducers/tw';
-import * as virtualCursor from '../lib/tw-virtual-cursor/virtual-cursor';
+import * as virtualCursor from '../lib/tw-gamepad/virtual-cursor';
 
 const colorPickerRadius = 20;
 const dragThreshold = 3; // Same as the block drag threshold

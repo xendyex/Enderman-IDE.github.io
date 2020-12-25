@@ -13,7 +13,7 @@ import {setRunningState, setTurboState, setStartedState} from '../reducers/vm-st
 import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
 import GamepadLib from './tw-gamepad/gamepadlib';
-import * as virtualCursor from './tw-virtual-cursor/virtual-cursor';
+import * as virtualCursor from './tw-gamepad/virtual-cursor';
 import {setFramerateState, setCompilerOptionsState, addCompileError, clearCompileErrors, setRuntimeOptionsState} from '../reducers/tw';
 import analytics from './analytics';
 

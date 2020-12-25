@@ -15,7 +15,7 @@ import {getStageDimensions} from '../../lib/screen-utils.js';
 import styles from './stage.css';
 
 import {stageSizeToTransform} from '../../lib/screen-utils';
-import * as virtualCursor from '../../lib/tw-virtual-cursor/virtual-cursor';
+import * as virtualCursor from '../../lib/tw-gamepad/virtual-cursor';
 
 const StageComponent = props => {
     const {
