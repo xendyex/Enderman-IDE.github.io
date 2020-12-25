@@ -12,9 +12,13 @@ import {setProjectChanged, setProjectUnchanged} from '../reducers/project-change
 import {setRunningState, setTurboState, setStartedState} from '../reducers/vm-status';
 import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
-import {setFramerateState, setCompilerOptionsState} from '../reducers/tw';
 import GamepadLib from './tw-gamepad/gamepadlib';
 import * as virtualCursor from './tw-virtual-cursor/virtual-cursor';
+import {setFramerateState, setCompilerOptionsState, addCompileError, clearCompileErrors, setRuntimeOptionsState} from '../reducers/tw';
+import analytics from './analytics';
+
+let compileErrorCounter = 0;
+let sentCompileErrorEvent = false;
 
 /*
  * Higher Order Component to manage events emitted by the VM
@@ -34,7 +38,8 @@ const vmListenerHOC = function (WrappedComponent) {
                 'handleGamepadButtonUp',
                 'handleGamepadMouseDown',
                 'handleGamepadMouseUp',
-                'handleGamepadMouseMove'
+                'handleGamepadMouseMove',
+                'handleCompileError'
             ]);
             // We have to start listening to the vm here rather than in
             // componentDidMount because the HOC mounts the wrapped component,
@@ -51,13 +56,17 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('PROJECT_RUN_STOP', this.props.onProjectRunStop);
             this.props.vm.on('PROJECT_CHANGED', this.handleProjectChanged);
             this.props.vm.on('RUNTIME_STARTED', this.props.onRuntimeStarted);
+            this.props.vm.on('RUNTIME_STOPPED', this.props.onRuntimeStopped);
             this.props.vm.on('PROJECT_START', this.props.onGreenFlag);
             this.props.vm.on('PERIPHERAL_CONNECTION_LOST_ERROR', this.props.onShowExtensionAlert);
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
             // tw: add handlers for our events
             this.props.vm.on('COMPILER_OPTIONS_CHANGED', this.props.onCompilerOptionsChanged);
+            this.props.vm.on('RUNTIME_OPTIONS_CHANGED', this.props.onRuntimeOptionsChanged);
             this.props.vm.on('FRAMERATE_CHANGED', this.props.onFramerateChanged);
+            this.props.vm.on('COMPILE_ERROR', this.handleCompileError);
+            this.props.vm.on('RUNTIME_STARTED', this.props.onClearCompileErrors);
         }
         componentDidMount () {
             if (this.props.attachKeyboardEvents) {
@@ -95,6 +104,29 @@ const vmListenerHOC = function (WrappedComponent) {
                 document.removeEventListener('keydown', this.handleKeyDown);
                 document.removeEventListener('keyup', this.handleKeyUp);
             }
+        }
+        // tw: handling for compile errors
+        handleCompileError (target, error) {
+            const errorMessage = `${error}`;
+            // Ignore certain types of known errors
+            // TODO: fix the root cause of all of these
+            if (
+                errorMessage.includes('running from toolbox?') ||
+                errorMessage.includes('This block is an input, not a stacked block') ||
+                errorMessage.includes('event_whengreaterthan')
+            ) {
+                return;
+            }
+            // Send an analytics event the first time this happens
+            if (!sentCompileErrorEvent) {
+                sentCompileErrorEvent = true;
+                analytics.twEvent('Compile Error');
+            }
+            this.props.onCompileError({
+                sprite: target.getName(),
+                error: errorMessage,
+                id: compileErrorCounter++
+            });
         }
         handleProjectChanged () {
             if (this.props.shouldUpdateProjectChanged && !this.props.projectChanged) {
@@ -204,10 +236,14 @@ const vmListenerHOC = function (WrappedComponent) {
                 onProjectRunStop,
                 onProjectSaved,
                 onRuntimeStarted,
+                onRuntimeStopped,
                 onTurboModeOff,
                 onTurboModeOn,
                 onFramerateChanged,
                 onCompilerOptionsChanged,
+                onRuntimeOptionsChanged,
+                onCompileError,
+                onClearCompileErrors,
                 onShowExtensionAlert,
                 /* eslint-enable no-unused-vars */
                 ...props
@@ -228,12 +264,16 @@ const vmListenerHOC = function (WrappedComponent) {
         onProjectRunStop: PropTypes.func.isRequired,
         onProjectSaved: PropTypes.func.isRequired,
         onRuntimeStarted: PropTypes.func.isRequired,
+        onRuntimeStopped: PropTypes.func.isRequired,
         onShowExtensionAlert: PropTypes.func.isRequired,
         onTargetsUpdate: PropTypes.func.isRequired,
         onTurboModeOff: PropTypes.func.isRequired,
         onTurboModeOn: PropTypes.func.isRequired,
         onFramerateChanged: PropTypes.func.isRequired,
         onCompilerOptionsChanged: PropTypes.func.isRequired,
+        onRuntimeOptionsChanged: PropTypes.func.isRequired,
+        onCompileError: PropTypes.func,
+        onClearCompileErrors: PropTypes.func,
         projectChanged: PropTypes.bool,
         shouldUpdateTargets: PropTypes.bool,
         shouldUpdateProjectChanged: PropTypes.bool,
@@ -271,10 +311,14 @@ const vmListenerHOC = function (WrappedComponent) {
         onProjectChanged: () => dispatch(setProjectChanged()),
         onProjectSaved: () => dispatch(setProjectUnchanged()),
         onRuntimeStarted: () => dispatch(setStartedState(true)),
+        onRuntimeStopped: () => dispatch(setStartedState(false)),
         onTurboModeOn: () => dispatch(setTurboState(true)),
         onTurboModeOff: () => dispatch(setTurboState(false)),
         onFramerateChanged: framerate => dispatch(setFramerateState(framerate)),
         onCompilerOptionsChanged: options => dispatch(setCompilerOptionsState(options)),
+        onRuntimeOptionsChanged: options => dispatch(setRuntimeOptionsState(options)),
+        onCompileError: errors => dispatch(addCompileError(errors)),
+        onClearCompileErrors: () => dispatch(clearCompileErrors()),
         onShowExtensionAlert: data => {
             dispatch(showExtensionAlert(data));
         },

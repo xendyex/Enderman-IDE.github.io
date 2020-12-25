@@ -79,14 +79,15 @@ const GUIComponent = props => {
         connectionModalVisible,
         costumeLibraryVisible,
         costumesTabVisible,
-        editingTarget,
         enableCommunity,
         intl,
         isCreating,
+        isEmbedded,
         isFullScreen,
         isPlayerOnly,
         isRtl,
         isShared,
+        isWindowFullScreen,
         loading,
         logo,
         renderLogin,
@@ -114,7 +115,6 @@ const GUIComponent = props => {
         showComingSoon,
         soundsTabVisible,
         stageSizeMode,
-        sprites,
         targetIsStage,
         telemetryModalVisible,
         tipsLibraryVisible,
@@ -142,18 +142,25 @@ const GUIComponent = props => {
         const stageSize = resolveStageSize(stageSizeMode, isFullSize);
 
         return isPlayerOnly ? (
-            <StageWrapper
-                isFullScreen={isFullScreen}
-                isRendererSupported={isRendererSupported}
-                isRtl={isRtl}
-                loading={loading}
-                stageSize={STAGE_SIZE_MODES.large}
-                vm={vm}
-            >
-                {alertsVisible ? (
-                    <Alerts className={styles.alertsContainer} />
+            <React.Fragment>
+                {/* tw: when window is fullscreen, put a solid white background behind the stage */}
+                {isWindowFullScreen ? (
+                    <div className={styles.fullscreenBackground} />
                 ) : null}
-            </StageWrapper>
+                <StageWrapper
+                    isFullScreen={isFullScreen}
+                    isEmbedded={isEmbedded}
+                    isRendererSupported={isRendererSupported}
+                    isRtl={isRtl}
+                    loading={loading}
+                    stageSize={STAGE_SIZE_MODES.large}
+                    vm={vm}
+                >
+                    {alertsVisible ? (
+                        <Alerts className={styles.alertsContainer} />
+                    ) : null}
+                </StageWrapper>
+            </React.Fragment>
         ) : (
             <Box
                 className={styles.pageWrapper}
@@ -383,14 +390,15 @@ GUIComponent.propTypes = {
     children: PropTypes.node,
     costumeLibraryVisible: PropTypes.bool,
     costumesTabVisible: PropTypes.bool,
-    editingTarget: PropTypes.string,
     enableCommunity: PropTypes.bool,
     intl: intlShape.isRequired,
     isCreating: PropTypes.bool,
+    isEmbedded: PropTypes.bool,
     isFullScreen: PropTypes.bool,
     isPlayerOnly: PropTypes.bool,
     isRtl: PropTypes.bool,
     isShared: PropTypes.bool,
+    isWindowFullScreen: PropTypes.bool,
     loading: PropTypes.bool,
     logo: PropTypes.string,
     onActivateCostumesTab: PropTypes.func,
@@ -417,7 +425,6 @@ GUIComponent.propTypes = {
     renderLogin: PropTypes.func,
     showComingSoon: PropTypes.bool,
     soundsTabVisible: PropTypes.bool,
-    sprites: PropTypes.object,
     stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
     targetIsStage: PropTypes.bool,
     telemetryModalVisible: PropTypes.bool,
@@ -446,10 +453,9 @@ GUIComponent.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-    sprites: state.scratchGui.targets.sprites,
+    isWindowFullScreen: state.scratchGui.tw.isWindowFullScreen,
     // This is the button's mode, as opposed to the actual current state
-    stageSizeMode: state.scratchGui.stageSize.stageSize,
-    editingTarget: state.scratchGui.targets.editingTarget,
+    stageSizeMode: state.scratchGui.stageSize.stageSize
 });
 
 export default injectIntl(connect(

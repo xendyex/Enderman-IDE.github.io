@@ -13,12 +13,13 @@ var postcssImport = require('postcss-import');
 
 const STATIC_PATH = process.env.STATIC_PATH || '/static';
 
+let root = process.env.ROOT || '';
+if (root.length > 0 && !root.endsWith('/')) {
+    throw new Error('If ROOT is defined, it must have a trailing slash.');
+}
+
 const htmlWebpackPluginCommon = {
-    sentryConfig: process.env.SENTRY_CONFIG,
-    plausible: process.env.PLAUSIBLE_HOST ? {
-        host: process.env.PLAUSIBLE_HOST,
-        domain: process.env.PLAUSIBLE_DOMAIN
-    } : null
+    root: root
 };
 
 const base = {
@@ -27,12 +28,22 @@ const base = {
     devServer: {
         contentBase: path.resolve(__dirname, 'build'),
         host: '0.0.0.0',
-        port: process.env.PORT || 8601
+        port: process.env.PORT || 8601,
+        // allows ROUTING_STYLE=wildcard to work properly
+        historyApiFallback: {
+            rewrites: [
+                {from: /^\/\d+\/?$/, to: '/index.html'},
+                {from: /^\/\d+\/fullscreen\/?$/, to: '/fullscreen.html'},
+                {from: /^\/\d+\/editor\/?$/, to: '/editor.html'},
+                {from: /^\/\d+\/embed\/?$/, to: '/embed.html'}
+            ]
+        }
     },
     output: {
         library: 'GUI',
         filename: process.env.NODE_ENV === 'production' ? 'js/[name].[contenthash].js' : 'js/[name].js',
-        chunkFilename: process.env.NODE_ENV === 'production' ? 'js/[name].[contenthash].js' : 'js/[name].js'
+        chunkFilename: process.env.NODE_ENV === 'production' ? 'js/[name].[contenthash].js' : 'js/[name].js',
+        publicPath: root
     },
     externals: {
         React: 'react',
@@ -103,10 +114,10 @@ module.exports = [
     // to run editor examples
     defaultsDeep({}, base, {
         entry: {
-            'editor': './src/playground/editor.jsx',
-            'player': './src/playground/player.jsx',
-            'fullscreen': './src/playground/fullscreen.jsx',
-            'embed': './src/playground/embed.jsx'
+            editor: './src/playground/editor.jsx',
+            player: './src/playground/player.jsx',
+            fullscreen: './src/playground/fullscreen.jsx',
+            embed: './src/playground/embed.jsx'
         },
         output: {
             path: path.resolve(__dirname, 'build')
@@ -140,13 +151,16 @@ module.exports = [
                 'process.env.NODE_ENV': '"' + process.env.NODE_ENV + '"',
                 'process.env.DEBUG': Boolean(process.env.DEBUG),
                 'process.env.ANNOUNCEMENT': process.env.ANNOUNCEMENT ? '"' + process.env.ANNOUNCEMENT + '"' : '""',
-                'process.env.GA_ID': '"' + (process.env.GA_ID || 'UA-000000-01') + '"'
+                'process.env.ROOT': JSON.stringify(root),
+                'process.env.ROUTING_STYLE': JSON.stringify(process.env.ROUTING_STYLE || 'filehash'),
+                'process.env.PLAUSIBLE_API': JSON.stringify(process.env.PLAUSIBLE_API),
+                'process.env.PLAUSIBLE_DOMAIN': JSON.stringify(process.env.PLAUSIBLE_DOMAIN)
             }),
             new HtmlWebpackPlugin({
                 chunks: ['editor'],
                 template: 'src/playground/index.ejs',
                 filename: 'editor.html',
-                title: 'TurboWarp Editor',
+                title: 'TurboWarp - Run Scratch projects faster',
                 ...htmlWebpackPluginCommon
             }),
             new HtmlWebpackPlugin({
@@ -160,14 +174,14 @@ module.exports = [
                 chunks: ['fullscreen'],
                 template: 'src/playground/index.ejs',
                 filename: 'fullscreen.html',
-                title: 'TurboWarp',
+                title: 'TurboWarp - Run Scratch projects faster',
                 ...htmlWebpackPluginCommon
             }),
             new HtmlWebpackPlugin({
                 chunks: ['embed'],
                 template: 'src/playground/index.ejs',
                 filename: 'embed.html',
-                title: 'TurboWarp',
+                title: 'Embedded Project - TurboWarp',
                 ...htmlWebpackPluginCommon
             }),
             new HtmlWebpackPlugin({
@@ -197,7 +211,7 @@ module.exports = [
 ].concat(
     process.env.NODE_ENV === 'production' || process.env.BUILD_MODE === 'dist' ? (
         // export as library
-        // tw: TODO: need to see if this even work anymore
+        // tw: TODO: need to see if this even works anymore
         defaultsDeep({}, base, {
             target: 'web',
             entry: {

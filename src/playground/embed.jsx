@@ -1,3 +1,5 @@
+import './import-first';
+
 import ReactDOM from 'react-dom';
 import React from 'react';
 import {compose} from 'redux';
@@ -7,14 +9,25 @@ import TWStateManagerHOC from '../lib/tw-state-manager-hoc.jsx';
 import TWFullscreenResizerHOC from '../lib/tw-fullscreen-resizer-hoc.jsx';
 
 import GUI from './render-gui.jsx';
+import appTarget from './app-target';
 
-const appTarget = document.createElement('div');
-document.body.appendChild(appTarget);
-document.body.classList.add('tw-loaded');
+const getProjectId = () => {
+    // For compatibility reasons, we first look at the hash.
+    // eg. https://turbowarp.org/embed.html#1
+    const hashMatch = location.hash.match(/#(\d+)/);
+    if (hashMatch !== null) {
+        return hashMatch[1];
+    }
+    // Otherwise, we'll recreate what "wildcard" routing does.
+    // eg. https://turbowarp.org/1/embed
+    const pathMatch = location.pathname.match(/(\d+)\/embed/);
+    if (pathMatch !== null) {
+        return pathMatch[pathMatch.length - 1];
+    }
+    return null;
+};
 
-// Read the project ID from location.hash once.
-// URL parameters are not used for this as hash is already used elsewhere, and this won't tell TurboWarp.org which project is being loaded. (I don't want to know!)
-const projectId = location.hash.substr(1);
+const projectId = getProjectId();
 
 let vm;
 
@@ -42,4 +55,5 @@ ReactDOM.render(<WrappedGUI
     projectId={projectId}
     onVmInit={onVmInit}
     onProjectLoaded={onProjectLoaded}
+    routingStyle="none"
 />, appTarget);
