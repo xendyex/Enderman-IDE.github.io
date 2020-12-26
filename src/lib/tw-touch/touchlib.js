@@ -1,5 +1,4 @@
 import styles from './touchlib.css';
-import arrowImage from './arrow.svg';
 
 const intersects = (a, b) => (
     a.x < b.x + b.width &&
@@ -113,7 +112,12 @@ class TouchLib extends EventTarget {
             this.createDpadButton('up', ['ArrowUp']),
             this.createDpadButton('down', ['ArrowDown']),
             this.createDpadButton('left', ['ArrowLeft']),
-            this.createDpadButton('right', ['ArrowRight'])
+            this.createDpadButton('right', ['ArrowRight']),
+            this.createDpadButton('up right', ['ArrowUp', 'ArrowRight']),
+            this.createDpadButton('down right', ['ArrowDown', 'ArrowRight']),
+            this.createDpadButton('up left', ['ArrowUp', 'ArrowLeft']),
+            this.createDpadButton('down left', ['ArrowDown', 'ArrowLeft']),
+            this.createDpadButton('middle', [])
         ];
 
         this.root.appendChild(this.dpadContainer);
@@ -136,11 +140,9 @@ class TouchLib extends EventTarget {
     }
 
     createDpadButton (button, keys) {
-        const el = document.createElement('img');
+        const el = document.createElement('div');
         el.className = styles.dpadButton;
         el.setAttribute('button', button);
-        el.src = arrowImage;
-        el.draggable = false;
         this.dpadContainer.appendChild(el);
         return new Region(el, keys);
     }
