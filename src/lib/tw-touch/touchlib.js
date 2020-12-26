@@ -2,10 +2,10 @@ import styles from './touchlib.css';
 import classNames from 'classnames';
 
 const intersects = (a, b) => (
-    a.x < b.x + b.width &&
-    a.x + a.width > b.x &&
-    a.y < b.y + b.height &&
-    a.y + a.height > b.y
+    a.x <= b.x + b.width &&
+    a.x >= b.x &&
+    a.y <= b.y + b.height &&
+    a.y >= b.y
 );
 
 class Gesture {
@@ -30,9 +30,8 @@ class Gesture {
             this.region = null;
         }
 
-        const dotRect = this.dot.getBoundingClientRect();
         for (const region of this.touchLib.regions) {
-            if (intersects(dotRect, region)) {
+            if (intersects(this, region)) {
                 region.connect(this);
                 this.region = region;
                 break;
