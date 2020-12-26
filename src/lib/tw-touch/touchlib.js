@@ -107,7 +107,10 @@ class TouchLib extends EventTarget {
         this.root.addEventListener('touchcancel', this.handleTouchCancel);
 
         this.dpadContainer = document.createElement('div');
-        this.dpadContainer.className = styles.dpad;
+        this.dpadContainer.className = classNames(styles.buttonContainer, styles.dpad);
+
+        this.actionContainer = document.createElement('div');
+        this.actionContainer.className = classNames(styles.buttonContainer, styles.actions);
 
         this.regions = [
             new Region(this.createDpadButton('up'), ['ArrowUp']),
@@ -119,10 +122,11 @@ class TouchLib extends EventTarget {
             new Region(this.createDpadButton('up left'), ['ArrowUp', 'ArrowLeft']),
             new Region(this.createDpadButton('down left'), ['ArrowDown', 'ArrowLeft']),
             new Region(this.createDpadButton('middle'), []),
-            new Region(this.createDpadButton())
+            new Region(this.createActionButton(), [' '])
         ];
 
         this.root.appendChild(this.dpadContainer);
+        this.root.appendChild(this.actionContainer);
         document.body.appendChild(this.root);
 
         this.setupRegions();
@@ -141,12 +145,25 @@ class TouchLib extends EventTarget {
         }
     }
 
-    createDpadButton (button) {
-        const el = document.createElement('div');
-        el.className = classNames(styles.button, styles.dpadButton);
-        el.setAttribute('button', button);
-        this.dpadContainer.appendChild(el);
-        return el;
+    _createButton () {
+        const button = document.createElement('div');
+        button.className = styles.button;
+        return button;
+    }
+
+    createActionButton () {
+        const button = this._createButton('action');
+        button.classList.add(styles.actionButton);
+        this.actionContainer.appendChild(button);
+        return button;
+    }
+
+    createDpadButton (type) {
+        const button = this._createButton(type);
+        button.classList.add(styles.dpadButton);
+        button.setAttribute('type', type);
+        this.dpadContainer.appendChild(button);
+        return button;
     }
 
     update () {
