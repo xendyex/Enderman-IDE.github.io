@@ -1,4 +1,5 @@
 import styles from './touchlib.css';
+import classNames from 'classnames';
 
 const intersects = (a, b) => (
     a.x < b.x + b.width &&
@@ -106,18 +107,19 @@ class TouchLib extends EventTarget {
         this.root.addEventListener('touchcancel', this.handleTouchCancel);
 
         this.dpadContainer = document.createElement('div');
-        this.dpadContainer.className = styles.dpadContainer;
+        this.dpadContainer.className = styles.dpad;
 
         this.regions = [
-            this.createDpadButton('up', ['ArrowUp']),
-            this.createDpadButton('down', ['ArrowDown']),
-            this.createDpadButton('left', ['ArrowLeft']),
-            this.createDpadButton('right', ['ArrowRight']),
-            this.createDpadButton('up right', ['ArrowUp', 'ArrowRight']),
-            this.createDpadButton('down right', ['ArrowDown', 'ArrowRight']),
-            this.createDpadButton('up left', ['ArrowUp', 'ArrowLeft']),
-            this.createDpadButton('down left', ['ArrowDown', 'ArrowLeft']),
-            this.createDpadButton('middle', [])
+            new Region(this.createDpadButton('up'), ['ArrowUp']),
+            new Region(this.createDpadButton('down'), ['ArrowDown']),
+            new Region(this.createDpadButton('left'), ['ArrowLeft']),
+            new Region(this.createDpadButton('right'), ['ArrowRight']),
+            new Region(this.createDpadButton('up right'), ['ArrowUp', 'ArrowRight']),
+            new Region(this.createDpadButton('down right'), ['ArrowDown', 'ArrowRight']),
+            new Region(this.createDpadButton('up left'), ['ArrowUp', 'ArrowLeft']),
+            new Region(this.createDpadButton('down left'), ['ArrowDown', 'ArrowLeft']),
+            new Region(this.createDpadButton('middle'), []),
+            new Region(this.createDpadButton())
         ];
 
         this.root.appendChild(this.dpadContainer);
@@ -139,12 +141,12 @@ class TouchLib extends EventTarget {
         }
     }
 
-    createDpadButton (button, keys) {
+    createDpadButton (button) {
         const el = document.createElement('div');
-        el.className = styles.dpadButton;
+        el.className = classNames(styles.button, styles.dpadButton);
         el.setAttribute('button', button);
         this.dpadContainer.appendChild(el);
-        return new Region(el, keys);
+        return el;
     }
 
     update () {

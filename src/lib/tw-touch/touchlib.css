@@ -8,7 +8,7 @@
     pointer-events: none;
 }
 
-.dpad-container {
+.dpad {
     position: absolute;
     bottom: 0;
     height: 200px;
@@ -17,16 +17,17 @@
     pointer-events: auto;
 }
 
-.dpad-button {
+.button {
     position: absolute;
     width: calc(100% / 3);
     height: calc(100% / 3);
     background-size: 100%;
     opacity: 0.4;
 }
-.dpad-button[active] {
+.button[active] {
     opacity: 0.75;
 }
+
 .dpad-button[button="up"] {
     background-image: url("./images/up.svg");
     left: calc(100% / 3);
