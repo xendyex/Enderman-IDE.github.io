@@ -28,41 +28,41 @@
     opacity: 0.75;
 }
 .dpad-button[button="up"] {
-    background-image: url("./dpad/up.svg");
+    background-image: url("./images/up.svg");
     left: calc(100% / 3);
 }
 .dpad-button[button="down"] {
-    background-image: url("./dpad/down.svg");
+    background-image: url("./images/down.svg");
     top: calc(100% / 3 * 2);
     left: calc(100% / 3);
 }
 .dpad-button[button="left"] {
-    background-image: url("./dpad/left.svg");
+    background-image: url("./images/left.svg");
     top: calc(100% / 3);
 }
 .dpad-button[button="right"] {
-    background-image: url("./dpad/right.svg");
+    background-image: url("./images/right.svg");
     top: calc(100% / 3);
     left: calc(100% / 3 * 2);
 }
 .dpad-button[button="up right"] {
-    background-image: url("./dpad/up-right.svg");
+    background-image: url("./images/up-right.svg");
     left: calc(100% / 3 * 2);
 }
 .dpad-button[button="down right"] {
-    background-image: url("./dpad/down-right.svg");
+    background-image: url("./images/down-right.svg");
     top: calc(100% / 3 * 2);
     left: calc(100% / 3 * 2);
 }
 .dpad-button[button="up left"] {
-    background-image: url("./dpad/up-left.svg");
+    background-image: url("./images/up-left.svg");
 }
 .dpad-button[button="down left"] {
-    background-image: url("./dpad/down-left.svg");
+    background-image: url("./images/down-left.svg");
     top: calc(100% / 3 * 2);
 }
 .dpad-button[button="middle"] {
-    background-image: url("./dpad/middle.svg");
+    background-image: url("./images/middle.svg");
     top: calc(100% / 3);
     left: calc(100% / 3);
 }
