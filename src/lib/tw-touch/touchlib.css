@@ -37,11 +37,11 @@
 }
 .dpad-button[button="left"] {
     top: calc(100% / 3);
-    left: calc(100% / 3 * 2);
+    transform: rotate(180deg);
 }
 .dpad-button[button="right"] {
     top: calc(100% / 3);
-    transform: rotate(180deg);
+    left: calc(100% / 3 * 2);
 }
 
 .dot {
@@ -49,6 +49,7 @@
     width: 25px;
     height: 25px;
     border-radius: 100%;
-    background-color: green;
+    background-color: black;
+    opacity: 0.5;
     will-change: transform;
 }
