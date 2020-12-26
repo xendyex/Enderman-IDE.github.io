@@ -6,21 +6,22 @@
     height: 100%;
     z-index: 10000;
     pointer-events: none;
+    --button-size: 50px;
 }
 
 .dpad {
     position: absolute;
     bottom: 0;
-    height: 200px;
-    width: 200px;
+    height: calc(var(--button-size) * 3);
+    width: calc(var(--button-size) * 3);
     border-radius: 100%;
     pointer-events: auto;
 }
 
 .button {
     position: absolute;
-    width: calc(100% / 3);
-    height: calc(100% / 3);
+    width: var(--button-size);
+    height: var(--button-size);
     background-size: 100%;
     opacity: 0.4;
 }
