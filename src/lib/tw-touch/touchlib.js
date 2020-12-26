@@ -1,6 +1,12 @@
 import styles from './touchlib.css';
+import arrowImage from './arrow.svg';
 
-const JOYSTICK_TOLERANCE = 25;
+const intersects = (a, b) => (
+    a.x < b.x + b.width &&
+    a.x + a.width > b.x &&
+    a.y < b.y + b.height &&
+    a.y + a.height > b.y
+);
 
 class Gesture {
     /**
@@ -8,55 +14,72 @@ class Gesture {
      */
     constructor (touchLib) {
         this.touchLib = touchLib;
-        this.intent = [];
+        this.region = null;
 
         this.x = 0;
         this.y = 0;
 
-        this.dotContainer = document.createElement('div');
-        this.dotContainer.className = styles.dotContainer;
-
         this.dot = document.createElement('div');
         this.dot.className = styles.dot;
-
-        this.dotContainer.appendChild(this.dot);
-        this.touchLib.circle.appendChild(this.dotContainer);
+        this.touchLib.root.appendChild(this.dot);
     }
 
-    update () {
-        return this.intent;
-    }
-
-    updateIntent () {
-        this.intent = [];
-
-        if (this.x > JOYSTICK_TOLERANCE) {
-            this.intent.push('ArrowRight');
-        } else if (this.x < -JOYSTICK_TOLERANCE) {
-            this.intent.push('ArrowLeft');
+    updateRegion () {
+        if (this.region) {
+            this.region.disconnect(this);
+            this.region = null;
         }
 
-        // Positive y is down
-        if (this.y > JOYSTICK_TOLERANCE) {
-            this.intent.push('ArrowDown');
-        } else if (this.y < -JOYSTICK_TOLERANCE) {
-            this.intent.push('ArrowUp');
+        const dotRect = this.dot.getBoundingClientRect();
+        for (const region of this.touchLib.regions) {
+            if (intersects(dotRect, region)) {
+                region.connect(this);
+                this.region = region;
+                break;
+            }
         }
     }
 
     move (x, y) {
         this.x = x;
         this.y = y;
-        this.dot.style.transform = `translate(${x}px, ${y}px)`;
-        this.updateIntent();
+        this.dot.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+        this.updateRegion();
     }
 
     end () {
-        this.dotContainer.remove();
+        if (this.region) {
+            this.region.disconnect(this);
+        }
+        this.dot.remove();
     }
 
     cancel () {
         this.end();
+    }
+}
+
+class Region {
+    constructor (el, keys) {
+        this.el = el;
+        this.keys = keys;
+        this.x = 0;
+        this.y = 0;
+        this.width = 0;
+        this.height = 0;
+        this.gestures = new Set();
+    }
+
+    connect (gesture) {
+        this.gestures.add(gesture);
+        this.el.setAttribute('active', 'true');
+    }
+    
+    disconnect (gesture) {
+        this.gestures.delete(gesture);
+        if (this.gestures.size === 0) {
+            this.el.removeAttribute('active');
+        }
     }
 }
 
@@ -66,59 +89,86 @@ class TouchLib extends EventTarget {
 
         /** @type {Map<number, Gesture>} */
         this.gestures = new Map();
-        this.oldIntents = new Set();
+        this.oldKeys = new Set();
 
         this.handleTouchStart = this.handleTouchStart.bind(this);
         this.handleTouchMove = this.handleTouchMove.bind(this);
         this.handleTouchEnd = this.handleTouchEnd.bind(this);
         this.handleTouchCancel = this.handleTouchCancel.bind(this);
+        this.setupRegions = this.setupRegions.bind(this);
         this.update = this.update.bind(this);
 
         this.root = document.createElement('div');
         this.root.className = styles.root;
+        
+        this.root.addEventListener('touchstart', this.handleTouchStart);
+        this.root.addEventListener('touchmove', this.handleTouchMove);
+        this.root.addEventListener('touchend', this.handleTouchEnd);
+        this.root.addEventListener('touchcancel', this.handleTouchCancel);
 
-        this.circle = document.createElement('div');
-        this.circle.className = styles.circle;
+        this.dpadContainer = document.createElement('div');
+        this.dpadContainer.className = styles.dpadContainer;
 
-        this.circle.addEventListener('touchstart', this.handleTouchStart);
-        this.circle.addEventListener('touchmove', this.handleTouchMove);
-        this.circle.addEventListener('touchend', this.handleTouchEnd);
-        this.circle.addEventListener('touchcancel', this.handleTouchCancel);
+        this.regions = [
+            this.createDpadButton('up', ['ArrowUp']),
+            this.createDpadButton('down', ['ArrowDown']),
+            this.createDpadButton('left', ['ArrowLeft']),
+            this.createDpadButton('right', ['ArrowRight'])
+        ];
 
-        this.root.appendChild(this.circle);
+        this.root.appendChild(this.dpadContainer);
         document.body.appendChild(this.root);
 
-        this.rootRect = this.root.getBoundingClientRect();
-        this.rootCenter = {
-            x: this.rootRect.x + (this.rootRect.width / 2),
-            y: this.rootRect.y + (this.rootRect.height / 2)
-        };
+        this.setupRegions();
+        window.addEventListener('resize', this.setupRegions);
 
         requestAnimationFrame(this.update);
     }
-    
+
+    setupRegions () {
+        for (const region of this.regions) {
+            const rect = region.el.getBoundingClientRect();
+            region.x = rect.x;
+            region.y = rect.y;
+            region.width = rect.width;
+            region.height = rect.height;
+        }
+    }
+
+    createDpadButton (button, keys) {
+        const el = document.createElement('img');
+        el.className = styles.dpadButton;
+        el.setAttribute('button', button);
+        el.src = arrowImage;
+        el.draggable = false;
+        this.dpadContainer.appendChild(el);
+        return new Region(el, keys);
+    }
+
     update () {
         requestAnimationFrame(this.update);
 
-        const intents = new Set();
+        const keys = new Set();
         for (const gesture of this.gestures.values()) {
-            const intent = gesture.update();
-            for (const i of intent) {
-                intents.add(i);
+            const region = gesture.region;
+            if (region) {
+                for (const key of region.keys) {
+                    keys.add(key);
+                }
             }
         }
 
-        for (const key of intents) {
-            if (!this.oldIntents.has(key)) {
+        for (const key of keys) {
+            if (!this.oldKeys.has(key)) {
                 this.dispatchKey(key, true);
             }
         }
-        for (const key of this.oldIntents) {
-            if (!intents.has(key)) {
+        for (const key of this.oldKeys) {
+            if (!keys.has(key)) {
                 this.dispatchKey(key, false);
             }
         }
-        this.oldIntents = intents;
+        this.oldKeys = keys;
     }
 
     dispatchKey (key, pressed) {
@@ -130,20 +180,6 @@ class TouchLib extends EventTarget {
     }
 
     /**
-     * Get the position of a touch relative to the center of the circle.
-     * Positive x is right, positive y is down (not up)
-     * @param {Touch} touch The touch
-     * @private
-     * @returns {object} Position relative to center of the circle.
-     */
-    getTouchPosition (touch) {
-        return {
-            x: touch.clientX - this.rootCenter.x,
-            y: touch.clientY - this.rootCenter.y
-        };
-    }
-
-    /**
      * @private
      * @param {TouchEvent} e Touch event.
      */
@@ -152,8 +188,8 @@ class TouchLib extends EventTarget {
         for (const touch of e.changedTouches) {
             const gesture = new Gesture(this);
             this.gestures.set(touch.identifier, gesture);
-            const {x, y} = this.getTouchPosition(touch);
-            gesture.move(x, y);
+            const {clientX, clientY} = touch;
+            gesture.move(clientX, clientY);
         }
     }
 
@@ -166,8 +202,8 @@ class TouchLib extends EventTarget {
         for (const touch of e.changedTouches) {
             const gesture = this.gestures.get(touch.identifier);
             if (gesture) {
-                const {x, y} = this.getTouchPosition(touch);
-                gesture.move(x, y);
+                const {clientX, clientY} = touch;
+                gesture.move(clientX, clientY);
             }
         }
     }
