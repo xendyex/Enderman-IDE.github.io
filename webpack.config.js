@@ -5,6 +5,7 @@ var webpack = require('webpack');
 // Plugins
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var WorkboxPlugin = require('workbox-webpack-plugin');
 
 // PostCss
 var autoprefixer = require('autoprefixer');
@@ -205,7 +206,12 @@ module.exports = [
             new CopyWebpackPlugin([{
                 from: 'extension-worker.{js,js.map}',
                 context: 'node_modules/scratch-vm/dist/web'
-            }])
+            }]),
+            new WorkboxPlugin.GenerateSW({
+                clientsClaim: true,
+                skipWaiting: true,
+                maximumFileSizeToCacheInBytes: Number.MAX_SAFE_INTEGER
+            })
         ])
     })
 ].concat(
