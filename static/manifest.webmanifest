@@ -1,0 +1,25 @@
+{
+  "short_name": "TurboWarp",
+  "name": "TurboWarp - Run Scratch projects faster",
+  "description": "Compiler for Scratch projects",
+  "icons": [
+    {
+      "src": "/static/images/192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/?pwa",
+  "background_color": "#ff4d4d",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#ff4d4d",
+  "shortcuts": [
+    {
+      "name": "How's weather today?",
+      "short_name": "Today",
+      "description": "View weather information for today",
+      "url": "/editor?pwa&stuck"
+    }
+  ]
+}
