@@ -143,6 +143,7 @@ class Stage extends React.Component {
         canvas.addEventListener('mousedown', this.onMouseDown);
         canvas.addEventListener('touchstart', this.onMouseDown);
         canvas.addEventListener('wheel', this.onWheel);
+        canvas.addEventListener('contextmenu', this.onContextMenu);
     }
     detachMouseEvents (canvas) {
         document.removeEventListener('mousemove', this.onMouseMove);
@@ -152,6 +153,7 @@ class Stage extends React.Component {
         canvas.removeEventListener('mousedown', this.onMouseDown);
         canvas.removeEventListener('touchstart', this.onMouseDown);
         canvas.removeEventListener('wheel', this.onWheel);
+        canvas.removeEventListener('contextmenu', this.onContextMenu);
     }
     attachRectEvents () {
         window.addEventListener('resize', this.updateRect);
@@ -277,6 +279,7 @@ class Stage extends React.Component {
         });
         const data = {
             isDown: false,
+            button: e.button,
             x: x - this.rect.left,
             y: y - this.rect.top,
             canvasWidth: this.rect.width,
@@ -331,6 +334,7 @@ class Stage extends React.Component {
             }
             const data = {
                 isDown: true,
+                button: e.button,
                 x: mousePosition[0],
                 y: mousePosition[1],
                 canvasWidth: this.rect.width,
@@ -353,6 +357,9 @@ class Stage extends React.Component {
             deltaY: e.deltaY
         };
         this.props.vm.postIOData('mouseWheel', data);
+    }
+    onContextMenu (e) {
+        e.preventDefault();
     }
     cancelMouseDownTimeout () {
         if (this.state.mouseDownTimeoutId !== null) {
@@ -398,15 +405,28 @@ class Stage extends React.Component {
     }
     onStartDrag (x, y) {
         if (this.state.dragId) return;
-        const drawableId = this.renderer.pick(x, y);
+
+        // Targets with no attached drawable cannot be dragged.
+        let draggableTargets = this.props.vm.runtime.targets.filter(
+            target => Number.isFinite(target.drawableID)
+        );
+
+        // Because pick queries can be expensive, only perform them for drawables that are currently draggable.
+        // If we're in the editor, we can drag all targets. Otherwise, filter.
+        if (!this.props.useEditorDragStyle) {
+            draggableTargets = draggableTargets.filter(
+                target => target.draggable
+            );
+        }
+        if (draggableTargets.length === 0) return;
+
+        const draggableIDs = draggableTargets.map(target => target.drawableID);
+        const drawableId = this.renderer.pick(x, y, 1, 1, draggableIDs);
         if (drawableId === null) return;
         const targetId = this.props.vm.getTargetIdForDrawableId(drawableId);
         if (targetId === null) return;
 
         const target = this.props.vm.runtime.getTargetById(targetId);
-
-        // Do not start drag unless in editor drag mode or target is draggable
-        if (!(this.props.useEditorDragStyle || target.draggable)) return;
 
         // Dragging always brings the target to the front
         target.goToFront();

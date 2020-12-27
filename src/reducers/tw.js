@@ -10,6 +10,8 @@ const SET_AUTHOR = 'tw/SET_AUTHOR';
 const SET_DESCRIPTION = 'tw/SET_DESCRIPTION';
 const ADD_COMPILE_ERROR = 'tw/ADD_COMPILE_ERROR';
 const CLEAR_COMPILE_ERRORS = 'tw/CLEAR_COMPILE_ERRORS';
+const SET_FILE_HANDLE = 'tw/SET_FILE_HANDLE';
+const SET_SHOWED_EXTENDED_EXTENSIONS_WARNING = 'tw/SET_SHOWED_EXTENDED_EXTENSIONS_WARNING';
 
 export const initialState = {
     framerate: 30,
@@ -33,7 +35,9 @@ export const initialState = {
         instructions: '',
         credits: ''
     },
-    compileErrors: []
+    compileErrors: [],
+    fileHandle: null,
+    showedExtendedExtensionsWarning: false
 };
 
 const reducer = function (state, action) {
@@ -89,6 +93,14 @@ const reducer = function (state, action) {
     case CLEAR_COMPILE_ERRORS:
         return Object.assign({}, state, {
             compileErrors: []
+        });
+    case SET_FILE_HANDLE:
+        return Object.assign({}, state, {
+            fileHandle: action.fileHandle
+        });
+    case SET_SHOWED_EXTENDED_EXTENSIONS_WARNING:
+        return Object.assign({}, state, {
+            showedExtendedExtensionsWarning: action.showedExtendedExtensionsWarning
         });
     default:
         return state;
@@ -178,6 +190,20 @@ const clearCompileErrors = function () {
     };
 };
 
+const setFileHandle = function (fileHandle) {
+    return {
+        type: SET_FILE_HANDLE,
+        fileHandle: fileHandle
+    };
+};
+
+const setShowedExtendedExtensionsWarning = function (showedExtendedExtensionsWarning) {
+    return {
+        type: SET_SHOWED_EXTENDED_EXTENSIONS_WARNING,
+        showedExtendedExtensionsWarning: showedExtendedExtensionsWarning
+    };
+};
+
 export {
     reducer as default,
     initialState as twInitialState,
@@ -192,5 +218,7 @@ export {
     setAuthor,
     setDescription,
     addCompileError,
-    clearCompileErrors
+    clearCompileErrors,
+    setFileHandle,
+    setShowedExtendedExtensionsWarning
 };
