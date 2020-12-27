@@ -1,7 +1,7 @@
 {
   "short_name": "TurboWarp",
-  "name": "TurboWarp - Run Scratch projects faster",
-  "description": "Compiler for Scratch projects",
+  "name": "TurboWarp",
+  "description": "Scratch editor with a compiler.",
   "icons": [
     {
       "src": "/static/images/192.png",
@@ -9,17 +9,17 @@
       "sizes": "192x192"
     }
   ],
-  "start_url": "/?pwa",
-  "background_color": "#ff4d4d",
+  "start_url": "/pwa/editor?pwa",
+  "background_color": "#333333",
   "display": "standalone",
-  "scope": "/",
-  "theme_color": "#ff4d4d",
+  "scope": "/pwa/",
+  "theme_color": "#333333",
   "shortcuts": [
     {
-      "name": "How's weather today?",
-      "short_name": "Today",
-      "description": "View weather information for today",
-      "url": "/editor?pwa&stuck"
+      "name": "Without comipler",
+      "short_name": "Without compiler",
+      "description": "The editor without the compiler",
+      "url": "/pwa/editor?pwa&nocompile"
     }
   ]
 }
