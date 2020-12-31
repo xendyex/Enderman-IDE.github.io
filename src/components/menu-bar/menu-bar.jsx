@@ -33,6 +33,7 @@ import ChangeUsername from '../../containers/tw-change-username.jsx';
 import CloudVariablesToggler from '../../containers/tw-cloud-toggler.jsx';
 import VMOptions from '../../containers/tw-vm-options.jsx';
 import TWSaveStatus from './tw-save-status.jsx';
+import Screenshot from '../../containers/tw-screenshot.jsx';
 
 import {openTipsLibrary} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
@@ -645,6 +646,15 @@ class MenuBar extends React.Component {
                                             )}
                                         </MenuItem>
                                     )}</SixtyFPSToggler>
+                                    <Screenshot>{screenshot => (
+                                        <MenuItem onClick={screenshot}>
+                                            <FormattedMessage
+                                                defaultMessage="Screenshot"
+                                                description="Menu bar item for to take a screenshot of the project"
+                                                id="tw.menuBar.screenshot"
+                                            />
+                                        </MenuItem>
+                                    )}</Screenshot>
                                     <ChangeUsername>{changeUsername => (
                                         <MenuItem onClick={changeUsername}>
                                             <FormattedMessage
