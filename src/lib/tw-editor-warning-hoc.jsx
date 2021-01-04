@@ -41,7 +41,7 @@ const TWEditorWarningHOC = function (WrappedComponent) {
             if (!this.props.isPlayerOnly) {
                 shownWarning = true;
 
-                this.props.onShowWarning();
+                // this.props.onShowWarning();
                 this.props.vm.setCompilerOptions({
                     warpTimer: true
                 });
