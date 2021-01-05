@@ -1,7 +1,7 @@
 let loaded = false;
 
 const load = () => {
-    import(/* webpackChunkName: "addons" */ './index');
+    // import(/* webpackChunkName: "addons" */ './index');
 };
 
 const loadAddons = () => {
