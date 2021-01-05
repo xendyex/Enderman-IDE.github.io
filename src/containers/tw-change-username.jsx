@@ -20,9 +20,9 @@ class ChangeUsername extends React.Component {
             'changeUsername'
         ]);
     }
-    changeUsername () {
+    async changeUsername () {
         // eslint-disable-next-line no-alert
-        const newUsername = prompt(this.props.intl.formatMessage(messages.usernamePrompt), this.props.username);
+        const newUsername = await prompt(this.props.intl.formatMessage(messages.usernamePrompt), this.props.username);
         if (newUsername === null) {
             return;
         }
