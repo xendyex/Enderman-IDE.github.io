@@ -552,30 +552,6 @@ class MenuBar extends React.Component {
                                                         </MenuItem>
                                                     </React.Fragment>
                                                 )}
-                                                <MenuItem onClick={this.getSaveToComputerHandler(downloadProject)}>
-                                                    {extended.available ? (
-                                                        <FormattedMessage
-                                                            defaultMessage="{saveToYourComputer} (legacy)"
-                                                            description="Wrapper around 'Save to your computer' when a more modern API is available" // eslint-disable-line max-len
-                                                            id="tw.menuBar.legacyDownloadToComputer"
-                                                            values={{
-                                                                saveToYourComputer: (
-                                                                    <FormattedMessage
-                                                                        defaultMessage="Save to your computer"
-                                                                        description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
-                                                                        id="gui.menuBar.downloadToComputer"
-                                                                    />
-                                                                )
-                                                            }}
-                                                        />
-                                                    ) : (
-                                                        <FormattedMessage
-                                                            defaultMessage="Save to your computer"
-                                                            description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
-                                                            id="gui.menuBar.downloadToComputer"
-                                                        />
-                                                    )}
-                                                </MenuItem>
                                             </React.Fragment>
                                         )}</SB3Downloader>
                                     </MenuSection>
