@@ -11,6 +11,9 @@ var autoprefixer = require('autoprefixer');
 var postcssVars = require('postcss-simple-vars');
 var postcssImport = require('postcss-import');
 
+process.env.NODE_ENV = 'production'; // force production
+process.env.STATIC_PATH = 'static'; // remove leading / from static
+
 const STATIC_PATH = process.env.STATIC_PATH || '/static';
 
 let root = process.env.ROOT || '';
