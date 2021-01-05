@@ -32,6 +32,7 @@ import HighQualityPen from '../../containers/tw-high-quality-pen.jsx';
 import ChangeUsername from '../../containers/tw-change-username.jsx';
 import CloudVariablesToggler from '../../containers/tw-cloud-toggler.jsx';
 import VMOptions from '../../containers/tw-vm-options.jsx';
+import TWAutoSaveLoader from '../../containers/tw-autosave-loader.jsx';
 import TWSaveStatus from './tw-save-status.jsx';
 
 import {openTipsLibrary} from '../../reducers/modals';
@@ -279,7 +280,7 @@ class MenuBar extends React.Component {
     handleKeyPress (event) {
         const modifier = bowser.mac ? event.metaKey : event.ctrlKey;
         if (modifier && event.key === 's') {
-            this.props.onClickSave();
+            // tw: disable Ctrl+S for now until it can be hooked up to the proper API
             event.preventDefault();
         }
     }
@@ -577,6 +578,20 @@ class MenuBar extends React.Component {
                                                 </MenuItem>
                                             </React.Fragment>
                                         )}</SB3Downloader>
+                                    </MenuSection>
+                                    <MenuSection>
+                                        <TWAutoSaveLoader>{(className, loadAutoSave) => (
+                                            <MenuItem
+                                                className={className}
+                                                onClick={loadAutoSave}
+                                            >
+                                                <FormattedMessage
+                                                    defaultMessage="Load restore point (BETA)"
+                                                    description="Menu bar item for loading a restore point"
+                                                    id="tw.menuBar.loadAutoSave"
+                                                />
+                                            </MenuItem>
+                                        )}</TWAutoSaveLoader>
                                     </MenuSection>
                                 </MenuBarMenu>
                             </div>
