@@ -562,8 +562,8 @@ class MenuBar extends React.Component {
                                                 onClick={loadAutoSave}
                                             >
                                                 <FormattedMessage
-                                                    defaultMessage="Load restore point (BETA)"
-                                                    description="Menu bar item for loading a restore point"
+                                                    defaultMessage="Load autosave (BETA)"
+                                                    description="Menu bar item for loading an autosave"
                                                     id="tw.menuBar.loadAutoSave"
                                                 />
                                             </MenuItem>
@@ -806,6 +806,13 @@ class MenuBar extends React.Component {
                                 onRequestClose={this.props.onRequestCloseHelp}
                             >
                                 <MenuSection>
+                                    <MenuItemLink href="https://github.com/TurboWarp/desktop/blob/master/LICENSE">
+                                        <FormattedMessage
+                                            defaultMessage="License"
+                                            description="Link to license"
+                                            id="tw.license"
+                                        />
+                                    </MenuItemLink>
                                     <MenuItemLink href="https://github.com/TurboWarp">
                                         <FormattedMessage
                                             defaultMessage="Source Code"
