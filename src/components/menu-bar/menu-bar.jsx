@@ -820,32 +820,11 @@ class MenuBar extends React.Component {
                                             id="tw.code"
                                         />
                                     </MenuItemLink>
-                                    <MenuItemLink href="/privacy.html">
-                                        <FormattedMessage
-                                            defaultMessage="Privacy"
-                                            description="Link to privacy policy"
-                                            id="tw.privacy"
-                                        />
-                                    </MenuItemLink>
-                                    <MenuItemLink href="https://github.com/TurboWarp/scratch-gui/wiki/Embedding">
-                                        <FormattedMessage
-                                            defaultMessage="Embedding"
-                                            description="Menu bar item for embedding link"
-                                            id="tw.menuBar.embed"
-                                        />
-                                    </MenuItemLink>
                                     <MenuItemLink href="https://github.com/TurboWarp/scratch-gui/wiki/TurboWarp-blocks">
                                         <FormattedMessage
                                             defaultMessage="TurboWarp Blocks"
                                             description="Menu bar item for TurboWarp blocks link"
                                             id="tw.menuBar.blocks"
-                                        />
-                                    </MenuItemLink>
-                                    <MenuItemLink href="https://github.com/TurboWarp/scratch-gui/wiki/URL-Parameters">
-                                        <FormattedMessage
-                                            defaultMessage="URL Parameters"
-                                            description="Menu bar item for URL parameters link"
-                                            id="tw.menuBar.parameters"
                                         />
                                     </MenuItemLink>
                                     <MenuItemLink href="https://github.com/TurboWarp/translations/blob/master/CONTRIBUTING.md#readme">
