@@ -384,7 +384,7 @@ class MenuBar extends React.Component {
             >
                 <div className={styles.mainMenu}>
                     <div className={styles.fileGroup}>
-                        {this.props.onClickLogo ? (
+                        {false && this.props.onClickLogo ? (
                             <div className={classNames(styles.menuBarItem)}>
                                 <img
                                     alt="Scratch"
@@ -806,18 +806,25 @@ class MenuBar extends React.Component {
                                 onRequestClose={this.props.onRequestCloseHelp}
                             >
                                 <MenuSection>
-                                    <MenuItemLink href="https://github.com/TurboWarp/desktop/blob/master/LICENSE">
+                                    <MenuItem onClick={this.props.onClickLogo}>
                                         <FormattedMessage
-                                            defaultMessage="License"
-                                            description="Link to license"
-                                            id="tw.license"
+                                            defaultMessage="About, credits, license"
+                                            description="Link to about in desktop"
+                                            id="tw.desktop.about"
                                         />
-                                    </MenuItemLink>
+                                    </MenuItem>
                                     <MenuItemLink href="https://github.com/TurboWarp">
                                         <FormattedMessage
                                             defaultMessage="Source Code"
                                             description="Link to source code"
                                             id="tw.code"
+                                        />
+                                    </MenuItemLink>
+                                    <MenuItemLink href="https://desktop.turbowarp.org">
+                                        <FormattedMessage
+                                            defaultMessage="Website"
+                                            description="Link to website in desktop"
+                                            id="tw.desktop.website"
                                         />
                                     </MenuItemLink>
                                     <MenuItemLink href="https://github.com/TurboWarp/scratch-gui/wiki/TurboWarp-blocks">
