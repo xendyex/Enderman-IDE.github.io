@@ -6,6 +6,8 @@ import {ScratchPaintReducer} from 'scratch-paint';
 import {setFullScreen, setPlayer} from './reducers/mode';
 import {remixProject} from './reducers/project-state';
 import {setAppElement} from 'react-modal';
+import {setFileHandle} from './reducers/tw';
+import {openLoadingProject, closeLoadingProject} from './reducers/modals';
 
 const guiReducers = {
     locales: LocalesReducer,
@@ -27,5 +29,8 @@ export {
     localesInitialState,
     remixProject,
     setFullScreen,
-    setPlayer
+    setPlayer,
+    setFileHandle,
+    openLoadingProject,
+    closeLoadingProject
 };
