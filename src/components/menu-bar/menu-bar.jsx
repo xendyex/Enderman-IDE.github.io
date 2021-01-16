@@ -685,14 +685,25 @@ class MenuBar extends React.Component {
                                 place={this.props.isRtl ? 'left' : 'right'}
                                 onRequestClose={this.props.onRequestCloseSettings}
                             >
-                                <MenuSection>
-                                    <MenuItemLink href="https://github.com/TurboWarp/scratch-gui/wiki/Advanced-Settings">
+                                {this.props.onClickAddonSettings && (<MenuSection>
+                                    <MenuItem onClick={this.props.onClickAddonSettings}>
                                         <FormattedMessage
-                                            defaultMessage="Advanced Settings Help"
-                                            description="Menu bar item for advanced settings help"
-                                            id="tw.menuBar.advancedHelp"
+                                            defaultMessage="Addon Settings"
+                                            description="Menu bar item for addon settings"
+                                            id="tw.menuBar.addonSettings"
                                         />
-                                    </MenuItemLink>
+                                    </MenuItem>
+                                </MenuSection>)}
+                                <MenuSection>
+                                    <div>
+                                        <MenuItemLink href="https://github.com/TurboWarp/scratch-gui/wiki/Advanced-Settings">
+                                            <FormattedMessage
+                                                defaultMessage="Advanced Settings Help"
+                                                description="Menu bar item for advanced settings help"
+                                                id="tw.menuBar.advancedHelp"
+                                            />
+                                        </MenuItemLink>
+                                    </div>
                                 </MenuSection>
                                 <MenuSection>
                                     {/* Wrap the top item in a div so that it gets a border */}
@@ -983,6 +994,7 @@ MenuBar.propTypes = {
     logo: PropTypes.string,
     onClickAbout: PropTypes.func,
     onClickAccount: PropTypes.func,
+    onClickAddonSettings: PropTypes.func,
     onClickEdit: PropTypes.func,
     onClickFile: PropTypes.func,
     onClickLanguage: PropTypes.func,
