@@ -83,10 +83,11 @@ const AppStateHOC = function (WrappedComponent, localesOnly) {
             }
             const reducer = combineReducers(reducers);
             const reducer2 = (a, b) => {
+                const next = reducer(a, b);
                 if (window.__APP_STATE_REDUCER__) {
-                    window.__APP_STATE_REDUCER__(b);
+                    window.__APP_STATE_REDUCER__(b, next);
                 }
-                return reducer(a, b);
+                return next;
             };
             this.store = createStore(
                 reducer2,
