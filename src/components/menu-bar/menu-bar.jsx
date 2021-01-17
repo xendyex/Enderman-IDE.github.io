@@ -805,7 +805,7 @@ class MenuBar extends React.Component {
                                 <MenuSection>
                                     <MenuItem onClick={this.props.onClickLogo}>
                                         <FormattedMessage
-                                            defaultMessage="About, credits, license"
+                                            defaultMessage="About and license"
                                             description="Link to about in desktop"
                                             id="tw.desktop.about"
                                         />
