@@ -664,6 +664,20 @@ class MenuBar extends React.Component {
                                 </MenuSection>
                             </MenuBarMenu>
                         </div>
+                        {this.props.onClickAddonSettings && (
+                            <div
+                                className={classNames(styles.menuBarItem, styles.hoverable)}
+                                onMouseUp={this.props.onClickAddonSettings}
+                            >
+                                <div className={classNames(styles.addonsMenu)}>
+                                    <FormattedMessage
+                                        defaultMessage="Addons"
+                                        description="Menu bar item for addon settings"
+                                        id="tw.menuBar.addons"
+                                    />
+                                </div>
+                            </div>
+                        )}
                         <div
                             className={classNames(styles.menuBarItem, styles.hoverable, {
                                 [styles.active]: this.props.settingsMenuOpen
@@ -683,25 +697,14 @@ class MenuBar extends React.Component {
                                 place={this.props.isRtl ? 'left' : 'right'}
                                 onRequestClose={this.props.onRequestCloseSettings}
                             >
-                                {this.props.onClickAddonSettings && (<MenuSection>
-                                    <MenuItem onClick={this.props.onClickAddonSettings}>
-                                        <FormattedMessage
-                                            defaultMessage="Addon Settings"
-                                            description="Menu bar item for addon settings"
-                                            id="tw.menuBar.addonSettings"
-                                        />
-                                    </MenuItem>
-                                </MenuSection>)}
                                 <MenuSection>
-                                    <div>
-                                        <MenuItemLink href="https://github.com/TurboWarp/scratch-gui/wiki/Advanced-Settings">
-                                            <FormattedMessage
-                                                defaultMessage="Advanced Settings Help"
-                                                description="Menu bar item for advanced settings help"
-                                                id="tw.menuBar.advancedHelp"
-                                            />
-                                        </MenuItemLink>
-                                    </div>
+                                    <MenuItemLink href="https://github.com/TurboWarp/scratch-gui/wiki/Advanced-Settings">
+                                        <FormattedMessage
+                                            defaultMessage="Advanced Settings Help"
+                                            description="Menu bar item for advanced settings help"
+                                            id="tw.menuBar.advancedHelp"
+                                        />
+                                    </MenuItemLink>
                                 </MenuSection>
                                 <MenuSection>
                                     {/* Wrap the top item in a div so that it gets a border */}
