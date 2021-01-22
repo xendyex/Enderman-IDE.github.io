@@ -11,8 +11,10 @@ const mergeMessages = messages => {
         const aliases = translationAliases[language] || [language];
         for (const alias of aliases) {
             const languageMessages = (messages[alias] || (messages[alias] = {}));
-            for (const messageId of Object.keys(newMessages)) {
-                languageMessages[messageId] = newMessages[messageId];
+            if (languageMessages) {
+                for (const messageId of Object.keys(newMessages)) {
+                    languageMessages[messageId] = newMessages[messageId];
+                }
             }
         }
     }

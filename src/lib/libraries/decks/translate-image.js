@@ -9,6 +9,7 @@ const defaultImages = {};
 let savedImages = {};
 let savedLocale = '';
 
+// tw: we don't use the videos, remove them
 const translations = {
 
 };

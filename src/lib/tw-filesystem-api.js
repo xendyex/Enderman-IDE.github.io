@@ -8,7 +8,8 @@ const showSaveFilePicker = async () => await window.showSaveFilePicker({
                 'application/x.scratch.sb3': '.sb3'
             }
         }
-    ]
+    ],
+    excludeAcceptAllOption: true
 });
 
 const showOpenFilePicker = async () => {
@@ -26,13 +27,14 @@ const showOpenFilePicker = async () => {
     return handle;
 };
 
-const createWritable = (handle) => {
-    return handle.createWritable();
+const createWritable = handle => handle.createWritable();
+
+const closeWritable = async writable => {
+    await writable.close();
 };
 
 const writeToWritable = async (writable, content) => {
     await writable.write(content);
-    await writable.close();
 };
 
 export default {
@@ -40,5 +42,6 @@ export default {
     showOpenFilePicker,
     showSaveFilePicker,
     createWritable,
+    closeWritable,
     writeToWritable
 };

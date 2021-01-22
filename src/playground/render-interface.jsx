@@ -9,7 +9,8 @@ import AppStateHOC from '../lib/app-state-hoc.jsx';
 import TWProjectMetaFetcherHOC from '../lib/tw-project-meta-fetcher-hoc.jsx';
 import TWEditorWarningHOC from '../lib/tw-editor-warning-hoc.jsx';
 import TWStateManagerHOC from '../lib/tw-state-manager-hoc.jsx';
-import TWFullscreenResizerHOC from '../lib/tw-fullscreen-resizer-hoc.jsx';
+import TWDarkModeHOC from '../lib/tw-dark-mode-hoc.jsx';
+import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
 
 import GUI from './render-gui.jsx';
 import MenuBar from '../components/menu-bar/menu-bar.jsx';
@@ -19,18 +20,16 @@ import Description from '../components/tw-description/description.jsx';
 
 import styles from './interface.css';
 
-if (window !== window.parent) {
-    // Show a warning when trying to embed this page. Users shouldn't do that.
-    // eslint-disable-next-line no-alert
-    alert('You are embedding TurboWarp incorrectly.\n\nGo here for instructions: https://github.com/TurboWarp/scratch-gui/wiki/Embedding');
-}
-
 let announcement = null;
 if (process.env.ANNOUNCEMENT) {
     announcement = document.createElement('p');
     // This is safe because process.env.ANNOUNCEMENT is set at build time.
     announcement.innerHTML = process.env.ANNOUNCEMENT;
 }
+
+const WrappedMenuBar = compose(
+    SBFileUploaderHOC
+)(MenuBar);
 
 const Interface = ({
     description,
@@ -42,7 +41,7 @@ const Interface = ({
         <div className={classNames(styles.container, isHomepage ? styles.playerOnly : styles.editor)}>
             {isHomepage ? (
                 <div className={styles.menu}>
-                    <MenuBar
+                    <WrappedMenuBar
                         canManageFiles
                         canChangeLanguage
                         enableSeeInside
@@ -80,9 +79,24 @@ const Interface = ({
                         <footer className={classNames(styles.section, styles.footer)}>
                             <p>
                                 <FormattedMessage
-                                    defaultMessage="Projects from the Scratch website are licensed under the Creative Commons Attribution-ShareAlike 2.0 license. TurboWarp is not affiliated with Scratch, the Scratch Team, or the Scratch Foundation."
+                                    defaultMessage="Projects from the Scratch website are licensed under the {ccbysa2}. TurboWarp is not affiliated with Scratch, the Scratch Team, or the Scratch Foundation."
                                     description="Disclaimer that TurboWarp is not connected to Scratch and licensing information"
                                     id="tw.footer.disclaimer"
+                                    values={{
+                                        ccbysa2: (
+                                            <a
+                                                href="https://creativecommons.org/licenses/by-sa/2.0/"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
+                                                <FormattedMessage
+                                                    defaultMessage="Creative Commons Attribution-ShareAlike 2.0 license"
+                                                    description="Name of the license used by Scratch projects, CC BY-SA 2.0."
+                                                    id="tw.footer.disclaimer.ccbysa2"
+                                                />
+                                            </a>
+                                        )
+                                    }}
                                 />
                             </p>
                             <p>
@@ -179,7 +193,7 @@ const WrappedInterface = compose(
     TWProjectMetaFetcherHOC,
     TWEditorWarningHOC,
     TWStateManagerHOC,
-    TWFullscreenResizerHOC
+    TWDarkModeHOC
 )(ConnectedInterface);
 
 export default WrappedInterface;
