@@ -29,7 +29,7 @@ const TWPackagerHOC = function (WrappedComponent) {
             this.props.vm.setCompilerOptions(options.compilerOptions);
             this.props.vm.setFramerate(options.framerate);
             this.props.vm.setTurboMode(options.turbo);
-            this.props.vm.renderer.setUseHighQualityPen(options.highQualityPen);
+            this.props.vm.renderer.setUseHighQualityRender(options.highQualityPen);
 
             if (options.username) {
                 this.props.onSetUsername(options.username);
