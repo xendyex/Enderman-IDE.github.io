@@ -1,3 +1,21 @@
+/**
+ * @license
+ * Copyright (c) 2021 Thomas Weber
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -9,8 +27,9 @@ import AppStateHOC from '../lib/app-state-hoc.jsx';
 import TWProjectMetaFetcherHOC from '../lib/tw-project-meta-fetcher-hoc.jsx';
 import TWEditorWarningHOC from '../lib/tw-editor-warning-hoc.jsx';
 import TWStateManagerHOC from '../lib/tw-state-manager-hoc.jsx';
-import TWDarkModeHOC from '../lib/tw-dark-mode-hoc.jsx';
+import TWThemeHOC from '../lib/tw-theme-hoc.jsx';
 import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
+import SettingsStore from '../addons/settings-store';
 
 import GUI from './render-gui.jsx';
 import MenuBar from '../components/menu-bar/menu-bar.jsx';
@@ -27,6 +46,28 @@ if (process.env.ANNOUNCEMENT) {
     announcement.innerHTML = process.env.ANNOUNCEMENT;
 }
 
+window.addEventListener('message', e => {
+    if (e.origin !== location.origin) {
+        return;
+    }
+    const data = e.data;
+    if (data.type === 'reload') {
+        location.reload();
+    }
+    if (data.type === 'settings-changed') {
+        SettingsStore.setStore(data.store);
+    }
+});
+
+const handleClickAddonSettings = () => {
+    const path = process.env.ROUTING_STYLE === 'wildcard' ? 'addons' : 'addons.html';
+    window.open(`${process.env.ROOT}${path}`);
+};
+
+const handleLoadAddons = () => {
+    import(/* webpackChunkName: "addons" */ '../addons/entry');
+};
+
 const WrappedMenuBar = compose(
     SBFileUploaderHOC
 )(MenuBar);
@@ -34,7 +75,8 @@ const WrappedMenuBar = compose(
 const Interface = ({
     description,
     isFullScreen,
-    isPlayerOnly
+    isPlayerOnly,
+    onClickTheme
 }) => {
     const isHomepage = isPlayerOnly && !isFullScreen;
     return (
@@ -45,12 +87,17 @@ const Interface = ({
                         canManageFiles
                         canChangeLanguage
                         enableSeeInside
+                        onClickTheme={onClickTheme}
                     />
                 </div>
             ) : null}
             <div className={styles.center}>
                 {isHomepage && announcement ? <DOMElementRenderer domElement={announcement} /> : null}
-                <GUI />
+                <GUI
+                    onClickAddonSettings={handleClickAddonSettings}
+                    onLoadAddons={handleLoadAddons}
+                    onClickTheme={onClickTheme}
+                />
                 {isHomepage ? (
                     <React.Fragment>
                         <div className={styles.section}>
@@ -172,7 +219,8 @@ Interface.propTypes = {
         instructions: PropTypes.string
     }),
     isFullScreen: PropTypes.bool,
-    isPlayerOnly: PropTypes.bool
+    isPlayerOnly: PropTypes.bool,
+    onClickTheme: PropTypes.func
 };
 
 const mapStateToProps = state => ({
@@ -193,7 +241,7 @@ const WrappedInterface = compose(
     TWProjectMetaFetcherHOC,
     TWEditorWarningHOC,
     TWStateManagerHOC,
-    TWDarkModeHOC
+    TWThemeHOC
 )(ConnectedInterface);
 
 export default WrappedInterface;

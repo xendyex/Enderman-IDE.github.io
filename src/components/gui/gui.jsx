@@ -95,6 +95,7 @@ const GUIComponent = props => {
         onClickAccountNav,
         onCloseAccountNav,
         onClickAddonSettings,
+        onClickTheme,
         onLogOut,
         onOpenRegistration,
         onToggleLoginOpen,
@@ -179,10 +180,13 @@ const GUIComponent = props => {
                     />
                 ) : null}
                 {loading ? (
-                    <Loader />
+                    <Loader isFullScreen />
                 ) : null}
                 {isCreating ? (
-                    <Loader messageId="gui.loader.creating" />
+                    <Loader
+                        isFullScreen
+                        messageId="gui.loader.creating"
+                    />
                 ) : null}
                 {isRendererSupported ? null : (
                     <WebGlModal isRtl={isRtl} />
@@ -235,6 +239,7 @@ const GUIComponent = props => {
                     onClickAbout={onClickAbout}
                     onClickAccountNav={onClickAccountNav}
                     onClickAddonSettings={onClickAddonSettings}
+                    onClickTheme={onClickTheme}
                     onClickLogo={onClickLogo}
                     onCloseAccountNav={onCloseAccountNav}
                     onLogOut={onLogOut}
@@ -411,6 +416,7 @@ GUIComponent.propTypes = {
     onClickAbout: PropTypes.func,
     onClickAccountNav: PropTypes.func,
     onClickAddonSettings: PropTypes.func,
+    onClickTheme: PropTypes.func,
     onClickLogo: PropTypes.func,
     onCloseAccountNav: PropTypes.func,
     onExtensionButtonClick: PropTypes.func,

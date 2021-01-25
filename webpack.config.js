@@ -22,6 +22,9 @@ const htmlWebpackPluginCommon = {
     root: root
 };
 
+const addonFolder = path.resolve(__dirname, 'src', 'addons', 'addons');
+const rawLibrariesFolder = path.resolve(__dirname, 'src', 'addons', 'libraries-raw');
+
 const base = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     devtool: process.env.NODE_ENV === 'production' ? false : 'cheap-module-source-map',
@@ -35,7 +38,8 @@ const base = {
                 {from: /^\/\d+\/?$/, to: '/index.html'},
                 {from: /^\/\d+\/fullscreen\/?$/, to: '/fullscreen.html'},
                 {from: /^\/\d+\/editor\/?$/, to: '/editor.html'},
-                {from: /^\/\d+\/embed\/?$/, to: '/embed.html'}
+                {from: /^\/\d+\/embed\/?$/, to: '/embed.html'},
+                {from: /^\/addons\/?$/, to: '/addons.html'}
             ]
         }
     },
@@ -62,6 +66,9 @@ const base = {
                 /node_modules[\\/]pify/,
                 /node_modules[\\/]@vernier[\\/]godirect/
             ],
+            exclude: [
+                rawLibrariesFolder
+            ],
             options: {
                 // Explicitly disable babelrc so we don't catch various config
                 // in much lower dependencies.
@@ -78,6 +85,9 @@ const base = {
         },
         {
             test: /\.css$/,
+            exclude: [
+                addonFolder
+            ],
             use: [{
                 loader: 'style-loader'
             }, {
@@ -101,6 +111,24 @@ const base = {
                     }
                 }
             }]
+        }, {
+            test: /\.css$/,
+            include: [
+                addonFolder
+            ],
+            loader: 'raw-loader'
+        },
+        {
+            test: /\.svg$/,
+            include: [
+                addonFolder
+            ],
+            loader: 'file-loader',
+            options: {
+                name: '[path][name].[ext]',
+                context: addonFolder,
+                outputPath: 'addon-files'
+            }
         }]
     },
     plugins: []
@@ -117,7 +145,8 @@ module.exports = [
             editor: './src/playground/editor.jsx',
             player: './src/playground/player.jsx',
             fullscreen: './src/playground/fullscreen.jsx',
-            embed: './src/playground/embed.jsx'
+            embed: './src/playground/embed.jsx',
+            'addon-settings': './src/playground/addon-settings.jsx'
         },
         output: {
             path: path.resolve(__dirname, 'build')
@@ -131,6 +160,9 @@ module.exports = [
                 {
                     test: /\.(svg|png|wav|gif|jpg|mp3)$/,
                     loader: 'file-loader',
+                    exclude: [
+                        addonFolder
+                    ],
                     options: {
                         outputPath: 'static/assets/'
                     }
@@ -185,6 +217,13 @@ module.exports = [
                 ...htmlWebpackPluginCommon
             }),
             new HtmlWebpackPlugin({
+                chunks: ['addon-settings'],
+                template: 'src/playground/index.ejs',
+                filename: 'addons.html',
+                title: 'Addon Settings - TurboWarp',
+                ...htmlWebpackPluginCommon
+            }),
+            new HtmlWebpackPlugin({
                 chunks: [],
                 template: 'src/playground/privacy.html',
                 filename: 'privacy.html'
@@ -205,6 +244,10 @@ module.exports = [
             new CopyWebpackPlugin([{
                 from: 'extension-worker.{js,js.map}',
                 context: 'node_modules/scratch-vm/dist/web'
+            }]),
+            new CopyWebpackPlugin([{
+                from: rawLibrariesFolder,
+                to: 'addon-files/libraries-raw'
             }])
         ])
     })
@@ -231,6 +274,9 @@ module.exports = [
                     {
                         test: /\.(svg|png|wav|gif|jpg|mp3)$/,
                         loader: 'file-loader',
+                        exclude: [
+                            addonFolder
+                        ],
                         options: {
                             outputPath: 'static/assets/',
                             publicPath: `${STATIC_PATH}/assets/`

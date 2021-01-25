@@ -287,13 +287,16 @@ const TWStateManager = function (WrappedComponent) {
                 this.doNotPersistUsername = username;
                 this.props.onSetUsername(username);
             } else {
-                const persistentUsername = getLocalStorage(USERNAME_KEY);
+                const persistentUsername = this.props.isEmbedded ? null : getLocalStorage(USERNAME_KEY);
                 if (persistentUsername === null) {
                     const digits = 4;
                     const randomNumber = Math.round(Math.random() * (10 ** digits));
                     const randomId = randomNumber.toString().padStart(digits, '0');
                     const randomUsername = `player${randomId}`;
                     this.props.onSetUsername(randomUsername);
+                    if (this.props.isEmbedded) {
+                        this.doNotPersistUsername = randomUsername;
+                    }
                 } else {
                     this.props.onSetUsername(persistentUsername);
                 }
@@ -352,6 +355,10 @@ const TWStateManager = function (WrappedComponent) {
                         // eslint-disable-next-line no-alert
                         alert(`cannot load project: ${err}`);
                     });
+            }
+
+            for (const extension of urlParams.getAll('extension')) {
+                this.props.vm.extensionManager.loadExtensionURL(extension);
             }
 
             const routerCallbacks = {
@@ -490,6 +497,7 @@ const TWStateManager = function (WrappedComponent) {
                 intl,
                 isFullScreen,
                 isPlayerOnly,
+                isEmbedded,
                 projectChanged,
                 compilerOptions,
                 runtimeOptions,
@@ -520,6 +528,7 @@ const TWStateManager = function (WrappedComponent) {
         intl: intlShape,
         isFullScreen: PropTypes.bool,
         isPlayerOnly: PropTypes.bool,
+        isEmbedded: PropTypes.bool,
         projectChanged: PropTypes.bool,
         projectId: PropTypes.string,
         compilerOptions: PropTypes.shape({}),
@@ -544,6 +553,7 @@ const TWStateManager = function (WrappedComponent) {
     const mapStateToProps = state => ({
         isFullScreen: state.scratchGui.mode.isFullScreen,
         isPlayerOnly: state.scratchGui.mode.isPlayerOnly,
+        isEmbedded: state.scratchGui.mode.isEmbedded,
         projectChanged: state.scratchGui.projectChanged,
         reduxProjectId: state.scratchGui.projectState.projectId,
         compilerOptions: state.scratchGui.tw.compilerOptions,
