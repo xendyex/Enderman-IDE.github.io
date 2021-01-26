@@ -8,6 +8,7 @@ import {remixProject} from './reducers/project-state';
 import {setAppElement} from 'react-modal';
 import {setFileHandle} from './reducers/tw';
 import {openLoadingProject, closeLoadingProject} from './reducers/modals';
+import TWThemeHOC from './lib/tw-theme-hoc.jsx';
 
 const guiReducers = {
     locales: LocalesReducer,
@@ -32,5 +33,6 @@ export {
     setPlayer,
     setFileHandle,
     openLoadingProject,
-    closeLoadingProject
+    closeLoadingProject,
+    TWThemeHOC
 };
