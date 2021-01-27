@@ -80,6 +80,8 @@ a[href]:active, a[href]:focus {
     font-size: 14px;
     transition: 0.25s ease;
     transition-property: background;
+    display: flex;
+    align-items: center;
 }
 [theme="dark"] .button {
     color: #fff;
@@ -311,9 +313,9 @@ a[href]:active, a[href]:focus {
     border-color: #0e44b8;
 }
 .tag-theme {
-    color: white;
-    background-color: #5f8d0b;
-    border-color: #3e5a09;
+    color: black;
+    background-color: #9ad4cf;
+    border-color: #628f8c;
 }
 .tag-beta {
     color: white;
@@ -519,6 +521,7 @@ a[href]:active, a[href]:focus {
 
 .footer-buttons {
     margin-bottom: 10px;
+    display: flex;
 }
 .footer-buttons > .button {
     margin-right: 10px;
@@ -557,6 +560,8 @@ a[href]:active, a[href]:focus {
     border: 1px solid #cfcfcf;
     border-radius: 4px;
     pointer-events: auto;
+    display: flex;
+    align-items: center;
 }
 [theme="dark"] .dirty-inner {
     background: rgb(39, 50, 53);
