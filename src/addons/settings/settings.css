@@ -33,7 +33,7 @@ a[href] {
 [theme="dark"] a[href] {
     color: #6d9bff;
 }
-a:active, a:focus {
+a[href]:active, a[href]:focus {
     outline: none;
     box-shadow: 0 0 0 3px #ff4c4c5d;
 }
