@@ -71,7 +71,7 @@ class SB3Downloader extends React.Component {
     }
     async saveAsNew () {
         try {
-            const handle = await FileSystemAPI.showSaveFilePicker();
+            const handle = await FileSystemAPI.showSaveFilePicker(this.props.projectFilename);
             await this.saveToHandle(handle);
             this.props.onSetFileHandle(handle);
         } catch (e) {
