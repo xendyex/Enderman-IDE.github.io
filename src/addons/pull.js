@@ -200,12 +200,11 @@ const includeImports = (folder, contents) => {
         for (const file of walk(oldDirectory)) {
             const oldPath = pathUtil.join(oldDirectory, file);
             const newPath = pathUtil.join(newDirectory, file);
-            fs.mkdirSync(newDirectory, {recursive: true});
+            fs.mkdirSync(pathUtil.dirname(newPath), {recursive: true});
             let contents = fs.readFileSync(oldPath, 'utf-8');
 
             if (file.endsWith('.js')) {
                 includeImportedLibraries(contents);
-                // includeDynamicallyImportedLibraries(contents);
                 await includeFixedHardcodedClasses(contents);
                 if (contents.includes('addon.self.dir') || contents.includes('addon.self.lib')) {
                     contents = includeImports(oldDirectory, contents);

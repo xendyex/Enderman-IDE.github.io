@@ -74,10 +74,10 @@ const tabReduxInstance = new Redux();
 const language = tabReduxInstance.state.locales.locale.split('-')[0];
 const translations = getAddonTranslations(language);
 
-// Temporary until upstream removes window.scratchAddons
+// Temporary
 window.scratchAddons = {
     l10n: {
-        locale: language
+        lcoale: language
     }
 };
 
@@ -182,6 +182,7 @@ class AddonRunner {
         this.manifest = manifest;
         this.messageCache = {};
 
+        this.msg.locale = language;
         this.publicAPI = {
             global,
             console,
