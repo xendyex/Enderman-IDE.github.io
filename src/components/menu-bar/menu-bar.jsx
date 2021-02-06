@@ -31,7 +31,7 @@ import HighQualityPen from '../../containers/tw-high-quality-pen.jsx';
 import ChangeUsername from '../../containers/tw-change-username.jsx';
 import CloudVariablesToggler from '../../containers/tw-cloud-toggler.jsx';
 import VMOptions from '../../containers/tw-vm-options.jsx';
-import TWAutoSaveLoader from '../../containers/tw-autosave-loader.jsx';
+import TWRestorePointLoader from '../../containers/tw-restore-point-loader.jsx';
 import TWSaveStatus from './tw-save-status.jsx';
 
 import {openTipsLibrary} from '../../reducers/modals';
@@ -46,6 +46,9 @@ import {
     saveProjectAsCopy
 } from '../../reducers/project-state';
 import {
+    openAboutMenu,
+    closeAboutMenu,
+    aboutMenuOpen,
     openAccountMenu,
     closeAccountMenu,
     accountMenuOpen,
@@ -330,6 +333,56 @@ class MenuBar extends React.Component {
     handleClickSeeInside () {
         this.props.onClickSeeInside();
     }
+    buildAboutMenu (onClickAbout) {
+        if (!onClickAbout) {
+            // hide the button
+            return null;
+        }
+        if (typeof onClickAbout === 'function') {
+            // make a button which calls a function
+            return <AboutButton onClick={onClickAbout} />;
+        }
+        // assume it's an array of objects
+        // each item must have a 'title' FormattedMessage and a 'handleClick' function
+        // generate a menu with items for each object in the array
+        return (
+            <div
+                className={classNames(styles.menuBarItem, styles.hoverable, {
+                    [styles.active]: this.props.aboutMenuOpen
+                })}
+                onMouseUp={this.props.onRequestOpenAbout}
+            >
+                <img
+                    className={styles.aboutIcon}
+                    src={aboutIcon}
+                />
+                <MenuBarMenu
+                    className={classNames(styles.menuBarMenu)}
+                    open={this.props.aboutMenuOpen}
+                    place={this.props.isRtl ? 'right' : 'left'}
+                    onRequestClose={this.props.onRequestCloseAbout}
+                >
+                    {
+                        onClickAbout.map(itemProps => (
+                            <MenuItem
+                                key={itemProps.title}
+                                isRtl={this.props.isRtl}
+                                onClick={this.wrapAboutMenuCallback(itemProps.onClick)}
+                            >
+                                {itemProps.title}
+                            </MenuItem>
+                        ))
+                    }
+                </MenuBarMenu>
+            </div>
+        );
+    }
+    wrapAboutMenuCallback (callback) {
+        return () => {
+            callback();
+            this.props.onRequestCloseAbout();
+        };
+    }
     render () {
         const saveNowMessage = (
             <FormattedMessage
@@ -373,7 +426,7 @@ class MenuBar extends React.Component {
             </Button>
         );
         // Show the About button only if we have a handler for it (like in the desktop app)
-        const aboutButton = this.props.onClickAbout ? <AboutButton onClick={this.props.onClickAbout} /> : null;
+        const aboutButton = this.buildAboutMenu(this.props.onClickAbout);
         return (
             <Box
                 className={classNames(
@@ -553,18 +606,18 @@ class MenuBar extends React.Component {
                                         )}</SB3Downloader>
                                     </MenuSection>
                                     <MenuSection>
-                                        <TWAutoSaveLoader>{(className, loadAutoSave) => (
+                                        <TWRestorePointLoader>{(className, loadRestorePoint) => (
                                             <MenuItem
                                                 className={className}
-                                                onClick={loadAutoSave}
+                                                onClick={loadRestorePoint}
                                             >
                                                 <FormattedMessage
-                                                    defaultMessage="Load restore point (BETA)"
+                                                    defaultMessage="Load restore point"
                                                     description="Menu bar item for loading a restore point"
-                                                    id="tw.menuBar.loadAutoSave"
+                                                    id="tw.menuBar.loadRestorePoint"
                                                 />
                                             </MenuItem>
-                                        )}</TWAutoSaveLoader>
+                                        )}</TWRestorePointLoader>
                                     </MenuSection>
                                 </MenuBarMenu>
                             </div>
@@ -968,6 +1021,7 @@ class MenuBar extends React.Component {
 MenuBar.propTypes = {
     enableSeeInside: PropTypes.bool,
     onClickSeeInside: PropTypes.func,
+    aboutMenuOpen: PropTypes.bool,
     accountMenuOpen: PropTypes.bool,
     authorId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     authorThumbnailUrl: PropTypes.string,
@@ -1002,7 +1056,15 @@ MenuBar.propTypes = {
     locale: PropTypes.string.isRequired,
     loginMenuOpen: PropTypes.bool,
     logo: PropTypes.string,
-    onClickAbout: PropTypes.func,
+    onClickAbout: PropTypes.oneOfType([
+        PropTypes.func, // button mode: call this callback when the About button is clicked
+        PropTypes.arrayOf( // menu mode: list of items in the About menu
+            PropTypes.shape({
+                title: PropTypes.string, // text for the menu item
+                onClick: PropTypes.func // call this callback when the menu item is clicked
+            })
+        )
+    ]),
     onClickAccount: PropTypes.func,
     onClickAddonSettings: PropTypes.func,
     onClickTheme: PropTypes.func,
@@ -1025,6 +1087,8 @@ MenuBar.propTypes = {
     onOpenRegistration: PropTypes.func,
     onOpenTipLibrary: PropTypes.func,
     onProjectTelemetryEvent: PropTypes.func,
+    onRequestOpenAbout: PropTypes.func,
+    onRequestCloseAbout: PropTypes.func,
     onRequestCloseAccount: PropTypes.func,
     onRequestCloseEdit: PropTypes.func,
     onRequestCloseFile: PropTypes.func,
@@ -1057,6 +1121,7 @@ const mapStateToProps = (state, ownProps) => {
     const loadingState = state.scratchGui.projectState.loadingState;
     const user = state.session && state.session.session && state.session.session.user;
     return {
+        aboutMenuOpen: aboutMenuOpen(state),
         accountMenuOpen: accountMenuOpen(state),
         authorThumbnailUrl: state.scratchGui.tw.author.thumbnail,
         authorUsername: state.scratchGui.tw.author.username,
@@ -1103,6 +1168,8 @@ const mapDispatchToProps = dispatch => ({
     onRequestCloseHelp: () => dispatch(closeHelpMenu()),
     onClickErrors: () => dispatch(openErrorsMenu()),
     onRequestCloseErrors: () => dispatch(closeErrorsMenu()),
+    onRequestOpenAbout: () => dispatch(openAboutMenu()),
+    onRequestCloseAbout: () => dispatch(closeAboutMenu()),
     onClickNew: needSave => dispatch(requestNewProject(needSave)),
     onClickRemix: () => dispatch(remixProject()),
     onClickSave: () => dispatch(manualUpdateProject()),

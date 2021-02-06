@@ -1,5 +1,6 @@
 {
     "es": {
+        "tw.addons.settings.addonFeedback": "Feedback (comentarios) de addons",
         "tw.addons.settings.confirmResetAll": "¿Está seguro de que quiere reiniciar todos los addons a sus valores predeterminados?",
         "tw.addons.settings.credits": "Créditos",
         "tw.addons.settings.dirty": "Recargue TurboWarp para aplicar los cambios.",
@@ -17,7 +18,27 @@
         "tw.addons.settings.tags.turbowarp": "TurboWarp",
         "tw.addons.settings.unsupported": "Algunos addons no están disponibles en este navegador:"
     },
+    "it": {
+        "tw.addons.settings.addonFeedback": "Feedback sull'Addon",
+        "tw.addons.settings.confirmResetAll": "Sei sicuro di voler riportare tutte le impostazioni dell'addon al loro valore iniziale?",
+        "tw.addons.settings.credits": "Autore/i:",
+        "tw.addons.settings.dirty": "Ricarica TurboWarp per applicare le nuove impostazioni.",
+        "tw.addons.settings.dirtyButton": "Ricarica ora",
+        "tw.addons.settings.export": "Esporta le impostazioni",
+        "tw.addons.settings.import": "Importa le impostazioni",
+        "tw.addons.settings.noResults": "Nessun risultato.",
+        "tw.addons.settings.presets": "Valori iniziali",
+        "tw.addons.settings.reset": "Resetta",
+        "tw.addons.settings.resetAll": "Resetta tutto",
+        "tw.addons.settings.search": "Cerca",
+        "tw.addons.settings.tags.beta": "Beta",
+        "tw.addons.settings.tags.easterEgg": "Easter Egg",
+        "tw.addons.settings.tags.recommended": "Raccomandato",
+        "tw.addons.settings.tags.turbowarp": "TurboWarp",
+        "tw.addons.settings.unsupported": "Alcuni addon non sono disponibili in questo browser:"
+    },
     "pt": {
+        "tw.addons.settings.addonFeedback": "Dar Feedback sobre Addons",
         "tw.addons.settings.confirmResetAll": "Tem certeza que quer resetar as configurações de todos os addons aos seus valores padrão?",
         "tw.addons.settings.credits": "Créditos:",
         "tw.addons.settings.dirty": "Recarregue o TurboWarp para aplicar as opções.",
@@ -49,6 +70,7 @@
         "tw.addons.settings.tags.turbowarp": "TurboWarp"
     },
     "tr": {
+        "tw.addons.settings.addonFeedback": "Eklenti geribildirim",
         "tw.addons.settings.confirmResetAll": "Sen bütün eklenti ayarlarını sıfarlamaya eminmisin?",
         "tw.addons.settings.credits": "Krediler:",
         "tw.addons.settings.dirty": "Ayarı uygulamak için Turbowarp'u yeniden açın.",

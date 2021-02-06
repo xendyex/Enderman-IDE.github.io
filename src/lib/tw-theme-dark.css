@@ -14,8 +14,8 @@
 .blocklySvg {
     background-color: var(--ui-secondary) !important;
 }
-.blocklyMainBackground {
-    fill: var(--ui-secondary) !important;
+[id^="blocklyGridPattern"] > line {
+    stroke: #484848;
 }
 .blocklyFlyoutBackground {
     fill: #111;
@@ -47,6 +47,20 @@
     background: var(--ui-secondary);
 }
 .valueReportBox {
+    color: black;
+}
+.blocklyWidgetDiv .goog-menu {
+    background: var(--ui-primary);
+    border-color: hsla(0, 0%, 0%, 0.15);
+}
+.blocklyWidgetDiv .goog-menuitem {
+    color: var(--text-primary);
+}
+.blocklyWidgetDiv .goog-menuitem.goog-menuitem-highlight {
+    background-color: var(--ui-tertiary);
+    border-color: transparent; /* remove border */
+}
+.scratchCommentText {
     color: black;
 }
 

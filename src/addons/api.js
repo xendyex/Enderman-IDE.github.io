@@ -20,7 +20,7 @@ import IntlMessageFormat from 'intl-messageformat';
 import SettingsStore from './settings-store';
 import getAddonTranslations from './get-addon-translations';
 import dataURLToBlob from './api-libraries/data-url-to-blob';
-import fixHardcodedClassesCSS from '!raw-loader!./fix-hardcoded-classes.css';
+import EventTargetShim from './event-target';
 
 /* eslint-disable no-console */
 
@@ -32,7 +32,42 @@ const createStylesheet = css => {
     return style;
 };
 
-class Redux extends EventTarget {
+let _scratchClassNames = null;
+const getScratchClassNames = () => {
+    if (_scratchClassNames) {
+        return _scratchClassNames;
+    }
+    const classes = Array.from(document.styleSheets)
+        // Ignore some scratch-paint stylesheets
+        .filter(styleSheet => (
+            !(
+                styleSheet.ownerNode.textContent.startsWith(
+                    '/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.'
+                ) &&
+                (
+                    styleSheet.ownerNode.textContent.includes('input_input-form') ||
+                    styleSheet.ownerNode.textContent.includes('label_input-group_')
+                )
+            )
+        ))
+        .map(e => {
+            try {
+                return [...e.cssRules];
+            } catch (_e) {
+                return [];
+            }
+        })
+        .flat()
+        .map(e => e.selectorText)
+        .filter(e => e)
+        .map(e => e.match(/(([\w-]+?)_([\w-]+)_([\w\d-]+))/g))
+        .filter(e => e)
+        .flat();
+    _scratchClassNames = [...new Set(classes)];
+    return _scratchClassNames;
+};
+
+class Redux extends EventTargetShim {
     constructor () {
         super();
         this._initialized = false;
@@ -81,9 +116,7 @@ window.scratchAddons = {
     }
 };
 
-document.head.appendChild(createStylesheet(fixHardcodedClassesCSS));
-
-class Tab extends EventTarget {
+class Tab extends EventTargetShim {
     constructor () {
         super();
         this._seenElements = new WeakSet();
@@ -147,12 +180,34 @@ class Tab extends EventTarget {
         return navigator.clipboard.write(items);
     }
 
+    scratchClass (...args) {
+        const scratchClasses = getScratchClassNames();
+        const classes = [];
+        for (const arg of args) {
+            if (typeof arg === 'string') {
+                for (const scratchClass of scratchClasses) {
+                    if (scratchClass.startsWith(`${arg}_`) && scratchClass.length === arg.length + 6) {
+                        classes.push(scratchClass);
+                    }
+                }
+            }
+        }
+        const options = args[args.length - 1];
+        if (typeof options === 'object') {
+            const others = Array.isArray(options.others) ? options.others : [options.others];
+            for (const className of others) {
+                classes.push(className);
+            }
+        }
+        return classes.join(' ');
+    }
+
     get editorMode () {
         return getEditorMode();
     }
 }
 
-class Settings extends EventTarget {
+class Settings extends EventTargetShim {
     constructor (addonId, manifest) {
         super();
         this._addonId = addonId;
@@ -246,9 +301,9 @@ class AddonRunner {
                 const m = await import(
                     /* webpackInclude: /\.css$/ */
                     /* webpackMode: "eager" */
-                    `!raw-loader!./addons/${this.id}/${userstyle.url}`
+                    `!css-loader!./addons/${this.id}/${userstyle.url}`
                 );
-                const source = m.default;
+                const source = m.default[0][1];
                 const style = createStylesheet(source);
                 style.className = 'scratch-addons-theme';
                 style.dataset.addonId = this.id;
