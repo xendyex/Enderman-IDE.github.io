@@ -436,7 +436,7 @@ class MenuBar extends React.Component {
             >
                 <div className={styles.mainMenu}>
                     <div className={styles.fileGroup}>
-                        {false && this.props.onClickLogo ? (
+                        {this.props.onClickLogo ? (
                             <div className={classNames(styles.menuBarItem)}>
                                 <img
                                     alt="Scratch"
@@ -868,13 +868,6 @@ class MenuBar extends React.Component {
                                 onRequestClose={this.props.onRequestCloseHelp}
                             >
                                 <MenuSection>
-                                    <MenuItem onClick={this.props.onClickLogo}>
-                                        <FormattedMessage
-                                            defaultMessage="About and license"
-                                            description="Link to about in desktop"
-                                            id="tw.desktop.about"
-                                        />
-                                    </MenuItem>
                                     <MenuItemLink href="https://github.com/TurboWarp">
                                         <FormattedMessage
                                             defaultMessage="Source Code"
