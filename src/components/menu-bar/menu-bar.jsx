@@ -875,18 +875,11 @@ class MenuBar extends React.Component {
                                             id="tw.code"
                                         />
                                     </MenuItemLink>
-                                    <MenuItemLink href="https://desktop.turbowarp.org">
+                                    <MenuItemLink href="https://github.com/TurboWarp/scratch-gui/wiki/Embedding">
                                         <FormattedMessage
                                             defaultMessage="Website"
                                             description="Link to website in desktop"
                                             id="tw.desktop.website"
-                                        />
-                                    </MenuItemLink>
-                                    <MenuItemLink href="https://github.com/TurboWarp/scratch-gui/wiki/TurboWarp-blocks">
-                                        <FormattedMessage
-                                            defaultMessage="TurboWarp Blocks"
-                                            description="Menu bar item for TurboWarp blocks link"
-                                            id="tw.menuBar.blocks"
                                         />
                                     </MenuItemLink>
                                     <MenuItemLink href="https://github.com/TurboWarp/translations/blob/master/CONTRIBUTING.md#readme">
