@@ -848,50 +848,6 @@ class MenuBar extends React.Component {
                                 </MenuSection>
                             </MenuBarMenu>
                         </div>
-                        <div
-                            className={classNames(styles.menuBarItem, styles.hoverable, {
-                                [styles.active]: this.props.helpMenuOpen
-                            })}
-                            onMouseUp={this.props.onClickHelp}
-                        >
-                            <div className={classNames(styles.helpMenu)}>
-                                <FormattedMessage
-                                    defaultMessage="Help"
-                                    description="Text for TurboWarp Help dropdown menu"
-                                    id="tw.menuBar.help"
-                                />
-                            </div>
-                            <MenuBarMenu
-                                className={classNames(styles.menuBarMenu)}
-                                open={this.props.helpMenuOpen}
-                                place={this.props.isRtl ? 'left' : 'right'}
-                                onRequestClose={this.props.onRequestCloseHelp}
-                            >
-                                <MenuSection>
-                                    <MenuItemLink href="https://github.com/TurboWarp">
-                                        <FormattedMessage
-                                            defaultMessage="Source Code"
-                                            description="Link to source code"
-                                            id="tw.code"
-                                        />
-                                    </MenuItemLink>
-                                    <MenuItemLink href="https://github.com/TurboWarp/scratch-gui/wiki/Embedding">
-                                        <FormattedMessage
-                                            defaultMessage="Website"
-                                            description="Link to website in desktop"
-                                            id="tw.desktop.website"
-                                        />
-                                    </MenuItemLink>
-                                    <MenuItemLink href="https://github.com/TurboWarp/translations/blob/master/CONTRIBUTING.md#readme">
-                                        <FormattedMessage
-                                            defaultMessage="Help Translate TurboWarp"
-                                            description="Menu bar item for translating TurboWarp link"
-                                            id="tw.menuBar.translate"
-                                        />
-                                    </MenuItemLink>
-                                </MenuSection>
-                            </MenuBarMenu>
-                        </div>
                     </div>
                     <Divider className={classNames(styles.divider)} />
                     {this.props.canEditTitle ? (
