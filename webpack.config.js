@@ -35,7 +35,8 @@ const base = {
                 {from: /^\/\d+\/?$/, to: '/index.html'},
                 {from: /^\/\d+\/fullscreen\/?$/, to: '/fullscreen.html'},
                 {from: /^\/\d+\/editor\/?$/, to: '/editor.html'},
-                {from: /^\/\d+\/embed\/?$/, to: '/embed.html'}
+                {from: /^\/\d+\/embed\/?$/, to: '/embed.html'},
+                {from: /^\/addons\/?$/, to: '/addons.html'}
             ]
         }
     },
@@ -118,6 +119,7 @@ module.exports = [
             player: './src/playground/player.jsx',
             fullscreen: './src/playground/fullscreen.jsx',
             embed: './src/playground/embed.jsx',
+            'addon-settings': './src/playground/addon-settings.jsx',
             packager: './src/playground/packager.jsx'
         },
         output: {
@@ -174,13 +176,15 @@ module.exports = [
                 ...htmlWebpackPluginCommon
             }),
             new HtmlWebpackPlugin({
-                chunks: [],
-                template: 'src/playground/privacy.html',
-                filename: 'privacy.html'
+                chunks: ['addon-settings'],
+                template: 'src/playground/index.ejs',
+                filename: 'addons.html',
+                title: 'Addon Settings - TurboWarp',
+                ...htmlWebpackPluginCommon
             }),
             new CopyWebpackPlugin([{
                 from: 'static',
-                to: 'static'
+                to: ''
             }]),
             new CopyWebpackPlugin([{
                 from: 'node_modules/scratch-blocks/media',

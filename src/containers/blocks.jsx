@@ -32,8 +32,6 @@ import {
     SOUNDS_TAB_INDEX
 } from '../reducers/editor-tab';
 
-import loadAddons from '../addons/loader';
-
 const addFunctionListener = (object, property, callback) => {
     const oldFn = object[property];
     object[property] = function () {
@@ -114,6 +112,24 @@ class Blocks extends React.Component {
         toolboxWorkspace.registerButtonCallback('MAKE_A_VARIABLE', varListButtonCallback(''));
         toolboxWorkspace.registerButtonCallback('MAKE_A_LIST', varListButtonCallback('list'));
         toolboxWorkspace.registerButtonCallback('MAKE_A_PROCEDURE', procButtonCallback);
+        toolboxWorkspace.registerButtonCallback('OPEN_DOCUMENTATION', block => {
+            const CLASS_PREFIX = 'docs-uri-';
+            const svgGroup = block.svgGroup_;
+            const docsURIClass = Array.from(svgGroup.classList).find(i => i.startsWith(CLASS_PREFIX));
+            if (!docsURIClass) {
+                return;
+            }
+            try {
+                const docsURI = docsURIClass.substr(CLASS_PREFIX.length);
+                const url = new URL(docsURI);
+                if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+                    throw new Error('invalid protocol');
+                }
+                window.open(docsURI, '_blank');
+            } catch (e) {
+                log.warn('cannot open docs URI', e);
+            }
+        });
 
         // Store the xml of the toolbox that is actually rendered.
         // This is used in componentDidUpdate instead of prevProps, because
@@ -137,6 +153,11 @@ class Blocks extends React.Component {
         // If locale changes while not visible it will get handled in didUpdate
         if (this.props.isVisible) {
             this.setLocale();
+        }
+
+        // tw: Handle when extensions are added when Blocks isn't mounted
+        for (const category of this.props.vm.runtime._blockInfo) {
+            this.handleExtensionAdded(category);
         }
     }
     shouldComponentUpdate (nextProps, nextState) {
@@ -162,11 +183,6 @@ class Blocks extends React.Component {
         // Do not check against prevProps.toolboxXML because that may not have been rendered.
         if (this.props.isVisible && this.props.toolboxXML !== this._renderedToolboxXML) {
             this.requestToolboxUpdate();
-        }
-
-        // tw: load addons when editor is visible
-        if (this.props.isVisible) {
-            loadAddons();
         }
 
         if (this.props.isVisible === prevProps.isVisible) {

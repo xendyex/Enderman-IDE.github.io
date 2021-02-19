@@ -287,13 +287,16 @@ const TWStateManager = function (WrappedComponent) {
                 this.doNotPersistUsername = username;
                 this.props.onSetUsername(username);
             } else {
-                const persistentUsername = getLocalStorage(USERNAME_KEY);
+                const persistentUsername = this.props.isEmbedded ? null : getLocalStorage(USERNAME_KEY);
                 if (persistentUsername === null) {
                     const digits = 4;
                     const randomNumber = Math.round(Math.random() * (10 ** digits));
                     const randomId = randomNumber.toString().padStart(digits, '0');
                     const randomUsername = `player${randomId}`;
                     this.props.onSetUsername(randomUsername);
+                    if (this.props.isEmbedded) {
+                        this.doNotPersistUsername = randomUsername;
+                    }
                 } else {
                     this.props.onSetUsername(persistentUsername);
                 }
@@ -354,6 +357,13 @@ const TWStateManager = function (WrappedComponent) {
                     });
             }
 
+            for (const extension of urlParams.getAll('extension')) {
+                // This is temporary until we feel more comfortable about the idea of running remote code in a Worker.
+                if (confirm(`Load extension: ${extension}`)) {
+                    this.props.vm.extensionManager.loadExtensionURL(extension);
+                }
+            }
+
             const routerCallbacks = {
                 onSetProjectId: this.onSetProjectId,
                 onSetIsPlayerOnly: this.onSetIsPlayerOnly,
@@ -397,6 +407,9 @@ const TWStateManager = function (WrappedComponent) {
                 const searchParams = new URLSearchParams(location.search);
                 const runtimeOptions = this.props.runtimeOptions;
                 const compilerOptions = this.props.compilerOptions;
+
+                // Always remove legacy parameter
+                searchParams.delete('60fps');
 
                 if (this.props.framerate === 30) {
                     searchParams.delete('fps');
@@ -490,6 +503,7 @@ const TWStateManager = function (WrappedComponent) {
                 intl,
                 isFullScreen,
                 isPlayerOnly,
+                isEmbedded,
                 projectChanged,
                 compilerOptions,
                 runtimeOptions,
@@ -520,6 +534,7 @@ const TWStateManager = function (WrappedComponent) {
         intl: intlShape,
         isFullScreen: PropTypes.bool,
         isPlayerOnly: PropTypes.bool,
+        isEmbedded: PropTypes.bool,
         projectChanged: PropTypes.bool,
         projectId: PropTypes.string,
         compilerOptions: PropTypes.shape({}),
@@ -544,6 +559,7 @@ const TWStateManager = function (WrappedComponent) {
     const mapStateToProps = state => ({
         isFullScreen: state.scratchGui.mode.isFullScreen,
         isPlayerOnly: state.scratchGui.mode.isPlayerOnly,
+        isEmbedded: state.scratchGui.mode.isEmbedded,
         projectChanged: state.scratchGui.projectChanged,
         reduxProjectId: state.scratchGui.projectState.projectId,
         compilerOptions: state.scratchGui.tw.compilerOptions,
