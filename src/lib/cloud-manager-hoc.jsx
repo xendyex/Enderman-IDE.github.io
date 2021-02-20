@@ -14,6 +14,7 @@ import {
 import {
     showAlertWithTimeout
 } from '../reducers/alerts';
+import packagerOptions from '../lib/tw-packager-options';
 
 // tw: show warning when username is invalid
 const messages = defineMessages({
@@ -73,7 +74,7 @@ const cloudManagerHOC = function (WrappedComponent) {
             this.disconnectFromCloud();
         }
         canUseCloud (props) {
-            return !!(props.cloudHost && props.username && props.vm && __OPTIONS__.projectId && props.hasCloudPermission);
+            return !!(props.cloudHost && props.username && props.vm && packagerOptions.init.id && props.hasCloudPermission);
         }
         shouldConnect (props) {
             return !this.isConnected() && this.canUseCloud(props) &&
@@ -107,7 +108,7 @@ const cloudManagerHOC = function (WrappedComponent) {
                 this.props.cloudHost,
                 this.props.vm,
                 this.props.username,
-                __OPTIONS__.projectId);
+                packagerOptions.init.id);
             // tw: show warning when username is invalid
             this.cloudProvider.onInvalidUsername = this.onInvalidUsername;
             this.props.vm.setCloudProvider(this.cloudProvider);

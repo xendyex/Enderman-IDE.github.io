@@ -1,3 +1,5 @@
+import packagerOptions from './tw-packager-options';
+
 // Some limits to make sure the interface doesn't completely fall apart
 const MIN_WIDTH = 480;
 const MIN_HEIGHT = 25;
@@ -11,6 +13,8 @@ const DEFAULT_HEIGHT = 360;
 const PARAM = 'size';
 
 const getDimensions = () => {
+    return packagerOptions.stageSize;
+
     // Running in node.js
     if (typeof URLSearchParams === 'undefined') {
         return {
