@@ -1,19 +1,26 @@
+const assertNotUndefined = v => {
+    if (typeof v === 'undefined') {
+        throw new Error('Undefined value');
+    }
+    return v;
+};
+
 const __PACKAGER__ = window.__PACKAGER__;
 
 const options = {
     init: {
-        id: __PACKAGER__.id,
-        projectData: __PACKAGER__.projectData,
-        handleVmInit: __PACKAGER__.handleVmInit
+        id: assertNotUndefined(__PACKAGER__.id),
+        projectData: assertNotUndefined(__PACKAGER__.projectData),
+        handleVmInit: assertNotUndefined(__PACKAGER__.handleVmInit)
     },
     user: {
-        username: __PACKAGER__.username
+        username: assertNotUndefined(__PACKAGER__.username)
     },
     stageSize: {
-        width: __PACKAGER__.stageWidth,
-        height: __PACKAGER__.stageHeight
+        width: assertNotUndefined(__PACKAGER__.stageWidth),
+        height: assertNotUndefined(__PACKAGER__.stageHeight)
     },
-    noControls: __PACKAGER__.noControls
+    noControls: assertNotUndefined(__PACKAGER__.noControls)
 };
 
 window.__PACKAGER__ = null;
