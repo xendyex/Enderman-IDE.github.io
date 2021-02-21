@@ -11,7 +11,8 @@ const options = {
     init: {
         id: assertNotUndefined(__PACKAGER__.id),
         projectData: assertNotUndefined(__PACKAGER__.projectData),
-        handleVmInit: assertNotUndefined(__PACKAGER__.handleVmInit)
+        handleVmInit: assertNotUndefined(__PACKAGER__.handleVmInit),
+        handleProjectLoaded: assertNotUndefined(__PACKAGER__.handleProjectLoaded)
     },
     user: {
         username: assertNotUndefined(__PACKAGER__.username)
