@@ -25,6 +25,10 @@
     /* enforce overflow + reset position of absolutely-positioned children */
     position: relative;
 }
+[no-controls] .stage {
+    border: none;
+    border-radius: 0;
+}
 
 .stage.full-screen {
     /* tw: remove fullscreen border */
@@ -126,6 +130,9 @@ stage doesn't "spill" out from under its rounded corners. instead, shift these o
     border-radius: 0.5rem;
     pointer-events: all;
     cursor: pointer;
+}
+[no-controls] .green-flag-overlay-wrapper {
+    border-radius: 0;
 }
 
 .green-flag-overlay {

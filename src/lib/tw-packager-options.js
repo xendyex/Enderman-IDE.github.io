@@ -12,9 +12,14 @@ const options = {
     stageSize: {
         width: __PACKAGER__.stageWidth,
         height: __PACKAGER__.stageHeight
-    }
+    },
+    noControls: __PACKAGER__.noControls
 };
 
 window.__PACKAGER__ = null;
+
+if (options.noControls) {
+    document.body.setAttribute('no-controls', '');
+}
 
 export default options;

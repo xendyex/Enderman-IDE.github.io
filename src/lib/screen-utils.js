@@ -1,5 +1,6 @@
 import layout, {STAGE_DISPLAY_SCALES, STAGE_SIZE_MODES, STAGE_DISPLAY_SIZES} from '../lib/layout-constants';
 import twStageSize from './tw-stage-size';
+import packagerOptions from './tw-packager-options';
 
 const maxScaleParam = typeof URLSearchParams !== 'undefined' && new URLSearchParams(location.search).get('scale');
 
@@ -16,10 +17,10 @@ const STAGE_DIMENSION_DEFAULTS = {
     // referencing css/units.css,
     // spacingBorderAdjustment = 2 * $full-screen-top-bottom-margin +
     //   2 * $full-screen-border-width
-    fullScreenSpacingBorderAdjustment: 12,
+    fullScreenSpacingBorderAdjustment: packagerOptions.noControls ? 0 : 12,
     // referencing css/units.css,
     // menuHeightAdjustment = $stage-menu-height
-    menuHeightAdjustment: 44
+    menuHeightAdjustment: packagerOptions.noControls ? 0 : 44
 };
 
 /**

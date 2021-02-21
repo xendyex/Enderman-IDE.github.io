@@ -8,6 +8,7 @@ import {STAGE_DISPLAY_SIZES} from '../../lib/layout-constants.js';
 import StageHeader from '../../containers/stage-header.jsx';
 import Stage from '../../containers/stage.jsx';
 import Loader from '../loader/loader.jsx';
+import packagerOptions from '../../lib/tw-packager-options';
 
 import styles from './stage-wrapper.css';
 
@@ -31,12 +32,14 @@ const StageWrapperComponent = function (props) {
             )}
             dir={isRtl ? 'rtl' : 'ltr'}
         >
-            <Box className={styles.stageMenuWrapper}>
-                <StageHeader
-                    stageSize={stageSize}
-                    vm={vm}
-                />
-            </Box>
+            {packagerOptions.noControls ? null : (
+                <Box className={styles.stageMenuWrapper}>
+                    <StageHeader
+                        stageSize={stageSize}
+                        vm={vm}
+                    />
+                </Box>
+            )}
             <Box className={styles.stageCanvasWrapper}>
                 {
                     isRendererSupported ?

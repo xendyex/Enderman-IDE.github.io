@@ -33,6 +33,10 @@
     flex-direction: column;
     align-items: center;
 }
+[no-controls] .stage-wrapper {
+    top: 0;
+    padding: 0;
+}
 
 /* tw: support dark mode */
 [theme="dark"] .stage-wrapper.full-screen {
