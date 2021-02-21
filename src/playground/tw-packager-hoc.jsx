@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import VirtualMachine from 'scratch-vm';
 import {openLoadingProject, closeLoadingProject} from '../reducers/modals';
 import {setUsername} from '../reducers/tw';
+import {getIsLoadingUpload, onLoadedProject, requestProjectUpload} from '../reducers/project-state';
 import packagerOptions from '../lib/tw-packager-options';
 
 const setLocalStorage = (key, value) => {
@@ -43,10 +44,17 @@ const TWPackagerHOC = function (WrappedComponent) {
                 }
             }
 
+            this.props.requestProjectUpload(this.props.loadingState);
+        }
+        componentDidUpdate (prevProps) {
+            if (this.props.isLoadingUpload && !prevProps.isLoadingUpload) {
+                this.loadProject();
+            }
+        }
+        loadProject () {
             this.props.onLoadingStarted();
 
-            // fetch the project data from the global variable that the packager stores it in
-            // this will either convert the data: URI to an array buffer for us, or fetch it from another file
+            // projectData might be a data: URI or a path to a file, fetch will deal with both of these.
             fetch(packagerOptions.init.projectData)
                 .then(res => res.arrayBuffer())
                 .then(buffer => {
@@ -56,10 +64,10 @@ const TWPackagerHOC = function (WrappedComponent) {
                     return this.props.vm.loadProject(buffer);
                 })
                 .then(() => {
-                    this.props.onLoadingFinished();
-                    this.props.vm.renderer.draw();
+                    this.props.onLoadingFinished(this.props.loadingState, true);
                 })
                 .catch(e => {
+                    this.props.onLoadingFinished(this.props.loadingState, false);
                     alert(e); // eslint-disable-line no-alert
                 });
         }
@@ -90,17 +98,26 @@ const TWPackagerHOC = function (WrappedComponent) {
     }
     PackagerComponent.propTypes = {
         vm: PropTypes.instanceOf(VirtualMachine),
+        isLoadingUpload: PropTypes.bool,
+        loadingState: PropTypes.string,
         onLoadingFinished: PropTypes.func,
         onLoadingStarted: PropTypes.func,
-        onSetUsername: PropTypes.func
+        onSetUsername: PropTypes.func,
+        requestProjectUpload: PropTypes.func
     };
     const mapStateToProps = state => ({
+        isLoadingUpload: getIsLoadingUpload(state.scratchGui.projectState.loadingState),
+        loadingState: state.scratchGui.projectState.loadingState,
         vm: state.scratchGui.vm
     });
     const mapDispatchToProps = dispatch => ({
+        onLoadingFinished: (loadingState, success) => {
+            dispatch(onLoadedProject(loadingState, false, success));
+            dispatch(closeLoadingProject());
+        },
         onLoadingStarted: () => dispatch(openLoadingProject()),
-        onLoadingFinished: () => dispatch(closeLoadingProject()),
-        onSetUsername: username => dispatch(setUsername(username))
+        onSetUsername: username => dispatch(setUsername(username)),
+        requestProjectUpload: loadingState => dispatch(requestProjectUpload(loadingState))
     });
     return connect(
         mapStateToProps,
