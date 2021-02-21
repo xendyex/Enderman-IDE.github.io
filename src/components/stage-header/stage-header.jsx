@@ -103,6 +103,9 @@ const StageHeaderComponent = function (props) {
                 className={classNames(styles.stageHeaderWrapperOverlay, {
                     [styles.embedded]: isEmbedded
                 })}
+                style={{
+                    transform: `translateY(${stageDimensions.translateY}px)`
+                }}
             >
                 <Box
                     className={styles.stageMenuWrapper}

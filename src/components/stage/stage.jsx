@@ -41,6 +41,9 @@ const StageComponent = props => {
                     styles.stageWrapper,
                     {[styles.withColorPicker]: !isFullScreen && isColorPicking})}
                 onDoubleClick={onDoubleClick}
+                style={{
+                    transform: `translateY(${stageDimensions.translateY}px)`
+                }}
             >
                 <Box
                     className={classNames(
