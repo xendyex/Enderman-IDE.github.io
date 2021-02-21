@@ -819,9 +819,26 @@ class MenuBar extends React.Component {
                                         warpTimer,
                                         toggleWarpTimer,
                                         infiniteClones,
-                                        toggleInfiniteClones
+                                        toggleInfiniteClones,
+                                        interpolation,
+                                        toggleInterpolation
                                     }) => (
                                         <React.Fragment>
+                                            <MenuItem onClick={toggleInterpolation}>
+                                                {interpolation ? (
+                                                    <FormattedMessage
+                                                        defaultMessage="Turn off Interpolation"
+                                                        description="Menu bar item for turning off interpolation"
+                                                        id="tw.menuBar.interpolationOff"
+                                                    />
+                                                ) : (
+                                                    <FormattedMessage
+                                                        defaultMessage="Turn on Interpolation"
+                                                        description="Menu bar item for turning on interpolation"
+                                                        id="tw.menuBar.interpolationOn"
+                                                    />
+                                                )}
+                                            </MenuItem>
                                             <MenuItem onClick={toggleInfiniteClones}>
                                                 {infiniteClones ? (
                                                     <FormattedMessage
@@ -909,6 +926,10 @@ class MenuBar extends React.Component {
                                     <MenuItemLink href="https://desktop.turbowarp.org/">
                                         {/* This is not a FormattedMessage because it should not be translated. */}
                                         {'TurboWarp Desktop'}
+                                    </MenuItemLink>
+                                    <MenuItemLink href="https://packager.turbowarp.org/">
+                                        {/* This is not a FormattedMessage because it should not be translated. */}
+                                        {'TurboWarp Packager'}
                                     </MenuItemLink>
                                     <MenuItemLink href="https://github.com/TurboWarp/scratch-gui/wiki/Embedding">
                                         <FormattedMessage

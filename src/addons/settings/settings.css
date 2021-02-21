@@ -118,6 +118,10 @@ a:active, a:focus {
     background-color: transparent;
     font-size: 14px;
 }
+/* legacy edge */
+.search-input::-ms-clear {
+    display: none;
+}
 .search-button {
     height: 36px;
     width: 36px;
@@ -136,6 +140,12 @@ a:active, a:focus {
 }
 [theme="dark"] .search-button {
     background-image: url("./search-white.svg");
+}
+.search-input:not([value=""]) ~ .search-button {
+    background-image: url("./clear-black.svg") !important;
+}
+[theme="dark"] .search-input:not([value=""]) ~ .search-button {
+    background-image: url("./clear-white.svg") !important;
 }
 
 .feedback-button-outer {

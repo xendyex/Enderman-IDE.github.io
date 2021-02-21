@@ -24,7 +24,7 @@ const htmlWebpackPluginCommon = {
 
 const base = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-    devtool: process.env.NODE_ENV === 'production' ? false : 'cheap-module-source-map',
+    devtool: process.env.SOURCEMAP ? process.env.SOURCEMAP : process.env.NODE_ENV === 'production' ? false : 'cheap-module-source-map',
     devServer: {
         contentBase: path.resolve(__dirname, 'build'),
         host: '0.0.0.0',
@@ -45,10 +45,6 @@ const base = {
         filename: process.env.NODE_ENV === 'production' ? 'js/[name].[contenthash].js' : 'js/[name].js',
         chunkFilename: process.env.NODE_ENV === 'production' ? 'js/[name].[contenthash].js' : 'js/[name].js',
         publicPath: root
-    },
-    externals: {
-        React: 'react',
-        ReactDOM: 'react-dom'
     },
     resolve: {
         symlinks: false
@@ -124,10 +120,6 @@ module.exports = [
         output: {
             path: path.resolve(__dirname, 'build')
         },
-        externals: {
-            React: 'react',
-            ReactDOM: 'react-dom'
-        },
         module: {
             rules: base.module.rules.concat([
                 {
@@ -184,6 +176,7 @@ module.exports = [
                 template: 'src/playground/index.ejs',
                 filename: 'embed.html',
                 title: 'Embedded Project - TurboWarp',
+                noTheme: true,
                 ...htmlWebpackPluginCommon
             }),
             new HtmlWebpackPlugin({
@@ -193,14 +186,9 @@ module.exports = [
                 title: 'Addon Settings - TurboWarp',
                 ...htmlWebpackPluginCommon
             }),
-            new HtmlWebpackPlugin({
-                chunks: [],
-                template: 'src/playground/privacy.html',
-                filename: 'privacy.html'
-            }),
             new CopyWebpackPlugin([{
                 from: 'static',
-                to: 'static'
+                to: ''
             }]),
             new CopyWebpackPlugin([{
                 from: 'node_modules/scratch-blocks/media',
@@ -232,8 +220,8 @@ module.exports = [
                 publicPath: `${STATIC_PATH}/`
             },
             externals: {
-                React: 'react',
-                ReactDOM: 'react-dom'
+                'react': 'react',
+                'react-dom': 'react-dom'
             },
             module: {
                 rules: base.module.rules.concat([
