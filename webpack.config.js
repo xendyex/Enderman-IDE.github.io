@@ -125,7 +125,10 @@ module.exports = [
             rules: base.module.rules.concat([
                 {
                     test: /\.(svg|png|wav|gif|jpg|mp3)$/,
-                    loader: 'url-loader'
+                    loader: 'url-loader',
+                    options: {
+                        esModule: false
+                    }
                 }
             ])
         },
@@ -216,7 +219,10 @@ module.exports = [
                 rules: base.module.rules.concat([
                     {
                         test: /\.(svg|png|wav|gif|jpg|mp3)$/,
-                        loader: 'url-loader'
+                        loader: 'url-loader',
+                        options: {
+                            esModule: false
+                        }
                     }
                 ])
             },
