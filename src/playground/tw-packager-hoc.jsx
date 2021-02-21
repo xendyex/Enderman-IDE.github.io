@@ -66,6 +66,9 @@ const TWPackagerHOC = function (WrappedComponent) {
         handleVmInit (vm) {
             packagerOptions.init.handleVmInit(vm);
         }
+        handleProjectLoaded () {
+            packagerOptions.init.handleProjectLoaded();
+        }
         render () {
             const {
                 /* eslint-disable no-unused-vars */
@@ -80,6 +83,7 @@ const TWPackagerHOC = function (WrappedComponent) {
                 <WrappedComponent
                     {...props}
                     onVmInit={this.handleVmInit}
+                    onProjectLoaded={this.handleProjectLoaded}
                 />
             );
         }
