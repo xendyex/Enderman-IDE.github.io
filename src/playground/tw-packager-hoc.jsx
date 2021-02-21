@@ -64,6 +64,7 @@ const TWPackagerHOC = function (WrappedComponent) {
                     return this.props.vm.loadProject(buffer);
                 })
                 .then(() => {
+                    this.props.vm.renderer.draw();
                     this.props.onLoadingFinished(this.props.loadingState, true);
                 })
                 .catch(e => {
