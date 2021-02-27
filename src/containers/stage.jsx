@@ -196,7 +196,7 @@ class Stage extends React.Component {
         });
     }
     onPointerLockError () {
-        alert('pointer lock error');
+        console.error('pointer lock error');
     }
     onMouseMoveLocked (e, isDown) {
         e.preventDefault();
@@ -234,6 +234,7 @@ class Stage extends React.Component {
         if (this.locked) {
             return this.onMouseMoveLocked(e, null);
         }
+        return;
         const {x, y} = getEventXY(e);
         const mousePosition = [x - this.rect.left, y - this.rect.top];
 
@@ -279,6 +280,7 @@ class Stage extends React.Component {
         if (this.locked) {
             return this.onMouseMoveLocked(e, false);
         }
+        return;
         const {x, y} = getEventXY(e);
         const mousePosition = [x - this.rect.left, y - this.rect.top];
         this.cancelMouseDownTimeout();
@@ -321,6 +323,7 @@ class Stage extends React.Component {
         if (this.locked) {
             return this.onMouseMoveLocked(e, true);
         }
+        return;
         this.updateRect();
         const {x, y} = getEventXY(e);
         const mousePosition = [x - this.rect.left, y - this.rect.top];
