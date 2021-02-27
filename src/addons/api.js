@@ -132,6 +132,21 @@ class Tab extends EventTargetShim {
             get vm () {
                 // We expose VM on window
                 return window.vm;
+            },
+            getBlockly: () => {
+                // The real Blockly is exposed on window. It may not exist until the user enters the editor.
+                if (window.ScratchBlocks) {
+                    return Promise.resolve(window.ScratchBlocks);
+                }
+                return new Promise((resolve, reject) => {
+                    const handler = () => {
+                        if (window.ScratchBlocks) {
+                            this.removeEventListener('urlChange', handler);
+                            resolve(window.ScratchBlocks);
+                        }
+                    };
+                    this.addEventListener('urlChange', handler);
+                });
             }
         };
     }
@@ -227,7 +242,7 @@ class Settings extends EventTargetShim {
     }
 }
 
-class Self {
+class Self extends EventTargetShim {
     // These are removed at build-time by pull.js. Throw if attempting to access them at runtime.
     get dir () {
         throw new Error(`Addon tried to access addon.self.dir`);

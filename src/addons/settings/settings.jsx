@@ -41,6 +41,7 @@ import '../../lib/normalize.css';
 /* eslint-disable no-alert */
 /* eslint-disable no-console */
 /* eslint-disable react/no-multi-comp */
+/* eslint-disable react/jsx-no-bind */
 
 const locale = detectLocale(upstreamMeta.languages);
 const addonTranslations = getAddonTranslations(locale);
@@ -52,6 +53,8 @@ if (locale !== 'en') {
         Object.assign(settingsTranslations, messages);
     }
 }
+
+document.title = `${settingsTranslations['tw.addons.settings.title']} - TurboWarp`;
 
 const theme = getInitialDarkMode() ? 'dark' : 'light';
 document.body.setAttribute('theme', theme);
@@ -262,7 +265,7 @@ const SettingComponent = ({
                         max={setting.max}
                         step="1"
                         value={value}
-                        onChange={value => SettingsStore.setAddonSetting(addonId, settingId, value)}
+                        onChange={newValue => SettingsStore.setAddonSetting(addonId, settingId, newValue)}
                     />
                 </React.Fragment>
             )}
@@ -688,8 +691,19 @@ class AddonSettingsComponent extends React.Component {
         });
     }
     handleSearch (e) {
+        const value = e.target.value;
+        if (!this.state.easterEggs) {
+            if (
+                value.toLowerCase() === settingsTranslations['tw.addons.settings.tags.easterEgg'].toLowerCase() ||
+                value.toLowerCase() === settingsTranslationsEnglish['tw.addons.settings.tags.easterEgg'].toLowerCase()
+            ) {
+                this.setState({
+                    easterEggs: true
+                });
+            }
+        }
         this.setState({
-            search: e.target.value
+            search: value
         });
     }
     handleClickSearchButton () {
@@ -747,7 +761,10 @@ class AddonSettingsComponent extends React.Component {
         if (manifest.presets) {
             for (const preset of manifest.presets) {
                 texts.push(normalize(addonTranslations[`${addonId}/@preset-name-${preset.id}`] || preset.name));
-                texts.push(normalize(addonTranslations[`${addonId}/@preset-description-${preset.id}`] || preset.description));
+                texts.push(normalize(
+                    addonTranslations[`${addonId}/@preset-description-${preset.id}`] ||
+                    preset.description
+                ));
             }
         }
         if (manifest.tags) {
