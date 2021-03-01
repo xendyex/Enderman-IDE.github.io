@@ -47,7 +47,11 @@ const base = {
         publicPath: root
     },
     resolve: {
-        symlinks: false
+        symlinks: false,
+        alias: {
+            'text-encoding$': path.resolve(__dirname, 'src/lib/tw-text-encoder'),
+            'scratch-render-fonts$': path.resolve(__dirname, 'src/lib/tw-scratch-render-fonts')
+        }
     },
     module: {
         rules: [{
@@ -111,10 +115,10 @@ module.exports = [
     // to run editor examples
     defaultsDeep({}, base, {
         entry: {
-            editor: './src/playground/editor.jsx',
-            player: './src/playground/player.jsx',
-            fullscreen: './src/playground/fullscreen.jsx',
-            embed: './src/playground/embed.jsx',
+            'editor': './src/playground/editor.jsx',
+            'player': './src/playground/player.jsx',
+            'fullscreen': './src/playground/fullscreen.jsx',
+            'embed': './src/playground/embed.jsx',
             'addon-settings': './src/playground/addon-settings.jsx'
         },
         output: {
@@ -123,7 +127,7 @@ module.exports = [
         module: {
             rules: base.module.rules.concat([
                 {
-                    test: /\.(svg|png|wav|gif|jpg|mp3)$/,
+                    test: /\.(svg|png|wav|gif|jpg|mp3|ttf|otf)$/,
                     loader: 'file-loader',
                     options: {
                         outputPath: 'static/assets/'
@@ -134,10 +138,9 @@ module.exports = [
         optimization: {
             splitChunks: {
                 chunks: 'all',
-                minChunks: 2
-            },
-            runtimeChunk: {
-                name: 'runtime'
+                minChunks: 2,
+                minSize: 50000,
+                maxInitialRequests: 5
             }
         },
         plugins: base.plugins.concat([
@@ -226,7 +229,7 @@ module.exports = [
             module: {
                 rules: base.module.rules.concat([
                     {
-                        test: /\.(svg|png|wav|gif|jpg|mp3)$/,
+                        test: /\.(svg|png|wav|gif|jpg|mp3|ttf|otf)$/,
                         loader: 'file-loader',
                         options: {
                             outputPath: 'static/assets/',
