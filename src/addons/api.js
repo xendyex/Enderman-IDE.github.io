@@ -32,12 +32,26 @@ const createStylesheet = css => {
     return style;
 };
 
+const flat = array => {
+    const result = [];
+    for (const i of array) {
+        if (Array.isArray(i)) {
+            for (const j of flat(i)) {
+                result.push(j);
+            }
+        } else {
+            result.push(i);
+        }
+    }
+    return result;
+};
+
 let _scratchClassNames = null;
 const getScratchClassNames = () => {
     if (_scratchClassNames) {
         return _scratchClassNames;
     }
-    const classes = Array.from(document.styleSheets)
+    const cssRules = flat(Array.from(document.styleSheets)
         // Ignore some scratch-paint stylesheets
         .filter(styleSheet => (
             !(
@@ -57,12 +71,13 @@ const getScratchClassNames = () => {
                 return [];
             }
         })
-        .flat()
+    );
+    const classes = flat(cssRules
         .map(e => e.selectorText)
         .filter(e => e)
         .map(e => e.match(/(([\w-]+?)_([\w-]+)_([\w\d-]+))/g))
         .filter(e => e)
-        .flat();
+    );
     _scratchClassNames = [...new Set(classes)];
     return _scratchClassNames;
 };
@@ -117,6 +132,21 @@ class Tab extends EventTargetShim {
             get vm () {
                 // We expose VM on window
                 return window.vm;
+            },
+            getBlockly: () => {
+                // The real Blockly is exposed on window. It may not exist until the user enters the editor.
+                if (window.ScratchBlocks) {
+                    return Promise.resolve(window.ScratchBlocks);
+                }
+                return new Promise((resolve, reject) => {
+                    const handler = () => {
+                        if (window.ScratchBlocks) {
+                            this.removeEventListener('urlChange', handler);
+                            resolve(window.ScratchBlocks);
+                        }
+                    };
+                    this.addEventListener('urlChange', handler);
+                });
             }
         };
     }
@@ -125,14 +155,8 @@ class Tab extends EventTargetShim {
         return tabReduxInstance;
     }
 
-    loadScript (src) {
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.onload = () => resolve();
-            script.onerror = () => reject(new Error('Cannot load script'));
-            script.src = src;
-            document.body.appendChild(script);
-        });
+    loadScript () {
+        throw new Error('loadScript is not supported');
     }
 
     waitForElement (selector, {markAsSeen = false} = {}) {
@@ -212,7 +236,7 @@ class Settings extends EventTargetShim {
     }
 }
 
-class Self {
+class Self extends EventTargetShim {
     // These are removed at build-time by pull.js. Throw if attempting to access them at runtime.
     get dir () {
         throw new Error(`Addon tried to access addon.self.dir`);

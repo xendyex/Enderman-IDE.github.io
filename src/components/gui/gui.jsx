@@ -24,6 +24,7 @@ import Watermark from '../../containers/watermark.jsx';
 
 import Backpack from '../../containers/backpack.jsx';
 import WebGlModal from '../../containers/webgl-modal.jsx';
+import TWEvalModal from '../webgl-modal/tw-eval-modal.jsx';
 import TipsLibrary from '../../containers/tips-library.jsx';
 import Cards from '../../containers/cards.jsx';
 import Alerts from '../../containers/alerts.jsx';
@@ -33,6 +34,8 @@ import TelemetryModal from '../telemetry-modal/telemetry-modal.jsx';
 
 import layout, {STAGE_SIZE_MODES} from '../../lib/layout-constants';
 import {resolveStageSize} from '../../lib/screen-utils';
+
+import {isRendererSupported, isEvalSupported} from '../../lib/tw-environment-support-prober';
 
 import styles from './gui.css';
 import addExtensionIcon from './icon--extensions.svg';
@@ -47,10 +50,6 @@ const messages = defineMessages({
         defaultMessage: 'Add Extension'
     }
 });
-
-// Cache this value to only retrieve it once the first time.
-// Assume that it doesn't change for a session.
-let isRendererSupported = null;
 
 const GUIComponent = props => {
     const {
@@ -138,10 +137,6 @@ const GUIComponent = props => {
         tabSelected: classNames(tabStyles.reactTabsTabSelected, styles.isSelected)
     };
 
-    if (isRendererSupported === null) {
-        isRendererSupported = Renderer.isSupported();
-    }
-
     return (<MediaQuery minWidth={layout.fullSizeMinWidth}>{isFullSize => {
         const stageSize = resolveStageSize(stageSizeMode, isFullSize);
 
@@ -154,7 +149,7 @@ const GUIComponent = props => {
                 <StageWrapper
                     isFullScreen={isFullScreen}
                     isEmbedded={isEmbedded}
-                    isRendererSupported={isRendererSupported}
+                    isRendererSupported={isRendererSupported()}
                     isRtl={isRtl}
                     loading={loading}
                     stageSize={STAGE_SIZE_MODES.large}
@@ -191,8 +186,11 @@ const GUIComponent = props => {
                         messageId="gui.loader.creating"
                     />
                 ) : null}
-                {isRendererSupported ? null : (
+                {isRendererSupported() ? null : (
                     <WebGlModal isRtl={isRtl} />
+                )}
+                {isEvalSupported() ? null : (
+                    <TWEvalModal isRtl={isRtl} />
                 )}
                 {tipsLibraryVisible ? (
                     <TipsLibrary />
@@ -358,7 +356,7 @@ const GUIComponent = props => {
                         <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize])}>
                             <StageWrapper
                                 isFullScreen={isFullScreen}
-                                isRendererSupported={isRendererSupported}
+                                isRendererSupported={isRendererSupported()}
                                 isRtl={isRtl}
                                 stageSize={stageSize}
                                 vm={vm}

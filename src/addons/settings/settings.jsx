@@ -41,6 +41,7 @@ import '../../lib/normalize.css';
 /* eslint-disable no-alert */
 /* eslint-disable no-console */
 /* eslint-disable react/no-multi-comp */
+/* eslint-disable react/jsx-no-bind */
 
 const locale = detectLocale(upstreamMeta.languages);
 const addonTranslations = getAddonTranslations(locale);
@@ -52,6 +53,8 @@ if (locale !== 'en') {
         Object.assign(settingsTranslations, messages);
     }
 }
+
+document.title = `${settingsTranslations['tw.addons.settings.title']} - TurboWarp`;
 
 const theme = getInitialDarkMode() ? 'dark' : 'light';
 document.body.setAttribute('theme', theme);
@@ -262,7 +265,7 @@ const SettingComponent = ({
                         max={setting.max}
                         step="1"
                         value={value}
-                        onChange={value => SettingsStore.setAddonSetting(addonId, settingId, value)}
+                        onChange={newValue => SettingsStore.setAddonSetting(addonId, settingId, newValue)}
                     />
                 </React.Fragment>
             )}
@@ -583,6 +586,7 @@ class AddonSettingsComponent extends React.Component {
         this.handleImport = this.handleImport.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+        this.handleClickSearchButton = this.handleClickSearchButton.bind(this);
         this.searchRef = this.searchRef.bind(this);
         this.searchBar = null;
         this.state = {
@@ -687,9 +691,26 @@ class AddonSettingsComponent extends React.Component {
         });
     }
     handleSearch (e) {
+        const value = e.target.value;
+        if (!this.state.easterEggs) {
+            if (
+                value.toLowerCase() === settingsTranslations['tw.addons.settings.tags.easterEgg'].toLowerCase() ||
+                value.toLowerCase() === settingsTranslationsEnglish['tw.addons.settings.tags.easterEgg'].toLowerCase()
+            ) {
+                this.setState({
+                    easterEggs: true
+                });
+            }
+        }
         this.setState({
-            search: e.target.value
+            search: value
         });
+    }
+    handleClickSearchButton () {
+        this.setState({
+            search: ''
+        });
+        this.searchBar.focus();
     }
     searchRef (searchBar) {
         this.searchBar = searchBar;
@@ -740,7 +761,10 @@ class AddonSettingsComponent extends React.Component {
         if (manifest.presets) {
             for (const preset of manifest.presets) {
                 texts.push(normalize(addonTranslations[`${addonId}/@preset-name-${preset.id}`] || preset.name));
-                texts.push(normalize(addonTranslations[`${addonId}/@preset-description-${preset.id}`] || preset.description));
+                texts.push(normalize(
+                    addonTranslations[`${addonId}/@preset-description-${preset.id}`] ||
+                    preset.description
+                ));
             }
         }
         if (manifest.tags) {
@@ -792,7 +816,7 @@ class AddonSettingsComponent extends React.Component {
         return (
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <label className={styles.searchContainer}>
+                    <div className={styles.searchContainer}>
                         <input
                             className={styles.searchInput}
                             value={this.state.search}
@@ -803,8 +827,11 @@ class AddonSettingsComponent extends React.Component {
                             spellCheck="false"
                             autoFocus
                         />
-                        <div className={styles.searchButton} />
-                    </label>
+                        <div
+                            className={styles.searchButton}
+                            onClick={this.handleClickSearchButton}
+                        />
+                    </div>
                     <a
                         href="https://scratch.mit.edu/users/World_Languages/#comments"
                         target="_blank"
