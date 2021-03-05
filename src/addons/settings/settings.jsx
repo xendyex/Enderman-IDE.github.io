@@ -48,7 +48,7 @@ const addonTranslations = getAddonTranslations(locale);
 const settingsTranslations = settingsTranslationsEnglish;
 document.documentElement.lang = locale;
 if (locale !== 'en') {
-    const messages = settingsTranslationsOther[locale];
+    const messages = settingsTranslationsOther[locale] || settingsTranslationsOther[locale.split('-')[0]];
     if (messages) {
         Object.assign(settingsTranslations, messages);
     }
@@ -885,11 +885,16 @@ class AddonSettingsComponent extends React.Component {
                             {settingsTranslations['tw.addons.settings.import']}
                         </button>
                     </div>
-                    {unsupported.length ? (
-                        <UnsupportedAddonsComponent
-                            addons={unsupported}
-                        />
-                    ) : null}
+                    <footer className={styles.footer}>
+                        {unsupported.length ? (
+                            <UnsupportedAddonsComponent
+                                addons={unsupported}
+                            />
+                        ) : null}
+                        <div className={styles.version}>
+                            {`v${upstreamMeta.version} (${upstreamMeta.commit})`}
+                        </div>
+                    </footer>
                 </div>
             </div>
         );

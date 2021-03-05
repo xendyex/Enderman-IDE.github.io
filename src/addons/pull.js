@@ -44,8 +44,8 @@ const walk = dir => {
     return files;
 };
 
+const repoPath = pathUtil.resolve(__dirname, 'ScratchAddons');
 if (!process.argv.includes('-')) {
-    const repoPath = pathUtil.resolve(__dirname, 'ScratchAddons');
     rimraf.sync(repoPath);
     childProcess.execSync(`git clone --depth=1 -b tw https://github.com/GarboMuffin/ScratchAddons ${repoPath}`);
 }
@@ -55,6 +55,11 @@ rimraf.sync(pathUtil.resolve(__dirname, 'libraries'));
 fs.mkdirSync(pathUtil.resolve(__dirname, 'addons'), {recursive: true});
 fs.mkdirSync(pathUtil.resolve(__dirname, 'addons-l10n'), {recursive: true});
 fs.mkdirSync(pathUtil.resolve(__dirname, 'libraries'), {recursive: true});
+
+process.chdir(repoPath);
+const commitHash = childProcess.execSync('git rev-parse --short HEAD')
+    .toString()
+    .trim();
 
 const JS_HEADER = `/**!
  * Imported from SA
@@ -98,6 +103,10 @@ const includeImports = (folder, contents) => {
     // el.src = addon.self.dir + "/" + name + ".svg";
     //          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  match
     //                           ^^^^^^^^^^^^^^^^^^^  capture group 1
+    contents = contents.replace(
+        /\${addon\.self\.(?:dir|lib) *\+ *([^;\n]+)}/g,
+        (_fullText, name) => `\${_twGetAsset(${name})}`
+    );
     contents = contents.replace(
         /addon\.self\.(?:dir|lib) *\+ *([^;]+)/g,
         (_fullText, name) => `_twGetAsset(${name})`
@@ -162,6 +171,7 @@ const includeImports = (folder, contents) => {
     const versionName = extensionManifest.version_name;
     fs.writeFileSync(upstreamMetaPath, JSON.stringify({
         version: versionName,
+        commit: commitHash,
         languages
     }));
 })().catch(err => {
