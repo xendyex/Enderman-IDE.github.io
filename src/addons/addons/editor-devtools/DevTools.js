@@ -1207,10 +1207,10 @@ export default class DevTools {
     let wksp = this.utils.getWorkspace();
     this.hidePopups(wksp);
 
-    setTimeout(() => {
+    setTimeout(async () => {
       let wksp = this.utils.getWorkspace();
       let v = wksp.getVariableById(this.selVarID);
-      let varName = window.prompt(this.msg("replace", { name: v.name }));
+      let varName = await window.prompt(this.msg("replace", { name: v.name }));
       if (varName) {
         this.doReplaceVariable(this.selVarID, varName, v.type);
       }
