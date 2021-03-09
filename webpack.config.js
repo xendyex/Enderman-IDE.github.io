@@ -119,7 +119,9 @@ module.exports = [
             'player': './src/playground/player.jsx',
             'fullscreen': './src/playground/fullscreen.jsx',
             'embed': './src/playground/embed.jsx',
-            'addon-settings': './src/playground/addon-settings.jsx'
+            'embedgpl': './src/playground/embedgpl.jsx',
+            'addon-settings': './src/playground/addon-settings.jsx',
+            'credits': './src/playground/credits/credits.jsx'
         },
         output: {
             path: path.resolve(__dirname, 'build')
@@ -183,10 +185,26 @@ module.exports = [
                 ...htmlWebpackPluginCommon
             }),
             new HtmlWebpackPlugin({
-                chunks: ['addon-settings'],
+                chunks: ['embedgpl'],
                 template: 'src/playground/index.ejs',
+                filename: 'embedgpl.html',
+                title: 'Embedded Project - TurboWarp',
+                noTheme: true,
+                ...htmlWebpackPluginCommon
+            }),
+            new HtmlWebpackPlugin({
+                chunks: ['addon-settings'],
+                template: 'src/playground/simple.ejs',
                 filename: 'addons.html',
                 title: 'Addon Settings - TurboWarp',
+                ...htmlWebpackPluginCommon
+            }),
+            new HtmlWebpackPlugin({
+                chunks: ['credits'],
+                template: 'src/playground/simple.ejs',
+                filename: 'credits.html',
+                title: 'TurboWarp Credits',
+                noSplash: true,
                 ...htmlWebpackPluginCommon
             }),
             new CopyWebpackPlugin([{

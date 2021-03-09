@@ -23,6 +23,7 @@
 const fs = require('fs');
 const childProcess = require('child_process');
 const rimraf = require('rimraf');
+const request = require('request');
 const pathUtil = require('path');
 const addons = require('./addons.json');
 
@@ -81,17 +82,19 @@ const includeImportedLibraries = contents => {
 };
 
 const includeImports = (folder, contents) => {
-    const dynamicAssets = fs.readdirSync(folder)
+    const dynamicAssets = walk(folder)
         .filter(file => file.endsWith('.svg'));
+
+    const stringifyPath = path => JSON.stringify(path).replace(/\\\\/g, '/');
 
     // Then we'll generate some JS to import them.
     let header = '/* inserted by pull.js */\n';
     dynamicAssets.forEach((file, index) => {
-        header += `import _twAsset${index} from "./${file}";\n`;
+        header += `import _twAsset${index} from ${stringifyPath(`./${file}`)};\n`;
     });
     header += `const _twGetAsset = (path) => {\n`;
     dynamicAssets.forEach((file, index) => {
-        header += `  if (path === "/${file}") return _twAsset${index};\n`;
+        header += `  if (path === ${stringifyPath(`/${file}`)}) return _twAsset${index};\n`;
     });
     // eslint-disable-next-line no-template-curly-in-string
     header += '  throw new Error(`Unknown asset: ${path}`);\n';
@@ -114,6 +117,12 @@ const includeImports = (folder, contents) => {
 
     return header + contents;
 };
+
+request('https://raw.githubusercontent.com/ScratchAddons/contributors/master/.all-contributorsrc', (err, response, body) => {
+    const parsed = JSON.parse(body);
+    const contributorsPath = pathUtil.resolve(__dirname, 'contributors.json');
+    fs.writeFileSync(contributorsPath, JSON.stringify(parsed.contributors, null, 4));
+});
 
 (async () => {
     for (const addon of addons) {
