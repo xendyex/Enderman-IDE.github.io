@@ -86,17 +86,20 @@ class Redux extends EventTargetShim {
     constructor () {
         super();
         this._initialized = false;
+        this._nextState = null;
     }
 
     initialize () {
         if (!this._initialized) {
             window.__APP_STATE_REDUCER__ = (action, next) => {
+                this._nextState = next;
                 this.dispatchEvent(new CustomEvent('statechanged', {
                     detail: {
                         action,
                         next
                     }
                 }));
+                this._nextState = null;
             };
 
             this._initialized = true;
@@ -108,6 +111,7 @@ class Redux extends EventTargetShim {
     }
 
     get state () {
+        if (this._nextState) return this._nextState;
         return __APP_STATE_STORE__.getState();
     }
 }
@@ -205,6 +209,7 @@ class Tab extends EventTargetShim {
                 for (const scratchClass of scratchClasses) {
                     if (scratchClass.startsWith(`${arg}_`) && scratchClass.length === arg.length + 6) {
                         classes.push(scratchClass);
+                        break;
                     }
                 }
             }
@@ -302,10 +307,12 @@ class AddonRunner {
         if (this.manifest.settings) {
             const kebabCaseId = kebabCaseToCamelCase(this.id);
             for (const setting of this.manifest.settings) {
-                const settingId = setting.id;
-                const variable = `--${kebabCaseId}-${kebabCaseToCamelCase(settingId)}`;
-                const value = this.publicAPI.addon.settings.get(settingId);
-                document.documentElement.style.setProperty(variable, value);
+                if (setting.type === 'color') {
+                    const settingId = setting.id;
+                    const variable = `--${kebabCaseId}-${kebabCaseToCamelCase(settingId)}`;
+                    const value = this.publicAPI.addon.settings.get(settingId);
+                    document.documentElement.style.setProperty(variable, value);
+                }
             }
         }
     }

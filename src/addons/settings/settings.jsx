@@ -48,7 +48,7 @@ const addonTranslations = getAddonTranslations(locale);
 const settingsTranslations = settingsTranslationsEnglish;
 document.documentElement.lang = locale;
 if (locale !== 'en') {
-    const messages = settingsTranslationsOther[locale];
+    const messages = settingsTranslationsOther[locale] || settingsTranslationsOther[locale.split('-')[0]];
     if (messages) {
         Object.assign(settingsTranslations, messages);
     }
@@ -58,6 +58,21 @@ document.title = `${settingsTranslations['tw.addons.settings.title']} - TurboWar
 
 const theme = getInitialDarkMode() ? 'dark' : 'light';
 document.body.setAttribute('theme', theme);
+
+const sortAddons = () => {
+    const sortedOrder = Object.keys(addons).sort((aId, bId) => {
+        const aNew = addons[aId].tags && addons[aId].tags.includes('new');
+        const bNew = addons[bId].tags && addons[bId].tags.includes('new');
+        if (aNew && !bNew) return -1;
+        if (bNew && !aNew) return 1;
+        return 0;
+    });
+    const result = {};
+    for (const key of sortedOrder) {
+        result[key] = addons[key];
+    }
+    return result;
+};
 
 const AddonCreditsComponent = ({credits}) => (
     credits.map((author, index) => {
@@ -885,11 +900,16 @@ class AddonSettingsComponent extends React.Component {
                             {settingsTranslations['tw.addons.settings.import']}
                         </button>
                     </div>
-                    {unsupported.length ? (
-                        <UnsupportedAddonsComponent
-                            addons={unsupported}
-                        />
-                    ) : null}
+                    <footer className={styles.footer}>
+                        {unsupported.length ? (
+                            <UnsupportedAddonsComponent
+                                addons={unsupported}
+                            />
+                        ) : null}
+                        <div className={styles.version}>
+                            {`v${upstreamMeta.version} (${upstreamMeta.commit})`}
+                        </div>
+                    </footer>
                 </div>
             </div>
         );
@@ -903,7 +923,7 @@ AddonSettingsComponent.propTypes = {
     onExportSettings: PropTypes.func
 };
 AddonSettingsComponent.defaultProps = {
-    addons,
+    addons: sortAddons(),
     unsupportedAddons
 };
 

@@ -23,6 +23,7 @@
 const fs = require('fs');
 const childProcess = require('child_process');
 const rimraf = require('rimraf');
+const request = require('request');
 const pathUtil = require('path');
 const addons = require('./addons.json');
 
@@ -44,8 +45,8 @@ const walk = dir => {
     return files;
 };
 
+const repoPath = pathUtil.resolve(__dirname, 'ScratchAddons');
 if (!process.argv.includes('-')) {
-    const repoPath = pathUtil.resolve(__dirname, 'ScratchAddons');
     rimraf.sync(repoPath);
     childProcess.execSync(`git clone --depth=1 -b tw https://github.com/GarboMuffin/ScratchAddons ${repoPath}`);
 }
@@ -55,6 +56,11 @@ rimraf.sync(pathUtil.resolve(__dirname, 'libraries'));
 fs.mkdirSync(pathUtil.resolve(__dirname, 'addons'), {recursive: true});
 fs.mkdirSync(pathUtil.resolve(__dirname, 'addons-l10n'), {recursive: true});
 fs.mkdirSync(pathUtil.resolve(__dirname, 'libraries'), {recursive: true});
+
+process.chdir(repoPath);
+const commitHash = childProcess.execSync('git rev-parse --short HEAD')
+    .toString()
+    .trim();
 
 const JS_HEADER = `/**!
  * Imported from SA
@@ -76,17 +82,19 @@ const includeImportedLibraries = contents => {
 };
 
 const includeImports = (folder, contents) => {
-    const dynamicAssets = fs.readdirSync(folder)
+    const dynamicAssets = walk(folder)
         .filter(file => file.endsWith('.svg'));
+
+    const stringifyPath = path => JSON.stringify(path).replace(/\\\\/g, '/');
 
     // Then we'll generate some JS to import them.
     let header = '/* inserted by pull.js */\n';
     dynamicAssets.forEach((file, index) => {
-        header += `import _twAsset${index} from "./${file}";\n`;
+        header += `import _twAsset${index} from ${stringifyPath(`./${file}`)};\n`;
     });
     header += `const _twGetAsset = (path) => {\n`;
     dynamicAssets.forEach((file, index) => {
-        header += `  if (path === "/${file}") return _twAsset${index};\n`;
+        header += `  if (path === ${stringifyPath(`/${file}`)}) return _twAsset${index};\n`;
     });
     // eslint-disable-next-line no-template-curly-in-string
     header += '  throw new Error(`Unknown asset: ${path}`);\n';
@@ -99,12 +107,22 @@ const includeImports = (folder, contents) => {
     //          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  match
     //                           ^^^^^^^^^^^^^^^^^^^  capture group 1
     contents = contents.replace(
+        /\${addon\.self\.(?:dir|lib) *\+ *([^;\n]+)}/g,
+        (_fullText, name) => `\${_twGetAsset(${name})}`
+    );
+    contents = contents.replace(
         /addon\.self\.(?:dir|lib) *\+ *([^;]+)/g,
         (_fullText, name) => `_twGetAsset(${name})`
     );
 
     return header + contents;
 };
+
+request('https://raw.githubusercontent.com/ScratchAddons/contributors/master/.all-contributorsrc', (err, response, body) => {
+    const parsed = JSON.parse(body);
+    const contributorsPath = pathUtil.resolve(__dirname, 'contributors.json');
+    fs.writeFileSync(contributorsPath, JSON.stringify(parsed.contributors, null, 4));
+});
 
 (async () => {
     for (const addon of addons) {
@@ -162,6 +180,7 @@ const includeImports = (folder, contents) => {
     const versionName = extensionManifest.version_name;
     fs.writeFileSync(upstreamMetaPath, JSON.stringify({
         version: versionName,
+        commit: commitHash,
         languages
     }));
 })().catch(err => {
