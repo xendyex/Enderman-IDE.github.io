@@ -21,6 +21,7 @@ import {
     setPlayer,
     setFullScreen
 } from '../reducers/mode';
+import {generateRandomUsername} from './tw-username';
 import * as progressMonitor from '../components/loader/tw-progress-monitor';
 
 /* eslint-disable no-alert */
@@ -138,6 +139,16 @@ class FileHashRouter extends HashRouter {
     }
 }
 
+const getCanonicalLinkElement = () => {
+    let el = document.querySelector('link[rel=canonical]');
+    if (!el) {
+        el = document.createElement('link');
+        el.rel = 'canonical';
+        document.head.appendChild(el);
+    }
+    return el;
+};
+
 class WildcardRouter extends Router {
     constructor (callbacks) {
         super(callbacks);
@@ -211,6 +222,8 @@ class WildcardRouter extends Router {
         }
 
         const path = `${this.root}${parts.join('/')}`;
+        const canonical = `${location.origin}${this.root}${projectId === '0' ? '' : projectId}`;
+        getCanonicalLinkElement().href = canonical;
 
         return `${path}${location.search}${location.hash}`;
     }
@@ -293,10 +306,7 @@ const TWStateManager = function (WrappedComponent) {
             } else {
                 const persistentUsername = this.props.isEmbedded ? null : getLocalStorage(USERNAME_KEY);
                 if (persistentUsername === null) {
-                    const digits = 4;
-                    const randomNumber = Math.round(Math.random() * (10 ** digits));
-                    const randomId = randomNumber.toString().padStart(digits, '0');
-                    const randomUsername = `player${randomId}`;
+                    const randomUsername = generateRandomUsername();
                     this.props.onSetUsername(randomUsername);
                     if (this.props.isEmbedded) {
                         this.doNotPersistUsername = randomUsername;
@@ -337,6 +347,18 @@ const TWStateManager = function (WrappedComponent) {
                 }
             }
 
+            if (urlParams.has('offscreen')) {
+                this.props.vm.setRuntimeOptions({
+                    fencing: false
+                });
+            }
+
+            if (urlParams.has('limitless')) {
+                this.props.vm.setRuntimeOptions({
+                    effectLimits: false
+                });
+            }
+
             if (urlParams.has('project_url')) {
                 let projectUrl = urlParams.get('project_url');
                 if (!projectUrl.startsWith('http:') && !projectUrl.startsWith('https:')) {
@@ -362,7 +384,10 @@ const TWStateManager = function (WrappedComponent) {
             }
 
             for (const extension of urlParams.getAll('extension')) {
-                this.props.vm.extensionManager.loadExtensionURL(extension);
+                // This is temporary until we feel more comfortable about the idea of running remote code in a Worker.
+                if (confirm(`Load extension: ${extension}`)) {
+                    this.props.vm.extensionManager.loadExtensionURL(extension);
+                }
             }
 
             const routerCallbacks = {
@@ -457,6 +482,18 @@ const TWStateManager = function (WrappedComponent) {
                     searchParams.delete('clones');
                 } else {
                     searchParams.set('clones', runtimeOptions.maxClones);
+                }
+
+                if (runtimeOptions.fencing) {
+                    searchParams.delete('offscreen');
+                } else {
+                    searchParams.set('offscreen', '');
+                }
+
+                if (runtimeOptions.effectLimits) {
+                    searchParams.delete('limitless');
+                } else {
+                    searchParams.set('limitless', '');
                 }
 
                 let newSearch = searchParams.toString();

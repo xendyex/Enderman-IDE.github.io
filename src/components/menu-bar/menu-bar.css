@@ -236,14 +236,3 @@
     color: $ui-white !important;
     text-decoration: none;
 }
-
-.theme-icon {
-    background-image: url("./tw-sun.svg");
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 24px;
-    height: 24px;
-}
-[theme="dark"] .theme-icon {
-    background-image: url("./tw-moon.svg");
-}

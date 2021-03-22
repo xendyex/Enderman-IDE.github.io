@@ -40,6 +40,7 @@ import FeaturedProjects from '../components/tw-featured-projects/featured-projec
 import Description from '../components/tw-description/description.jsx';
 import WebGlModal from '../containers/webgl-modal.jsx';
 import TWEvalModal from '../components/webgl-modal/tw-eval-modal.jsx';
+import CloudVariableBadge from '../components/tw-cloud-variable-badge/cloud-variable-badge.jsx';
 import {isRendererSupported, isEvalSupported} from '../lib/tw-environment-support-prober';
 
 import styles from './interface.css';
@@ -101,6 +102,7 @@ class Interface extends React.Component {
     }
     render () {
         const {
+            hasCloudVariables,
             description,
             isFullScreen,
             isPlayerOnly,
@@ -108,8 +110,14 @@ class Interface extends React.Component {
             onClickTheme
         } = this.props;
         const isHomepage = isPlayerOnly && !isFullScreen;
+        const isEditor = !isPlayerOnly;
         return (
-            <div className={classNames(styles.container, isHomepage ? styles.playerOnly : styles.editor)}>
+            <div
+                className={classNames(styles.container, {
+                    [styles.playerOnly]: isHomepage,
+                    [styles.editor]: isEditor
+                })}
+            >
                 {isHomepage ? (
                     <div className={styles.menu}>
                         <WrappedMenuBar
@@ -125,7 +133,7 @@ class Interface extends React.Component {
                     className={styles.center}
                     style={isPlayerOnly ? ({
                         // add a couple pixels to account for border (TODO: remove weird hack)
-                        width: `${twStageSize.width + 2}px`
+                        width: `${Math.max(480, twStageSize.width) + 2}px`
                     }) : null}
                 >
                     {isHomepage && announcement ? <DOMElementRenderer domElement={announcement} /> : null}
@@ -133,6 +141,8 @@ class Interface extends React.Component {
                         onClickAddonSettings={handleClickAddonSettings}
                         onClickTheme={onClickTheme}
                         onUpdateProjectTitle={this.handleUpdateProjectTitle}
+                        backpackVisible
+                        backpackHost="_local_"
                     />
                     {isHomepage ? (
                         <React.Fragment>
@@ -145,6 +155,11 @@ class Interface extends React.Component {
                             <div className={styles.section}>
                                 <ProjectInput />
                             </div>
+                            {hasCloudVariables && (
+                                <div className={styles.section}>
+                                    <CloudVariableBadge />
+                                </div>
+                            )}
                             {description.instructions || description.credits ? (
                                 <div className={styles.section}>
                                     <Description
@@ -281,6 +296,7 @@ class Interface extends React.Component {
 
 Interface.propTypes = {
     intl: intlShape,
+    hasCloudVariables: PropTypes.bool,
     description: PropTypes.shape({
         credits: PropTypes.string,
         instructions: PropTypes.string
@@ -292,6 +308,7 @@ Interface.propTypes = {
 };
 
 const mapStateToProps = state => ({
+    hasCloudVariables: state.scratchGui.tw.hasCloudVariables,
     description: state.scratchGui.tw.description,
     isFullScreen: state.scratchGui.mode.isFullScreen,
     isPlayerOnly: state.scratchGui.mode.isPlayerOnly,
