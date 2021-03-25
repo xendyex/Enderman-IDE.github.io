@@ -1,6 +1,6 @@
 const available = () => !!window.showSaveFilePicker;
 
-const showSaveFilePicker = async fileName => await window.showSaveFilePicker({
+const showSaveFilePicker = fileName => window.showSaveFilePicker({
     // Non-standard property used by desktop
     fileName: fileName,
     types: [

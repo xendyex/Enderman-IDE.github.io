@@ -11,9 +11,8 @@ import UserData from './users';
 /* eslint-disable react/jsx-no-literals */
 
 const User = ({image, text, href}) => (
-    <a
+    <span
         className={styles.user}
-        href={href}
     >
         <img
             className={styles.userImage}
@@ -24,7 +23,7 @@ const User = ({image, text, href}) => (
         <div className={styles.userInfo}>
             {text}
         </div>
-    </a>
+    </span>
 );
 User.propTypes = {
     image: PropTypes.string.isRequired,
@@ -65,7 +64,7 @@ const Credits = () => (
         </section>
         <section>
             <h2>{'Scratch'}</h2>
-            <p>TurboWarp is based on work by the <a href="https://scratch.mit.edu/credits">Scratch contributors</a>. TurboWarp is not affiliated wtih Scratch.</p>
+            <p>TurboWarp is based on work by the <a href="https://scratch.mit.edu/credits">Scratch contributors</a>. TurboWarp is not affiliated with Scratch.</p>
         </section>
         <section>
             <h2>{'Addons'}</h2>
