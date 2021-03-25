@@ -29,13 +29,13 @@ class ExtensionLibrary extends React.PureComponent {
             'handleItemSelect'
         ]);
     }
-    handleItemSelect (item) {
+    async handleItemSelect (item) {
         const id = item.extensionId;
         let url = item.extensionURL ? item.extensionURL : id;
         const isCustomURL = !item.disabled && !id;
         if (isCustomURL) {
             // eslint-disable-next-line no-alert
-            url = prompt(this.props.intl.formatMessage(messages.extensionUrl));
+            url = await prompt(this.props.intl.formatMessage(messages.extensionUrl));
         }
         if (url && !item.disabled) {
             if (this.props.vm.extensionManager.isExtensionLoaded(url)) {
