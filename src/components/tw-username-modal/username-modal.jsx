@@ -47,6 +47,9 @@ const UsernameModalComponent = props => (
                     />
                 </p>
             </React.Fragment>}
+            <p>
+                {'New username:'}
+            </p>
             <Box>
                 <input
                     autoFocus
