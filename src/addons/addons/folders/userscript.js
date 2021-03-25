@@ -1,8 +1,3 @@
-/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE or https://www.gnu.org/licenses/ for more information)
- */
-
 /* inserted by pull.js */
 import _twAsset0 from "./folder.svg";
 const _twGetAsset = (path) => {
@@ -706,8 +701,8 @@ export default async function ({ addon, global, console, msg }) {
           }
         };
 
-        const renameFolder = async () => {
-          let newName = await prompt(msg("rename-folder-prompt"), data.folder);
+        const renameFolder = () => {
+          let newName = prompt(msg("rename-folder-prompt"), data.folder);
           // Prompt cancelled, do not rename
           if (newName === null) {
             return;
@@ -753,8 +748,8 @@ export default async function ({ addon, global, console, msg }) {
           }
         };
 
-        const createFolder = async () => {
-          const name = await prompt(msg("name-prompt"), getNameWithoutFolder(data.realName));
+        const createFolder = () => {
+          const name = prompt(msg("name-prompt"), getNameWithoutFolder(data.realName));
           if (name === null) {
             return;
           }

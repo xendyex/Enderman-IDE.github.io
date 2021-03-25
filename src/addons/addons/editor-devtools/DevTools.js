@@ -1,8 +1,3 @@
-/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE or https://www.gnu.org/licenses/ for more information)
- */
-
 // import ShowBroadcast from "./show-broadcast.js";
 import Utils from "./blockly/Utils.js";
 import DomHelpers from "./DomHelpers.js";
@@ -1207,10 +1202,10 @@ export default class DevTools {
     let wksp = this.utils.getWorkspace();
     this.hidePopups(wksp);
 
-    setTimeout(async () => {
+    setTimeout(() => {
       let wksp = this.utils.getWorkspace();
       let v = wksp.getVariableById(this.selVarID);
-      let varName = await window.prompt(this.msg("replace", { name: v.name }));
+      let varName = window.prompt(this.msg("replace", { name: v.name }));
       if (varName) {
         this.doReplaceVariable(this.selVarID, varName, v.type);
       }
