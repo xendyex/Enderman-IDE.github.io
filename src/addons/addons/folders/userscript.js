@@ -702,7 +702,7 @@ export default async function ({ addon, global, console, msg }) {
         };
 
         const renameFolder = () => {
-          let newName = prompt(msg("rename-folder-prompt"), data.folder);
+          let newName = await prompt(msg("rename-folder-prompt"), data.folder);
           // Prompt cancelled, do not rename
           if (newName === null) {
             return;
@@ -749,7 +749,7 @@ export default async function ({ addon, global, console, msg }) {
         };
 
         const createFolder = () => {
-          const name = prompt(msg("name-prompt"), getNameWithoutFolder(data.realName));
+          const name = await prompt(msg("name-prompt"), getNameWithoutFolder(data.realName));
           if (name === null) {
             return;
           }
