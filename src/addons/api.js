@@ -1,5 +1,4 @@
 /**
- * @license
  * Copyright (c) 2021 Thomas Weber
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +18,7 @@
 import IntlMessageFormat from 'intl-messageformat';
 import SettingsStore from './settings-store';
 import getAddonTranslations from './get-addon-translations';
-import dataURLToBlob from './api-libraries/data-url-to-blob';
+import dataURLToBlob from '../lib/data-uri-to-blob';
 import EventTargetShim from './event-target';
 import './polyfill';
 
