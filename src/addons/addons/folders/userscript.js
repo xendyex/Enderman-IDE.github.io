@@ -701,7 +701,7 @@ export default async function ({ addon, global, console, msg }) {
           }
         };
 
-        const renameFolder = () => {
+        const renameFolder = async () => {
           let newName = await prompt(msg("rename-folder-prompt"), data.folder);
           // Prompt cancelled, do not rename
           if (newName === null) {
@@ -748,7 +748,7 @@ export default async function ({ addon, global, console, msg }) {
           }
         };
 
-        const createFolder = () => {
+        const createFolder = async () => {
           const name = await prompt(msg("name-prompt"), getNameWithoutFolder(data.realName));
           if (name === null) {
             return;
