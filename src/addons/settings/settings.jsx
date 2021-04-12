@@ -1,11 +1,9 @@
 /**
- * @license
- * Copyright (c) 2021 Thomas Weber
+ * Copyright (C) 2021 Thomas Weber
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,7 +25,7 @@ import settingsTranslationsOther from './l10n/translations.json';
 import upstreamMeta from '../upstream-meta.json';
 import {detectLocale} from '../../lib/detect-locale';
 import {getInitialDarkMode} from '../../lib/tw-theme-hoc.jsx';
-import SettingsStore from '../settings-store';
+import SettingsStore from '../settings-store-singleton';
 import extensionImageWhite from './extension-white.svg';
 import extensionImageBlack from './extension-black.svg';
 import brushImageWhite from './brush-white.svg';
@@ -41,20 +39,40 @@ import '../../lib/normalize.css';
 /* eslint-disable no-alert */
 /* eslint-disable no-console */
 /* eslint-disable react/no-multi-comp */
+/* eslint-disable react/jsx-no-bind */
 
 const locale = detectLocale(upstreamMeta.languages);
 const addonTranslations = getAddonTranslations(locale);
 const settingsTranslations = settingsTranslationsEnglish;
 document.documentElement.lang = locale;
 if (locale !== 'en') {
-    const messages = settingsTranslationsOther[locale];
+    const messages = settingsTranslationsOther[locale] || settingsTranslationsOther[locale.split('-')[0]];
     if (messages) {
         Object.assign(settingsTranslations, messages);
     }
 }
 
+document.title = `${settingsTranslations['tw.addons.settings.title']} - TurboWarp`;
+
 const theme = getInitialDarkMode() ? 'dark' : 'light';
 document.body.setAttribute('theme', theme);
+
+const sortAddons = () => {
+    const sortedOrder = Object.keys(addons).sort((aId, bId) => {
+        const aNew = addons[aId].tags && addons[aId].tags.includes('new');
+        const bNew = addons[bId].tags && addons[bId].tags.includes('new');
+        if (aNew && !bNew) return -1;
+        if (bNew && !aNew) return 1;
+        return 0;
+    });
+    const result = {};
+    for (const key of sortedOrder) {
+        result[key] = addons[key];
+    }
+    return result;
+};
+
+const isEasterEgg = addonManifest => addonManifest.tags && addonManifest.tags.includes('easterEgg');
 
 const AddonCreditsComponent = ({credits}) => (
     credits.map((author, index) => {
@@ -185,16 +203,23 @@ class BufferedInput extends React.Component {
     }
     handleKeyPress (e) {
         if (e.key === 'Enter') {
-            this.handleFlush();
+            this.handleFlush(e);
             e.target.blur();
         }
     }
-    handleFlush () {
+    handleFlush (e) {
         if (this.state.value === null) {
             return;
         }
         if (this.props.type === 'number') {
-            this.props.onChange(+this.state.value);
+            let value = +this.state.value;
+            const min = e.target.min;
+            const max = e.target.max;
+            const step = e.target.step;
+            if (min !== '') value = Math.max(min, value);
+            if (max !== '') value = Math.min(max, value);
+            if (step === '1') value = Math.round(value);
+            this.props.onChange(value);
         } else {
             this.props.onChange(this.state.value);
         }
@@ -262,7 +287,7 @@ const SettingComponent = ({
                         max={setting.max}
                         step="1"
                         value={value}
-                        onChange={value => SettingsStore.setAddonSetting(addonId, settingId, value)}
+                        onChange={newValue => SettingsStore.setAddonSetting(addonId, settingId, newValue)}
                     />
                 </React.Fragment>
             )}
@@ -560,6 +585,97 @@ UnsupportedAddonsComponent.propTypes = {
     }))
 };
 
+const normalize = i => i.toLowerCase();
+
+class AddonList extends React.Component {
+    shouldShowAddon (state, addonId, manifest) {
+        if (!state.visible) {
+            return false;
+        }
+        const terms = normalize(this.props.search.trim()).split(' ');
+        if (terms.length === 0) {
+            return true;
+        }
+        const texts = [
+            normalize(addonId),
+            normalize(addonTranslations[`${addonId}/@name`] || manifest.name),
+            normalize(addonTranslations[`${addonId}/@name`] || manifest.description)
+        ];
+        if (manifest.settings) {
+            for (const setting of manifest.settings) {
+                texts.push(normalize(addonTranslations[`${addonId}/@settings-name-${setting.id}`] || setting.name));
+            }
+        }
+        if (manifest.presets) {
+            for (const preset of manifest.presets) {
+                texts.push(normalize(addonTranslations[`${addonId}/@preset-name-${preset.id}`] || preset.name));
+                texts.push(normalize(
+                    addonTranslations[`${addonId}/@preset-description-${preset.id}`] ||
+                    preset.description
+                ));
+            }
+        }
+        if (manifest.tags) {
+            for (const tag of manifest.tags) {
+                const translatedTag = settingsTranslations[`tw.addons.settings.tags.${tag}`];
+                if (translatedTag) {
+                    texts.push(normalize(settingsTranslations[`tw.addons.settings.tags.${tag}`]));
+                }
+            }
+        }
+        // For an addon to be included, all search terms must match one of the texts.
+        for (const term of terms) {
+            if (!term) continue;
+            let found = false;
+            for (const text of texts) {
+                if (text.includes(term)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                return false;
+            }
+        }
+        return true;
+    }
+    render () {
+        const filteredAddons = this.props.addons
+            .filter(({id, manifest, state}) => this.shouldShowAddon(state, id, manifest));
+        if (filteredAddons.length === 0) {
+            return (
+                <div className={styles.noResults}>
+                    {settingsTranslations['tw.addons.settings.noResults']}
+                </div>
+            );
+        }
+        return (
+            <div>
+                {filteredAddons.map(({id, manifest, state}) => (
+                    <AddonComponent
+                        key={id}
+                        id={id}
+                        settings={state}
+                        manifest={manifest}
+                    />
+                ))}
+            </div>
+        );
+    }
+}
+AddonList.propTypes = {
+    addons: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        state: PropTypes.shape({
+
+        }).isRequired,
+        manifest: PropTypes.shape({
+
+        }).isRequired
+    })).isRequired,
+    search: PropTypes.string.isRequired
+};
+
 const KONAMI = [
     'arrowup',
     'arrowup',
@@ -584,17 +700,20 @@ class AddonSettingsComponent extends React.Component {
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleClickSearchButton = this.handleClickSearchButton.bind(this);
+        this.handleOpenEasterEggs = this.handleOpenEasterEggs.bind(this);
         this.searchRef = this.searchRef.bind(this);
         this.searchBar = null;
         this.state = {
             dirty: false,
-            easterEggs: false,
             search: ''
         };
+        this.easterEggsVisible = false;
         this.konamiProgress = 0;
         for (const [id, manifest] of Object.entries(this.props.addons)) {
+            const enabled = SettingsStore.getAddonEnabled(id);
             const addonState = {
-                enabled: SettingsStore.getAddonEnabled(id),
+                enabled: enabled,
+                visible: enabled || !isEasterEgg(manifest),
                 dirty: false
             };
             if (manifest.settings) {
@@ -688,8 +807,17 @@ class AddonSettingsComponent extends React.Component {
         });
     }
     handleSearch (e) {
+        const value = e.target.value;
+        if (!this.easterEggsVisible) {
+            if (
+                value.toLowerCase() === settingsTranslations['tw.addons.settings.tags.easterEgg'].toLowerCase() ||
+                value.toLowerCase() === settingsTranslationsEnglish['tw.addons.settings.tags.easterEgg'].toLowerCase()
+            ) {
+                this.handleOpenEasterEggs();
+            }
+        }
         this.setState({
-            search: e.target.value
+            search: value
         });
     }
     handleClickSearchButton () {
@@ -697,6 +825,23 @@ class AddonSettingsComponent extends React.Component {
             search: ''
         });
         this.searchBar.focus();
+    }
+    handleOpenEasterEggs () {
+        for (const [addonId, addonManifest] of Object.entries(this.props.addons)) {
+            const addonState = this.state[addonId];
+            if (!addonState.visible && isEasterEgg(addonManifest)) {
+                this.setState(prevState => ({
+                    [addonId]: {
+                        ...prevState[addonId],
+                        visible: true
+                    }
+                }));
+            }
+        }
+        this.setState({
+            search: settingsTranslations['tw.addons.settings.tags.easterEgg']
+        });
+        this.easterEggsVisible = true;
     }
     searchRef (searchBar) {
         this.searchBar = searchBar;
@@ -708,10 +853,7 @@ class AddonSettingsComponent extends React.Component {
         if (e.key.toLowerCase() === KONAMI[this.konamiProgress]) {
             this.konamiProgress++;
             if (this.konamiProgress >= KONAMI.length) {
-                this.setState({
-                    easterEggs: true,
-                    search: settingsTranslations['tw.addons.settings.tags.easterEgg']
-                });
+                this.handleOpenEasterEggs();
                 this.konamiProgress = 0;
                 this.searchBar.blur();
                 e.preventDefault();
@@ -728,70 +870,12 @@ class AddonSettingsComponent extends React.Component {
             e.preventDefault();
         }
     }
-    isIncludedInSearch (addonId, manifest) {
-        const normalize = i => i.toLowerCase();
-        const terms = normalize(this.state.search.trim()).split(' ');
-        if (terms.length === 0) {
-            return true;
-        }
-        const texts = [
-            normalize(addonId),
-            normalize(addonTranslations[`${addonId}/@name`] || manifest.name),
-            normalize(addonTranslations[`${addonId}/@name`] || manifest.description)
-        ];
-        if (manifest.settings) {
-            for (const setting of manifest.settings) {
-                texts.push(normalize(addonTranslations[`${addonId}/@settings-name-${setting.id}`] || setting.name));
-            }
-        }
-        if (manifest.presets) {
-            for (const preset of manifest.presets) {
-                texts.push(normalize(addonTranslations[`${addonId}/@preset-name-${preset.id}`] || preset.name));
-                texts.push(normalize(addonTranslations[`${addonId}/@preset-description-${preset.id}`] || preset.description));
-            }
-        }
-        if (manifest.tags) {
-            for (const tag of manifest.tags) {
-                const translatedTag = settingsTranslations[`tw.addons.settings.tags.${tag}`];
-                if (translatedTag) {
-                    texts.push(normalize(settingsTranslations[`tw.addons.settings.tags.${tag}`]));
-                }
-            }
-        }
-        // For an addon to be included, all search terms must match one of the texts.
-        for (const term of terms) {
-            if (!term) continue;
-            let found = false;
-            for (const text of texts) {
-                if (text.includes(term)) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                return false;
-            }
-        }
-        return true;
-    }
-    shouldShowAddon (state, addonId, manifest) {
-        if (!this.isIncludedInSearch(addonId, manifest)) {
-            return false;
-        }
-        if (this.state.easterEggs) {
-            // Show everything when easter eggs are visible.
-            return true;
-        }
-        // Otherwise, only show easter eggs when they are enabled.
-        return state.enabled || !(manifest.tags && manifest.tags.includes('easterEgg'));
-    }
     render () {
-        const filteredAddons = Object.entries(this.props.addons).map(([id, manifest]) => ({
+        const addonState = Object.entries(this.props.addons).map(([id, manifest]) => ({
             id,
             manifest,
             state: this.state[id]
-        }))
-            .filter(({id, manifest, state}) => this.shouldShowAddon(state, id, manifest));
+        }));
         const unsupported = Object.entries(this.props.unsupportedAddons).map(([id, manifest]) => ({
             id,
             manifest
@@ -832,22 +916,10 @@ class AddonSettingsComponent extends React.Component {
                     )}
                 </div>
                 <div className={styles.addons}>
-                    {filteredAddons.length > 0 ? (
-                        <React.Fragment>
-                            {filteredAddons.map(({id, manifest, state}) => (
-                                <AddonComponent
-                                    key={id}
-                                    id={id}
-                                    settings={state}
-                                    manifest={manifest}
-                                />
-                            ))}
-                        </React.Fragment>
-                    ) : (
-                        <div className={styles.noResults}>
-                            {settingsTranslations['tw.addons.settings.noResults']}
-                        </div>
-                    )}
+                    <AddonList
+                        addons={addonState}
+                        search={this.state.search}
+                    />
                     <div className={styles.footerButtons}>
                         <button
                             className={classNames(styles.button, styles.resetAllButton)}
@@ -868,11 +940,25 @@ class AddonSettingsComponent extends React.Component {
                             {settingsTranslations['tw.addons.settings.import']}
                         </button>
                     </div>
-                    {unsupported.length ? (
-                        <UnsupportedAddonsComponent
-                            addons={unsupported}
-                        />
-                    ) : null}
+                    <footer className={styles.footer}>
+                        {unsupported.length ? (
+                            <UnsupportedAddonsComponent
+                                addons={unsupported}
+                            />
+                        ) : null}
+                        <div className={styles.version}>
+                            {`v${upstreamMeta.version} (${upstreamMeta.commit}) `}
+                            <span
+                                role="button"
+                                tabIndex="0"
+                                className={styles.dango}
+                                onClick={this.handleOpenEasterEggs}
+                                title="Dango"
+                            >
+                                {'🍡'}
+                            </span>
+                        </div>
+                    </footer>
                 </div>
             </div>
         );
@@ -886,7 +972,7 @@ AddonSettingsComponent.propTypes = {
     onExportSettings: PropTypes.func
 };
 AddonSettingsComponent.defaultProps = {
-    addons,
+    addons: sortAddons(),
     unsupportedAddons
 };
 

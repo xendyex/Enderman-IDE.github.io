@@ -16,6 +16,21 @@ const fetchProjectMeta = projectId => fetch(API_URL.replace('$id', projectId))
         return r.json();
     });
 
+const getNoIndexTag = () => document.querySelector('meta[name="robots"][content="noindex"]');
+const setIndexable = indexable => {
+    if (indexable) {
+        const tag = getNoIndexTag();
+        if (tag) {
+            tag.remove();
+        }
+    } else if (!getNoIndexTag()) {
+        const tag = document.createElement('meta');
+        tag.name = 'robots';
+        tag.content = 'noindex';
+        document.head.appendChild(tag);
+    }
+};
+
 const TWProjectMetaFetcherHOC = function (WrappedComponent) {
     class ProjectMetaFetcherComponent extends React.Component {
         shouldComponentUpdate (nextProps) {
@@ -50,13 +65,18 @@ const TWProjectMetaFetcherHOC = function (WrappedComponent) {
                     if (instructions || credits) {
                         this.props.onSetDescription(instructions, credits);
                     }
+                    // We only want projects that are somewhat noteworthy to appear in search engines.
+                    const {views, loves, favorites} = data.stats;
+                    setIndexable(
+                        views >= 50 &&
+                        loves >= 5 &&
+                        favorites >= 5
+                    );
                 })
                 .catch(err => {
+                    setIndexable(false);
                     log.warn('cannot fetch project meta', err);
                 });
-        }
-        componentWillUnmount () {
-            document.title = this.initialTitle;
         }
         render () {
             const {

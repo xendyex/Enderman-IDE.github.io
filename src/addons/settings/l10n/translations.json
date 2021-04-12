@@ -14,9 +14,12 @@
         "tw.addons.settings.search": "Suchen",
         "tw.addons.settings.tags.beta": "Beta",
         "tw.addons.settings.tags.easterEgg": "Easter Egg",
+        "tw.addons.settings.tags.new": "Neu!",
         "tw.addons.settings.tags.recommended": "Empfohlen",
+        "tw.addons.settings.tags.theme": "Design",
         "tw.addons.settings.tags.turbowarp": "TurboWarp",
-        "tw.addons.settings.unsupported": "Manche Addons sind in diesem Browser nicht verfügbar."
+        "tw.addons.settings.title": "Addon-Einstellungen",
+        "tw.addons.settings.unsupported": "Manche Addons sind in diesem Browser nicht verfügbar:"
     },
     "es": {
         "tw.addons.settings.addonFeedback": "Enviar comentarios sobre addons",
@@ -33,8 +36,11 @@
         "tw.addons.settings.search": "Buscar",
         "tw.addons.settings.tags.beta": "Beta",
         "tw.addons.settings.tags.easterEgg": "Easter Egg",
+        "tw.addons.settings.tags.new": "¡Nuevo!",
         "tw.addons.settings.tags.recommended": "Recomendado",
+        "tw.addons.settings.tags.theme": "Tema",
         "tw.addons.settings.tags.turbowarp": "TurboWarp",
+        "tw.addons.settings.title": "Ajustes de Addons",
         "tw.addons.settings.unsupported": "Algunos addons no están disponibles en este navegador:"
     },
     "it": {
@@ -52,9 +58,56 @@
         "tw.addons.settings.search": "Cerca",
         "tw.addons.settings.tags.beta": "Beta",
         "tw.addons.settings.tags.easterEgg": "Easter Egg",
+        "tw.addons.settings.tags.new": "Nuovo!",
         "tw.addons.settings.tags.recommended": "Raccomandato",
+        "tw.addons.settings.tags.theme": "Tema",
         "tw.addons.settings.tags.turbowarp": "TurboWarp",
+        "tw.addons.settings.title": "Impostazioni Addon",
         "tw.addons.settings.unsupported": "Alcuni addon non sono disponibili in questo browser:"
+    },
+    "ja": {
+        "tw.addons.settings.addonFeedback": "アドオンのフィードバック",
+        "tw.addons.settings.confirmResetAll": "アドオンの設定を削除し、デフォルトに戻します。よろしいですか？",
+        "tw.addons.settings.credits": "クレジット:",
+        "tw.addons.settings.dirty": "再読み込みをしてアドオンの効果を反映する。",
+        "tw.addons.settings.dirtyButton": "すぐに再読み込みする",
+        "tw.addons.settings.export": "設定を保存する",
+        "tw.addons.settings.import": "設定を読み込む",
+        "tw.addons.settings.noResults": "検索条件に一致する結果はありません。",
+        "tw.addons.settings.presets": "プリセット",
+        "tw.addons.settings.reset": "リセット",
+        "tw.addons.settings.resetAll": "全てリセットする",
+        "tw.addons.settings.search": "検索",
+        "tw.addons.settings.tags.beta": "ベータ版",
+        "tw.addons.settings.tags.easterEgg": "イースターエッグ",
+        "tw.addons.settings.tags.new": "新機能!",
+        "tw.addons.settings.tags.recommended": "おすすめ",
+        "tw.addons.settings.tags.theme": "テーマ",
+        "tw.addons.settings.tags.turbowarp": "TurboWarp",
+        "tw.addons.settings.title": "アドオン設定",
+        "tw.addons.settings.unsupported": "いくつかのアドオンがお使いのブラウザに対応していません:"
+    },
+    "ko": {
+        "tw.addons.settings.addonFeedback": "애드온 피드백",
+        "tw.addons.settings.confirmResetAll": "정말로 애드온 설정을 기본값으로 초기화하시겠습니까?",
+        "tw.addons.settings.credits": "크레딧:",
+        "tw.addons.settings.dirty": "설정을 적용하기 위해 TurboWarp를 재시작합니다.",
+        "tw.addons.settings.dirtyButton": "재시작하기",
+        "tw.addons.settings.export": "설정 내보내기",
+        "tw.addons.settings.import": "설정 가져오기",
+        "tw.addons.settings.noResults": "결과가 없습니다.",
+        "tw.addons.settings.presets": "프리셋",
+        "tw.addons.settings.reset": "초기화하기",
+        "tw.addons.settings.resetAll": "모두 초기화하기",
+        "tw.addons.settings.search": "검색",
+        "tw.addons.settings.tags.beta": "베타",
+        "tw.addons.settings.tags.easterEgg": "이스터에그",
+        "tw.addons.settings.tags.new": "새로운 기능",
+        "tw.addons.settings.tags.recommended": "추천",
+        "tw.addons.settings.tags.theme": "테마",
+        "tw.addons.settings.tags.turbowarp": "TurboWarp",
+        "tw.addons.settings.title": "애드온 설정",
+        "tw.addons.settings.unsupported": "일부 애드온은 다음 브라우저에서는 사용하실 수 없습니다:"
     },
     "pt": {
         "tw.addons.settings.addonFeedback": "Dar Feedback sobre Addons",
@@ -71,8 +124,11 @@
         "tw.addons.settings.search": "Buscar",
         "tw.addons.settings.tags.beta": "Beta",
         "tw.addons.settings.tags.easterEgg": "Easter Egg",
+        "tw.addons.settings.tags.new": "Novo!",
         "tw.addons.settings.tags.recommended": "Recomendado",
+        "tw.addons.settings.tags.theme": "Tema",
         "tw.addons.settings.tags.turbowarp": "TurboWarp",
+        "tw.addons.settings.title": "Configurações de Addon",
         "tw.addons.settings.unsupported": "Alguns addons não estão disponíveis neste navegador:"
     },
     "ro": {
@@ -92,6 +148,7 @@
         "tw.addons.settings.tags.easterEgg": "Surprize Ascunse",
         "tw.addons.settings.tags.recommended": "Recomandat",
         "tw.addons.settings.tags.turbowarp": "TurboWarp",
+        "tw.addons.settings.title": "Setările Addon-urilor",
         "tw.addons.settings.unsupported": "Unele extensii nu sunt disponibile în acest browser:"
     },
     "tr": {
@@ -108,9 +165,15 @@
         "tw.addons.settings.resetAll": "Her şeyi sıfırla",
         "tw.addons.settings.search": "Arama",
         "tw.addons.settings.tags.beta": "Beta",
-        "tw.addons.settings.tags.easterEgg": "Eğlenceli bir gizli şey",
+        "tw.addons.settings.tags.easterEgg": "Gizli Özellik",
+        "tw.addons.settings.tags.new": "Yeni!",
         "tw.addons.settings.tags.recommended": "Önerildi",
+        "tw.addons.settings.tags.theme": "Tema",
         "tw.addons.settings.tags.turbowarp": "TurboWarp",
+        "tw.addons.settings.title": "Eklenti Ayarlar",
         "tw.addons.settings.unsupported": "Bazi içerikler bu web tarayacıda kullanamıyoruz:"
+    },
+    "zh-cn": {
+        "tw.addons.settings.search": "搜索"
     }
 }

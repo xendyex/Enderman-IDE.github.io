@@ -1,8 +1,3 @@
-/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE_GPL or https://www.gnu.org/licenses/ for more information)
- */
-
 /**
  * Helper class to flash a Blockly scratch block in the users workspace
  */
@@ -27,7 +22,7 @@ export default class BlockFlasher {
      * @private
      */
     function _flash() {
-      myFlash.block.setColour(flashOn ? "#ffff80" : myFlash.colour);
+      myFlash.block.svgPath_.style.fill = flashOn ? "#ffff80" : myFlash.colour;
       flashOn = !flashOn;
       count--;
       if (count > 0) {

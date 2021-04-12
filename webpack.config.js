@@ -47,7 +47,11 @@ const base = {
         publicPath: root
     },
     resolve: {
-        symlinks: false
+        symlinks: false,
+        alias: {
+            'text-encoding$': path.resolve(__dirname, 'src/lib/tw-text-encoder'),
+            'scratch-render-fonts$': path.resolve(__dirname, 'src/lib/tw-scratch-render-fonts')
+        }
     },
     module: {
         rules: [{
@@ -64,9 +68,6 @@ const base = {
                 // in much lower dependencies.
                 babelrc: false,
                 plugins: [
-                    '@babel/plugin-syntax-dynamic-import',
-                    '@babel/plugin-transform-async-to-generator',
-                    '@babel/plugin-proposal-object-rest-spread',
                     ['react-intl', {
                         messagesDir: './translations/messages/'
                     }]],
@@ -111,12 +112,13 @@ module.exports = [
     // to run editor examples
     defaultsDeep({}, base, {
         entry: {
-            editor: './src/playground/editor.jsx',
-            player: './src/playground/player.jsx',
-            fullscreen: './src/playground/fullscreen.jsx',
-            embed: './src/playground/embed.jsx',
+            'editor': './src/playground/editor.jsx',
+            'player': './src/playground/player.jsx',
+            'fullscreen': './src/playground/fullscreen.jsx',
+            'embed': './src/playground/embed.jsx',
             'addon-settings': './src/playground/addon-settings.jsx',
-            packager: './src/playground/packager.jsx'
+            'credits': './src/playground/credits/credits.jsx',
+            'packager': './src/playground/packager.jsx'
         },
         output: {
             path: path.resolve(__dirname, 'build')
@@ -124,7 +126,7 @@ module.exports = [
         module: {
             rules: base.module.rules.concat([
                 {
-                    test: /\.(svg|png|wav|gif|jpg|mp3)$/,
+                    test: /\.(svg|png|wav|gif|jpg|mp3|ttf|otf)$/,
                     loader: 'url-loader',
                     options: {
                         esModule: false
@@ -136,7 +138,7 @@ module.exports = [
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': '"' + process.env.NODE_ENV + '"',
                 'process.env.DEBUG': Boolean(process.env.DEBUG),
-                'process.env.ANNOUNCEMENT': process.env.ANNOUNCEMENT ? '"' + process.env.ANNOUNCEMENT + '"' : '""',
+                'process.env.ANNOUNCEMENT': JSON.stringify(process.env.ANNOUNCEMENT || ''),
                 'process.env.ROOT': JSON.stringify(root),
                 'process.env.ROUTING_STYLE': JSON.stringify(process.env.ROUTING_STYLE || 'filehash'),
                 'process.env.PLAUSIBLE_API': JSON.stringify(process.env.PLAUSIBLE_API),
@@ -173,9 +175,17 @@ module.exports = [
             }),
             new HtmlWebpackPlugin({
                 chunks: ['addon-settings'],
-                template: 'src/playground/index.ejs',
+                template: 'src/playground/simple.ejs',
                 filename: 'addons.html',
                 title: 'Addon Settings - TurboWarp',
+                ...htmlWebpackPluginCommon
+            }),
+            new HtmlWebpackPlugin({
+                chunks: ['credits'],
+                template: 'src/playground/simple.ejs',
+                filename: 'credits.html',
+                title: 'TurboWarp Credits',
+                noSplash: true,
                 ...htmlWebpackPluginCommon
             }),
             new CopyWebpackPlugin([{
@@ -218,7 +228,7 @@ module.exports = [
             module: {
                 rules: base.module.rules.concat([
                     {
-                        test: /\.(svg|png|wav|gif|jpg|mp3)$/,
+                        test: /\.(svg|png|wav|gif|jpg|mp3|ttf|otf)$/,
                         loader: 'url-loader',
                         options: {
                             esModule: false

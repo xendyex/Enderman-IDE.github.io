@@ -1,11 +1,9 @@
 /**
- * @license
- * Copyright (c) 2021 Thomas Weber
+ * Copyright (C) 2021 Thomas Weber
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,10 +15,11 @@
  */
 
 import IntlMessageFormat from 'intl-messageformat';
-import SettingsStore from './settings-store';
+import SettingsStore from './settings-store-singleton';
 import getAddonTranslations from './get-addon-translations';
-import dataURLToBlob from './api-libraries/data-url-to-blob';
+import dataURLToBlob from '../lib/data-uri-to-blob';
 import EventTargetShim from './event-target';
+import './polyfill';
 
 /* eslint-disable no-console */
 
@@ -32,26 +31,12 @@ const createStylesheet = css => {
     return style;
 };
 
-const flat = array => {
-    const result = [];
-    for (const i of array) {
-        if (Array.isArray(i)) {
-            for (const j of flat(i)) {
-                result.push(j);
-            }
-        } else {
-            result.push(i);
-        }
-    }
-    return result;
-};
-
 let _scratchClassNames = null;
 const getScratchClassNames = () => {
     if (_scratchClassNames) {
         return _scratchClassNames;
     }
-    const cssRules = flat(Array.from(document.styleSheets)
+    const cssRules = Array.from(document.styleSheets)
         // Ignore some scratch-paint stylesheets
         .filter(styleSheet => (
             !(
@@ -71,32 +56,70 @@ const getScratchClassNames = () => {
                 return [];
             }
         })
-    );
-    const classes = flat(cssRules
+        .flat();
+    const classes = cssRules
         .map(e => e.selectorText)
         .filter(e => e)
         .map(e => e.match(/(([\w-]+?)_([\w-]+)_([\w\d-]+))/g))
         .filter(e => e)
-    );
+        .flat();
     _scratchClassNames = [...new Set(classes)];
+    const observer = new MutationObserver(mutationList => {
+        for (const mutation of mutationList) {
+            for (const node of mutation.addedNodes) {
+                if (node.tagName === 'STYLE') {
+                    _scratchClassNames = null;
+                    observer.disconnect();
+                    return;
+                }
+            }
+        }
+    });
+    observer.observe(document.head, {
+        childList: true
+    });
     return _scratchClassNames;
+};
+
+let _mutationObserver;
+let _mutationObserverCallbacks = [];
+const addMutationObserverCallback = newCallback => {
+    if (!_mutationObserver) {
+        _mutationObserver = new MutationObserver(() => {
+            for (const cb of _mutationObserverCallbacks) {
+                cb();
+            }
+        });
+        _mutationObserver.observe(document.documentElement, {
+            attributes: false,
+            childList: true,
+            subtree: true
+        });
+    }
+    _mutationObserverCallbacks.push(newCallback);
+};
+const removeMutationObserverCallback = callback => {
+    _mutationObserverCallbacks = _mutationObserverCallbacks.filter(i => i !== callback);
 };
 
 class Redux extends EventTargetShim {
     constructor () {
         super();
         this._initialized = false;
+        this._nextState = null;
     }
 
     initialize () {
         if (!this._initialized) {
             window.__APP_STATE_REDUCER__ = (action, next) => {
+                this._nextState = next;
                 this.dispatchEvent(new CustomEvent('statechanged', {
                     detail: {
                         action,
                         next
                     }
                 }));
+                this._nextState = null;
             };
 
             this._initialized = true;
@@ -108,6 +131,7 @@ class Redux extends EventTargetShim {
     }
 
     get state () {
+        if (this._nextState) return this._nextState;
         return __APP_STATE_STORE__.getState();
     }
 }
@@ -132,6 +156,21 @@ class Tab extends EventTargetShim {
             get vm () {
                 // We expose VM on window
                 return window.vm;
+            },
+            getBlockly: () => {
+                // The real Blockly is exposed on window. It may not exist until the user enters the editor.
+                if (window.ScratchBlocks) {
+                    return Promise.resolve(window.ScratchBlocks);
+                }
+                return new Promise((resolve, reject) => {
+                    const handler = () => {
+                        if (window.ScratchBlocks) {
+                            this.removeEventListener('urlChange', handler);
+                            resolve(window.ScratchBlocks);
+                        }
+                    };
+                    this.addEventListener('urlChange', handler);
+                });
             }
         };
     }
@@ -140,14 +179,8 @@ class Tab extends EventTargetShim {
         return tabReduxInstance;
     }
 
-    loadScript (src) {
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.onload = () => resolve();
-            script.onerror = () => reject(new Error('Cannot load script'));
-            script.src = src;
-            document.body.appendChild(script);
-        });
+    loadScript () {
+        throw new Error('loadScript is not supported');
     }
 
     waitForElement (selector, {markAsSeen = false} = {}) {
@@ -158,22 +191,19 @@ class Tab extends EventTargetShim {
             return Promise.resolve(element);
         }
 
-        return new Promise(resolve =>
-            new MutationObserver((mutationsList, observer) => {
+        return new Promise(resolve => {
+            const callback = () => {
                 const elements = document.querySelectorAll(selector);
                 for (const element of elements) {
                     if (this._seenElements.has(element)) continue;
-                    observer.disconnect();
                     resolve(element);
+                    removeMutationObserverCallback(callback);
                     if (markAsSeen) this._seenElements.add(element);
                     break;
                 }
-            }).observe(document.documentElement, {
-                attributes: false,
-                childList: true,
-                subtree: true
-            })
-        );
+            };
+            addMutationObserverCallback(callback);
+        });
     }
 
     copyImage (dataURL) {
@@ -196,6 +226,7 @@ class Tab extends EventTargetShim {
                 for (const scratchClass of scratchClasses) {
                     if (scratchClass.startsWith(`${arg}_`) && scratchClass.length === arg.length + 6) {
                         classes.push(scratchClass);
+                        break;
                     }
                 }
             }
@@ -227,7 +258,7 @@ class Settings extends EventTargetShim {
     }
 }
 
-class Self {
+class Self extends EventTargetShim {
     // These are removed at build-time by pull.js. Throw if attempting to access them at runtime.
     get dir () {
         throw new Error(`Addon tried to access addon.self.dir`);
@@ -293,12 +324,23 @@ class AddonRunner {
         if (this.manifest.settings) {
             const kebabCaseId = kebabCaseToCamelCase(this.id);
             for (const setting of this.manifest.settings) {
-                const settingId = setting.id;
-                const variable = `--${kebabCaseId}-${kebabCaseToCamelCase(settingId)}`;
-                const value = this.publicAPI.addon.settings.get(settingId);
-                document.documentElement.style.setProperty(variable, value);
+                if (setting.type === 'color') {
+                    const settingId = setting.id;
+                    const variable = `--${kebabCaseId}-${kebabCaseToCamelCase(settingId)}`;
+                    const value = this.publicAPI.addon.settings.get(settingId);
+                    document.documentElement.style.setProperty(variable, value);
+                }
             }
         }
+    }
+
+    settingsMatch (settingMatch) {
+        if (!settingMatch) {
+            // No settings to match.
+            return true;
+        }
+        const settingValue = this.publicAPI.addon.settings.get(settingMatch.id);
+        return settingValue === settingMatch.value;
     }
 
     async _run () {
@@ -306,6 +348,9 @@ class AddonRunner {
 
         if (this.manifest.userstyles) {
             for (const userstyle of this.manifest.userstyles) {
+                if (!this.settingsMatch(userstyle.settingMatch)) {
+                    continue;
+                }
                 const m = await import(
                     /* webpackInclude: /\.css$/ */
                     /* webpackMode: "eager" */
@@ -322,6 +367,9 @@ class AddonRunner {
 
         if (this.manifest.userscripts) {
             for (const userscript of this.manifest.userscripts) {
+                if (!this.settingsMatch(userscript.settingMatch)) {
+                    continue;
+                }
                 const m = await import(
                     /* webpackInclude: /\.js$/ */
                     /* webpackMode: "eager" */

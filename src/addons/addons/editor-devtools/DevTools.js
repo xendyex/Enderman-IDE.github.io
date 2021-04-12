@@ -1,8 +1,3 @@
-/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE_GPL or https://www.gnu.org/licenses/ for more information)
- */
-
 // import ShowBroadcast from "./show-broadcast.js";
 import Utils from "./blockly/Utils.js";
 import DomHelpers from "./DomHelpers.js";
@@ -648,11 +643,7 @@ export default class DevTools {
         continue;
       }
 
-      // blocks._blocks is not iterable, have to do it using an 'in'
-      for (const id in blocks._blocks) {
-        if (!blocks._blocks.hasOwnProperty(id)) {
-          continue;
-        }
+      for (const id of Object.keys(blocks._blocks)) {
         const block = blocks._blocks[id];
         // To find event broadcaster blocks, we look for the nested "event_broadcast_menu" blocks first that match the event name
         if (block.opcode === "event_broadcast_menu" && block.fields.BROADCAST_OPTION.value === name) {
@@ -1365,7 +1356,7 @@ export default class DevTools {
       }
     } else if (e.button === 2) {
       // Right click...
-      let spriteSelector = e.target.closest("div[class*='sprite-selector-item_sprite-selector-item']");
+      let spriteSelector = e.target.closest("#react-tabs-3 div[class*='sprite-selector-item_sprite-selector-item']");
       if (spriteSelector) {
         let contextMenu = spriteSelector.getElementsByTagName("nav")[0];
         if (!contextMenu.querySelector("div.s3devSTT")) {
@@ -1392,8 +1383,7 @@ export default class DevTools {
       if (blockSvg || isBackground) {
         let dataId = blockSvg && blockSvg.getAttribute("data-id");
         if (dataId || isBackground) {
-          let devTools = this;
-          setTimeout(() => {
+          setTimeout(async () => {
             // Is there a popup menu to hi-jack?
             let widget = document.querySelector("div.blocklyWidgetDiv");
             if (!widget) {
@@ -1405,9 +1395,11 @@ export default class DevTools {
             }
             if (isBackground) {
               let nodes = blocklyContextMenu.children;
+              const realBlockly = await this.addon.tab.traps.getBlockly();
               for (const node of nodes) {
-                if (node.textContent === "Clean up Blocks") {
+                if (node.textContent === realBlockly.Msg.CLEAN_UP) {
                   node.remove();
+                  break;
                 }
               }
               blocklyContextMenu.insertAdjacentHTML(

@@ -1,8 +1,3 @@
-/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE_GPL or https://www.gnu.org/licenses/ for more information)
- */
-
 /* inserted by pull.js */
 import _twAsset0 from "./pause.svg";
 import _twAsset1 from "./play.svg";
@@ -74,6 +69,11 @@ export default async function ({ addon, global, console, msg }) {
           if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
             const dt = now - pauseState.pauseTime;
             stackFrame.executionContext.timer.startTime += dt;
+          }
+          // Compiler state is stored differently
+          if (thread.timer) {
+            const dt = now - pauseState.pauseTime;
+            thread.timer.startTime += dt;
           }
           Object.defineProperty(thread, "status", {
             value: pauseState.status,

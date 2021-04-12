@@ -1,8 +1,7 @@
 import packagerOptions from './tw-packager-options';
 
-// Some limits to make sure the interface doesn't completely fall apart
-const MIN_WIDTH = 480;
-const MIN_HEIGHT = 25;
+const MIN_WIDTH = 0;
+const MIN_HEIGHT = 0;
 
 const MAX_WIDTH = 4096;
 const MAX_HEIGHT = 4096;

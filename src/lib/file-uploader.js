@@ -2,6 +2,8 @@ import {BitmapAdapter} from 'scratch-svg-renderer';
 import randomizeSpritePosition from './randomize-sprite-position.js';
 import bmpConverter from './bmp-converter';
 import gifDecoder from './gif-decoder';
+import fixSVG from './tw-svg-fixer';
+import twStageSize from './tw-stage-size';
 
 /**
  * Extract the file name given a string of the form fileName + ext
@@ -104,6 +106,7 @@ const costumeUpload = function (fileData, fileType, storage, handleCostume, hand
     case 'image/svg+xml': {
         costumeFormat = storage.DataFormat.SVG;
         assetType = storage.AssetType.ImageVector;
+        fileData = fixSVG(fileData);
         break;
     }
     case 'image/jpeg': {
@@ -142,6 +145,9 @@ const costumeUpload = function (fileData, fileType, storage, handleCostume, hand
     }
 
     const bitmapAdapter = new BitmapAdapter();
+    if (bitmapAdapter.setStageSize) {
+        bitmapAdapter.setStageSize(twStageSize.width, twStageSize.height);
+    }
     const addCostumeFromBuffer = function (dataBuffer) {
         const vmCostume = createVMAsset(
             storage,

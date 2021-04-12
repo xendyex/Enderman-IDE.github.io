@@ -3,13 +3,10 @@
  * Utility functions for handling tutorial images in multiple languages
  */
 
-// tw: we don't use the tutorials, so completely remove them from the bundle
 const defaultImages = {};
-
 let savedImages = {};
 let savedLocale = '';
 
-// tw: we don't use the videos, remove them
 const translations = {
 
 };

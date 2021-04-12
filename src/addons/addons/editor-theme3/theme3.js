@@ -1,10 +1,4 @@
-/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE_GPL or https://www.gnu.org/licenses/ for more information)
- */
-
 export default async function ({ addon, global, console }) {
-  var style = document.createElement("style");
   var stylesheet = `path.blocklyBlockBackground[fill="#FF6680"],
     path.blocklyBlockBackground[fill="#5CB1D6"],
     path.blocklyBlockBackground[fill="#FFBF00"],
