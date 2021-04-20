@@ -79,7 +79,11 @@ export default async function ({ addon, global, console }) {
     if (toggleSetting === "category" || toggleSetting === "cathover") {
       (async () => {
         while (true) {
-          let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
+          let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", {
+            markAsSeen: true,
+            condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+            reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+          });
           category.onclick = () => {
             if (toggle && selectedCategory === category && toggleSetting === "category") {
               onmouseleave();
@@ -103,8 +107,12 @@ export default async function ({ addon, global, console }) {
   }
 
   while (true) {
-    flyOut = await addon.tab.waitForElement(".blocklyFlyout", { markAsSeen: true });
-    let blocklySvg = await addon.tab.waitForElement(".blocklySvg", { markAsSeen: true });
+    flyOut = await addon.tab.waitForElement(".blocklyFlyout", {
+      markAsSeen: true,
+      condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+    });
+    let blocklySvg = document.querySelector(".blocklySvg");
     scrollBar = document.querySelector(".blocklyFlyoutScrollbar");
     const tabs = document.querySelector('[class^="gui_tabs"]');
 

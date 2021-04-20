@@ -15,7 +15,7 @@
  */
 
 import IntlMessageFormat from 'intl-messageformat';
-import SettingsStore from './settings-store';
+import SettingsStore from './settings-store-singleton';
 import getAddonTranslations from './get-addon-translations';
 import dataURLToBlob from '../lib/data-uri-to-blob';
 import EventTargetShim from './event-target';
@@ -31,26 +31,12 @@ const createStylesheet = css => {
     return style;
 };
 
-const flat = array => {
-    const result = [];
-    for (const i of array) {
-        if (Array.isArray(i)) {
-            for (const j of flat(i)) {
-                result.push(j);
-            }
-        } else {
-            result.push(i);
-        }
-    }
-    return result;
-};
-
 let _scratchClassNames = null;
 const getScratchClassNames = () => {
     if (_scratchClassNames) {
         return _scratchClassNames;
     }
-    const cssRules = flat(Array.from(document.styleSheets)
+    const cssRules = Array.from(document.styleSheets)
         // Ignore some scratch-paint stylesheets
         .filter(styleSheet => (
             !(
@@ -70,14 +56,28 @@ const getScratchClassNames = () => {
                 return [];
             }
         })
-    );
-    const classes = flat(cssRules
+        .flat();
+    const classes = cssRules
         .map(e => e.selectorText)
         .filter(e => e)
         .map(e => e.match(/(([\w-]+?)_([\w-]+)_([\w\d-]+))/g))
         .filter(e => e)
-    );
+        .flat();
     _scratchClassNames = [...new Set(classes)];
+    const observer = new MutationObserver(mutationList => {
+        for (const mutation of mutationList) {
+            for (const node of mutation.addedNodes) {
+                if (node.tagName === 'STYLE') {
+                    _scratchClassNames = null;
+                    observer.disconnect();
+                    return;
+                }
+            }
+        }
+    });
+    observer.observe(document.head, {
+        childList: true
+    });
     return _scratchClassNames;
 };
 
@@ -148,10 +148,13 @@ const tabReduxInstance = new Redux();
 const language = tabReduxInstance.state.locales.locale.split('-')[0];
 const translations = getAddonTranslations(language);
 
+const alwaysTrue = () => true;
+
 class Tab extends EventTargetShim {
     constructor () {
         super();
         this._seenElements = new WeakSet();
+        // traps is public API
         this.traps = {
             get vm () {
                 // We expose VM on window
@@ -183,22 +186,52 @@ class Tab extends EventTargetShim {
         throw new Error('loadScript is not supported');
     }
 
-    waitForElement (selector, {markAsSeen = false} = {}) {
-        const firstQuery = document.querySelectorAll(selector);
-        for (const element of firstQuery) {
-            if (this._seenElements.has(element)) continue;
-            if (markAsSeen) this._seenElements.add(element);
-            return Promise.resolve(element);
+    waitForElement (selector, {markAsSeen = false, condition = alwaysTrue, reduxEvents} = {}) {
+        if (condition()) {
+            const firstQuery = document.querySelectorAll(selector);
+            for (const element of firstQuery) {
+                if (this._seenElements.has(element)) continue;
+                if (markAsSeen) this._seenElements.add(element);
+                return Promise.resolve(element);
+            }
+        }
+
+        let reduxListener;
+        if (reduxEvents) {
+            let reduxEventSatisifed = false;
+            reduxListener = ({detail}) => {
+                if (reduxEvents.includes(detail.action.type)) {
+                    reduxEventSatisifed = true;
+                }
+            };
+            const oldCondition = condition;
+            condition = () => {
+                if (!oldCondition()) {
+                    return false;
+                }
+                if (reduxEventSatisifed) {
+                    return true;
+                }
+                return false;
+            };
+            this.redux.initialize();
+            this.redux.addEventListener('statechanged', reduxListener);
         }
 
         return new Promise(resolve => {
             const callback = () => {
+                if (!condition()) {
+                    return;
+                }
                 const elements = document.querySelectorAll(selector);
                 for (const element of elements) {
                     if (this._seenElements.has(element)) continue;
                     resolve(element);
                     removeMutationObserverCallback(callback);
                     if (markAsSeen) this._seenElements.add(element);
+                    if (reduxListener) {
+                        this.redux.removeEventListener('statechanged', reduxListener);
+                    }
                     break;
                 }
             };
@@ -244,6 +277,10 @@ class Tab extends EventTargetShim {
     get editorMode () {
         return getEditorMode();
     }
+
+    displayNoneWhileDisabled () {
+        // no-op
+    }
 }
 
 class Settings extends EventTargetShim {
@@ -265,6 +302,10 @@ class Self extends EventTargetShim {
     }
     get lib () {
         throw new Error(`Addon tried to access addon.self.lib`);
+    }
+    get disabled () {
+        // no-op
+        return false;
     }
 }
 

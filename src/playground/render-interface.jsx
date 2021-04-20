@@ -28,8 +28,9 @@ import TWEditorWarningHOC from '../lib/tw-editor-warning-hoc.jsx';
 import TWStateManagerHOC from '../lib/tw-state-manager-hoc.jsx';
 import TWThemeHOC from '../lib/tw-theme-hoc.jsx';
 import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
-import SettingsStore from '../addons/settings-store';
+import SettingsStore from '../addons/settings-store-singleton';
 import twStageSize from '../lib/tw-stage-size';
+import '../lib/tw-fix-history-api';
 
 import GUI from './render-gui.jsx';
 import MenuBar from '../components/menu-bar/menu-bar.jsx';

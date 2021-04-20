@@ -25,15 +25,18 @@ import settingsTranslationsOther from './l10n/translations.json';
 import upstreamMeta from '../upstream-meta.json';
 import {detectLocale} from '../../lib/detect-locale';
 import {getInitialDarkMode} from '../../lib/tw-theme-hoc.jsx';
-import SettingsStore from '../settings-store';
+import SettingsStore from '../settings-store-singleton';
 import extensionImageWhite from './extension-white.svg';
 import extensionImageBlack from './extension-black.svg';
 import brushImageWhite from './brush-white.svg';
 import brushImageBlack from './brush-black.svg';
+import eggImageWhite from './egg-white.svg';
+import eggImageBlack from './egg-black.svg';
 import undoImageWhite from './undo-white.svg';
 import undoImageBlack from './undo-black.svg';
 import infoImage from './info.svg';
 import styles from './settings.css';
+import '../polyfill';
 import '../../lib/normalize.css';
 
 /* eslint-disable no-alert */
@@ -74,7 +77,7 @@ const sortAddons = () => {
 
 const isEasterEgg = addonManifest => addonManifest.tags && addonManifest.tags.includes('easterEgg');
 
-const AddonCreditsComponent = ({credits}) => (
+const AddonCredits = ({credits}) => (
     credits.map((author, index) => {
         const isLast = index === credits.length - 1;
         return (
@@ -100,14 +103,14 @@ const AddonCreditsComponent = ({credits}) => (
         );
     })
 );
-AddonCreditsComponent.propTypes = {
+AddonCredits.propTypes = {
     credits: PropTypes.arrayOf(PropTypes.shape({
         name: PropTypes.string,
         link: PropTypes.string
     }))
 };
 
-const SwitchComponent = ({onChange, value, ...props}) => (
+const Switch = ({onChange, value, ...props}) => (
     <button
         className={styles.switch}
         state={value ? 'on' : 'off'}
@@ -118,12 +121,12 @@ const SwitchComponent = ({onChange, value, ...props}) => (
         {...props}
     />
 );
-SwitchComponent.propTypes = {
+Switch.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.bool
 };
 
-const SelectComponent = ({
+const Select = ({
     onChange,
     value,
     values
@@ -144,7 +147,7 @@ const SelectComponent = ({
         })}
     </div>
 );
-SelectComponent.propTypes = {
+Select.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.string,
     values: PropTypes.arrayOf(PropTypes.shape({
@@ -153,7 +156,7 @@ SelectComponent.propTypes = {
     }))
 };
 
-const TagComponent = ({tags}) => tags.length > 0 && (
+const Tags = ({tags}) => tags.length > 0 && (
     <span className={styles.tagContainer}>
         {tags.includes('recommended') && (
             <span className={classNames(styles.tag, styles.tagRecommended)}>
@@ -182,12 +185,12 @@ const TagComponent = ({tags}) => tags.length > 0 && (
         )}
         {tags.includes('turbowarp') && (
             <span className={classNames(styles.tag, styles.tagTurbowarp)}>
-                {settingsTranslations['tw.addons.settings.tags.turbowarp']}
+                {'TurboWarp'}
             </span>
         )}
     </span>
 );
-TagComponent.propTypes = {
+Tags.propTypes = {
     tags: PropTypes.arrayOf(PropTypes.string)
 };
 
@@ -203,16 +206,23 @@ class BufferedInput extends React.Component {
     }
     handleKeyPress (e) {
         if (e.key === 'Enter') {
-            this.handleFlush();
+            this.handleFlush(e);
             e.target.blur();
         }
     }
-    handleFlush () {
+    handleFlush (e) {
         if (this.state.value === null) {
             return;
         }
         if (this.props.type === 'number') {
-            this.props.onChange(+this.state.value);
+            let value = +this.state.value;
+            const min = e.target.min;
+            const max = e.target.max;
+            const step = e.target.step;
+            if (min !== '') value = Math.max(min, value);
+            if (max !== '') value = Math.min(max, value);
+            if (step === '1') value = Math.round(value);
+            this.props.onChange(value);
         } else {
             this.props.onChange(this.state.value);
         }
@@ -239,7 +249,7 @@ BufferedInput.propTypes = {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 
-const SettingComponent = ({
+const Setting = ({
     addonId,
     setting,
     value
@@ -304,7 +314,7 @@ const SettingComponent = ({
             {setting.type === 'select' && (
                 <React.Fragment>
                     {label}
-                    <SelectComponent
+                    <Select
                         value={value}
                         values={setting.potentialValues.map(({id, name}) => ({
                             id,
@@ -318,7 +328,7 @@ const SettingComponent = ({
         </div>
     );
 };
-SettingComponent.propTypes = {
+Setting.propTypes = {
     addonId: PropTypes.string,
     setting: PropTypes.shape({
         type: PropTypes.string,
@@ -335,7 +345,7 @@ SettingComponent.propTypes = {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number])
 };
 
-const NoticeComponent = ({
+const Notice = ({
     addonId,
     notice
 }) => {
@@ -360,7 +370,7 @@ const NoticeComponent = ({
         </div>
     );
 };
-NoticeComponent.propTypes = {
+Notice.propTypes = {
     addonId: PropTypes.string,
     notice: PropTypes.shape({
         type: PropTypes.string,
@@ -369,7 +379,7 @@ NoticeComponent.propTypes = {
     })
 };
 
-const PresetComponent = ({
+const Presets = ({
     addonId,
     presets
 }) => (
@@ -394,7 +404,7 @@ const PresetComponent = ({
         })}
     </div>
 );
-PresetComponent.propTypes = {
+Presets.propTypes = {
     addonId: PropTypes.string,
     presets: PropTypes.arrayOf(PropTypes.shape({
         name: PropTypes.string,
@@ -404,7 +414,7 @@ PresetComponent.propTypes = {
     }))
 };
 
-const AddonComponent = ({
+const Addon = ({
     id,
     settings,
     manifest
@@ -416,10 +426,16 @@ const AddonComponent = ({
                 id={`${id}-label`}
                 className={styles.addonTitle}
             >
-                {manifest.tags && manifest.tags.includes('theme') ? (
+                {manifest.tags.includes('theme') ? (
                     <img
                         className={styles.extensionImage}
                         src={theme === 'dark' ? brushImageWhite : brushImageBlack}
+                        alt=""
+                    />
+                ) : manifest.tags.includes('easterEgg') ? (
+                    <img
+                        className={styles.extensionImage}
+                        src={theme === 'dark' ? eggImageWhite : eggImageBlack}
                         alt=""
                     />
                 ) : (
@@ -433,11 +449,9 @@ const AddonComponent = ({
                     {addonTranslations[`${id}/@name`] || manifest.name}
                 </div>
             </label>
-            {manifest.tags && (
-                <TagComponent
-                    tags={manifest.tags}
-                />
-            )}
+            <Tags
+                tags={manifest.tags}
+            />
             {!settings.enabled && (
                 <div className={styles.inlineDescription}>
                     {addonTranslations[`${id}/@description`] || manifest.description}
@@ -457,7 +471,7 @@ const AddonComponent = ({
                         />
                     </button>
                 )}
-                <SwitchComponent
+                <Switch
                     id={id}
                     aria-labelledby={`${id}-label`}
                     value={settings.enabled}
@@ -473,7 +487,7 @@ const AddonComponent = ({
                 {manifest.info && (
                     <div className={styles.noticeContainer}>
                         {manifest.info.map(info => (
-                            <NoticeComponent
+                            <Notice
                                 key={info.id}
                                 addonId={id}
                                 notice={info}
@@ -486,13 +500,13 @@ const AddonComponent = ({
                         <span className={styles.creditTitle}>
                             {settingsTranslations['tw.addons.settings.credits']}
                         </span>
-                        <AddonCreditsComponent credits={manifest.credits} />
+                        <AddonCredits credits={manifest.credits} />
                     </div>
                 )}
                 {manifest.settings && (
                     <div className={styles.settingContainer}>
                         {manifest.settings.map(setting => (
-                            <SettingComponent
+                            <Setting
                                 key={setting.id}
                                 addonId={id}
                                 setting={setting}
@@ -500,7 +514,7 @@ const AddonComponent = ({
                             />
                         ))}
                         {manifest.presets && (
-                            <PresetComponent
+                            <Presets
                                 addonId={id}
                                 presets={manifest.presets}
                             />
@@ -511,7 +525,7 @@ const AddonComponent = ({
         )}
     </div>
 );
-AddonComponent.propTypes = {
+Addon.propTypes = {
     id: PropTypes.string,
     settings: PropTypes.shape({
         enabled: PropTypes.bool,
@@ -532,7 +546,7 @@ AddonComponent.propTypes = {
     })
 };
 
-const DirtyComponent = props => (
+const Dirty = props => (
     <div className={styles.dirtyOuter}>
         <div className={styles.dirtyInner}>
             {settingsTranslations['tw.addons.settings.dirty']}
@@ -547,11 +561,11 @@ const DirtyComponent = props => (
         </div>
     </div>
 );
-DirtyComponent.propTypes = {
+Dirty.propTypes = {
     onReloadNow: PropTypes.func
 };
 
-const UnsupportedAddonsComponent = ({addons: addonList}) => (
+const UnsupportedAddons = ({addons: addonList}) => (
     <div className={styles.unsupportedContainer}>
         <span className={styles.unsupportedText}>
             {settingsTranslations['tw.addons.settings.unsupported']}
@@ -569,7 +583,7 @@ const UnsupportedAddonsComponent = ({addons: addonList}) => (
         ))}
     </div>
 );
-UnsupportedAddonsComponent.propTypes = {
+UnsupportedAddons.propTypes = {
     addons: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string,
         manifest: PropTypes.shape({
@@ -608,12 +622,10 @@ class AddonList extends React.Component {
                 ));
             }
         }
-        if (manifest.tags) {
-            for (const tag of manifest.tags) {
-                const translatedTag = settingsTranslations[`tw.addons.settings.tags.${tag}`];
-                if (translatedTag) {
-                    texts.push(normalize(settingsTranslations[`tw.addons.settings.tags.${tag}`]));
-                }
+        for (const tag of manifest.tags) {
+            const translatedTag = settingsTranslations[`tw.addons.settings.tags.${tag}`];
+            if (translatedTag) {
+                texts.push(normalize(settingsTranslations[`tw.addons.settings.tags.${tag}`]));
             }
         }
         // For an addon to be included, all search terms must match one of the texts.
@@ -645,7 +657,7 @@ class AddonList extends React.Component {
         return (
             <div>
                 {filteredAddons.map(({id, manifest, state}) => (
-                    <AddonComponent
+                    <Addon
                         key={id}
                         id={id}
                         settings={state}
@@ -903,7 +915,7 @@ class AddonSettingsComponent extends React.Component {
                         </span>
                     </a>
                     {this.state.dirty && (
-                        <DirtyComponent
+                        <Dirty
                             onReloadNow={this.props.onReloadNow && this.handleReloadNow}
                         />
                     )}
@@ -935,7 +947,7 @@ class AddonSettingsComponent extends React.Component {
                     </div>
                     <footer className={styles.footer}>
                         {unsupported.length ? (
-                            <UnsupportedAddonsComponent
+                            <UnsupportedAddons
                                 addons={unsupported}
                             />
                         ) : null}

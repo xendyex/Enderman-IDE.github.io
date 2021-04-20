@@ -35,7 +35,7 @@ export default async ({ addon, console, msg }) => {
     if (color === null || color === "scratch-paint/style-path/mixed") return;
     // This value can be arbitrary - it can be HEX, RGB, etc.
     // Use tinycolor to convert them.
-    return tinycolor(color).toHex();
+    return tinycolor(color).toHex8();
   };
 
   // load the new color to scratch
@@ -71,7 +71,12 @@ export default async ({ addon, console, msg }) => {
   // le loop
   while (true) {
     // wait for color dialog box appearance
-    const element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', { markAsSeen: true });
+    const element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {
+      markAsSeen: true,
+      condition: () =>
+        addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 1 &&
+        !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+    });
     rateLimiter.abort(false);
 
     // update the bg color of the picker
@@ -189,7 +194,7 @@ export default async ({ addon, console, msg }) => {
         let color = tinycolor(getColor(element)).toHsv();
         let s = ox / 150;
         let v = 1 - oy / 150;
-        let newColor = tinycolor({ h: color.h, s: s, v: v }).toHex();
+        let newColor = tinycolor({ h: color.h, s: s, v: v, a: color.a }).toHex8();
         setColor(newColor, element);
         updateHandleFinal(s, v);
       });
@@ -243,14 +248,13 @@ export default async ({ addon, console, msg }) => {
     addon.tab.redux.addEventListener("statechanged", prevEventHandler);
     saColorPicker.appendChild(saColorPickerImage);
     saColorPicker.appendChild(saColorPickerHandle);
-    let e = element;
-    if (element.parentElement.querySelector(".sa-color-picker"))
-      e = element.parentElement.querySelector(".sa-color-picker");
-    element.parentElement.insertBefore(saColorLabel, e);
-    element.parentElement.insertBefore(saColorPicker, e);
 
-    //hide sat and bright sliders
-    saColorPicker.parentElement.children[2].style.display = "none";
-    saColorPicker.parentElement.children[3].style.display = "none";
+    const [colorSlider, saturationSlider, brightnessSlider] = [
+      ...element.parentElement.querySelectorAll('[class^="color-picker_row-header"]'),
+    ].map((i) => i.parentElement);
+    saturationSlider.style.display = "none";
+    brightnessSlider.style.display = "none";
+    colorSlider.insertAdjacentElement("afterend", saColorPicker);
+    colorSlider.insertAdjacentElement("afterend", saColorLabel);
   }
 };

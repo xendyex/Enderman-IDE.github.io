@@ -247,7 +247,7 @@ a[href]:active, a[href]:focus {
 }
 
 .reset-button {
-    display: block;
+    display: flex;
     margin-right: 8px;
     border-radius: 4px;
     cursor: pointer;
@@ -262,6 +262,7 @@ a[href]:active, a[href]:focus {
     box-shadow: 0 0 0 3px $motion-transparent;
 }
 .reset-button-image {
+    padding: 1px 0;
     height: 16px;
     width: 16px;
 }
@@ -407,7 +408,7 @@ a[href]:active, a[href]:focus {
 
 .setting {
     margin: 10px;
-    margin-right: 20px;
+    margin-right: 30px;
     min-height: 35px;
     display: flex;
     align-items: center;
@@ -415,7 +416,6 @@ a[href]:active, a[href]:focus {
 }
 .setting-label {
     font-weight: bold;
-    width: 200px;
     text-transform: uppercase;
     color: #555;
     font-size: 12px;
