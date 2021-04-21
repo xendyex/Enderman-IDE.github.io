@@ -1,8 +1,3 @@
-/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE_GPL or https://www.gnu.org/licenses/ for more information)
- */
-
 import { normalizeHex, getHexRegex } from "../../libraries/normalize-color.js";
 import RateLimiter from "../../libraries/rate-limiter.js";
 import tinycolor from "../../libraries/tinycolor-min.js";
@@ -49,7 +44,12 @@ export default async ({ addon, console, msg }) => {
     element.click();
   };
   while (true) {
-    const element = await addon.tab.waitForElement("button.scratchEyedropper", { markAsSeen: true });
+    const element = await addon.tab.waitForElement("button.scratchEyedropper", {
+      markAsSeen: true,
+      condition: () =>
+        addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 0 &&
+        !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+    });
     rateLimiter.abort(false);
     if (addon.tab.editorMode !== "editor") continue;
     addon.tab.redux.initialize();
@@ -63,7 +63,9 @@ export default async ({ addon, console, msg }) => {
       value: defaultColor || "#000000",
     });
     const saColorPickerText = Object.assign(document.createElement("input"), {
-      className: "sa-color-picker-text sa-color-picker-code-text",
+      className: addon.tab.scratchClass("input_input-form", {
+        others: "sa-color-picker-text sa-color-picker-code-text",
+      }),
       type: "text",
       pattern: "^#?([0-9a-fA-F]{3}){1,2}$",
       placeholder: msg("hex"),

@@ -1,6 +1,6 @@
 [
-    "folders",
-    "variable-manager",
-    "block-palette-icons",
-    "load-extensions"
+    "initialise-sprite-position",
+    "blocks2image",
+    "custom-zoom",
+    "cat-blocks"
 ]

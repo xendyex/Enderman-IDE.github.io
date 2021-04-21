@@ -1,8 +1,3 @@
-/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE_GPL or https://www.gnu.org/licenses/ for more information)
- */
-
 export default async function ({ addon, global, console }) {
   // The hierarchy is:
   // blocklyDropDownDiv (position, background color, etc.) -> blocklyDropDownContent (scrollbar) -> blocklyDropdownMenu (items)
@@ -19,6 +14,8 @@ export default async function ({ addon, global, console }) {
     blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
 
     const searchBar = document.createElement("input");
+    addon.tab.displayNoneWhileDisabled(searchBar);
+
     searchBar.type = "text";
     searchBar.addEventListener("input", handleInputEvent);
     searchBar.addEventListener("keydown", handleKeyDownEvent);
@@ -176,7 +173,13 @@ export default async function ({ addon, global, console }) {
   }
 
   function findBlocklyDropDownDiv() {
-    return addon.tab.waitForElement(".blocklyDropDownDiv").then(() => document.querySelector(".blocklyDropDownDiv"));
+    return addon.tab
+      .waitForElement(".blocklyDropDownDiv", {
+        condition: () =>
+          addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 0 &&
+          !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+      })
+      .then(() => document.querySelector(".blocklyDropDownDiv"));
   }
 
   blocklyDropDownDiv = await findBlocklyDropDownDiv();

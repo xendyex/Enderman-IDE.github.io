@@ -1,8 +1,3 @@
-/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE_GPL or https://www.gnu.org/licenses/ for more information)
- */
-
 /* inserted by pull.js */
 import _twAsset0 from "./pause.svg";
 import _twAsset1 from "./play.svg";
@@ -21,6 +16,8 @@ export default async function ({ addon, global, console, msg }) {
   img.draggable = false;
   img.title = msg("pause");
   img.addEventListener("click", () => setPaused(!paused));
+  addon.tab.displayNoneWhileDisabled(img);
+  addon.self.addEventListener("disabled", () => setPaused(false));
 
   let paused = false;
   let pausedThreadState = new WeakMap();
@@ -137,7 +134,10 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   while (true) {
-    const flag = await addon.tab.waitForElement("[class^='green-flag']", { markAsSeen: true });
+    const flag = await addon.tab.waitForElement("[class^='green-flag']", {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+    });
     flag.insertAdjacentElement("afterend", img);
   }
 }

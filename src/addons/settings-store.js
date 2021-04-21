@@ -1,11 +1,9 @@
 /**
- * @license
- * Copyright (c) 2021 Thomas Weber
+ * Copyright (C) 2021 Thomas Weber
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,7 +24,7 @@ const VERSION = 1;
 class SettingsStore extends EventTargetShim {
     constructor () {
         super();
-        this.store = this.readLocalStorage();
+        this.store = this.createEmptyStore();
     }
 
     /**
@@ -40,11 +38,8 @@ class SettingsStore extends EventTargetShim {
         return result;
     }
 
-    /**
-     * @private
-     */
     readLocalStorage () {
-        const base = this.createEmptyStore();
+        const base = this.store;
         try {
             const local = localStorage.getItem(SETTINGS_KEY);
             if (local) {
@@ -63,7 +58,7 @@ class SettingsStore extends EventTargetShim {
         } catch (e) {
             // ignore
         }
-        return base;
+        this.store = base;
     }
 
     /**
@@ -143,6 +138,9 @@ class SettingsStore extends EventTargetShim {
         return settingObject.default;
     }
 
+    /**
+     * @private
+     */
     getDefaultSettings (addonId) {
         const manifest = this.getAddonManifest(addonId);
         const result = {};
@@ -159,8 +157,10 @@ class SettingsStore extends EventTargetShim {
         if (value === null) {
             value = !!manifest.enabledByDefault;
             delete storage.enabled;
-        } else {
+        } else if (typeof value === 'boolean') {
             storage.enabled = value;
+        } else {
+            throw new Error('Enabled value is invalid.');
         }
         this.saveToLocalStorage();
         if (value !== oldValue) {
@@ -294,7 +294,9 @@ class SettingsStore extends EventTargetShim {
                 continue;
             }
             const {enabled, settings} = value;
-            this.setAddonEnabled(addonId, enabled);
+            if (typeof enabled === 'boolean') {
+                this.setAddonEnabled(addonId, enabled);
+            }
             for (const [settingId, settingValue] of Object.entries(settings)) {
                 try {
                     this.setAddonSetting(addonId, settingId, settingValue);
@@ -311,4 +313,4 @@ class SettingsStore extends EventTargetShim {
     }
 }
 
-export default new SettingsStore();
+export default SettingsStore;

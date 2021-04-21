@@ -1,11 +1,13 @@
-import SansSerif from './NotoSans-Medium.ttf';
-import Serif from './SourceSerifPro-Regular.otf';
-import Handwriting from './handlee-regular.ttf';
-import Marker from './Knewave.ttf';
-import Curly from './Griffy-Regular.ttf';
-import Pixel from './Grand9K-Pixel.ttf';
-import Scratch from './Scratch.ttf';
-import log from '../log';
+/* eslint-disable import/no-commonjs */
+
+const SansSerif = require('./NotoSans-Medium.ttf');
+const Serif = require('./SourceSerifPro-Regular.otf');
+const Handwriting = require('./handlee-regular.ttf');
+const Marker = require('./Knewave.ttf');
+const Curly = require('./Griffy-Regular.ttf');
+const Pixel = require('./Grand9K-Pixel.ttf');
+const Scratch = require('./Scratch.ttf');
+const log = require('../log').default;
 
 const fontSource = {
     'Sans Serif': SansSerif,
@@ -50,14 +52,16 @@ const addFontsToDocument = () => {
     if (document.getElementById('scratch-font-styles')) {
         return;
     }
-    const documentStyleTag = document.createElement('style');
-    documentStyleTag.id = 'scratch-font-styles';
+    let css = '';
     for (const fontName of Object.keys(fontSource)) {
-        const css = fontData[fontName];
-        if (css) {
-            documentStyleTag.textContent += css;
+        const fontCSS = fontData[fontName];
+        if (fontCSS) {
+            css += fontCSS;
         }
     }
+    const documentStyleTag = document.createElement('style');
+    documentStyleTag.id = 'scratch-font-styles';
+    documentStyleTag.textContent = css;
     document.body.insertBefore(documentStyleTag, document.body.firstChild);
 };
 
@@ -80,7 +84,9 @@ const loadFonts = () => fetchFonts()
         log.error(err);
     });
 
-export {
-    loadFonts,
-    fontData as FONTS
-};
+const getFonts = () => fontData;
+
+// We have to use legacy module.exports as some parts of Scratch expect require('scratch-render-font') to be a function
+module.exports = getFonts;
+module.exports.loadFonts = loadFonts;
+module.exports.FONTS = fontData;

@@ -68,9 +68,6 @@ const base = {
                 // in much lower dependencies.
                 babelrc: false,
                 plugins: [
-                    '@babel/plugin-syntax-dynamic-import',
-                    '@babel/plugin-transform-async-to-generator',
-                    '@babel/plugin-proposal-object-rest-spread',
                     ['react-intl', {
                         messagesDir: './translations/messages/'
                     }]],
@@ -119,7 +116,6 @@ module.exports = [
             'player': './src/playground/player.jsx',
             'fullscreen': './src/playground/fullscreen.jsx',
             'embed': './src/playground/embed.jsx',
-            'embedgpl': './src/playground/embedgpl.jsx',
             'addon-settings': './src/playground/addon-settings.jsx',
             'credits': './src/playground/credits/credits.jsx'
         },
@@ -180,14 +176,6 @@ module.exports = [
                 chunks: ['embed'],
                 template: 'src/playground/index.ejs',
                 filename: 'embed.html',
-                title: 'Embedded Project - TurboWarp',
-                noTheme: true,
-                ...htmlWebpackPluginCommon
-            }),
-            new HtmlWebpackPlugin({
-                chunks: ['embedgpl'],
-                template: 'src/playground/index.ejs',
-                filename: 'embedgpl.html',
                 title: 'Embedded Project - TurboWarp',
                 noTheme: true,
                 ...htmlWebpackPluginCommon

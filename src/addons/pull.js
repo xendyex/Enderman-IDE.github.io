@@ -1,11 +1,9 @@
 /**
- * @license
- * Copyright (c) 2021 Thomas Weber
+ * Copyright (C) 2021 Thomas Weber
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -62,11 +60,6 @@ const commitHash = childProcess.execSync('git rev-parse --short HEAD')
     .toString()
     .trim();
 
-const JS_HEADER = `/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE_GPL or https://www.gnu.org/licenses/ for more information)
- */\n\n`;
-
 const includeImportedLibraries = contents => {
     // Parse things like:
     // import { normalizeHex, getHexRegex } from "../../libraries/normalize-color.js";
@@ -83,7 +76,7 @@ const includeImportedLibraries = contents => {
 
 const includeImports = (folder, contents) => {
     const dynamicAssets = walk(folder)
-        .filter(file => file.endsWith('.svg'));
+        .filter(file => file.endsWith('.svg') || file.endsWith('.png'));
 
     const stringifyPath = path => JSON.stringify(path).replace(/\\\\/g, '/');
 
@@ -111,7 +104,7 @@ const includeImports = (folder, contents) => {
         (_fullText, name) => `\${_twGetAsset(${name})}`
     );
     contents = contents.replace(
-        /addon\.self\.(?:dir|lib) *\+ *([^;]+)/g,
+        /addon\.self\.(?:dir|lib) *\+ *([^;,]+)/g,
         (_fullText, name) => `_twGetAsset(${name})`
     );
 
@@ -132,18 +125,14 @@ request('https://raw.githubusercontent.com/ScratchAddons/contributors/master/.al
             const oldPath = pathUtil.join(oldDirectory, file);
             const newPath = pathUtil.join(newDirectory, file);
             fs.mkdirSync(pathUtil.dirname(newPath), {recursive: true});
-            let contents = fs.readFileSync(oldPath, 'utf-8');
+            let contents = fs.readFileSync(oldPath);
 
             if (file.endsWith('.js')) {
+                contents = contents.toString('utf-8');
                 includeImportedLibraries(contents);
                 if (contents.includes('addon.self.dir') || contents.includes('addon.self.lib')) {
                     contents = includeImports(oldDirectory, contents);
                 }
-            }
-
-            // Add a license notice, unless one already exists.
-            if ((file.endsWith('.js') || file.endsWith('.css')) && !contents.includes('@license')) {
-                contents = JS_HEADER + contents;
             }
 
             fs.writeFileSync(newPath, contents);

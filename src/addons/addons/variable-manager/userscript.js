@@ -1,8 +1,3 @@
-/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE_GPL or https://www.gnu.org/licenses/ for more information)
- */
-
 /* inserted by pull.js */
 import _twAsset0 from "./icon.svg";
 import _twAsset1 from "./search.svg";
@@ -15,7 +10,6 @@ const _twGetAsset = (path) => {
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
-  let contentArea;
   let localVariables = [];
   let globalVariables = [];
   let preventUpdate = false;
@@ -25,7 +19,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const searchBox = document.createElement("input");
   searchBox.placeholder = msg("search");
-  searchBox.className = "sa-var-manager-searchbox";
+  searchBox.className = addon.tab.scratchClass("input_input-form", { others: "sa-var-manager-searchbox" });
 
   searchBox.addEventListener("input", (e) => {
     for (const variable of localVariables) {
@@ -175,9 +169,34 @@ export default async function ({ addon, global, console, msg }) {
       const labelCell = document.createElement("td");
       labelCell.className = "sa-var-manager-name";
 
-      const label = document.createElement("label");
-      label.textContent = this.scratchVariable.name;
+      const label = document.createElement("input");
+      label.value = this.scratchVariable.name;
       label.htmlFor = id;
+      const onLabelOut = (e) => {
+        e.preventDefault();
+        const workspace = Blockly.getMainWorkspace();
+        const existingVariableWithNewName = workspace.getVariable(label.value, this.scratchVariable.type);
+        if (existingVariableWithNewName) {
+          label.value = this.scratchVariable.name;
+        } else {
+          workspace.renameVariableById(this.scratchVariable.id, label.value);
+        }
+        label.blur();
+      };
+      label.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) e.target.blur();
+      });
+      label.addEventListener("focusout", onLabelOut);
+
+      label.addEventListener("focus", (e) => {
+        preventUpdate = true;
+        manager.classList.add("freeze");
+      });
+
+      label.addEventListener("blur", (e) => {
+        preventUpdate = false;
+        manager.classList.remove("freeze");
+      });
       labelCell.appendChild(label);
 
       rowToVariableMap.set(row, this);
@@ -200,17 +219,20 @@ export default async function ({ addon, global, console, msg }) {
         this.input.addEventListener("input", () => this.resizeInputIfList(), false);
       }
 
-      input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          if (this.scratchVariable.type === "list") {
-            vm.setVariableValue(this.target.id, this.scratchVariable.id, input.value.split("\n"));
-          } else {
-            vm.setVariableValue(this.target.id, this.scratchVariable.id, input.value);
-          }
-          input.blur();
+      const onInputOut = (e) => {
+        e.preventDefault();
+        if (this.scratchVariable.type === "list") {
+          vm.setVariableValue(this.target.id, this.scratchVariable.id, input.value.split("\n"));
+        } else {
+          vm.setVariableValue(this.target.id, this.scratchVariable.id, input.value);
         }
+        input.blur();
+      };
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) e.target.blur();
       });
+      input.addEventListener("focusout", onInputOut);
 
       input.addEventListener("focus", (e) => {
         preventUpdate = true;
@@ -283,23 +305,33 @@ export default async function ({ addon, global, console, msg }) {
     addon.tab.redux.dispatch({ type: "scratch-gui/navigation/ACTIVATE_TAB", activeTabIndex: 3 });
   });
 
+  function setVisible(visible) {
+    if (visible) {
+      varTab.classList.add(
+        addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
+        addon.tab.scratchClass("gui_is-selected")
+      );
+      const contentArea = document.querySelector("[class^=gui_tabs]");
+      contentArea.insertAdjacentElement("beforeend", manager);
+      fullReload();
+    } else {
+      varTab.classList.remove(
+        addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
+        addon.tab.scratchClass("gui_is-selected")
+      );
+      manager.remove();
+      cleanup();
+    }
+  }
+
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
     if (detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB") {
-      if (detail.action.activeTabIndex === 3) {
-        varTab.classList.add(
-          addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
-          addon.tab.scratchClass("gui_is-selected")
-        );
-        contentArea.insertAdjacentElement("beforeend", manager);
-        fullReload();
-      } else {
-        varTab.classList.remove(
-          addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
-          addon.tab.scratchClass("gui_is-selected")
-        );
-        manager.remove();
-        cleanup();
+      setVisible(detail.action.activeTabIndex === 3);
+    } else if (detail.action.type === "scratch-gui/mode/SET_PLAYER") {
+      if (!detail.action.isPlayerOnly && addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 3) {
+        // DOM doesn't actually exist yet
+        queueMicrotask(() => setVisible(true));
       }
     }
   });
@@ -317,9 +349,8 @@ export default async function ({ addon, global, console, msg }) {
   while (true) {
     const tabs = await addon.tab.waitForElement("[class^='react-tabs_react-tabs__tab-list']", {
       markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
     });
-
-    contentArea = document.querySelector("[class^=gui_tabs]");
     const soundTab = tabs.children[2];
     soundTab.insertAdjacentElement("afterend", varTab);
   }

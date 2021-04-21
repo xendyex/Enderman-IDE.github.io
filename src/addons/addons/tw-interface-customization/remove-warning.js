@@ -1,8 +1,3 @@
-/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE_GPL or https://www.gnu.org/licenses/ for more information)
- */
-
 export default async function ({ addon }) {
   addon.tab.redux.initialize();
   const close = () =>

@@ -34,7 +34,9 @@ const sendEvent = eventName => {
             // Removing project IDs might result in multiple slashes like //editor, so merge multiple slashes
             .replace(/\/+/g, '/')
             // Remove .html so that old links like /fullscreen.html links will be logged as /fullscreen
-            .replace('.html', '');
+            .replace('.html', '')
+            // Remove trailing /
+            .replace(/(?!^)\/$/, '');
 
         const req = new XMLHttpRequest();
         req.open('POST', PLAUSIBLE_API, true);
@@ -50,23 +52,7 @@ const sendEvent = eventName => {
 };
 
 if (enabled) {
-    const trackPageview = () => {
-        sendEvent('pageview');
-    };
-
-    const originalPushState = history.pushState;
-    history.pushState = (a, b, c) => {
-        originalPushState.call(history, a, b, c);
-        trackPageview();
-    };
-    const originalReplaceState = history.replaceState;
-    history.replaceState = (a, b, c) => {
-        originalReplaceState.call(history, a, b, c);
-        trackPageview();
-    };
-    window.addEventListener('popstate', trackPageview);
-
-    trackPageview();
+    sendEvent('pageview');
 }
 
 const GoogleAnalytics = {

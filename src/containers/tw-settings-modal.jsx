@@ -6,12 +6,18 @@ import {connect} from 'react-redux';
 import {closeSettingsModal} from '../reducers/modals';
 import SettingsModalComponent from '../components/tw-settings-modal/settings-modal.jsx';
 import twStageSize from '../lib/tw-stage-size';
+import {searchParamsToString} from '../lib/tw-navigation-utils';
 
 const messages = defineMessages({
     confirmReload: {
-        defaultMessage: 'A reload is required to change stage size, are you should you want to reload?',
+        defaultMessage: 'A reload is required to change stage size, are you sure you want to reload?',
         description: 'Confirmation that user wants to reload to apply settings',
         id: 'tw.settingsModal.confirmReload'
+    },
+    newFramerate: {
+        defaultMessage: 'New framerate:',
+        description: 'Prompt shown to choose a new framerate',
+        id: 'tw.menuBar.newFramerate'
     }
 });
 
@@ -22,6 +28,8 @@ class UsernameModal extends React.Component {
         super(props);
         bindAll(this, [
             'handleClose',
+            'handleFramerateChange',
+            'handleCustomizeFramerate',
             'handleHighQualityPenChange',
             'handleInterpolationChange',
             'handleInfiniteClonesChange',
@@ -37,21 +45,26 @@ class UsernameModal extends React.Component {
             stageHeight: twStageSize.height,
             reloadRequired: false
         };
-        this.isReloading = false;
     }
     handleClose () {
-        if (this.isReloading) {
-            return;
-        }
         if (this.state.reloadRequired) {
             // eslint-disable-next-line no-alert
             if (confirm(this.props.intl.formatMessage(messages.confirmReload))) {
-                this.isReloading = true;
                 this.applyChangesThatNeedReload();
                 return;
             }
         }
         this.props.onCloseSettingsModal();
+    }
+    handleFramerateChange (e) {
+        this.props.vm.setFramerate(e.target.checked ? 60 : 30);
+    }
+    handleCustomizeFramerate () {
+        // eslint-disable-next-line no-alert
+        const newFramerate = +prompt(this.props.intl.formatMessage(messages.newFramerate), this.props.framerate);
+        if (newFramerate > 0 && isFinite(newFramerate)) {
+            this.props.vm.setFramerate(+newFramerate);
+        }
     }
     handleHighQualityPenChange (e) {
         this.props.vm.renderer.setUseHighQualityRender(e.target.checked);
@@ -71,7 +84,7 @@ class UsernameModal extends React.Component {
     }
     handleRemoveLimitsChange (e) {
         this.props.vm.setRuntimeOptions({
-            effectLimits: !e.target.checked
+            miscLimits: !e.target.checked
         });
     }
     handleWarpTimerChange (e) {
@@ -103,9 +116,8 @@ class UsernameModal extends React.Component {
         } else {
             urlParams.set('size', `${this.state.stageWidth}x${this.state.stageHeight}`);
         }
-        const search = urlParams.toString();
-        const newUrl = `${location.pathname}${search.length > 0 ? '?' : ''}${search}`;
-        location.href = newUrl;
+        const search = searchParamsToString(urlParams);
+        location.href = `${location.pathname}${search}`;
     }
     render () {
         const {
@@ -119,6 +131,8 @@ class UsernameModal extends React.Component {
             <SettingsModalComponent
                 onClose={this.handleClose}
                 reloadRequired={this.state.reloadRequired}
+                onFramerateChange={this.handleFramerateChange}
+                onCustomizeFramerate={this.handleCustomizeFramerate}
                 onHighQualityPenChange={this.handleHighQualityPenChange}
                 onInterpolationChange={this.handleInterpolationChange}
                 onInfiniteClonesChange={this.handleInfiniteClonesChange}
@@ -144,10 +158,12 @@ UsernameModal.propTypes = {
         renderer: PropTypes.shape({
             setUseHighQualityRender: PropTypes.func
         }),
+        setFramerate: PropTypes.func,
         setCompilerOptions: PropTypes.func,
         setInterpolation: PropTypes.func,
         setRuntimeOptions: PropTypes.func
     }),
+    framerate: PropTypes.number,
     highQualityPen: PropTypes.bool,
     interpolation: PropTypes.bool,
     infiniteClones: PropTypes.bool,
@@ -159,11 +175,12 @@ UsernameModal.propTypes = {
 
 const mapStateToProps = state => ({
     vm: state.scratchGui.vm,
+    framerate: state.scratchGui.tw.framerate,
     highQualityPen: state.scratchGui.tw.highQualityPen,
     interpolation: state.scratchGui.tw.interpolation,
     infiniteClones: state.scratchGui.tw.runtimeOptions.maxClones === Infinity,
     removeFencing: !state.scratchGui.tw.runtimeOptions.fencing,
-    removeLimits: !state.scratchGui.tw.runtimeOptions.effectLimits,
+    removeLimits: !state.scratchGui.tw.runtimeOptions.miscLimits,
     warpTimer: state.scratchGui.tw.compilerOptions.warpTimer,
     disableCompiler: !state.scratchGui.tw.compilerOptions.enabled
 });

@@ -1,3 +1,5 @@
+/* eslint-disable no-extend-native */
+
 if (!Blob.prototype.text) {
     Blob.prototype.text = function () {
         return new Promise((resolve, reject) => {
@@ -8,3 +10,29 @@ if (!Blob.prototype.text) {
         });
     };
 }
+
+if (!Array.prototype.flat) {
+    Array.prototype.flat = function (depth = 1) {
+        const result = [];
+        for (const i of this) {
+            if (Array.isArray(i)) {
+                if (depth < 1) {
+                    result.push(i);
+                } else {
+                    for (const j of i.flat(depth - 1)) {
+                        result.push(j);
+                    }
+                }
+            } else {
+                result.push(i);
+            }
+        }
+        return result;
+    };
+}
+
+if (typeof queueMicrotask !== 'function') {
+    window.queueMicrotask = callback => {
+        setTimeout(callback);
+    };
+};

@@ -1,19 +1,20 @@
-/*
-Copyright (c) 2021 Thomas Weber
+/**
+ * Copyright (C) 2021 Thomas Weber
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+@import "../../css/colors.css";
 
 body {
     background-color: white;
@@ -35,7 +36,7 @@ a[href] {
 }
 a:active, a:focus {
     outline: none;
-    box-shadow: 0 0 0 3px #ff4c4c5d;
+    box-shadow: 0 0 0 3px $motion-transparent;
 }
 
 .container {
@@ -95,7 +96,7 @@ a:active, a:focus {
     background: #151515;
 }
 .button:active, .button:focus-within {
-    box-shadow: 0 0 0 3px #ff4c4c5d;
+    box-shadow: 0 0 0 3px $motion-transparent;
 }
 
 .search-container {
@@ -106,7 +107,7 @@ a:active, a:focus {
     border-radius: 4px;
 }
 .search-container:focus-within {
-    box-shadow: 0 0 0 3px #ff4c4c5d;
+    box-shadow: 0 0 0 3px $motion-transparent;
 }
 .search-input {
     color: inherit;
@@ -149,11 +150,11 @@ a:active, a:focus {
 }
 
 .feedback-button-outer {
-    background: white;
-    color: inherit !important;
-    box-sizing: border-box;
+    background: #f0f0f0;
     border: 1px solid #cecece;
-    height: 38px;
+    color: #333 !important;
+    height: 36px;
+    box-sizing: border-box;
     border-radius: 4px;
     padding: 0 12px;
     margin-left: 10px;
@@ -164,11 +165,11 @@ a:active, a:focus {
     text-decoration: none !important;
 }
 [theme="dark"] .feedback-button-outer {
-    background-color: #111111;
-    border-color: #222222;
+    background-color: white;
+    border-color: white;
 }
 .feedback-button-outer:active, .feedback-button-outer:focus-within {
-    box-shadow: 0 0 0 3px #ff4c4c5d;
+    box-shadow: 0 0 0 3px $motion-transparent;
 }
 .feedback-button-inner {
     text-decoration: none;
@@ -246,7 +247,7 @@ a:active, a:focus {
 }
 
 .reset-button {
-    display: block;
+    display: flex;
     margin-right: 8px;
     border-radius: 4px;
     cursor: pointer;
@@ -258,9 +259,10 @@ a:active, a:focus {
 }
 .reset-button:active, .reset-button:focus-within {
     outline: none;
-    box-shadow: 0 0 0 3px #ff4c4c5d;
+    box-shadow: 0 0 0 3px $motion-transparent;
 }
 .reset-button-image {
+    padding: 1px 0;
     height: 16px;
     width: 16px;
 }
@@ -281,7 +283,7 @@ a:active, a:focus {
     transition-property: background;
 }
 .switch[state="on"] {
-    background: #ff4c4c;
+    background: $motion-primary;
 }
 .switch::before {
     content: "";
@@ -305,7 +307,7 @@ a:active, a:focus {
 }
 .switch:active, .switch:focus-within {
     outline: none;
-    box-shadow: 0 0 0 3px #ff4c4c5d;
+    box-shadow: 0 0 0 3px $motion-transparent;
 }
 
 .tag-container {
@@ -317,6 +319,7 @@ a:active, a:focus {
     padding: 2px 5px;
     margin-left: 10px;
     border-bottom: 2px solid #111;
+    white-space: nowrap;
 }
 .tag-recommended {
     color: white;
@@ -345,7 +348,7 @@ a:active, a:focus {
 }
 .tag-turbowarp {
     color: white;
-    background: #ff4c4c;
+    background: $motion-primary;
     border-color: rgb(185, 38, 38);
 }
 @media (max-width: 550px) {
@@ -405,7 +408,7 @@ a:active, a:focus {
 
 .setting {
     margin: 10px;
-    margin-right: 20px;
+    margin-right: 30px;
     min-height: 35px;
     display: flex;
     align-items: center;
@@ -413,7 +416,6 @@ a:active, a:focus {
 }
 .setting-label {
     font-weight: bold;
-    width: 200px;
     text-transform: uppercase;
     color: #555;
     font-size: 12px;
@@ -438,8 +440,8 @@ a:active, a:focus {
 }
 .setting input:focus, .setting input:active {
     outline: none;
-    border-color: #ff4c4c;
-    box-shadow: 0 0 0 3px #ff4c4c5d;
+    border-color: $motion-primary;
+    box-shadow: 0 0 0 3px $motion-transparent;
 }
 .setting input[type="checkbox"] {
     height: 20px;
@@ -453,11 +455,15 @@ a:active, a:focus {
     background-position: center center;
 }
 .setting input[type="checkbox"]:checked {
-    background-color: #175ef8;
+    border-color: $motion-primary;
+    background-color: $motion-primary;
     background-image: url("./check.svg");
 }
 .setting input[type="checkbox"]:hover:not(:focus) {
-    border-color: #0e44b8;
+    border-color: $motion-tertiary;
+}
+.setting input[type="checkbox"]:checked:hover {
+    border-color: $motion-tertiary;
 }
 .setting input[type="number"] {
     border-radius: 20px;
@@ -510,11 +516,11 @@ a:active, a:focus {
 }
 .select-option.selected {
     color: white;
-    background: #ff4c4c;
+    background: $motion-primary;
 }
 .select-option:active, .select-option:focus-within {
     outline: none;
-    box-shadow: 0 0 0 3px #ff4c4c5d;
+    box-shadow: 0 0 0 3px $motion-transparent;
 }
 
 .presets {

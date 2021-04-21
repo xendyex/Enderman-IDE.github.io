@@ -1,8 +1,3 @@
-/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE_GPL or https://www.gnu.org/licenses/ for more information)
- */
-
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
@@ -24,7 +19,10 @@ export default async function ({ addon, console, msg }) {
   const addLiveBlockCount = async () => {
     if (vm.editingTarget) {
       while (true) {
-        const topBar = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", { markAsSeen: true });
+        const topBar = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", {
+          markAsSeen: true,
+          reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+        });
         let display = topBar.appendChild(document.createElement("span"));
         display.style.order = 1;
         display.style.padding = "9px";

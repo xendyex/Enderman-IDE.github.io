@@ -1,8 +1,3 @@
-/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE_GPL or https://www.gnu.org/licenses/ for more information)
- */
-
 export default async function ({ addon, global, console }) {
   let pos = null;
 
@@ -41,11 +36,16 @@ export default async function ({ addon, global, console }) {
   hideInSmallStageMode({ addon });
 
   while (true) {
-    let bar = await addon.tab.waitForElement('[class*="controls_controls-container"]', { markAsSeen: true });
+    let bar = await addon.tab.waitForElement('[class*="controls_controls-container"]', {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+    });
 
     if (addon.tab.editorMode === "editor") {
       // my attempt at detecting if they're in the editor?
       var posContainerContainer = document.createElement("div");
+      addon.tab.displayNoneWhileDisabled(posContainerContainer, { display: "flex" });
+
       var posContainer = document.createElement("div");
       pos = document.createElement("span");
 
@@ -64,7 +64,10 @@ export default async function ({ addon, global, console }) {
 
 async function hideInSmallStageMode({ addon }) {
   while (true) {
-    await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group']", { markAsSeen: true });
+    await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group']", {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+    });
 
     document.querySelector("[class*='stage-header_stage-button-first']").addEventListener("click", () => {
       document.querySelector(".pos-container-container").style.display = "none";

@@ -1,11 +1,9 @@
 /**
- * @license
- * Copyright (c) 2021 Thomas Weber
+ * Copyright (C) 2021 Thomas Weber
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -30,8 +28,9 @@ import TWEditorWarningHOC from '../lib/tw-editor-warning-hoc.jsx';
 import TWStateManagerHOC from '../lib/tw-state-manager-hoc.jsx';
 import TWThemeHOC from '../lib/tw-theme-hoc.jsx';
 import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
-import SettingsStore from '../addons/settings-store';
+import SettingsStore from '../addons/settings-store-singleton';
 import twStageSize from '../lib/tw-stage-size';
+import '../lib/tw-fix-history-api';
 
 import GUI from './render-gui.jsx';
 import MenuBar from '../components/menu-bar/menu-bar.jsx';
@@ -107,7 +106,8 @@ class Interface extends React.Component {
             isFullScreen,
             isPlayerOnly,
             isRtl,
-            onClickTheme
+            onClickTheme,
+            projectId
         } = this.props;
         const isHomepage = isPlayerOnly && !isFullScreen;
         const isEditor = !isPlayerOnly;
@@ -155,7 +155,7 @@ class Interface extends React.Component {
                             <div className={styles.section}>
                                 <ProjectInput />
                             </div>
-                            {hasCloudVariables && (
+                            {hasCloudVariables && projectId !== '0' && (
                                 <div className={styles.section}>
                                     <CloudVariableBadge />
                                 </div>
@@ -165,6 +165,7 @@ class Interface extends React.Component {
                                     <Description
                                         instructions={description.instructions}
                                         credits={description.credits}
+                                        projectId={projectId}
                                     />
                                 </div>
                             ) : null}
@@ -193,7 +194,7 @@ class Interface extends React.Component {
                             />
                         </div>
                         <div className={styles.footerColumns}>
-                            <div>
+                            <div className={styles.footerSection}>
                                 <div className={styles.footerHeader}>
                                     <FormattedMessage
                                         defaultMessage="Credits"
@@ -220,7 +221,7 @@ class Interface extends React.Component {
                                     </a>
                                 </div>
                             </div>
-                            <div>
+                            <div className={styles.footerSection}>
                                 <div className={styles.footerHeader}>
                                     <FormattedMessage
                                         defaultMessage="Links"
@@ -250,7 +251,7 @@ class Interface extends React.Component {
                                     </a>
                                 </div>
                             </div>
-                            <div>
+                            <div className={styles.footerSection}>
                                 <div className={styles.footerHeader}>
                                     <FormattedMessage
                                         defaultMessage="About"
@@ -304,7 +305,8 @@ Interface.propTypes = {
     isFullScreen: PropTypes.bool,
     isRtl: PropTypes.bool,
     isPlayerOnly: PropTypes.bool,
-    onClickTheme: PropTypes.func
+    onClickTheme: PropTypes.func,
+    projectId: PropTypes.string
 };
 
 const mapStateToProps = state => ({
@@ -312,7 +314,8 @@ const mapStateToProps = state => ({
     description: state.scratchGui.tw.description,
     isFullScreen: state.scratchGui.mode.isFullScreen,
     isPlayerOnly: state.scratchGui.mode.isPlayerOnly,
-    isRtl: state.locales.isRtl
+    isRtl: state.locales.isRtl,
+    projectId: state.scratchGui.projectState.projectId
 });
 
 const mapDispatchToProps = () => ({});

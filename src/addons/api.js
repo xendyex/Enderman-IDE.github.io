@@ -1,11 +1,9 @@
 /**
- * @license
- * Copyright (c) 2021 Thomas Weber
+ * Copyright (C) 2021 Thomas Weber
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,9 +15,9 @@
  */
 
 import IntlMessageFormat from 'intl-messageformat';
-import SettingsStore from './settings-store';
+import SettingsStore from './settings-store-singleton';
 import getAddonTranslations from './get-addon-translations';
-import dataURLToBlob from './api-libraries/data-url-to-blob';
+import dataURLToBlob from '../lib/data-uri-to-blob';
 import EventTargetShim from './event-target';
 import './polyfill';
 
@@ -33,26 +31,12 @@ const createStylesheet = css => {
     return style;
 };
 
-const flat = array => {
-    const result = [];
-    for (const i of array) {
-        if (Array.isArray(i)) {
-            for (const j of flat(i)) {
-                result.push(j);
-            }
-        } else {
-            result.push(i);
-        }
-    }
-    return result;
-};
-
 let _scratchClassNames = null;
 const getScratchClassNames = () => {
     if (_scratchClassNames) {
         return _scratchClassNames;
     }
-    const cssRules = flat(Array.from(document.styleSheets)
+    const cssRules = Array.from(document.styleSheets)
         // Ignore some scratch-paint stylesheets
         .filter(styleSheet => (
             !(
@@ -72,15 +56,50 @@ const getScratchClassNames = () => {
                 return [];
             }
         })
-    );
-    const classes = flat(cssRules
+        .flat();
+    const classes = cssRules
         .map(e => e.selectorText)
         .filter(e => e)
         .map(e => e.match(/(([\w-]+?)_([\w-]+)_([\w\d-]+))/g))
         .filter(e => e)
-    );
+        .flat();
     _scratchClassNames = [...new Set(classes)];
+    const observer = new MutationObserver(mutationList => {
+        for (const mutation of mutationList) {
+            for (const node of mutation.addedNodes) {
+                if (node.tagName === 'STYLE') {
+                    _scratchClassNames = null;
+                    observer.disconnect();
+                    return;
+                }
+            }
+        }
+    });
+    observer.observe(document.head, {
+        childList: true
+    });
     return _scratchClassNames;
+};
+
+let _mutationObserver;
+let _mutationObserverCallbacks = [];
+const addMutationObserverCallback = newCallback => {
+    if (!_mutationObserver) {
+        _mutationObserver = new MutationObserver(() => {
+            for (const cb of _mutationObserverCallbacks) {
+                cb();
+            }
+        });
+        _mutationObserver.observe(document.documentElement, {
+            attributes: false,
+            childList: true,
+            subtree: true
+        });
+    }
+    _mutationObserverCallbacks.push(newCallback);
+};
+const removeMutationObserverCallback = callback => {
+    _mutationObserverCallbacks = _mutationObserverCallbacks.filter(i => i !== callback);
 };
 
 class Redux extends EventTargetShim {
@@ -129,10 +148,13 @@ const tabReduxInstance = new Redux();
 const language = tabReduxInstance.state.locales.locale.split('-')[0];
 const translations = getAddonTranslations(language);
 
+const alwaysTrue = () => true;
+
 class Tab extends EventTargetShim {
     constructor () {
         super();
         this._seenElements = new WeakSet();
+        // traps is public API
         this.traps = {
             get vm () {
                 // We expose VM on window
@@ -164,30 +186,57 @@ class Tab extends EventTargetShim {
         throw new Error('loadScript is not supported');
     }
 
-    waitForElement (selector, {markAsSeen = false} = {}) {
-        const firstQuery = document.querySelectorAll(selector);
-        for (const element of firstQuery) {
-            if (this._seenElements.has(element)) continue;
-            if (markAsSeen) this._seenElements.add(element);
-            return Promise.resolve(element);
+    waitForElement (selector, {markAsSeen = false, condition = alwaysTrue, reduxEvents} = {}) {
+        if (condition()) {
+            const firstQuery = document.querySelectorAll(selector);
+            for (const element of firstQuery) {
+                if (this._seenElements.has(element)) continue;
+                if (markAsSeen) this._seenElements.add(element);
+                return Promise.resolve(element);
+            }
         }
 
-        return new Promise(resolve =>
-            new MutationObserver((mutationsList, observer) => {
+        let reduxListener;
+        if (reduxEvents) {
+            let reduxEventSatisifed = false;
+            reduxListener = ({detail}) => {
+                if (reduxEvents.includes(detail.action.type)) {
+                    reduxEventSatisifed = true;
+                }
+            };
+            const oldCondition = condition;
+            condition = () => {
+                if (!oldCondition()) {
+                    return false;
+                }
+                if (reduxEventSatisifed) {
+                    return true;
+                }
+                return false;
+            };
+            this.redux.initialize();
+            this.redux.addEventListener('statechanged', reduxListener);
+        }
+
+        return new Promise(resolve => {
+            const callback = () => {
+                if (!condition()) {
+                    return;
+                }
                 const elements = document.querySelectorAll(selector);
                 for (const element of elements) {
                     if (this._seenElements.has(element)) continue;
-                    observer.disconnect();
                     resolve(element);
+                    removeMutationObserverCallback(callback);
                     if (markAsSeen) this._seenElements.add(element);
+                    if (reduxListener) {
+                        this.redux.removeEventListener('statechanged', reduxListener);
+                    }
                     break;
                 }
-            }).observe(document.documentElement, {
-                attributes: false,
-                childList: true,
-                subtree: true
-            })
-        );
+            };
+            addMutationObserverCallback(callback);
+        });
     }
 
     copyImage (dataURL) {
@@ -228,6 +277,10 @@ class Tab extends EventTargetShim {
     get editorMode () {
         return getEditorMode();
     }
+
+    displayNoneWhileDisabled () {
+        // no-op
+    }
 }
 
 class Settings extends EventTargetShim {
@@ -243,6 +296,11 @@ class Settings extends EventTargetShim {
 }
 
 class Self extends EventTargetShim {
+    constructor (id) {
+        super();
+        this.id = id;
+        this.disabled = false;
+    }
     // These are removed at build-time by pull.js. Throw if attempting to access them at runtime.
     get dir () {
         throw new Error(`Addon tried to access addon.self.dir`);
@@ -267,7 +325,7 @@ class AddonRunner {
             addon: {
                 tab: new Tab(),
                 settings: new Settings(id, manifest),
-                self: new Self()
+                self: new Self(id)
             },
             msg: this.msg.bind(this),
             safeMsg: this.safeMsg.bind(this)

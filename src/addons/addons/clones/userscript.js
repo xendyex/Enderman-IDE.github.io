@@ -1,14 +1,12 @@
-/**!
- * Imported from SA
- * @license GPLv3.0 (see LICENSE_GPL or https://www.gnu.org/licenses/ for more information)
- */
-
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   hideInSmallStageMode({ addon });
 
   let countContainerContainer = document.createElement("div");
+
+  addon.tab.displayNoneWhileDisabled(countContainerContainer, { display: "flex" });
+
   let countContainer = document.createElement("div");
   let count = document.createElement("span");
   let icon = document.createElement("span");
@@ -58,7 +56,10 @@ export default async function ({ addon, global, console, msg }) {
 
 async function hideInSmallStageMode({ addon }) {
   while (true) {
-    await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group']", { markAsSeen: true });
+    await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group']", {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+    });
 
     document.querySelector("[class*='stage-header_stage-button-first']").addEventListener("click", () => {
       document.querySelector(".clone-container-container").style.display = "none";
