@@ -82,7 +82,6 @@ export default async function ({ addon, global, console }) {
           let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", {
             markAsSeen: true,
             condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
-            reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
           });
           category.onclick = () => {
             if (toggle && selectedCategory === category && toggleSetting === "category") {

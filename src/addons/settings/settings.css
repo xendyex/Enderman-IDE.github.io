@@ -611,7 +611,3 @@ a[href]:active, a[href]:focus {
         transform: translateY(0);
     }
 }
-
-.dango {
-    cursor: pointer;
-}
