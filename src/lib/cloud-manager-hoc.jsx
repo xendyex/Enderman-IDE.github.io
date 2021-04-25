@@ -7,7 +7,7 @@ import VM from 'scratch-vm';
 import CloudProvider from '../lib/cloud-provider';
 
 import {
-    getIsShowingWithId
+    getIsShowingProject
 } from '../reducers/project-state';
 
 import {
@@ -65,12 +65,11 @@ const cloudManagerHOC = function (WrappedComponent) {
             this.disconnectFromCloud();
         }
         canUseCloud (props) {
-            return !!(props.cloudHost && props.username && props.vm && packagerOptions.init.id && props.hasCloudPermission);
+            return !!(packagerOptions.cloud.host && props.username && props.vm && packagerOptions.cloud.id && props.hasCloudPermission);
         }
         shouldConnect (props) {
             return !this.isConnected() && this.canUseCloud(props) &&
-                // packager: do not need to be "showing a project id" to use cloud variables
-                props.vm.runtime.hasCloudData() &&
+                props.isShowingWithId && props.vm.runtime.hasCloudData() &&
                 props.canModifyCloudData;
         }
         shouldDisconnect (props, prevProps) {
@@ -96,10 +95,10 @@ const cloudManagerHOC = function (WrappedComponent) {
         }
         connectToCloud () {
             this.cloudProvider = new CloudProvider(
-                this.props.cloudHost,
+                packagerOptions.cloud.host,
                 this.props.vm,
                 this.props.username,
-                packagerOptions.init.id);
+                packagerOptions.cloud.id);
             this.cloudProvider.onInvalidUsername = this.onInvalidUsername;
             this.props.vm.setCloudProvider(this.cloudProvider);
         }
@@ -167,7 +166,8 @@ const cloudManagerHOC = function (WrappedComponent) {
     const mapStateToProps = (state, ownProps) => {
         const loadingState = state.scratchGui.projectState.loadingState;
         return {
-            isShowingWithId: getIsShowingWithId(loadingState),
+            // packager: changed to just "is showing project"
+            isShowingWithId: getIsShowingProject(loadingState),
             projectId: state.scratchGui.projectState.projectId,
             hasCloudPermission: state.scratchGui.tw ? state.scratchGui.tw.cloud : false,
             username: state.scratchGui.tw ? state.scratchGui.tw.username : '',

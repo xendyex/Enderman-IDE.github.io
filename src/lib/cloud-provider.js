@@ -1,6 +1,8 @@
 import log from './log.js';
 import throttle from 'lodash.throttle';
 
+const LOCALSTORAGE_HOST = '_local_';
+const LOCALSTOARGE_KEY = 'tw:cloudvars';
 
 class CloudProvider {
     /**
@@ -31,6 +33,10 @@ class CloudProvider {
         // than 10 messages/sec.
         // tw: we let cloud variables change at a greater rate
         this.sendCloudData = throttle(this._sendCloudData, 50);
+
+        if (cloudHost === LOCALSTORAGE_HOST) {
+            this.readFromLocalStorage();
+        }
     }
 
     /**
@@ -38,6 +44,10 @@ class CloudProvider {
      * @param {string} cloudHost The cloud data server to connect to.
      */
     openConnection () {
+        if (this.cloudHost === LOCALSTORAGE_HOST) {
+            return;
+        }
+
         this.connectionAttempts += 1;
 
         try {
@@ -188,6 +198,10 @@ class CloudProvider {
      * @param {string | number} value The new value for the variable
      */
     updateVariable (name, value) {
+        if (this.cloudHost === LOCALSTORAGE_HOST) {
+            this.data[name] = value;
+            this.saveToLocalStorage();
+        }
         this.writeToServer('set', name, value);
     }
 
@@ -225,6 +239,38 @@ class CloudProvider {
             this.connection.close();
         }
         this.clear();
+    }
+
+    readFromLocalStorage () {
+        this.data = {};
+        try {
+            const localData = localStorage.getItem(LOCALSTOARGE_KEY);
+            const parsed = JSON.parse(localData);
+            if (typeof parsed === 'object' && parsed !== null) {
+                this.data = parsed;
+            }
+        } catch (e) {
+            // Ignore
+        }
+        setTimeout(() => {
+            for (const name of Object.keys(this.data)) {
+                const value = this.data[name];
+                this.vm.postIOData('cloud', {
+                    varUpdate: {
+                        name,
+                        value
+                    }
+                });
+            }
+        });
+    }
+
+    saveToLocalStorage () {
+        try {
+            localStorage.setItem(LOCALSTOARGE_KEY, JSON.stringify(this.data));
+        } catch (e) {
+            log.error('Could not save cloud variables to local storage');
+        }
     }
 
     /**

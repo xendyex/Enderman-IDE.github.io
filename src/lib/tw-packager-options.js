@@ -9,10 +9,13 @@ const __PACKAGER__ = window.__PACKAGER__;
 
 const options = {
     init: {
-        id: assertNotUndefined(__PACKAGER__.id),
         projectData: assertNotUndefined(__PACKAGER__.projectData),
         handleVmInit: assertNotUndefined(__PACKAGER__.handleVmInit),
         handleProjectLoaded: assertNotUndefined(__PACKAGER__.handleProjectLoaded)
+    },
+    cloud: {
+        id: assertNotUndefined(__PACKAGER__.id),
+        host: assertNotUndefined(__PACKAGER__.cloudHost)
     },
     user: {
         username: assertNotUndefined(__PACKAGER__.username)
