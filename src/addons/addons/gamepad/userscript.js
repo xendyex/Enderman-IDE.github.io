@@ -27,6 +27,7 @@ export default async function ({ addon, global, console, msg }) {
   const renderer = vm.runtime.renderer;
   const width = renderer._xRight - renderer._xLeft;
   const height = renderer._yTop - renderer._yBottom;
+  const canvas = renderer.canvas;
 
   const spacer = document.createElement("div");
   spacer.className = "sa-gamepad-spacer";
@@ -134,6 +135,39 @@ export default async function ({ addon, global, console, msg }) {
     virtualCursorSetVisible(false);
   });
 
+  let getCanvasSize;
+  // Support modern ResizeObserver and slow getBoundingClientRect version for improved browser support (matters for TurboWarp)
+  if (window.ResizeObserver) {
+    let canvasWidth = width;
+    let canvasHeight = height;
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        canvasWidth = entry.contentRect.width;
+        canvasHeight = entry.contentRect.height;
+      }
+    });
+    resizeObserver.observe(canvas);
+    getCanvasSize = () => [canvasWidth, canvasHeight];
+  } else {
+    getCanvasSize = () => {
+      const rect = canvas.getBoundingClientRect();
+      return [rect.width, rect.height];
+    };
+  }
+
+  // Both in Scratch space
+  let virtualX = 0;
+  let virtualY = 0;
+  const postMouseData = (data) => {
+    const [unscaledCanvasWidth, unscaledCanvasHeight] = getCanvasSize();
+    vm.postIOData("mouse", {
+      ...data,
+      canvasWidth: canvas.width,
+      canvasHeight: canvas.height,
+      x: (virtualX + width / 2) * (unscaledCanvasWidth / width),
+      y: (height / 2 - virtualY) * (unscaledCanvasHeight / height),
+    });
+  };
   const handleGamepadButtonDown = (e) => {
     const key = e.detail;
     vm.postIOData("keyboard", {
@@ -150,29 +184,21 @@ export default async function ({ addon, global, console, msg }) {
   };
   const handleGamepadMouseDown = () => {
     virtualCursorSetDown(true);
-    vm.postIOData("mouse", {
+    postMouseData({
       isDown: true,
-      canvasWidth: width,
-      x: Math.max(0, Math.min(width, vm.runtime.ioDevices.mouse._clientX)),
-      canvasHeight: height,
-      y: Math.max(0, Math.min(height, vm.runtime.ioDevices.mouse._clientY)),
     });
   };
   const handleGamepadMouseUp = () => {
     virtualCursorSetDown(false);
-    vm.postIOData("mouse", {
+    postMouseData({
       isDown: false,
     });
   };
   const handleGamepadMouseMove = (e) => {
-    const { x, y } = e.detail;
-    virtualCursorSetPosition(x, y);
-    vm.postIOData("mouse", {
-      canvasWidth: width,
-      x: x + width / 2,
-      canvasHeight: height,
-      y: height / 2 - y,
-    });
+    virtualX = e.detail.x;
+    virtualY = e.detail.y;
+    virtualCursorSetPosition(virtualX, virtualY);
+    postMouseData({});
   };
 
   GamepadLib.setConsole(console);
@@ -190,6 +216,7 @@ export default async function ({ addon, global, console, msg }) {
   while (true) {
     const stageHeaderWrapper = await addon.tab.waitForElement('[class*="stage-header_stage-menu-wrapper"]', {
       markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
     });
     stageHeaderWrapper.insertBefore(spacer, stageHeaderWrapper.lastChild);
 
