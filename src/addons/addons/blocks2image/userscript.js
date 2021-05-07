@@ -68,14 +68,15 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
-  while (true) {
-    let blocklyWorkspace = await addon.tab.waitForElement("g.blocklyWorkspace", {
-      markAsSeen: true,
-    });
-
-    // insert contextmenu
-    blocklyWorkspace.addEventListener("mousedown", (e) => eventMouseDown(e));
-  }
+  document.addEventListener(
+    "mousedown",
+    (e) => {
+      if (e.target.closest("g.blocklyWorkspace")) {
+        eventMouseDown(e);
+      }
+    },
+    true
+  );
 
   function exportBlock(request, sender, sendMessage) {
     // console.log(request)
@@ -195,6 +196,7 @@ export default async function ({ addon, global, console, msg }) {
       let y = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[2] || 0;
       xArr.push(x * (isExportPNG ? 2 : 1));
       yArr.push(y * (isExportPNG ? 2 : 1));
+      g.style.display = ""; // because of TW scratch-blocks changes
     });
 
     svgchild.setAttribute(

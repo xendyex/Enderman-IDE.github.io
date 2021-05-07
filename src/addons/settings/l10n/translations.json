@@ -41,6 +41,21 @@
         "tw.addons.settings.title": "Ajustes de Addons",
         "tw.addons.settings.unsupported": "Algunos addons no están disponibles en este navegador:"
     },
+    "fr": {
+        "tw.addons.settings.credits": "Crédits :",
+        "tw.addons.settings.export": "Exporter les paramètres",
+        "tw.addons.settings.import": "Importer les paramètres",
+        "tw.addons.settings.noResults": "Aucuns résultats",
+        "tw.addons.settings.reset": "Réinitialiser",
+        "tw.addons.settings.resetAll": "Tout réinitialiser",
+        "tw.addons.settings.search": "Rechercher",
+        "tw.addons.settings.tags.beta": "Bêta",
+        "tw.addons.settings.tags.new": "Nouveau !",
+        "tw.addons.settings.tags.recommended": "Recommandé",
+        "tw.addons.settings.tags.theme": "Thème",
+        "tw.addons.settings.title": "Paramètres des addons",
+        "tw.addons.settings.unsupported": "Certains addons ne sont pas disponibles sur ce navigateur "
+    },
     "it": {
         "tw.addons.settings.addonFeedback": "Feedback sull'Addon",
         "tw.addons.settings.confirmResetAll": "Sei sicuro di voler riportare tutte le impostazioni dell'addon al loro valore iniziale?",
@@ -145,6 +160,27 @@
         "tw.addons.settings.title": "Addons Instellingen",
         "tw.addons.settings.unsupported": "Sommige addons zijn niet beschikbaar in deze browser."
     },
+    "pl": {
+        "tw.addons.settings.addonFeedback": "Opinia o dodatkach",
+        "tw.addons.settings.confirmResetAll": "Jesteś pewien, że chcesz zresetować wszystkie dodatki do ich domyślnych wartości?",
+        "tw.addons.settings.credits": "Kredyty:",
+        "tw.addons.settings.dirty": "Odśwież TurboWarp, aby zastosować ustawienia.",
+        "tw.addons.settings.dirtyButton": "Odśwież teraz",
+        "tw.addons.settings.export": "Eksportuj ustawienia",
+        "tw.addons.settings.import": "Importuj ustawienia",
+        "tw.addons.settings.noResults": "Brak wyników.",
+        "tw.addons.settings.presets": "Ustawienia wstępne",
+        "tw.addons.settings.reset": "Resetuj",
+        "tw.addons.settings.resetAll": "Resetuj wszystko",
+        "tw.addons.settings.search": "Szukaj",
+        "tw.addons.settings.tags.beta": "Beta",
+        "tw.addons.settings.tags.easterEgg": "Zabawny Sekret",
+        "tw.addons.settings.tags.new": "Nowość!",
+        "tw.addons.settings.tags.recommended": "Polecane",
+        "tw.addons.settings.tags.theme": "Motyw",
+        "tw.addons.settings.title": "Ustawienia Dodatków",
+        "tw.addons.settings.unsupported": "Niektóre dodatki nie są dostępne w tej przeglądarce:"
+    },
     "pt": {
         "tw.addons.settings.addonFeedback": "Dar Feedback sobre Addons",
         "tw.addons.settings.confirmResetAll": "Tem certeza que quer resetar as configurações de todos os addons aos seus valores padrão?",
@@ -199,6 +235,7 @@
         "tw.addons.settings.resetAll": "Ponastavi vse",
         "tw.addons.settings.search": "Iskanje",
         "tw.addons.settings.tags.beta": "Beta",
+        "tw.addons.settings.tags.easterEgg": "Skriven dodatek",
         "tw.addons.settings.tags.new": "Novo!",
         "tw.addons.settings.tags.recommended": "Priporočeno",
         "tw.addons.settings.tags.theme": "Tema",
@@ -227,6 +264,24 @@
         "tw.addons.settings.unsupported": "Bazi içerikler bu web tarayacıda kullanamıyoruz:"
     },
     "zh-cn": {
-        "tw.addons.settings.search": "搜索"
+        "tw.addons.settings.addonFeedback": "插件反馈",
+        "tw.addons.settings.confirmResetAll": "你确定要将所有加载项设置重置为其默认值吗？",
+        "tw.addons.settings.credits": "作者：",
+        "tw.addons.settings.dirty": "重新加载TurboWarp以应用设置。",
+        "tw.addons.settings.dirtyButton": "立即重新加载",
+        "tw.addons.settings.export": "导出设置",
+        "tw.addons.settings.import": "导入设置",
+        "tw.addons.settings.noResults": "无结果。",
+        "tw.addons.settings.presets": "预设",
+        "tw.addons.settings.reset": "重置",
+        "tw.addons.settings.resetAll": "重置所有",
+        "tw.addons.settings.search": "搜索",
+        "tw.addons.settings.tags.beta": "测试版",
+        "tw.addons.settings.tags.easterEgg": "彩蛋",
+        "tw.addons.settings.tags.new": "新！",
+        "tw.addons.settings.tags.recommended": "推荐",
+        "tw.addons.settings.tags.theme": "主题",
+        "tw.addons.settings.title": "插件设置",
+        "tw.addons.settings.unsupported": "某些插件在此浏览器中不可用："
     }
 }

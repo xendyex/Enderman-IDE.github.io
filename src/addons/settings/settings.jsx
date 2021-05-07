@@ -62,8 +62,8 @@ document.body.setAttribute('theme', theme);
 
 const sortAddons = () => {
     const sortedOrder = Object.keys(addons).sort((aId, bId) => {
-        const aNew = addons[aId].tags && addons[aId].tags.includes('new');
-        const bNew = addons[bId].tags && addons[bId].tags.includes('new');
+        const aNew = addons[aId].tags.includes('new');
+        const bNew = addons[bId].tags.includes('new');
         if (aNew && !bNew) return -1;
         if (bNew && !aNew) return 1;
         return 0;
@@ -897,7 +897,7 @@ class AddonSettingsComponent extends React.Component {
                             />
                         ) : null}
                         <div className={styles.version}>
-                            {`v${upstreamMeta.version} (${upstreamMeta.commit}) `}
+                            {`v${upstreamMeta.version} (${upstreamMeta.commit})`}
                         </div>
                     </footer>
                 </div>

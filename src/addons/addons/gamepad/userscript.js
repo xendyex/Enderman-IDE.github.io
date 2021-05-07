@@ -135,16 +135,37 @@ export default async function ({ addon, global, console, msg }) {
     virtualCursorSetVisible(false);
   });
 
+  let getCanvasSize;
+  // Support modern ResizeObserver and slow getBoundingClientRect version for improved browser support (matters for TurboWarp)
+  if (window.ResizeObserver) {
+    let canvasWidth = width;
+    let canvasHeight = height;
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        canvasWidth = entry.contentRect.width;
+        canvasHeight = entry.contentRect.height;
+      }
+    });
+    resizeObserver.observe(canvas);
+    getCanvasSize = () => [canvasWidth, canvasHeight];
+  } else {
+    getCanvasSize = () => {
+      const rect = canvas.getBoundingClientRect();
+      return [rect.width, rect.height];
+    };
+  }
+
   // Both in Scratch space
   let virtualX = 0;
   let virtualY = 0;
   const postMouseData = (data) => {
+    const [unscaledCanvasWidth, unscaledCanvasHeight] = getCanvasSize();
     vm.postIOData("mouse", {
       ...data,
       canvasWidth: canvas.width,
       canvasHeight: canvas.height,
-      x: (virtualX + width / 2) * (canvas.width / width),
-      y: (height / 2 - virtualY) * (canvas.height / height),
+      x: (virtualX + width / 2) * (unscaledCanvasWidth / width),
+      y: (height / 2 - virtualY) * (unscaledCanvasHeight / height),
     });
   };
   const handleGamepadButtonDown = (e) => {
@@ -195,6 +216,7 @@ export default async function ({ addon, global, console, msg }) {
   while (true) {
     const stageHeaderWrapper = await addon.tab.waitForElement('[class*="stage-header_stage-menu-wrapper"]', {
       markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
     stageHeaderWrapper.insertBefore(spacer, stageHeaderWrapper.lastChild);
 
