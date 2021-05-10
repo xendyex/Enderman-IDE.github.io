@@ -17,6 +17,7 @@
 /* eslint-disable import/no-commonjs */
 /* eslint-disable import/no-nodejs-modules */
 /* eslint-disable no-console */
+/* eslint-disable max-len */
 
 const fs = require('fs');
 const childProcess = require('child_process');
@@ -49,11 +50,8 @@ if (!process.argv.includes('-')) {
     childProcess.execSync(`git clone --depth=1 -b tw https://github.com/GarboMuffin/ScratchAddons ${repoPath}`);
 }
 rimraf.sync(pathUtil.resolve(__dirname, 'addons'));
-rimraf.sync(pathUtil.resolve(__dirname, 'addons-l10n'));
 rimraf.sync(pathUtil.resolve(__dirname, 'libraries'));
-fs.mkdirSync(pathUtil.resolve(__dirname, 'addons'), {recursive: true});
-fs.mkdirSync(pathUtil.resolve(__dirname, 'addons-l10n'), {recursive: true});
-fs.mkdirSync(pathUtil.resolve(__dirname, 'libraries'), {recursive: true});
+rimraf.sync(pathUtil.resolve(__dirname, 'generated'));
 
 process.chdir(repoPath);
 const commitHash = childProcess.execSync('git rev-parse --short HEAD')
@@ -67,6 +65,11 @@ const matchAll = (str, regex) => {
         matches.push(match);
     }
     return matches;
+};
+
+const writeFile = (path, data) => {
+    fs.mkdirSync(pathUtil.dirname(path), {recursive: true});
+    fs.writeFileSync(path, data);
 };
 
 const includeImportedLibraries = contents => {
@@ -87,7 +90,7 @@ const includeImportedLibraries = contents => {
     }
 };
 
-const includeImports = (folder, contents) => {
+const includeDynamicallyImportedAssets = (folder, contents) => {
     const dynamicAssets = walk(folder)
         .filter(file => file.endsWith('.svg') || file.endsWith('.png'));
 
@@ -127,66 +130,113 @@ const includeImports = (folder, contents) => {
 request('https://raw.githubusercontent.com/ScratchAddons/contributors/master/.all-contributorsrc', (err, response, body) => {
     const parsed = JSON.parse(body);
     const contributors = parsed.contributors.filter(({contributions}) => contributions.includes('translation'));
+    // TODO: remove useless information
     const contributorsPath = pathUtil.resolve(__dirname, 'translators.json');
     fs.writeFileSync(contributorsPath, JSON.stringify(contributors, null, 4));
 });
 
-(async () => {
-    for (const addon of addons) {
-        const oldDirectory = pathUtil.resolve(__dirname, 'ScratchAddons', 'addons', addon);
-        const newDirectory = pathUtil.resolve(__dirname, 'addons', addon);
-        for (const file of walk(oldDirectory)) {
-            const oldPath = pathUtil.join(oldDirectory, file);
-            const newPath = pathUtil.join(newDirectory, file);
-            fs.mkdirSync(pathUtil.dirname(newPath), {recursive: true});
-            let contents = fs.readFileSync(oldPath);
+const l10nRoot = pathUtil.resolve(__dirname, 'ScratchAddons', 'addons-l10n');
+const getL10nFile = (lang, addonId) => pathUtil.join(l10nRoot, lang, `${addonId}.json`);
+const allLanguages = fs.readdirSync(l10nRoot).filter(i => fs.existsSync(getL10nFile(i, '_general')));
 
-            if (file.endsWith('.js')) {
-                contents = contents.toString('utf-8');
-                includeImportedLibraries(contents);
-                if (contents.includes('addon.self.dir') || contents.includes('addon.self.lib')) {
-                    contents = includeImports(oldDirectory, contents);
-                }
-            }
+for (const addonId of addons) {
+    const oldSourceDirectory = pathUtil.resolve(__dirname, 'ScratchAddons', 'addons', addonId);
+    const newSourceDirectory = pathUtil.resolve(__dirname, 'addons', addonId);
 
-            fs.writeFileSync(newPath, contents);
+    const addonLanguages = [];
+    for (const language of allLanguages) {
+        const l10nPath = getL10nFile(language, addonId);
+        if (fs.existsSync(l10nPath)) {
+            addonLanguages.push(language);
+            const l10nContents = fs.readFileSync(l10nPath, 'utf-8');
+            const newPath = pathUtil.join(newSourceDirectory, 'l10n', `${language}.json`);
+            // Parse and stringify to validate and minimize
+            writeFile(newPath, JSON.stringify(JSON.parse(l10nContents)));
         }
     }
 
-    const l10nFiles = fs.readdirSync(pathUtil.resolve(__dirname, 'ScratchAddons', 'addons-l10n'));
-    const languages = [];
-    for (const file of l10nFiles) {
-        const oldDirectory = pathUtil.resolve(__dirname, 'ScratchAddons', 'addons-l10n', file);
-        const newDirectory = pathUtil.resolve(__dirname, 'addons-l10n', file);
-        if (!fs.statSync(oldDirectory).isDirectory()) {
-            continue;
-        }
-        languages.push(file);
-        fs.mkdirSync(newDirectory, {recursive: true});
-        for (const addon of addons) {
-            const oldFile = pathUtil.join(oldDirectory, `${addon}.json`);
-            const newFile = pathUtil.join(newDirectory, `${addon}.json`);
-            try {
-                const contents = fs.readFileSync(oldFile, 'utf-8');
-                // Parse and stringify to minimize
-                const parsed = JSON.parse(contents);
-                fs.writeFileSync(newFile, JSON.stringify(parsed));
-            } catch (e) {
-                // Ignore
+    let manifest;
+    for (const file of walk(oldSourceDirectory)) {
+        const oldPath = pathUtil.join(oldSourceDirectory, file);
+        const newPath = pathUtil.join(newSourceDirectory, file);
+
+        let contents = fs.readFileSync(oldPath);
+        if (file.endsWith('.js')) {
+            contents = contents.toString('utf-8');
+            includeImportedLibraries(contents);
+            if (contents.includes('addon.self.dir') || contents.includes('addon.self.lib')) {
+                contents = includeDynamicallyImportedAssets(oldSourceDirectory, contents);
             }
         }
+        if (file === 'addon.json') {
+            contents = contents.toString('utf-8');
+            manifest = JSON.parse(contents);
+            delete manifest.versionAdded;
+            delete manifest.libraries;
+            delete manifest.l10n;
+            delete manifest.dynamicEnable;
+            delete manifest.dynamicDisable;
+            delete manifest.injectAsStyleElt;
+            contents = JSON.stringify(manifest, null, 2);
+        }
+
+        writeFile(newPath, contents);
     }
 
-    const extensionManifestPath = pathUtil.resolve(__dirname, 'ScratchAddons', 'manifest.json');
-    const upstreamMetaPath = pathUtil.resolve(__dirname, 'upstream-meta.json');
-    const extensionManifest = JSON.parse(fs.readFileSync(extensionManifestPath, 'utf8'));
-    const versionName = extensionManifest.version_name;
-    fs.writeFileSync(upstreamMetaPath, JSON.stringify({
-        version: versionName,
-        commit: commitHash,
-        languages
-    }));
-})().catch(err => {
-    console.error(err);
-    process.exit(1);
-});
+    const l10nEntry = pathUtil.join(newSourceDirectory, 'l10n.js');
+    let l10nSource = '';
+    l10nSource += '/* generated by pull.js */\n';
+    l10nSource += `export default {\n`;
+    addonLanguages.forEach(lang => {
+        l10nSource += `  ${JSON.stringify(lang)}: () => require(${JSON.stringify(`./l10n/${lang}.json`)}),\n`;
+    });
+    l10nSource += `};\n`;
+    writeFile(l10nEntry, l10nSource);
+
+    const runnerEntry = pathUtil.join(newSourceDirectory, 'run.js');
+    let runnerSource = '';
+    runnerSource += '/* generated by pull.js */\n';
+    runnerSource += `import AddonRunner from "../../api.js";\n`;
+    runnerSource += `import manifest from "./addon.json";\n`;
+    runnerSource += `import l10n from "./l10n.js";\n`;
+    const userscripts = manifest.userscripts || [];
+    const userstyles = manifest.userstyles || [];
+    runnerSource += `const runner = new AddonRunner(${JSON.stringify(addonId)}, manifest);\n`;
+    runnerSource += `runner.l10n(l10n);\n`;
+    userscripts.forEach(({url}) => {
+        runnerSource += `runner.userscript(${JSON.stringify(url)}, () => require(${JSON.stringify(`./${url}`)}));\n`;
+    });
+    userstyles.forEach(({url}) => {
+        runnerSource += `runner.userstyle(${JSON.stringify(url)}, () => require(${JSON.stringify(`!!raw-loader!./${url}`)}));\n`;
+    });
+    runnerSource += 'runner.run();\n';
+    writeFile(runnerEntry, runnerSource);
+}
+
+// TODO bundles
+const addonIdToEntryPath = pathUtil.resolve(__dirname, 'generated', 'addon-id-to-entry.js');
+const addonIdToL10nPath = pathUtil.resolve(__dirname, 'generated', 'addon-id-to-l10n.js');
+let addonIdToEntryContent = '';
+addonIdToEntryContent += `/* generated by pull.js */\n`;
+addonIdToEntryContent += `export default {\n`;
+let addonIdToL10nContent = '';
+addonIdToL10nContent += `/* generated by pull.js */\n`;
+addonIdToL10nContent += `export default {\n`;
+for (const addonId of addons) {
+    addonIdToEntryContent += `  ${JSON.stringify(addonId)}: () => import(/* webpackChunkName: ${JSON.stringify(`addon-${addonId}`)} */ ${JSON.stringify(`../addons/${addonId}/run.js`)}),\n`;
+    addonIdToL10nContent += `  ${JSON.stringify(addonId)}: require(${JSON.stringify(`../addons/${addonId}/l10n.js`)}).default,\n`;
+}
+addonIdToEntryContent += `};\n`;
+addonIdToL10nContent += '};\n';
+writeFile(addonIdToEntryPath, addonIdToEntryContent);
+writeFile(addonIdToL10nPath, addonIdToL10nContent);
+
+const extensionManifestPath = pathUtil.resolve(__dirname, 'ScratchAddons', 'manifest.json');
+const upstreamMetaPath = pathUtil.resolve(__dirname, 'upstream-meta.json');
+const extensionManifest = JSON.parse(fs.readFileSync(extensionManifestPath, 'utf8'));
+const versionName = extensionManifest.version_name;
+fs.writeFileSync(upstreamMetaPath, JSON.stringify({
+    version: versionName,
+    commit: commitHash,
+    languages: allLanguages
+}));

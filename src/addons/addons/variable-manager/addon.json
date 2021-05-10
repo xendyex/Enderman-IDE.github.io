@@ -12,16 +12,22 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
-  "tags": ["editor", "recommended"],
-  "enabledByDefault": false,
-  "l10n": true
+  "tags": [
+    "editor",
+    "recommended"
+  ],
+  "enabledByDefault": false
 }

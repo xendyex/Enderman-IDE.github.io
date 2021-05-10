@@ -17,20 +17,20 @@
       "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
-  "dynamicEnable": true,
-  "dynamicDisable": true,
-  "injectAsStyleElt": true,
-
   "userscripts": [
     {
       "url": "theme3.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
   "userstyles": [
     {
       "url": "theme3.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
   "settings": [
@@ -163,7 +163,12 @@
       "reloadRequired": false
     }
   ],
-  "tags": ["editor", "theme", "codeEditor", "recommended"],
+  "tags": [
+    "editor",
+    "theme",
+    "codeEditor",
+    "recommended"
+  ],
   "enabledByDefault": false,
   "presets": [
     {
@@ -246,6 +251,5 @@
         "text": "colorOnBlack"
       }
     }
-  ],
-  "l10n": true
+  ]
 }

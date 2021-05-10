@@ -6,21 +6,25 @@
       "name": "Jeffalo"
     }
   ],
-  "dynamicEnable": true,
-  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
-  "tags": ["editor", "projectPlayer"],
-  "enabledByDefault": false,
-  "l10n": true
+  "tags": [
+    "editor",
+    "projectPlayer"
+  ],
+  "enabledByDefault": false
 }

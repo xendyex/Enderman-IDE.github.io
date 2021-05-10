@@ -4,7 +4,9 @@
   "userscripts": [
     {
       "url": "remove-backpack.js",
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ],
       "settingMatch": {
         "id": "removeBackpack",
         "value": true
@@ -12,7 +14,9 @@
     },
     {
       "url": "remove-warning.js",
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ],
       "settingMatch": {
         "id": "removeWarning1",
         "value": true
@@ -22,7 +26,9 @@
   "userstyles": [
     {
       "url": "remove-backpack.css",
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ],
       "settingMatch": {
         "id": "removeBackpack",
         "value": true
@@ -43,7 +49,8 @@
       "default": false
     }
   ],
-  "tags": ["beta"],
-  "enabledByDefault": false,
-  "l10n": true
+  "tags": [
+    "beta"
+  ],
+  "enabledByDefault": false
 }

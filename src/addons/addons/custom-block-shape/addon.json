@@ -1,7 +1,12 @@
 {
   "name": "Custom block shape",
   "description": "Adjust the padding, corner radius, and notch height of Scratch blocks.",
-  "tags": ["editor", "codeEditor", "theme", "recommended"],
+  "tags": [
+    "editor",
+    "codeEditor",
+    "theme",
+    "recommended"
+  ],
   "credits": [
     {
       "name": "SheepTester",
@@ -20,7 +25,9 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
   "info": [
@@ -100,6 +107,5 @@
         "notchSize": 0
       }
     }
-  ],
-  "l10n": true
+  ]
 }

@@ -1,7 +1,10 @@
 {
   "name": "Save blocks as image",
   "description": "Right click the editor workspace to export blocks as SVG/PNG images.",
-  "tags": ["editor", "codeEditor"],
+  "tags": [
+    "editor",
+    "codeEditor"
+  ],
   "credits": [
     {
       "name": "summerscar"
@@ -10,9 +13,10 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }

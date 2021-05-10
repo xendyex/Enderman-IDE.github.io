@@ -36,16 +36,24 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
   "userstyles": [
     {
       "url": "userscript.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
-  "tags": ["editor", "codeEditor", "costumeEditor", "recommended"],
-  "enabledByDefault": true,
-  "l10n": true
+  "tags": [
+    "editor",
+    "codeEditor",
+    "costumeEditor",
+    "recommended"
+  ],
+  "enabledByDefault": true
 }

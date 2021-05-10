@@ -9,21 +9,26 @@
       "name": "GarboMuffin"
     }
   ],
-  "dynamicEnable": true,
-  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
-  "tags": ["editor", "projectPlayer", "recommended"],
-  "enabledByDefault": true,
-  "l10n": true
+  "tags": [
+    "editor",
+    "projectPlayer",
+    "recommended"
+  ],
+  "enabledByDefault": true
 }

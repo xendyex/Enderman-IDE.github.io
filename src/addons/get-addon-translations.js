@@ -15,28 +15,22 @@
  */
 
 import addons from './addons.json';
+import addonIdToL10n from './generated/addon-id-to-l10n';
 
 /**
  * Get addon translations.
- * @param {string} lang The locale code
+ * @param {string} language The locale code
  * @returns {object} Object of translation ID to localized string or English fallback
  */
-export default function getTranslations (lang) {
+export default function getTranslations (language) {
     const result = {};
     for (const addonId of addons) {
-        try {
-            const english = require(`./addons-l10n/en/${addonId}.json`);
-            Object.assign(result, english);
-        } catch (e) {
-            // ignore
+        const l10n = addonIdToL10n[addonId];
+        if (l10n.en) {
+            Object.assign(result, l10n.en());
         }
-        if (lang !== 'en') {
-            try {
-                const translations = require(`./addons-l10n/${lang}/${addonId}.json`);
-                Object.assign(result, translations);
-            } catch (e) {
-                // ignore
-            }
+        if (language !== 'en' && l10n[language]) {
+            Object.assign(result, l10n[language]());
         }
     }
     return result;

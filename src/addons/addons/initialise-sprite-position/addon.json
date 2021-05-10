@@ -10,7 +10,9 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
   "settings": [
@@ -40,7 +42,8 @@
       "reloadRequired": false
     }
   ],
-  "tags": ["editor"],
-  "enabledByDefault": false,
-  "l10n": true
+  "tags": [
+    "editor"
+  ],
+  "enabledByDefault": false
 }

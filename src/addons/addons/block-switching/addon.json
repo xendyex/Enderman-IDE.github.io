@@ -6,15 +6,19 @@
       "name": "GarboMuffin"
     }
   ],
-  "dynamicEnable": true,
-  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
-  "tags": ["editor", "codeEditor", "recommended"],
+  "tags": [
+    "editor",
+    "codeEditor",
+    "recommended"
+  ],
   "settings": [
     {
       "name": "Show option to change block to self",
@@ -83,7 +87,5 @@
       "default": true
     }
   ],
-  "libraries": ["scratch-blocks"],
-  "l10n": true,
   "enabledByDefault": true
 }

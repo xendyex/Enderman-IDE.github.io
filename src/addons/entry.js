@@ -14,14 +14,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import AddonRunner from './api';
 import addons from './addon-manifests';
+import addonIdToEntry from './generated/addon-id-to-entry';
 import SettingsStore from './settings-store-singleton';
 
-for (const [id, manifest] of Object.entries(addons)) {
+// Import API to ensure that all the entries won't include their own copy
+// TODO: this seems to be necessary in dev but might not be in prod
+import './api';
+
+for (const id of Object.keys(addons)) {
     if (!SettingsStore.getAddonEnabled(id)) {
         continue;
     }
-    const runner = new AddonRunner(id, manifest);
-    runner.run();
+    const fn = addonIdToEntry[id];
+    fn();
 }

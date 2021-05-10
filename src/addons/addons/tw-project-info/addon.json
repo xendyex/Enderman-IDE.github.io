@@ -1,7 +1,9 @@
 {
   "name": "Block count",
   "description": "Shows the number of blocks a project has.",
-  "tags": ["community"],
+  "tags": [
+    "community"
+  ],
   "credits": [
     {
       "name": "TheColaber",
@@ -11,8 +13,9 @@
   "userscripts": [
     {
       "url": "blockcount.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
-  ],
-  "l10n": true
+  ]
 }

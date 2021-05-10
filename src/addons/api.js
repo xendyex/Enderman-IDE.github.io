@@ -16,7 +16,6 @@
 
 import IntlMessageFormat from 'intl-messageformat';
 import SettingsStore from './settings-store-singleton';
-import getAddonTranslations from './get-addon-translations';
 import dataURLToBlob from '../lib/data-uri-to-blob';
 import EventTargetShim from './event-target';
 import './polyfill';
@@ -146,7 +145,6 @@ const getEditorMode = () => {
 
 const tabReduxInstance = new Redux();
 const language = tabReduxInstance.state.locales.locale.split('-')[0];
-const translations = getAddonTranslations(language);
 
 const alwaysTrue = () => true;
 
@@ -321,6 +319,10 @@ class AddonRunner {
         this.manifest = manifest;
         this.messageCache = {};
 
+        this.translations = {};
+        this.userscripts = {};
+        this.userstyles = {};
+
         this.msg.locale = language;
         this.publicAPI = {
             global,
@@ -340,7 +342,7 @@ class AddonRunner {
         if (this.messageCache[namespacedKey]) {
             return this.messageCache[namespacedKey].format(vars);
         }
-        let translation = translations[namespacedKey];
+        let translation = this.translations[namespacedKey];
         if (!translation) {
             return namespacedKey;
         }
@@ -388,7 +390,24 @@ class AddonRunner {
         return settingValue === settingMatch.value;
     }
 
-    async _run () {
+    l10n (l10nfns) {
+        if (l10nfns.en) {
+            Object.assign(this.translations, l10nfns.en());
+        }
+        if (language !== 'en' && l10nfns[language]) {
+            Object.assign(this.translations, l10nfns[language]());
+        }
+    }
+
+    userscript (url, module) {
+        this.userscripts[url] = module;
+    }
+
+    userstyle (url, source) {
+        this.userstyles[url] = source;
+    }
+
+    run () {
         this.updateCSSVariables();
 
         if (this.manifest.userstyles) {
@@ -396,12 +415,7 @@ class AddonRunner {
                 if (!this.settingsMatch(userstyle.settingMatch)) {
                     continue;
                 }
-                const m = await import(
-                    /* webpackInclude: /\.css$/ */
-                    /* webpackMode: "eager" */
-                    `!css-loader!./addons/${this.id}/${userstyle.url}`
-                );
-                const source = m.default[0][1];
+                const source = this.userstyles[userstyle.url]();
                 const style = createStylesheet(source);
                 style.className = 'scratch-addons-theme';
                 style.dataset.addonId = this.id;
@@ -415,18 +429,10 @@ class AddonRunner {
                 if (!this.settingsMatch(userscript.settingMatch)) {
                     continue;
                 }
-                const m = await import(
-                    /* webpackInclude: /\.js$/ */
-                    /* webpackMode: "eager" */
-                    `./addons/${this.id}/${userscript.url}`
-                );
-                m.default(this.publicAPI);
+                const module = this.userscripts[userscript.url]();
+                module.default(this.publicAPI);
             }
         }
-    }
-
-    async run () {
-        this._run();
     }
 }
 AddonRunner.instances = [];
