@@ -11,6 +11,8 @@ var autoprefixer = require('autoprefixer');
 var postcssVars = require('postcss-simple-vars');
 var postcssImport = require('postcss-import');
 
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 const STATIC_PATH = process.env.STATIC_PATH || '/static';
 
 let root = process.env.ROOT || '';
@@ -211,7 +213,8 @@ module.exports = [
             new CopyWebpackPlugin([{
                 from: 'extension-worker.{js,js.map}',
                 context: 'node_modules/scratch-vm/dist/web'
-            }])
+            }]),
+            new BundleAnalyzerPlugin()
         ])
     })
 ].concat(

@@ -128,6 +128,7 @@
     "uglifyjs-webpack-plugin": "^1.2.5",
     "web-audio-test-api": "^0.5.2",
     "webpack": "^4.6.0",
+    "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.3"
   },
