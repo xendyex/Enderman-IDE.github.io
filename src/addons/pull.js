@@ -60,16 +60,29 @@ const commitHash = childProcess.execSync('git rev-parse --short HEAD')
     .toString()
     .trim();
 
+const matchAll = (str, regex) => {
+    const matches = [];
+    let match;
+    while ((match = regex.exec(str)) !== null) {
+        matches.push(match);
+    }
+    return matches;
+};
+
 const includeImportedLibraries = contents => {
     // Parse things like:
     // import { normalizeHex, getHexRegex } from "../../libraries/normalize-color.js";
     // import RateLimiter from "../../libraries/rate-limiter.js";
-    const matches = [...contents.matchAll(/import +(?:{.*}|.*) +from +["']\.\.\/\.\.\/libraries\/([\w\d_-]+\.js)["'];/g)];
+    const matches = matchAll(contents, /import +(?:{.*}|.*) +from +["']\.\.\/\.\.\/libraries\/([\w\d_\/-]+(?:\.esm)?\.js)["'];/g);
     for (const match of matches) {
         const libraryFile = match[1];
         const oldLibraryPath = pathUtil.resolve(__dirname, 'ScratchAddons', 'libraries', libraryFile);
         const newLibraryPath = pathUtil.resolve(__dirname, 'libraries', libraryFile);
         const libraryContents = fs.readFileSync(oldLibraryPath, 'utf-8');
+        const newLibraryDirName = pathUtil.dirname(newLibraryPath);
+        fs.mkdirSync(newLibraryDirName, {
+            recursive: true
+        });
         fs.writeFileSync(newLibraryPath, libraryContents);
     }
 };
@@ -113,8 +126,9 @@ const includeImports = (folder, contents) => {
 
 request('https://raw.githubusercontent.com/ScratchAddons/contributors/master/.all-contributorsrc', (err, response, body) => {
     const parsed = JSON.parse(body);
-    const contributorsPath = pathUtil.resolve(__dirname, 'contributors.json');
-    fs.writeFileSync(contributorsPath, JSON.stringify(parsed.contributors, null, 4));
+    const contributors = parsed.contributors.filter(({contributions}) => contributions.includes('translation'));
+    const contributorsPath = pathUtil.resolve(__dirname, 'translators.json');
+    fs.writeFileSync(contributorsPath, JSON.stringify(contributors, null, 4));
 });
 
 (async () => {

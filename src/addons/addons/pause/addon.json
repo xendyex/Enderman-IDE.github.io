@@ -9,6 +9,8 @@
       "name": "GarboMuffin"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
@@ -21,7 +23,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor", "recommended"],
+  "tags": ["editor", "projectPlayer", "recommended"],
   "enabledByDefault": true,
   "l10n": true
 }

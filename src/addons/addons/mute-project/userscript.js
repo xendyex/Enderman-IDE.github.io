@@ -16,6 +16,9 @@ export default async function ({ addon, global, console }) {
     if (e.ctrlKey) {
       e.cancelBubble = true;
       e.preventDefault();
+      if (e.type === "contextmenu" && window.safari) {
+        return;
+      }
       muted = !muted;
       if (muted) {
         vm.runtime.audioEngine.inputNode.gain.value = 0;
@@ -27,7 +30,10 @@ export default async function ({ addon, global, console }) {
     }
   };
   while (true) {
-    let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", { markAsSeen: true });
+    let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+    });
     let container = button.parentElement;
     container.appendChild(icon);
     button.addEventListener("click", toggleMute);

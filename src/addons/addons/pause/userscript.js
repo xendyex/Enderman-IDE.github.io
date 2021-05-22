@@ -16,6 +16,8 @@ export default async function ({ addon, global, console, msg }) {
   img.draggable = false;
   img.title = msg("pause");
   img.addEventListener("click", () => setPaused(!paused));
+  addon.tab.displayNoneWhileDisabled(img);
+  addon.self.addEventListener("disabled", () => setPaused(false));
 
   let paused = false;
   let pausedThreadState = new WeakMap();
@@ -132,7 +134,10 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   while (true) {
-    const flag = await addon.tab.waitForElement("[class^='green-flag']", { markAsSeen: true });
+    const flag = await addon.tab.waitForElement("[class^='green-flag']", {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+    });
     flag.insertAdjacentElement("afterend", img);
   }
 }

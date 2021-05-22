@@ -23,9 +23,6 @@ a {
     height: 100%;
 }
 
-.player-only * {
-    box-sizing: border-box;
-}
 .player-only .center {
     margin: auto;
 }
@@ -41,13 +38,16 @@ a {
     margin-top: 10px;
     background: #eee;
 }
+.footer a {
+    font-weight: bold;
+    text-decoration: none;
+}
 [theme="dark"] .footer {
     background-color: #151515;
 }
 .footer-content {
     max-width: 600px;
     margin: auto;
-    flex-wrap: wrap;
 }
 .footer-text {
     text-align: center;
@@ -55,15 +55,19 @@ a {
 }
 .footer-columns {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
     flex-wrap: wrap;
 }
 .footer-section {
-    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+    width: 200px;
     margin-bottom: 10px;
 }
 .footer-section > * {
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 .footer-header {
     font-weight: bold;

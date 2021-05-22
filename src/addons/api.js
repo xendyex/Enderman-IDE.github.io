@@ -19,6 +19,8 @@ import SettingsStore from './settings-store-singleton';
 import getAddonTranslations from './get-addon-translations';
 import dataURLToBlob from '../lib/data-uri-to-blob';
 import EventTargetShim from './event-target';
+import AddonHooks from './hooks';
+import addons from './addon-manifests';
 import './polyfill';
 
 /* eslint-disable no-console */
@@ -111,7 +113,7 @@ class Redux extends EventTargetShim {
 
     initialize () {
         if (!this._initialized) {
-            window.__APP_STATE_REDUCER__ = (action, next) => {
+            AddonHooks.appStateReducer = (action, next) => {
                 this._nextState = next;
                 this.dispatchEvent(new CustomEvent('statechanged', {
                     detail: {
@@ -127,16 +129,17 @@ class Redux extends EventTargetShim {
     }
 
     dispatch (m) {
-        return __APP_STATE_STORE__.dispatch(m);
+        return AddonHooks.appStateStore.dispatch(m);
     }
 
     get state () {
         if (this._nextState) return this._nextState;
-        return __APP_STATE_STORE__.getState();
+        return AddonHooks.appStateStore.getState();
     }
 }
 
 const getEditorMode = () => {
+    // eslint-disable-next-line no-use-before-define
     const mode = tabReduxInstance.state.scratchGui.mode;
     if (mode.isEmbedded) return 'embed';
     if (mode.isFullScreen) return 'fullscreen';
@@ -148,10 +151,14 @@ const tabReduxInstance = new Redux();
 const language = tabReduxInstance.state.locales.locale.split('-')[0];
 const translations = getAddonTranslations(language);
 
+const getDisplayNoneWhileDisabledVariable = id => `--${kebabCaseToCamelCase(id)}_displayNoneWhileDisabledValue`;
+
 class Tab extends EventTargetShim {
-    constructor () {
+    constructor (id) {
         super();
+        this._id = id;
         this._seenElements = new WeakSet();
+        // traps is public API
         this.traps = {
             get vm () {
                 // We expose VM on window
@@ -162,7 +169,7 @@ class Tab extends EventTargetShim {
                 if (window.ScratchBlocks) {
                     return Promise.resolve(window.ScratchBlocks);
                 }
-                return new Promise((resolve, reject) => {
+                return new Promise(resolve => {
                     const handler = () => {
                         if (window.ScratchBlocks) {
                             this.removeEventListener('urlChange', handler);
@@ -183,22 +190,53 @@ class Tab extends EventTargetShim {
         throw new Error('loadScript is not supported');
     }
 
-    waitForElement (selector, {markAsSeen = false} = {}) {
-        const firstQuery = document.querySelectorAll(selector);
-        for (const element of firstQuery) {
-            if (this._seenElements.has(element)) continue;
-            if (markAsSeen) this._seenElements.add(element);
-            return Promise.resolve(element);
+    waitForElement (selector, {markAsSeen = false, condition, reduxCondition, reduxEvents} = {}) {
+        let externalEventSatisfied = true;
+        const evaluateCondition = () => {
+            if (!externalEventSatisfied) return false;
+            if (condition && !condition()) return false;
+            if (reduxCondition && !reduxCondition(tabReduxInstance.state)) return false;
+            return true;
+        };
+
+        if (evaluateCondition()) {
+            const firstQuery = document.querySelectorAll(selector);
+            for (const element of firstQuery) {
+                if (this._seenElements.has(element)) continue;
+                if (markAsSeen) this._seenElements.add(element);
+                return Promise.resolve(element);
+            }
+        }
+
+        let reduxListener;
+        if (reduxEvents) {
+            externalEventSatisfied = false;
+            reduxListener = ({detail}) => {
+                const type = detail.action.type;
+                // As addons can't run before DOM exists here, ignore fontsLoaded/SET_FONTS_LOADED
+                // Otherwise, as our font loading is very async, we could activate more often than required.
+                if (reduxEvents.includes(type) && type !== 'fontsLoaded/SET_FONTS_LOADED') {
+                    externalEventSatisfied = true;
+                }
+            };
+            this.redux.initialize();
+            this.redux.addEventListener('statechanged', reduxListener);
         }
 
         return new Promise(resolve => {
             const callback = () => {
+                if (!evaluateCondition()) {
+                    return;
+                }
                 const elements = document.querySelectorAll(selector);
                 for (const element of elements) {
                     if (this._seenElements.has(element)) continue;
                     resolve(element);
                     removeMutationObserverCallback(callback);
                     if (markAsSeen) this._seenElements.add(element);
+                    if (reduxListener) {
+                        this.redux.removeEventListener('statechanged', reduxListener);
+                    }
                     break;
                 }
             };
@@ -211,6 +249,7 @@ class Tab extends EventTargetShim {
             return Promise.reject(new Error('Clipboard API not supported'));
         }
         const items = [
+            // eslint-disable-next-line no-undef
             new ClipboardItem({
                 'image/png': dataURLToBlob(dataURL)
             })
@@ -244,6 +283,11 @@ class Tab extends EventTargetShim {
     get editorMode () {
         return getEditorMode();
     }
+
+    displayNoneWhileDisabled (el, {display = ''} = {}) {
+        const varName = getDisplayNoneWhileDisabledVariable(this._id);
+        el.style.display = `var(${varName}${display ? `,${display}` : ''})`;
+    }
 }
 
 class Settings extends EventTargetShim {
@@ -259,6 +303,11 @@ class Settings extends EventTargetShim {
 }
 
 class Self extends EventTargetShim {
+    constructor (id) {
+        super();
+        this.id = id;
+        this.disabled = false;
+    }
     // These are removed at build-time by pull.js. Throw if attempting to access them at runtime.
     get dir () {
         throw new Error(`Addon tried to access addon.self.dir`);
@@ -269,21 +318,23 @@ class Self extends EventTargetShim {
 }
 
 class AddonRunner {
-    constructor (id, manifest) {
+    constructor (id) {
         AddonRunner.instances.push(this);
+        const manifest = addons[id];
 
         this.id = id;
         this.manifest = manifest;
         this.messageCache = {};
+        this.stylesheets = [];
 
         this.msg.locale = language;
         this.publicAPI = {
             global,
             console,
             addon: {
-                tab: new Tab(),
+                tab: new Tab(id),
                 settings: new Settings(id, manifest),
-                self: new Self()
+                self: new Self(id)
             },
             msg: this.msg.bind(this),
             safeMsg: this.safeMsg.bind(this)
@@ -343,7 +394,34 @@ class AddonRunner {
         return settingValue === settingMatch.value;
     }
 
-    async _run () {
+    dynamicEnable () {
+        this.publicAPI.addon.self.dispatchEvent(new CustomEvent('reenabled'));
+        this.publicAPI.addon.self.disabled = false;
+        document.documentElement.style.removeProperty(getDisplayNoneWhileDisabledVariable(this.id));
+        this.appendStylesheets();
+    }
+
+    dynamicDisable () {
+        this.publicAPI.addon.self.dispatchEvent(new CustomEvent('disabled'));
+        this.publicAPI.addon.self.disabled = true;
+        document.documentElement.style.setProperty(getDisplayNoneWhileDisabledVariable(this.id), 'none');
+        this.removeStylesheets();
+    }
+
+    removeStylesheets () {
+        for (const style of this.stylesheets) {
+            style.remove();
+        }
+    }
+
+    appendStylesheets () {
+        for (const style of this.stylesheets) {
+            // Insert styles at the start of the body so that they have higher precedence than those in <head>
+            document.body.insertBefore(style, document.body.firstChild);
+        }
+    }
+
+    async run () {
         this.updateCSSVariables();
 
         if (this.manifest.userstyles) {
@@ -360,10 +438,10 @@ class AddonRunner {
                 const style = createStylesheet(source);
                 style.className = 'scratch-addons-theme';
                 style.dataset.addonId = this.id;
-                // Insert styles at the start of the body so that they have higher precedence than those in <head>
-                document.body.insertBefore(style, document.body.firstChild);
+                this.stylesheets.push(style);
             }
         }
+        this.appendStylesheets();
 
         if (this.manifest.userscripts) {
             for (const userscript of this.manifest.userscripts) {
@@ -379,17 +457,19 @@ class AddonRunner {
             }
         }
     }
-
-    async run () {
-        this._run();
-    }
 }
 AddonRunner.instances = [];
+
+const runAddon = addonId => {
+    const runner = new AddonRunner(addonId);
+    runner.run();
+};
 
 let oldMode = getEditorMode();
 const emitUrlChange = () => {
     // In Scratch, URL changes usually mean someone went from editor to fullscreen or something like that.
-    // This is not the case in TW -- the URL can change for many other reasons that addons probably aren't prepared to handle.
+    // This is not the case in TW -- the URL can change for many other reasons that addons probably aren't prepared
+    // to handle.
     const newMode = getEditorMode();
     if (newMode !== oldMode) {
         oldMode = newMode;
@@ -411,10 +491,28 @@ history.pushState = function (...args) {
     emitUrlChange();
 };
 
-SettingsStore.addEventListener('store-changed', () => {
-    for (const runner of AddonRunner.instances) {
+SettingsStore.addEventListener('addon-changed', e => {
+    const addonId = e.detail.addonId;
+    const runner = AddonRunner.instances.find(i => i.id === addonId);
+    if (e.detail.dynamicEnable) {
+        if (runner) {
+            runner.dynamicEnable();
+        } else {
+            runAddon(addonId);
+        }
+    } else if (e.detail.dynamicDisable) {
+        if (runner) {
+            runner.dynamicDisable();
+        }
+    }
+    if (runner) {
         runner.settingsChanged();
     }
 });
 
-export default AddonRunner;
+for (const id of Object.keys(addons)) {
+    if (!SettingsStore.getAddonEnabled(id)) {
+        continue;
+    }
+    runAddon(id);
+}

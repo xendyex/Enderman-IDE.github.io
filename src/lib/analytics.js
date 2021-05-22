@@ -5,9 +5,8 @@ const enabled =
     PLAUSIBLE_DOMAIN &&
     // Must be on http: or https:
     (location.protocol === 'http:' || location.protocol === 'https:') &&
-    // Domain must roughly match
-    // This type of comparison allows experiments.turbowarp.org and turbowarp.org to use the same domain
-    location.origin.includes(PLAUSIBLE_DOMAIN) &&
+    // Domain must match expected
+    location.hostname === PLAUSIBLE_DOMAIN &&
     // Respect Do Not Track
     navigator.doNotTrack !== '1';
 
@@ -34,7 +33,9 @@ const sendEvent = eventName => {
             // Removing project IDs might result in multiple slashes like //editor, so merge multiple slashes
             .replace(/\/+/g, '/')
             // Remove .html so that old links like /fullscreen.html links will be logged as /fullscreen
-            .replace('.html', '');
+            .replace('.html', '')
+            // Remove trailing /
+            .replace(/(?!^)\/$/, '');
 
         const req = new XMLHttpRequest();
         req.open('POST', PLAUSIBLE_API, true);
@@ -43,30 +44,13 @@ const sendEvent = eventName => {
             n: eventName,
             u: url.href,
             d: PLAUSIBLE_DOMAIN,
-            r: referrer,
-            w: window.innerWidth
+            r: referrer
         }));
     });
 };
 
 if (enabled) {
-    const trackPageview = () => {
-        sendEvent('pageview');
-    };
-
-    const originalPushState = history.pushState;
-    history.pushState = (a, b, c) => {
-        originalPushState.call(history, a, b, c);
-        trackPageview();
-    };
-    const originalReplaceState = history.replaceState;
-    history.replaceState = (a, b, c) => {
-        originalReplaceState.call(history, a, b, c);
-        trackPageview();
-    };
-    window.addEventListener('popstate', trackPageview);
-
-    trackPageview();
+    sendEvent('pageview');
 }
 
 const GoogleAnalytics = {

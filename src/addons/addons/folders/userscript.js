@@ -452,7 +452,7 @@ export default async function ({ addon, global, console, msg }) {
       folderItemCache.start();
       folderAssetCache.start();
 
-      const folderOccurences = new Map();
+      const folderOccurrences = new Map();
       const items = [];
       const result = {
         items,
@@ -495,11 +495,11 @@ export default async function ({ addon, global, console, msg }) {
           }
           i--;
 
-          const occurence = folderOccurences.get(folderName) || 0;
-          folderOccurences.set(folderName, occurence + 1);
+          const occurrence = folderOccurrences.get(folderName) || 0;
+          folderOccurrences.set(folderName, occurrence + 1);
           const baseUniqueId = getUniqueIdOfFolderItems(folderItems);
-          const itemUniqueId = `${isOpen}&${occurence}&${folderName}&${baseUniqueId}&`;
-          const reactKey = `&__${occurence}_${folderName}`;
+          const itemUniqueId = `${isOpen}&${occurrence}&${folderName}&${baseUniqueId}&`;
+          const reactKey = `&__${occurrence}_${folderName}`;
           const assetUniqueId = baseUniqueId;
 
           let folderItem;
@@ -1295,9 +1295,31 @@ export default async function ({ addon, global, console, msg }) {
 
   await untilInEditor();
 
+  // Backpack
+  {
+    const clickListener = (e) => {
+      if (!e.target.closest('[class*="backpack_backpack-header_"]')) {
+        return;
+      }
+      setTimeout(() => {
+        const backpackContainer = document.querySelector("[class^='backpack_backpack-list_']");
+        if (!backpackContainer) {
+          return;
+        }
+        document.removeEventListener("click", clickListener);
+        const backpackInstance = getBackpackFromElement(backpackContainer);
+        verifyBackpack(backpackInstance);
+        patchBackpack(backpackInstance);
+      });
+    };
+    document.addEventListener("click", clickListener, true);
+  }
+
   // Sprite list
   {
-    const spriteSelectorItemElement = await addon.tab.waitForElement("[class*='sprite-selector_sprite-wrapper']");
+    const spriteSelectorItemElement = await addon.tab.waitForElement("[class^='sprite-selector_sprite-wrapper']", {
+      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+    });
     vm = addon.tab.traps.vm;
     reactInternalKey = Object.keys(spriteSelectorItemElement).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
     const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
@@ -1311,17 +1333,11 @@ export default async function ({ addon, global, console, msg }) {
     patchVM();
   }
 
-  // Backpack
-  (async () => {
-    const backpackContainer = await addon.tab.waitForElement("[class*='backpack_backpack-list_']");
-    const backpackInstance = getBackpackFromElement(backpackContainer);
-    verifyBackpack(backpackInstance);
-    patchBackpack(backpackInstance);
-  })();
-
   // Costume and sound list
   {
-    const selectorListItem = await addon.tab.waitForElement("[class*='selector_list-item']");
+    const selectorListItem = await addon.tab.waitForElement("[class*='selector_list-item']", {
+      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex !== 0 && !state.scratchGui.mode.isPlayerOnly,
+    });
     const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
     verifySortableHOC(sortableHOCInstance);
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);

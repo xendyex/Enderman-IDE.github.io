@@ -1,23 +1,8 @@
 import {addLocaleData} from 'react-intl';
 
-import {localeData} from 'scratch-l10n';
-import {isRtl} from 'scratch-l10n';
-
+import {localeData, isRtl} from '@turbowarp/scratch-l10n';
 import {LANGUAGE_KEY} from '../lib/detect-locale.js';
-import mergeTranslations from '../lib/tw-translations/merge-translations.js';
-
-const editorMessages = {};
-
-const consoleError = console.error;
-console.error = function (...args) {
-    if (typeof args[0] === 'string' && args[0].includes('[React Intl]')) {
-        return;
-    }
-    consoleError.apply(this, args);
-};
-
-// tw: merge our translations into editorMessages
-mergeTranslations(editorMessages);
+import editorMessages from './tw-minimal-translations.json';
 
 addLocaleData(localeData);
 

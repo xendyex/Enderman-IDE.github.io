@@ -1,5 +1,6 @@
 [
-    "drag-drop",
-    "custom-block-shape",
-    "2d-color-picker"
+    "editor-sounds",
+    "remove-curved-stage-border",
+    "gamepad",
+    "cat-blocks"
 ]
