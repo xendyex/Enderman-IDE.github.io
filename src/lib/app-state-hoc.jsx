@@ -91,6 +91,7 @@ const AppStateHOC = function (WrappedComponent, localesOnly) {
                 initialState,
                 enhancer
             );
+            window.ReduxStore = this.store;
             AddonHooks.appStateStore = this.store;
         }
         componentDidUpdate (prevProps) {

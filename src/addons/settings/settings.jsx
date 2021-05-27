@@ -66,6 +66,7 @@ const postThrottledSettingsChange = store => {
     }
     _throttleTimeout = setTimeout(() => {
         Channels.changeChannel.postMessage({
+            version: upstreamMeta.commit,
             store
         });
     }, 100);
@@ -86,7 +87,7 @@ const sortAddons = () => {
     return result;
 };
 
-const AddonCredits = ({credits}) => (
+const CreditList = ({credits}) => (
     credits.map((author, index) => {
         const isLast = index === credits.length - 1;
         return (
@@ -112,7 +113,7 @@ const AddonCredits = ({credits}) => (
         );
     })
 );
-AddonCredits.propTypes = {
+CreditList.propTypes = {
     credits: PropTypes.arrayOf(PropTypes.shape({
         name: PropTypes.string,
         link: PropTypes.string
@@ -354,23 +355,22 @@ const Notice = ({
     notice
 }) => {
     const noticeId = notice.id;
-    // All themes require reload, so ignore these alerts from upstream.
-    // Users are already informed of this in other places of the UI.
-    if (noticeId === 'refresheditor') {
-        return null;
-    }
     const text = addonTranslations[`${addonId}/@info-${noticeId}`] || notice.text;
     return (
         <div
             className={styles.notice}
             type={notice.type}
         >
-            <img
-                className={styles.noticeIcon}
-                src={infoImage}
-                alt=""
-            />
-            {text}
+            <div>
+                <img
+                    className={styles.noticeIcon}
+                    src={infoImage}
+                    alt=""
+                />
+            </div>
+            <div>
+                {text}
+            </div>
         </div>
     );
 };
@@ -482,6 +482,14 @@ const Addon = ({
                 <div className={styles.description}>
                     {addonTranslations[`${id}/@description`] || manifest.description}
                 </div>
+                {manifest.credits && (
+                    <div className={styles.creditContainer}>
+                        <span className={styles.creditTitle}>
+                            {settingsTranslations['tw.addons.settings.credits']}
+                        </span>
+                        <CreditList credits={manifest.credits} />
+                    </div>
+                )}
                 {manifest.info && (
                     <div className={styles.noticeContainer}>
                         {manifest.info.map(info => (
@@ -491,14 +499,6 @@ const Addon = ({
                                 notice={info}
                             />
                         ))}
-                    </div>
-                )}
-                {manifest.credits && (
-                    <div className={styles.creditContainer}>
-                        <span className={styles.creditTitle}>
-                            {settingsTranslations['tw.addons.settings.credits']}
-                        </span>
-                        <AddonCredits credits={manifest.credits} />
                     </div>
                 )}
                 {manifest.settings && (
@@ -548,12 +548,14 @@ const Dirty = props => (
     <div className={styles.dirtyOuter}>
         <div className={styles.dirtyInner}>
             {settingsTranslations['tw.addons.settings.dirty']}
-            <button
-                className={classNames(styles.button, styles.dirtyButton)}
-                onClick={props.onReloadNow}
-            >
-                {settingsTranslations['tw.addons.settings.dirtyButton']}
-            </button>
+            {props.onReloadNow && (
+                <button
+                    className={classNames(styles.button, styles.dirtyButton)}
+                    onClick={props.onReloadNow}
+                >
+                    {settingsTranslations['tw.addons.settings.dirtyButton']}
+                </button>
+            )}
         </div>
     </div>
 );
@@ -694,7 +696,6 @@ class AddonSettingsComponent extends React.Component {
             dirty: false,
             search: ''
         };
-        this.konamiProgress = 0;
         for (const [id, manifest] of Object.entries(this.props.addons)) {
             const enabled = SettingsStore.getAddonEnabled(id);
             const addonState = {
@@ -719,7 +720,9 @@ class AddonSettingsComponent extends React.Component {
         document.body.removeEventListener('keydown', this.handleKeyDown);
     }
     handleSettingStoreChanged (e) {
-        const {addonId, settingId, value, reloadRequired} = e.detail;
+        const {addonId, settingId, value} = e.detail;
+        // If channels are unavailable, every change requires reload.
+        const reloadRequired = e.detail.reloadRequired || !Channels.changeChannel;
         this.setState(state => {
             const newState = {
                 [addonId]: {
@@ -860,7 +863,7 @@ class AddonSettingsComponent extends React.Component {
                     </a>
                     {this.state.dirty && (
                         <Dirty
-                            onReloadNow={this.handleReloadNow}
+                            onReloadNow={Channels.reloadChannel ? this.handleReloadNow : null}
                         />
                     )}
                 </div>

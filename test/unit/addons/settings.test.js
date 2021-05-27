@@ -1,4 +1,5 @@
 import SettingStore from '../../../src/addons/settings-store';
+import upstreamMeta from '../../../src/addons/upstream-meta.json';
 
 class LocalStorageShim {
     constructor () {
@@ -200,12 +201,12 @@ test('reset all addons', () => {
     store.addEventListener('setting-changed', fn);
     store.resetAllAddons();
     expect(fn).toHaveBeenCalledTimes(2);
-    expect(fn.mock.calls[0][0].detail.addonId).toBe('onion-skinning');
-    expect(fn.mock.calls[0][0].detail.settingId).toBe('default');
+    expect(fn.mock.calls[0][0].detail.addonId).toBe('cat-blocks');
+    expect(fn.mock.calls[0][0].detail.settingId).toBe('enabled');
     expect(fn.mock.calls[0][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[0][0].detail.value).toBe(false);
-    expect(fn.mock.calls[1][0].detail.addonId).toBe('cat-blocks');
-    expect(fn.mock.calls[1][0].detail.settingId).toBe('enabled');
+    expect(fn.mock.calls[1][0].detail.addonId).toBe('onion-skinning');
+    expect(fn.mock.calls[1][0].detail.settingId).toBe('default');
     expect(fn.mock.calls[1][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[1][0].detail.value).toBe(false);
 });
@@ -428,4 +429,31 @@ test('setStore weird values', () => {
         pause: null
     });
     expect(settingsStore.getAddonEnabled('pause')).toBe(false);
+});
+
+test('resetting an addon through setStore', () => {
+    const store = new SettingStore();
+    expect(store.getAddonSetting('custom-block-shape', 'paddingSize')).toBe(100);
+    store.setAddonSetting('custom-block-shape', 'paddingSize', 50);
+    expect(store.getAddonSetting('custom-block-shape', 'paddingSize')).toBe(50);
+    const store2 = new SettingStore();
+    store.setStore(store2.store);
+    expect(store.getAddonSetting('custom-block-shape', 'paddingSize')).toBe(100);
+});
+
+test('setStoreWithVersionCheck', () => {
+    const store = new SettingStore();
+    store.setStore = jest.fn();
+    store.setStoreWithVersionCheck({
+        store: '1234',
+        version: upstreamMeta.commit
+    });
+    expect(store.setStore).toHaveBeenCalledTimes(1);
+    expect(store.setStore).toHaveBeenCalledWith('1234');
+    store.setStore = jest.fn();
+    store.setStoreWithVersionCheck({
+        store: '1234',
+        version: 'something invalid'
+    });
+    expect(store.setStore).toHaveBeenCalledTimes(0);
 });

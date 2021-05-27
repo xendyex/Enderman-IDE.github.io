@@ -1,13 +1,6 @@
 {
   "name": "Customizable block colors",
   "description": "Edit block colors for each category in the editor.",
-  "info": [
-    {
-      "type": "notice",
-      "text": "Refresh the editor after enabling/disabling this theme.",
-      "id": "refresheditor"
-    }
-  ],
   "credits": [
     {
       "name": "NitroCipher/ZenithRogue"
@@ -20,7 +13,7 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
-
+  "versionAdded": "1.2.0",
   "userscripts": [
     {
       "url": "theme3.js",
@@ -222,6 +215,7 @@
         "data-lists-color": "#993300",
         "custom-color": "#99004d",
         "Pen-color": "#064734",
+        "tw-color": "#660000",
         "input-color": "#202020",
         "text": "white"
       }

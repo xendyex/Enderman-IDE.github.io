@@ -308,6 +308,13 @@ class SettingsStore extends EventTargetShim {
         }
     }
 
+    setStoreWithVersionCheck ({version, store}) {
+        if (version !== upstreamMeta.commit) {
+            return;
+        }
+        this.setStore(store);
+    }
+
     setStore (newStore) {
         const oldStore = this.store;
         for (const addonId of Object.keys(oldStore)) {
@@ -320,7 +327,8 @@ class SettingsStore extends EventTargetShim {
                 const manifest = this.getAddonManifest(addonId);
                 const dynamicEnable = !!manifest.dynamicEnable && !oldSettings.enabled && newSettings.enabled;
                 const dynamicDisable = !!manifest.dynamicDisable && oldSettings.enabled && !newSettings.enabled;
-                Object.assign(oldSettings, newSettings);
+                // Clone to avoid pass-by-reference issues
+                this.store[addonId] = JSON.parse(JSON.stringify(newSettings));
                 this.dispatchEvent(new CustomEvent('addon-changed', {
                     detail: {
                         addonId,
