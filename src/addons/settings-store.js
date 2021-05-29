@@ -164,11 +164,12 @@ class SettingsStore extends EventTargetShim {
         }
         this.saveToLocalStorage();
         if (value !== oldValue) {
+            const reloadRequired = value ? !manifest.dynamicEnable : !manifest.dynamicDisable;
             this.dispatchEvent(new CustomEvent('setting-changed', {
                 detail: {
                     addonId,
                     settingId: 'enabled',
-                    reloadRequired: true,
+                    reloadRequired,
                     value
                 }
             }));
@@ -307,9 +308,36 @@ class SettingsStore extends EventTargetShim {
         }
     }
 
-    setStore (store) {
-        this.store = store;
-        this.dispatchEvent(new CustomEvent('store-changed'));
+    setStoreWithVersionCheck ({version, store}) {
+        if (version !== upstreamMeta.commit) {
+            return;
+        }
+        this.setStore(store);
+    }
+
+    setStore (newStore) {
+        const oldStore = this.store;
+        for (const addonId of Object.keys(oldStore)) {
+            const oldSettings = oldStore[addonId];
+            const newSettings = newStore[addonId];
+            if (!newSettings || typeof newSettings !== 'object') {
+                continue;
+            }
+            if (JSON.stringify(oldSettings) !== JSON.stringify(newSettings)) {
+                const manifest = this.getAddonManifest(addonId);
+                const dynamicEnable = !!manifest.dynamicEnable && !oldSettings.enabled && newSettings.enabled;
+                const dynamicDisable = !!manifest.dynamicDisable && oldSettings.enabled && !newSettings.enabled;
+                // Clone to avoid pass-by-reference issues
+                this.store[addonId] = JSON.parse(JSON.stringify(newSettings));
+                this.dispatchEvent(new CustomEvent('addon-changed', {
+                    detail: {
+                        addonId,
+                        dynamicEnable,
+                        dynamicDisable
+                    }
+                }));
+            }
+        }
     }
 }
 

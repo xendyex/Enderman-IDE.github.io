@@ -23,7 +23,7 @@ const messages = defineMessages({
     help: {
         defaultMessage: 'Click for help',
         description: 'Hover text of help icon in settings',
-        id: 'tw.stetingsModal.help'
+        id: 'tw.settingsModal.help'
     }
 });
 
@@ -346,6 +346,26 @@ CustomStageSize.propTypes = {
     onStageHeightChange: PropTypes.func
 };
 
+const StoreProjectOptions = ({onStoreProjectOptions}) => (
+    <Setting>
+        <div>
+            <button
+                onClick={onStoreProjectOptions}
+                className={styles.button}
+            >
+                {'Store settings in project (Experimental)'}
+            </button>
+            <p>
+                {/* eslint-disable-next-line max-len */}
+                {'Attempts to store the selected advanced settings in a script comment in the stage so that they will be automatically applied when this project is loaded in TurboWarp. Custom stage size and warp timer will not be saved. You may have to manually download the project from TurboWarp and upload it to Scratch. This is very experimental and may be removed if it does not work as well as hoped.'}
+            </p>
+        </div>
+    </Setting>
+);
+StoreProjectOptions.propTypes = {
+    onStoreProjectOptions: PropTypes.func
+};
+
 const Header = props => (
     <div className={styles.header}>
         {props.children}
@@ -420,6 +440,9 @@ const SettingsModalComponent = props => (
             <DisableCompiler
                 value={props.disableCompiler}
                 onChange={props.onDisableCompilerChange}
+            />
+            <StoreProjectOptions
+                {...props}
             />
         </Box>
     </Modal>

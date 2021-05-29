@@ -9,7 +9,7 @@ import localesReducer, {initLocale, localesInitialState} from '../reducers/local
 
 import {setPlayer, setFullScreen} from '../reducers/mode.js';
 
-import locales from 'scratch-l10n';
+import locales from '@turbowarp/scratch-l10n';
 import {detectLocale} from './detect-locale';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -93,6 +93,7 @@ const AppStateHOC = function (WrappedComponent, localesOnly) {
                 initialState,
                 enhancer
             );
+            window.ReduxStore = this.store;
             AddonHooks.appStateStore = this.store;
         }
         componentDidUpdate (prevProps) {

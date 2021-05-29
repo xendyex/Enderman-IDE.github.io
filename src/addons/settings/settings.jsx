@@ -26,12 +26,11 @@ import upstreamMeta from '../upstream-meta.json';
 import {detectLocale} from '../../lib/detect-locale';
 import {getInitialDarkMode} from '../../lib/tw-theme-hoc.jsx';
 import SettingsStore from '../settings-store-singleton';
+import Channels from '../channels';
 import extensionImageWhite from './extension-white.svg';
 import extensionImageBlack from './extension-black.svg';
 import brushImageWhite from './brush-white.svg';
 import brushImageBlack from './brush-black.svg';
-import eggImageWhite from './egg-white.svg';
-import eggImageBlack from './egg-black.svg';
 import undoImageWhite from './undo-white.svg';
 import undoImageBlack from './undo-black.svg';
 import infoImage from './info.svg';
@@ -60,6 +59,19 @@ document.title = `${settingsTranslations['tw.addons.settings.title']} - TurboWar
 const theme = getInitialDarkMode() ? 'dark' : 'light';
 document.body.setAttribute('theme', theme);
 
+let _throttleTimeout;
+const postThrottledSettingsChange = store => {
+    if (_throttleTimeout) {
+        clearTimeout(_throttleTimeout);
+    }
+    _throttleTimeout = setTimeout(() => {
+        Channels.changeChannel.postMessage({
+            version: upstreamMeta.commit,
+            store
+        });
+    }, 100);
+};
+
 const sortAddons = () => {
     const sortedOrder = Object.keys(addons).sort((aId, bId) => {
         const aNew = addons[aId].tags.includes('new');
@@ -75,7 +87,7 @@ const sortAddons = () => {
     return result;
 };
 
-const AddonCredits = ({credits}) => (
+const CreditList = ({credits}) => (
     credits.map((author, index) => {
         const isLast = index === credits.length - 1;
         return (
@@ -101,7 +113,7 @@ const AddonCredits = ({credits}) => (
         );
     })
 );
-AddonCredits.propTypes = {
+CreditList.propTypes = {
     credits: PropTypes.arrayOf(PropTypes.shape({
         name: PropTypes.string,
         link: PropTypes.string
@@ -169,11 +181,6 @@ const Tags = ({tags}) => tags.length > 0 && (
         {tags.includes('beta') && (
             <span className={classNames(styles.tag, styles.tagBeta)}>
                 {settingsTranslations['tw.addons.settings.tags.beta']}
-            </span>
-        )}
-        {tags.includes('easterEgg') && (
-            <span className={classNames(styles.tag, styles.tagEasterEgg)}>
-                {settingsTranslations['tw.addons.settings.tags.easterEgg']}
             </span>
         )}
         {tags.includes('new') && (
@@ -348,23 +355,22 @@ const Notice = ({
     notice
 }) => {
     const noticeId = notice.id;
-    // All themes require reload, so ignore these alerts from upstream.
-    // Users are already informed of this in other places of the UI.
-    if (noticeId === 'refresheditor') {
-        return null;
-    }
     const text = addonTranslations[`${addonId}/@info-${noticeId}`] || notice.text;
     return (
         <div
             className={styles.notice}
             type={notice.type}
         >
-            <img
-                className={styles.noticeIcon}
-                src={infoImage}
-                alt=""
-            />
-            {text}
+            <div>
+                <img
+                    className={styles.noticeIcon}
+                    src={infoImage}
+                    alt=""
+                />
+            </div>
+            <div>
+                {text}
+            </div>
         </div>
     );
 };
@@ -430,12 +436,6 @@ const Addon = ({
                         src={theme === 'dark' ? brushImageWhite : brushImageBlack}
                         alt=""
                     />
-                ) : manifest.tags.includes('easterEgg') ? (
-                    <img
-                        className={styles.extensionImage}
-                        src={theme === 'dark' ? eggImageWhite : eggImageBlack}
-                        alt=""
-                    />
                 ) : (
                     <img
                         className={styles.extensionImage}
@@ -482,6 +482,14 @@ const Addon = ({
                 <div className={styles.description}>
                     {addonTranslations[`${id}/@description`] || manifest.description}
                 </div>
+                {manifest.credits && (
+                    <div className={styles.creditContainer}>
+                        <span className={styles.creditTitle}>
+                            {settingsTranslations['tw.addons.settings.credits']}
+                        </span>
+                        <CreditList credits={manifest.credits} />
+                    </div>
+                )}
                 {manifest.info && (
                     <div className={styles.noticeContainer}>
                         {manifest.info.map(info => (
@@ -491,14 +499,6 @@ const Addon = ({
                                 notice={info}
                             />
                         ))}
-                    </div>
-                )}
-                {manifest.credits && (
-                    <div className={styles.creditContainer}>
-                        <span className={styles.creditTitle}>
-                            {settingsTranslations['tw.addons.settings.credits']}
-                        </span>
-                        <AddonCredits credits={manifest.credits} />
                     </div>
                 )}
                 {manifest.settings && (
@@ -696,7 +696,6 @@ class AddonSettingsComponent extends React.Component {
             dirty: false,
             search: ''
         };
-        this.konamiProgress = 0;
         for (const [id, manifest] of Object.entries(this.props.addons)) {
             const enabled = SettingsStore.getAddonEnabled(id);
             const addonState = {
@@ -721,7 +720,9 @@ class AddonSettingsComponent extends React.Component {
         document.body.removeEventListener('keydown', this.handleKeyDown);
     }
     handleSettingStoreChanged (e) {
-        const {addonId, settingId, value, reloadRequired} = e.detail;
+        const {addonId, settingId, value} = e.detail;
+        // If channels are unavailable, every change requires reload.
+        const reloadRequired = e.detail.reloadRequired || !Channels.changeChannel;
         this.setState(state => {
             const newState = {
                 [addonId]: {
@@ -735,12 +736,13 @@ class AddonSettingsComponent extends React.Component {
             }
             return newState;
         });
-        if (!reloadRequired && this.props.onSettingsChanged) {
-            this.props.onSettingsChanged(reloadRequired);
+        if (!reloadRequired) {
+            postThrottledSettingsChange(SettingsStore.store);
         }
     }
     handleReloadNow () {
-        this.props.onReloadNow();
+        // Value posted does not matter
+        Channels.reloadChannel.postMessage(0);
         this.setState({
             dirty: false
         });
@@ -861,7 +863,7 @@ class AddonSettingsComponent extends React.Component {
                     </a>
                     {this.state.dirty && (
                         <Dirty
-                            onReloadNow={this.props.onReloadNow && this.handleReloadNow}
+                            onReloadNow={Channels.reloadChannel ? this.handleReloadNow : null}
                         />
                     )}
                 </div>
@@ -908,8 +910,6 @@ class AddonSettingsComponent extends React.Component {
 AddonSettingsComponent.propTypes = {
     addons: PropTypes.objectOf(PropTypes.object),
     unsupportedAddons: PropTypes.objectOf(PropTypes.object),
-    onReloadNow: PropTypes.func,
-    onSettingsChanged: PropTypes.func,
     onExportSettings: PropTypes.func
 };
 AddonSettingsComponent.defaultProps = {
