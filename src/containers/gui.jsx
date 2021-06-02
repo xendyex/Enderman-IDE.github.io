@@ -27,6 +27,7 @@ import {
 
 import FontLoaderHOC from '../lib/font-loader-hoc.jsx';
 import LocalizationHOC from '../lib/localization-hoc.jsx';
+import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
 import ProjectFetcherHOC from '../lib/project-fetcher-hoc.jsx';
 import TitledHOC from '../lib/titled-hoc.jsx';
 import ProjectSaverHOC from '../lib/project-saver-hoc.jsx';
@@ -35,6 +36,8 @@ import storage from '../lib/storage';
 import vmListenerHOC from '../lib/vm-listener-hoc.jsx';
 import vmManagerHOC from '../lib/vm-manager-hoc.jsx';
 import cloudManagerHOC from '../lib/cloud-manager-hoc.jsx';
+import TWFullScreenResizerHOC from '../lib/tw-fullscreen-resizer-hoc.jsx';
+import TWRestorePointHOC from '../lib/tw-restore-point-hoc.jsx';
 
 import GUIComponent from '../components/gui/gui.jsx';
 import {setIsScratchDesktop} from '../lib/isScratchDesktop.js';
@@ -152,6 +155,8 @@ const mapStateToProps = state => {
         ),
         telemetryModalVisible: state.scratchGui.modals.telemetryModal,
         tipsLibraryVisible: state.scratchGui.modals.tipsLibrary,
+        usernameModalVisible: state.scratchGui.modals.usernameModal,
+        settingsModalVisible: state.scratchGui.modals.settingsModal,
         vm: state.scratchGui.vm
     };
 };
@@ -184,7 +189,10 @@ const WrappedGui = compose(
     ProjectSaverHOC,
     vmListenerHOC,
     vmManagerHOC,
-    cloudManagerHOC
+    SBFileUploaderHOC,
+    cloudManagerHOC,
+    TWFullScreenResizerHOC,
+    TWRestorePointHOC
 )(ConnectedGUI);
 
 WrappedGui.setAppElement = ReactModal.setAppElement;

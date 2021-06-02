@@ -12,7 +12,15 @@ import {setProjectChanged, setProjectUnchanged} from '../reducers/project-change
 import {setRunningState, setTurboState, setStartedState} from '../reducers/vm-status';
 import {showExtensionAlert} from '../reducers/alerts';
 import {updateMicIndicator} from '../reducers/mic-indicator';
-import {setFramerateState, setCompilerOptionsState, addCompileError, clearCompileErrors, setRuntimeOptionsState} from '../reducers/tw';
+import {
+    setFramerateState,
+    setCompilerOptionsState,
+    addCompileError,
+    clearCompileErrors,
+    setRuntimeOptionsState,
+    setInterpolationState,
+    setHasCloudVariables
+} from '../reducers/tw';
 import analytics from './analytics';
 
 let compileErrorCounter = 0;
@@ -32,6 +40,7 @@ const vmListenerHOC = function (WrappedComponent) {
                 'handleKeyUp',
                 'handleProjectChanged',
                 'handleTargetsUpdate',
+                'handleCloudDataUpdate',
                 'handleCompileError'
             ]);
             // We have to start listening to the vm here rather than in
@@ -55,9 +64,11 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
             // tw: add handlers for our events
+            this.props.vm.on('HAS_CLOUD_DATA_UPDATE', this.handleCloudDataUpdate);
             this.props.vm.on('COMPILER_OPTIONS_CHANGED', this.props.onCompilerOptionsChanged);
             this.props.vm.on('RUNTIME_OPTIONS_CHANGED', this.props.onRuntimeOptionsChanged);
             this.props.vm.on('FRAMERATE_CHANGED', this.props.onFramerateChanged);
+            this.props.vm.on('INTERPOLATION_CHANGED', this.props.onInterpolationChanged);
             this.props.vm.on('COMPILE_ERROR', this.handleCompileError);
             this.props.vm.on('RUNTIME_STARTED', this.props.onClearCompileErrors);
         }
@@ -86,16 +97,21 @@ const vmListenerHOC = function (WrappedComponent) {
                 document.removeEventListener('keyup', this.handleKeyUp);
             }
         }
+        handleCloudDataUpdate (hasCloudVariables) {
+            if (this.props.hasCloudVariables !== hasCloudVariables) {
+                this.props.onHasCloudVariablesChanged(hasCloudVariables);
+            }
+        }
         // tw: handling for compile errors
         handleCompileError (target, error) {
             const errorMessage = `${error}`;
             // Ignore certain types of known errors
             // TODO: fix the root cause of all of these
-            if (
-                errorMessage.includes('running from toolbox?') ||
-                errorMessage.includes('This block is an input, not a stacked block') ||
-                errorMessage.includes('event_whengreaterthan')
-            ) {
+            if (errorMessage.includes('edge-activated hat')) {
+                return;
+            }
+            // Ignore intentonal errors
+            if (errorMessage.includes('Script explicitly disables compilation')) {
                 return;
             }
             // Send an analytics event the first time this happens
@@ -126,6 +142,7 @@ const vmListenerHOC = function (WrappedComponent) {
             const key = (!e.key || e.key === 'Dead') ? e.keyCode : e.key;
             this.props.vm.postIOData('keyboard', {
                 key: key,
+                keyCode: e.keyCode,
                 isDown: true
             });
 
@@ -150,6 +167,7 @@ const vmListenerHOC = function (WrappedComponent) {
             const key = (!e.key || e.key === 'Dead') ? e.keyCode : e.key;
             this.props.vm.postIOData('keyboard', {
                 key: key,
+                keyCode: e.keyCode,
                 isDown: false
             });
 
@@ -180,7 +198,10 @@ const vmListenerHOC = function (WrappedComponent) {
                 onRuntimeStopped,
                 onTurboModeOff,
                 onTurboModeOn,
+                hasCloudVariables,
+                onHasCloudVariablesChanged,
                 onFramerateChanged,
+                onInterpolationChanged,
                 onCompilerOptionsChanged,
                 onRuntimeOptionsChanged,
                 onCompileError,
@@ -210,7 +231,10 @@ const vmListenerHOC = function (WrappedComponent) {
         onTargetsUpdate: PropTypes.func.isRequired,
         onTurboModeOff: PropTypes.func.isRequired,
         onTurboModeOn: PropTypes.func.isRequired,
+        hasCloudVariables: PropTypes.bool,
+        onHasCloudVariablesChanged: PropTypes.func.isRequired,
         onFramerateChanged: PropTypes.func.isRequired,
+        onInterpolationChanged: PropTypes.func.isRequired,
         onCompilerOptionsChanged: PropTypes.func.isRequired,
         onRuntimeOptionsChanged: PropTypes.func.isRequired,
         onCompileError: PropTypes.func,
@@ -226,6 +250,7 @@ const vmListenerHOC = function (WrappedComponent) {
         onGreenFlag: () => ({})
     };
     const mapStateToProps = state => ({
+        hasCloudVariables: state.scratchGui.tw.hasCloudVariables,
         projectChanged: state.scratchGui.projectChanged,
         // Do not emit target or project updates in fullscreen or player only mode
         // or when recording sounds (it leads to garbled recordings on low-power machines)
@@ -255,7 +280,9 @@ const vmListenerHOC = function (WrappedComponent) {
         onRuntimeStopped: () => dispatch(setStartedState(false)),
         onTurboModeOn: () => dispatch(setTurboState(true)),
         onTurboModeOff: () => dispatch(setTurboState(false)),
+        onHasCloudVariablesChanged: hasCloudVariables => dispatch(setHasCloudVariables(hasCloudVariables)),
         onFramerateChanged: framerate => dispatch(setFramerateState(framerate)),
+        onInterpolationChanged: interpolation => dispatch(setInterpolationState(interpolation)),
         onCompilerOptionsChanged: options => dispatch(setCompilerOptionsState(options)),
         onRuntimeOptionsChanged: options => dispatch(setRuntimeOptionsState(options)),
         onCompileError: errors => dispatch(addCompileError(errors)),

@@ -1,5 +1,5 @@
 import './public-path';
-import './check-dependencies';
+import '../lib/normalize.css';
 import log from '../lib/log';
 
 if ('serviceWorker' in navigator) {

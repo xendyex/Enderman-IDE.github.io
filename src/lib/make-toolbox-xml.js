@@ -1,12 +1,20 @@
-import ScratchBlocks from 'scratch-blocks';
+import LazyScratchBlocks from './tw-lazy-scratch-blocks';
 
 const categorySeparator = '<sep gap="36"/>';
 
 const blockSeparator = '<sep gap="36"/>'; // At default scale, about 28px
 
+const translate = (id, english) => {
+    if (LazyScratchBlocks.isLoaded()) {
+        const ScratchBlocks = LazyScratchBlocks.get();
+        return ScratchBlocks.ScratchMsgs.translate(id, english);
+    }
+    return english;
+};
+
 /* eslint-disable no-unused-vars */
 const motion = function (isInitialSetup, isStage, targetId) {
-    const stageSelected = ScratchBlocks.ScratchMsgs.translate(
+    const stageSelected = translate(
         'MOTION_STAGE_SELECTED',
         'Stage selected: no motion blocks'
     );
@@ -152,8 +160,8 @@ const xmlEscape = function (unsafe) {
 };
 
 const looks = function (isInitialSetup, isStage, targetId, costumeName, backdropName) {
-    const hello = ScratchBlocks.ScratchMsgs.translate('LOOKS_HELLO', 'Hello!');
-    const hmm = ScratchBlocks.ScratchMsgs.translate('LOOKS_HMM', 'Hmm...');
+    const hello = translate('LOOKS_HELLO', 'Hello!');
+    const hmm = translate('LOOKS_HMM', 'Hmm...');
     return `
     <category name="%{BKY_CATEGORY_LOOKS}" id="looks" colour="#9966FF" secondaryColour="#774DCB">
         ${isStage ? '' : `
@@ -438,7 +446,7 @@ const control = function (isInitialSetup, isStage) {
 };
 
 const sensing = function (isInitialSetup, isStage) {
-    const name = ScratchBlocks.ScratchMsgs.translate('SENSING_ASK_TEXT', 'What\'s your name?');
+    const name = translate('SENSING_ASK_TEXT', 'What\'s your name?');
     return `
     <category name="%{BKY_CATEGORY_SENSING}" id="sensing" colour="#4CBFE6" secondaryColour="#2E8EB8">
         ${isStage ? '' : `
@@ -513,9 +521,9 @@ const sensing = function (isInitialSetup, isStage) {
 };
 
 const operators = function (isInitialSetup) {
-    const apple = ScratchBlocks.ScratchMsgs.translate('OPERATORS_JOIN_APPLE', 'apple');
-    const banana = ScratchBlocks.ScratchMsgs.translate('OPERATORS_JOIN_BANANA', 'banana');
-    const letter = ScratchBlocks.ScratchMsgs.translate('OPERATORS_LETTEROF_APPLE', 'a');
+    const apple = translate('OPERATORS_JOIN_APPLE', 'apple');
+    const banana = translate('OPERATORS_JOIN_BANANA', 'banana');
+    const letter = translate('OPERATORS_LETTEROF_APPLE', 'a');
     return `
     <category name="%{BKY_CATEGORY_OPERATORS}" id="operators" colour="#40BF4A" secondaryColour="#389438">
         <block type="operator_add">
@@ -724,23 +732,15 @@ const myBlocks = function () {
 };
 
 // tw: add custom category
-const turbowarp = function () {
-    return `
-    <category
-        name="TurboWarp"
-        id="turbowarp"
-        colour="#FF4D4D"
-        secondaryColour="#FF3D3D">
-    </category>
-    `;
-};
-const turbowarpIsCompiledBlock = function () {
-    return `
-    <block type="argument_reporter_boolean">
-        <field name="VALUE">is compiled?</field>
-    </block>
-    `;
-};
+// eslint-disable-next-line max-len
+const turbowarpIsCompiledBlock = `<block type="argument_reporter_boolean"><field name="VALUE">is compiled?</field></block>`;
+const turbowarpCategory = `<category
+    name="TurboWarp"
+    id="tw"
+    colour="#FF4C4C"
+    secondaryColour="#FF3D3D">
+    <button text="The other blocks have moved" callbackKey="TW_MIGRATION"></button>
+    ${turbowarpIsCompiledBlock}</category>`;
 /* eslint-enable no-unused-vars */
 
 const xmlOpen = '<xml style="display: none">';
@@ -790,9 +790,11 @@ const makeToolboxXML = function (isInitialSetup, isStage = true, targetId, categ
     const variablesXML = moveCategory('data') || variables(isInitialSetup, isStage, targetId);
     const myBlocksXML = moveCategory('procedures') || myBlocks(isInitialSetup, isStage, targetId);
     // tw: add custom category
-    let turbowarpXML = moveCategory('tw') || turbowarp(isInitialSetup, isStage, targetId);
+    let turbowarpXML = moveCategory('tw') || turbowarpCategory;
     // terrible hack to add "is compiled" to the top of the category...
-    turbowarpXML = turbowarpXML.replace('<block', `${turbowarpIsCompiledBlock()}<block`);
+    if (!turbowarpXML.includes(turbowarpIsCompiledBlock)) {
+        turbowarpXML = turbowarpXML.replace('<block', `${turbowarpIsCompiledBlock}<block`);
+    }
 
     const everything = [
         xmlOpen,

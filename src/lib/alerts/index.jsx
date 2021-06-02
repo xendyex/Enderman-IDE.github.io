@@ -129,7 +129,7 @@ const alerts = [
         clearList: ['createSuccess', 'creating', 'createCopySuccess', 'creatingCopy',
             'createRemixSuccess', 'creatingRemix', 'saveSuccess', 'saving'],
         showDownload: true,
-        showSaveNow: true,
+        // showSaveNow: true,
         closeButton: false,
         content: (
             <FormattedMessage
@@ -185,6 +185,19 @@ const alerts = [
         level: AlertLevels.INFO
     },
     {
+        alertId: 'twAutosaving',
+        alertType: AlertTypes.INLINE,
+        content: (
+            <FormattedMessage
+                defaultMessage="Creating restore point…"
+                description="Message indicating that a restore point is being created"
+                id="tw.alerts.autosaving"
+            />
+        ),
+        iconSpinner: true,
+        level: AlertLevels.INFO
+    },
+    {
         alertId: 'cloudInfo',
         alertType: AlertTypes.STANDARD,
         clearList: ['cloudInfo'],
@@ -227,86 +240,6 @@ const alerts = [
         ),
         iconSpinner: true,
         level: AlertLevels.SUCCESS
-    },
-    {
-        alertId: 'twWarning',
-        alertType: AlertTypes.STANDARD,
-        clearList: [],
-        content: (
-            <center>
-                <div>
-                    <FormattedMessage
-                        defaultMessage="Important Reminders"
-                        description="Header of the warning that appears when the editor is opened"
-                        id="tw.alerts.warning.top"
-                    />
-                </div>
-                <hr />
-                <div>
-                    <FormattedMessage
-                        defaultMessage="Save your project often, otherwise you will {loseAllYourWork} when the project crashes."
-                        description="Part of the warning that appears when the editor is opened"
-                        id="tw.alerts.warning.saveOften"
-                        values={{
-                            loseAllYourWork: <i>
-                                <FormattedMessage
-                                    defaultMessage="irrecoverably lose all of your work"
-                                    description="a harsh way to phrase losing all of one's work"
-                                    id="tw.alerts.warning.saveOften.loseAllYourWork"
-                                />
-                            </i>
-                        }}
-                    />
-                </div>
-                <hr />
-                <div>
-                    <FormattedMessage
-                        defaultMessage="Warp Timer has been enabled because you opened the editor. This fixes most crashes but hurts performance."
-                        description="Part of the warning that appears when the editor is opened"
-                        id="tw.alerts.warning.warpTimer"
-                    />
-                </div>
-                <hr />
-                <div>
-                    <FormattedMessage
-                        defaultMessage="Scripts may need to be restarted for changes to apply."
-                        description="Part of the warning that appears when the editor is opened"
-                        id="tw.alerts.warning.restartScripts"
-                    />
-                </div>
-            </center>
-        ),
-        closeButton: true,
-        level: AlertLevels.WARN
-    },
-    {
-        alertId: 'twExtendedExtensionsWarning',
-        alertType: AlertTypes.STANDARD,
-        clearList: ['twExtendedExtensionsWarning'],
-        content: (
-            <FormattedMessage
-                defaultMessage="This project uses blocks exclusive to TurboWarp. It will not work in Scratch and should not be uploaded to the Scratch website. {learnMoreLink}"
-                description="Warning that this project uses blocks that will only work in TurboWarp"
-                id="tw.alerts.extendedExtensionsWarning"
-                values={{
-                    learnMoreLink: (
-                        <a
-                            href="https://github.com/TurboWarp/scratch-gui/wiki/TurboWarp-blocks"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            <FormattedMessage
-                                defaultMessage="Learn more."
-                                description="Link text to TurboWarp-exclusive blocks FAQ"
-                                id="tw.alerts.extendedExtensionsWarning.learnMoreLink"
-                            />
-                        </a>
-                    )
-                }}
-            />
-        ),
-        closeButton: true,
-        level: AlertLevels.WARN
     }
 ];
 

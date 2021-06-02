@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {injectIntl, defineMessages, intlShape} from 'react-intl';
-import {projectTitleInitialState} from '../reducers/project-title';
+import {projectTitleInitialState, setProjectTitle} from '../reducers/project-title';
 import downloadBlob from '../lib/download-blob';
 import {setProjectUnchanged} from '../reducers/project-changed';
 import {showStandardAlert, showAlertWithTimeout} from '../reducers/alerts';
-import {setFileHandle, setShowedExtendedExtensionsWarning} from '../reducers/tw';
+import {setFileHandle} from '../reducers/tw';
 import FileSystemAPI from '../lib/tw-filesystem-api';
 
 // tw: we make some extensive changes to file saving
@@ -22,6 +22,16 @@ const messages = defineMessages({
         id: 'tw.fs.saveError'
     }
 });
+
+// from sb-file-uploader-hoc.jsx
+const getProjectTitleFromFilename = fileInputFilename => {
+    if (!fileInputFilename) return '';
+    // only parse title with valid scratch project extensions
+    // (.sb, .sb2, and .sb3)
+    const matches = fileInputFilename.match(/^(.*)\.sb[23]?$/);
+    if (!matches) return '';
+    return matches[1].substring(0, 100); // truncate project title to max 100 chars
+};
 
 /**
  * Project saver component passes a downloadProject function to its child.
@@ -60,20 +70,19 @@ class SB3Downloader extends React.Component {
     downloadProject () {
         this.startedSaving();
         this.props.saveProjectSb3().then(content => {
-            if (content.usesExtendedExtensions) {
-                if (!this.props.showedExtendedExtensionsWarning) {
-                    this.props.onShowExtendedExtensionsWarning();
-                }
-            }
             this.finishedSaving();
             downloadBlob(this.props.projectFilename, content);
         });
     }
     async saveAsNew () {
         try {
-            const handle = await FileSystemAPI.showSaveFilePicker();
+            const handle = await FileSystemAPI.showSaveFilePicker(this.props.projectFilename);
             await this.saveToHandle(handle);
             this.props.onSetFileHandle(handle);
+            const title = getProjectTitleFromFilename(handle.name);
+            if (title) {
+                this.props.onSetProjectTitle(title);
+            }
         } catch (e) {
             this.handleSaveError(e);
         }
@@ -157,9 +166,8 @@ SB3Downloader.propTypes = {
     onSaveFinished: PropTypes.func,
     projectFilename: PropTypes.string,
     saveProjectSb3: PropTypes.func,
-    showedExtendedExtensionsWarning: PropTypes.bool,
-    onShowExtendedExtensionsWarning: PropTypes.func,
     onSetFileHandle: PropTypes.func,
+    onSetProjectTitle: PropTypes.func,
     onShowSavingAlert: PropTypes.func,
     onShowSaveSuccessAlert: PropTypes.func,
     onShowSaveErrorAlert: PropTypes.func,
@@ -172,16 +180,12 @@ SB3Downloader.defaultProps = {
 const mapStateToProps = state => ({
     fileHandle: state.scratchGui.tw.fileHandle,
     saveProjectSb3: state.scratchGui.vm.saveProjectSb3.bind(state.scratchGui.vm),
-    projectFilename: getProjectFilename(state.scratchGui.projectTitle, projectTitleInitialState),
-    showedExtendedExtensionsWarning: state.scratchGui.tw.showedExtendedExtensionsWarning
+    projectFilename: getProjectFilename(state.scratchGui.projectTitle, projectTitleInitialState)
 });
 
 const mapDispatchToProps = dispatch => ({
     onSetFileHandle: fileHandle => dispatch(setFileHandle(fileHandle)),
-    onShowExtendedExtensionsWarning: () => {
-        dispatch(showStandardAlert('twExtendedExtensionsWarning'));
-        dispatch(setShowedExtendedExtensionsWarning(true));
-    },
+    onSetProjectTitle: title => dispatch(setProjectTitle(title)),
     onShowSavingAlert: () => showAlertWithTimeout(dispatch, 'saving'),
     onShowSaveSuccessAlert: () => showAlertWithTimeout(dispatch, 'twSaveToDiskSuccess'),
     onShowSaveErrorAlert: () => dispatch(showStandardAlert('savingError')),

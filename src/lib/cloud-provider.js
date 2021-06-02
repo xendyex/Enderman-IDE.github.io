@@ -42,7 +42,7 @@ class CloudProvider {
 
         try {
             // tw: only add ws:// or wss:// if it not already present in the cloudHost
-            if (!(this.cloudHost.includes('ws://') || this.cloudHost.includes('wss://'))) {
+            if (!this.cloudHost || (!this.cloudHost.includes('ws://') && !this.cloudHost.includes('wss://'))) {
                 this.cloudHost = (location.protocol === 'http:' ? 'ws://' : 'wss://') + this.cloudHost;
             }
             this.connection = new WebSocket(this.cloudHost);
@@ -92,9 +92,9 @@ class CloudProvider {
 
     onClose (e) {
         // tw: code 4002 is "Username Error" -- do not try to reconnect
-        if (e.code === 4002) {
+        if (e && e.code === 4002) {
             log.info('Cloud username is invalid. Not reconnecting.');
-            this.onInvalidUsername(this.username);
+            this.onInvalidUsername();
             return;
         }
         log.info(`Closed connection to websocket`);
@@ -103,7 +103,7 @@ class CloudProvider {
     }
 
     // tw: method called when username is invalid
-    onInvalidUsername (username) { /* no-op */ }
+    onInvalidUsername () { /* no-op */ }
 
     exponentialTimeout () {
         return (Math.pow(2, Math.min(this.connectionAttempts, 5)) - 1) * 1000;

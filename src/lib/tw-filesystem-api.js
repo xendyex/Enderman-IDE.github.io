@@ -1,6 +1,7 @@
 const available = () => !!window.showSaveFilePicker;
 
-const showSaveFilePicker = async () => await window.showSaveFilePicker({
+const showSaveFilePicker = fileName => window.showSaveFilePicker({
+    suggestedName: fileName,
     types: [
         {
             description: 'Scratch 3 Project',
@@ -8,7 +9,8 @@ const showSaveFilePicker = async () => await window.showSaveFilePicker({
                 'application/x.scratch.sb3': '.sb3'
             }
         }
-    ]
+    ],
+    excludeAcceptAllOption: true
 });
 
 const showOpenFilePicker = async () => {
@@ -26,11 +28,9 @@ const showOpenFilePicker = async () => {
     return handle;
 };
 
-const createWritable = (handle) => {
-    return handle.createWritable();
-};
+const createWritable = handle => handle.createWritable();
 
-const closeWritable = async (writable) => {
+const closeWritable = async writable => {
     await writable.close();
 };
 

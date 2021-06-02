@@ -8,8 +8,8 @@ import {connect} from 'react-redux';
 import {STAGE_DISPLAY_SIZES} from '../lib/layout-constants';
 import {getEventXY} from '../lib/touch-utils';
 import VideoProvider from '../lib/video/video-provider';
-import {SVGRenderer as V2SVGAdapter} from 'scratch-svg-renderer';
 import {BitmapAdapter as V2BitmapAdapter} from 'scratch-svg-renderer';
+import twStageSize from '../lib/tw-stage-size';
 
 import StageComponent from '../components/stage/stage.jsx';
 
@@ -38,6 +38,7 @@ class Stage extends React.Component {
             'onStartDrag',
             'onStopDrag',
             'onWheel',
+            'onContextMenu',
             'updateRect',
             'questionListener',
             'setDragCanvas',
@@ -59,7 +60,15 @@ class Stage extends React.Component {
             this.canvas = this.renderer.canvas;
         } else {
             this.canvas = document.createElement('canvas');
-            this.renderer = new Renderer(this.canvas);
+            this.renderer = new Renderer(
+                this.canvas,
+                -twStageSize.width / 2,
+                twStageSize.width / 2,
+                -twStageSize.height / 2,
+                twStageSize.height / 2
+            );
+            this.props.vm.runtime.stageWidth = twStageSize.width;
+            this.props.vm.runtime.stageHeight = twStageSize.height;
             this.props.vm.attachRenderer(this.renderer);
 
             // Only attach a video provider once because it is stateful
@@ -72,9 +81,8 @@ class Stage extends React.Component {
             this.props.vm.renderer.draw();
 
             // tw: handle changes to high quality pen
-            this.props.vm.renderer.on('UseHighQualityPenChanged', this.props.onHighQualityPenChanged);
+            this.props.vm.renderer.on('UseHighQualityRenderChanged', this.props.onHighQualityPenChanged);
         }
-        this.props.vm.attachV2SVGAdapter(new V2SVGAdapter());
         this.props.vm.attachV2BitmapAdapter(new V2BitmapAdapter());
     }
     componentDidMount () {
@@ -315,7 +323,9 @@ class Stage extends React.Component {
         this.props.vm.postIOData('mouseWheel', data);
     }
     onContextMenu (e) {
-        e.preventDefault();
+        if (this.props.vm.runtime.ioDevices.mouse.usesRightClickDown) {
+            e.preventDefault();
+        }
     }
     cancelMouseDownTimeout () {
         if (this.state.mouseDownTimeoutId !== null) {
@@ -361,28 +371,15 @@ class Stage extends React.Component {
     }
     onStartDrag (x, y) {
         if (this.state.dragId) return;
-
-        // Targets with no attached drawable cannot be dragged.
-        let draggableTargets = this.props.vm.runtime.targets.filter(
-            target => Number.isFinite(target.drawableID)
-        );
-
-        // Because pick queries can be expensive, only perform them for drawables that are currently draggable.
-        // If we're in the editor, we can drag all targets. Otherwise, filter.
-        if (!this.props.useEditorDragStyle) {
-            draggableTargets = draggableTargets.filter(
-                target => target.draggable
-            );
-        }
-        if (draggableTargets.length === 0) return;
-
-        const draggableIDs = draggableTargets.map(target => target.drawableID);
-        const drawableId = this.renderer.pick(x, y, 1, 1, draggableIDs);
+        const drawableId = this.renderer.pick(x, y);
         if (drawableId === null) return;
         const targetId = this.props.vm.getTargetIdForDrawableId(drawableId);
         if (targetId === null) return;
 
         const target = this.props.vm.runtime.getTargetById(targetId);
+
+        // Do not start drag unless in editor drag mode or target is draggable
+        if (!(this.props.useEditorDragStyle || target.draggable)) return;
 
         // Dragging always brings the target to the front
         target.goToFront();
@@ -468,6 +465,7 @@ Stage.propTypes = {
     disableEditingTargetChange: PropTypes.bool,
     isColorPicking: PropTypes.bool,
     isFullScreen: PropTypes.bool.isRequired,
+    isPlayerOnly: PropTypes.bool,
     // tw: update when dimensions or isWindowFullScreen changes
     isWindowFullScreen: PropTypes.bool,
     dimensions: PropTypes.arrayOf(PropTypes.number),
@@ -496,6 +494,7 @@ const mapStateToProps = state => ({
     isColorPicking: state.scratchGui.colorPicker.active,
     // tw: embed is always considered fullscreen
     isFullScreen: state.scratchGui.mode.isFullScreen || state.scratchGui.mode.isEmbedded,
+    isPlayerOnly: state.scratchGui.mode.isPlayerOnly,
     // tw: update when dimensions or isWindowFullScreen changes
     isWindowFullScreen: state.scratchGui.tw.isWindowFullScreen,
     dimensions: state.scratchGui.tw.dimensions,
