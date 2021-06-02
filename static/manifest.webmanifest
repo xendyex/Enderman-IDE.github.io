@@ -1,25 +1,21 @@
 {
   "short_name": "TurboWarp",
   "name": "TurboWarp",
-  "description": "Scratch editor with a compiler, dark mode, addons, and more.",
+  "description": "Scratch mod with a compiler, dark mode, addons, and more.",
   "icons": [
     {
-      "src": "/pwa/images/192.png",
+      "src": "images/192.png",
       "type": "image/png",
       "sizes": "192x192"
+    },
+    {
+      "src": "images/512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
-  "start_url": "/pwa/editor?pwa",
+  "start_url": "editor",
   "background_color": "#333333",
   "display": "standalone",
-  "scope": "/pwa/",
-  "theme_color": "#333333",
-  "shortcuts": [
-    {
-      "name": "Without compiler",
-      "short_name": "Without compiler",
-      "description": "The editor without the compiler",
-      "url": "/pwa/editor?pwa&nocompile"
-    }
-  ]
+  "theme_color": "#333333"
 }
