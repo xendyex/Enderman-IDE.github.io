@@ -1,10 +1,10 @@
 {
   "short_name": "TurboWarp",
   "name": "TurboWarp",
-  "description": "Scratch editor with a compiler.",
+  "description": "Scratch editor with a compiler, dark mode, addons, and more.",
   "icons": [
     {
-      "src": "/static/images/192.png",
+      "src": "/images/192.png",
       "type": "image/png",
       "sizes": "192x192"
     }
@@ -16,7 +16,7 @@
   "theme_color": "#333333",
   "shortcuts": [
     {
-      "name": "Without comipler",
+      "name": "Without compiler",
       "short_name": "Without compiler",
       "description": "The editor without the compiler",
       "url": "/pwa/editor?pwa&nocompile"
