@@ -4,7 +4,7 @@
   "description": "Scratch editor with a compiler, dark mode, addons, and more.",
   "icons": [
     {
-      "src": "/images/192.png",
+      "src": "/pwa/images/192.png",
       "type": "image/png",
       "sizes": "192x192"
     }
