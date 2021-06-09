@@ -84,7 +84,10 @@ class Search {
             processItem(this.items[i], i);
         }
         result.sort((a, b) => b.score - a.score);
-        return result;
+        return {
+            items: result,
+            terms
+        };
     }
 }
 

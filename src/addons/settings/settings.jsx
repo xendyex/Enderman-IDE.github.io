@@ -17,6 +17,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import reactStringReplace from 'react-string-replace';
 
 import Search from './search';
 import importedAddons, {unsupportedAddons} from '../addon-manifests';
@@ -87,6 +88,8 @@ const sortAddons = () => {
     }
     return result;
 };
+
+const escapeForRegExp = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const CreditList = ({credits}) => (
     credits.map((author, index) => {
@@ -167,37 +170,80 @@ Select.propTypes = {
     }))
 };
 
-const Tags = ({tags}) => tags.length > 0 && (
+
+const HighlightedText = ({text, highlight, ...props}) => {
+    if (highlight === null) {
+        return <div {...props}>{text}</div>;
+    }
+    let result = text;
+    const regex = new RegExp(`(${highlight.map(escapeForRegExp).join('|')})`, 'gi');
+    result = reactStringReplace(text, regex, (match, index) => (
+        <mark
+            key={`${match}${index}`}
+            className={styles.highlight}
+        >
+            {match}
+        </mark>
+    ));
+    return (
+        <div {...props}>
+            {result}
+        </div>
+    );
+};
+const highlightPropType = PropTypes.arrayOf(PropTypes.string);
+HighlightedText.propTypes = {
+    text: PropTypes.string.isRequired,
+    highlight: highlightPropType
+};
+
+const Tags = ({tags, highlight}) => tags.length > 0 && (
     <span className={styles.tagContainer}>
         {tags.includes('recommended') && (
             <span className={classNames(styles.tag, styles.tagRecommended)}>
-                {settingsTranslations['tw.addons.settings.tags.recommended']}
+                <HighlightedText
+                    highlight={highlight}
+                    text={settingsTranslations['tw.addons.settings.tags.recommended']}
+                />
             </span>
         )}
         {tags.includes('theme') && (
             <span className={classNames(styles.tag, styles.tagTheme)}>
-                {settingsTranslations['tw.addons.settings.tags.theme']}
+                <HighlightedText
+                    highlight={highlight}
+                    text={settingsTranslations['tw.addons.settings.tags.theme']}
+                />
             </span>
         )}
         {tags.includes('beta') && (
             <span className={classNames(styles.tag, styles.tagBeta)}>
-                {settingsTranslations['tw.addons.settings.tags.beta']}
+                <HighlightedText
+                    highlight={highlight}
+                    text={settingsTranslations['tw.addons.settings.tags.beta']}
+                />
             </span>
         )}
         {tags.includes('new') && (
             <span className={classNames(styles.tag, styles.tagNew)}>
-                {settingsTranslations['tw.addons.settings.tags.new']}
+                <HighlightedText
+                    highlight={highlight}
+                    text={settingsTranslations['tw.addons.settings.tags.new']}
+                />
             </span>
         )}
         {tags.includes('turbowarp') && (
             <span className={classNames(styles.tag, styles.tagTurbowarp)}>
-                {'TurboWarp'}
+                <HighlightedText
+                    highlight={highlight}
+                    text={'TurboWarp'}
+                />
             </span>
         )}
     </span>
 );
 Tags.propTypes = {
-    tags: PropTypes.arrayOf(PropTypes.string)
+    tags: PropTypes.arrayOf(PropTypes.string),
+    highlight: highlightPropType
 };
 
 class BufferedInput extends React.Component {
@@ -258,7 +304,8 @@ BufferedInput.propTypes = {
 const Setting = ({
     addonId,
     setting,
-    value
+    value,
+    highlight
 }) => {
     const settingId = setting.id;
     const settingName = addonTranslations[`${addonId}/@settings-name-${settingId}`] || setting.name;
@@ -268,7 +315,10 @@ const Setting = ({
             htmlFor={uniqueId}
             className={styles.settingLabel}
         >
-            {settingName}
+            <HighlightedText
+                text={settingName}
+                highlight={highlight}
+            />
         </label>
     );
     return (
@@ -348,12 +398,14 @@ Setting.propTypes = {
             name: PropTypes.string
         }))
     }),
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number])
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
+    highlight: highlightPropType
 };
 
 const Notice = ({
     addonId,
-    notice
+    notice,
+    highlight
 }) => {
     const noticeId = notice.id;
     const text = addonTranslations[`${addonId}/@info-${noticeId}`] || notice.text;
@@ -370,7 +422,10 @@ const Notice = ({
                 />
             </div>
             <div>
-                {text}
+                <HighlightedText
+                    text={text}
+                    highlight={highlight}
+                />
             </div>
         </div>
     );
@@ -381,12 +436,14 @@ Notice.propTypes = {
         type: PropTypes.string,
         text: PropTypes.string,
         id: PropTypes.string
-    })
+    }),
+    highlight: highlightPropType
 };
 
 const Presets = ({
     addonId,
-    presets
+    presets,
+    highlight
 }) => (
     <div className={classNames(styles.setting, styles.presets)}>
         <div className={styles.settingLabel}>
@@ -403,7 +460,10 @@ const Presets = ({
                     className={classNames(styles.button, styles.presetButton)}
                     onClick={() => SettingsStore.applyAddonPreset(addonId, presetId)}
                 >
-                    {name}
+                    <HighlightedText
+                        text={name}
+                        highlight={highlight}
+                    />
                 </button>
             );
         })}
@@ -416,13 +476,15 @@ Presets.propTypes = {
         id: PropTypes.string,
         description: PropTypes.string,
         values: PropTypes.object
-    }))
+    })),
+    highlight: highlightPropType
 };
 
 const Addon = ({
     id,
     settings,
-    manifest
+    manifest,
+    highlight
 }) => (
     <div className={classNames(styles.addon, {[styles.addonDirty]: settings.dirty})}>
         <div className={styles.addonHeader}>
@@ -444,17 +506,22 @@ const Addon = ({
                         alt=""
                     />
                 )}
-                <div className={styles.addonTitleText}>
-                    {addonTranslations[`${id}/@name`] || manifest.name}
-                </div>
+                <HighlightedText
+                    className={styles.addonTitleText}
+                    text={addonTranslations[`${id}/@name`] || manifest.name}
+                    highlight={highlight}
+                />
             </label>
             <Tags
                 tags={manifest.tags}
+                highlight={highlight}
             />
             {!settings.enabled && (
-                <div className={styles.inlineDescription}>
-                    {addonTranslations[`${id}/@description`] || manifest.description}
-                </div>
+                <HighlightedText
+                    className={styles.inlineDescription}
+                    text={addonTranslations[`${id}/@description`] || manifest.description}
+                    highlight={highlight}
+                />
             )}
             <div className={styles.addonOperations}>
                 {settings.enabled && manifest.settings && (
@@ -480,9 +547,11 @@ const Addon = ({
         </div>
         {settings.enabled && (
             <div className={styles.addonDetails}>
-                <div className={styles.description}>
-                    {addonTranslations[`${id}/@description`] || manifest.description}
-                </div>
+                <HighlightedText
+                    className={styles.description}
+                    text={addonTranslations[`${id}/@description`] || manifest.description}
+                    highlight={highlight}
+                />
                 {manifest.credits && (
                     <div className={styles.creditContainer}>
                         <span className={styles.creditTitle}>
@@ -498,6 +567,7 @@ const Addon = ({
                                 key={info.id}
                                 addonId={id}
                                 notice={info}
+                                highlight={highlight}
                             />
                         ))}
                     </div>
@@ -510,12 +580,14 @@ const Addon = ({
                                 addonId={id}
                                 setting={setting}
                                 value={settings[setting.id]}
+                                highlight={highlight}
                             />
                         ))}
                         {manifest.presets && (
                             <Presets
                                 addonId={id}
                                 presets={manifest.presets}
+                                highlight={highlight}
                             />
                         )}
                     </div>
@@ -542,7 +614,8 @@ Addon.propTypes = {
         })),
         presets: PropTypes.array,
         tags: PropTypes.arrayOf(PropTypes.string)
-    })
+    }),
+    highlight: highlightPropType
 };
 
 const Dirty = props => (
@@ -632,10 +705,14 @@ class AddonList extends React.Component {
     }
     render () {
         let addons;
+        let highlight;
         if (this.props.search) {
-            addons = this.search.search(this.props.search).map(({index}) => this.props.addons[index]);
+            const searchResult = this.search.search(this.props.search);
+            addons = searchResult.items.map(({index}) => this.props.addons[index]);
+            highlight = searchResult.terms;
         } else {
             addons = this.props.addons;
+            highlight = null;
         }
         return (
             <div>
@@ -645,6 +722,7 @@ class AddonList extends React.Component {
                         id={id}
                         settings={state}
                         manifest={manifest}
+                        highlight={highlight}
                     />
                 ))}
             </div>
