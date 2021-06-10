@@ -52,6 +52,11 @@ const TWPackagerHOC = function (WrappedComponent) {
             }
         }
         loadProject () {
+            if (this.loaded) {
+                return;
+            }
+            this.loaded = true;
+
             this.props.onLoadingStarted();
 
             // projectData might be a data: URI or a path to a file, fetch will deal with both of these.

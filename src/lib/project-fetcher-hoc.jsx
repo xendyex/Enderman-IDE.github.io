@@ -67,9 +67,6 @@ const ProjectFetcherHOC = function (WrappedComponent) {
             if (this.props.isShowingProject && !prevProps.isShowingProject) {
                 this.props.onProjectUnchanged();
             }
-            if (this.props.isShowingProject && (prevProps.isLoadingProject || prevProps.isCreatingNew)) {
-                this.props.onActivateTab(BLOCKS_TAB_INDEX);
-            }
         }
         fetchProject (projectId, loadingState) {
             // tw: clear and stop the VM before fetching
