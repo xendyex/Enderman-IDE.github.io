@@ -323,7 +323,7 @@ const CustomStageSize = ({
                 onSubmit={onStageWidthChange}
                 type="number"
                 min="0"
-                max="4096"
+                max="1024"
                 step="1"
             />
             <span>{'×'}</span>
@@ -332,9 +332,21 @@ const CustomStageSize = ({
                 onSubmit={onStageHeightChange}
                 type="number"
                 min="0"
-                max="4096"
+                max="1024"
                 step="1"
             />
+        </div>
+        <div>
+            {(stageWidth > 1024 || stageHeight > 1024) && (
+                <div className={styles.warning}>
+                    <FormattedMessage
+                        // eslint-disable-next-line max-len
+                        defaultMessage="Using a custom stage size this large is not recommended! Instead, use a lower size with the same aspect ratio and let fullscreen mode upscale it to match the user's display."
+                        description="Warning about using stages that are too large in settings modal"
+                        id="tw.settingsModal.largeStageWarning"
+                    />
+                </div>
+            )}
         </div>
     </Setting>
 );
@@ -353,11 +365,19 @@ const StoreProjectOptions = ({onStoreProjectOptions}) => (
                 onClick={onStoreProjectOptions}
                 className={styles.button}
             >
-                {'Store settings in project (Experimental)'}
+                <FormattedMessage
+                    defaultMessage="Store settings in project (Experimental)"
+                    description="Button in settings modal"
+                    id="tw.settingsModal.storeProjectOptions"
+                />
             </button>
             <p>
-                {/* eslint-disable-next-line max-len */}
-                {'Attempts to store the selected advanced settings in a script comment in the stage so that they will be automatically applied when this project is loaded in TurboWarp. Custom stage size and warp timer will not be saved. You may have to manually download the project from TurboWarp and upload it to Scratch. This is very experimental and may be removed if it does not work as well as hoped.'}
+                <FormattedMessage
+                    // eslint-disable-next-line max-len
+                    defaultMessage="Stores the selected settings in the project so they will be automatically applied when TurboWarp loads this project. Custom stage size and warp timer will not be saved. This is an experimental feature that may be removed."
+                    description="Help text for the store settings in project button"
+                    id="tw.settingsModal.storeProjectOptionsHelp"
+                />
             </p>
         </div>
     </Setting>
@@ -400,6 +420,16 @@ const SettingsModalComponent = props => (
                 value={props.interpolation}
                 onChange={props.onInterpolationChange}
             />
+            {(props.framerate === 60 && props.interpolation) && (
+                <div className={styles.warning}>
+                    <FormattedMessage
+                        // eslint-disable-next-line max-len
+                        defaultMessage="Using 60 FPS and interpolation together can cause unexpected behavior. You most likely want to enable just 60 FPS or just interpolation, not both. If you're not sure which to use, try interpolation first."
+                        description="Settings modal warning when both 60 FPS mode and interpolation are enabled"
+                        id="tw.settingsModal.interp60Warning"
+                    />
+                </div>
+            )}
             <HighQualityPen
                 value={props.highQualityPen}
                 onChange={props.onHighQualityPenChange}
@@ -451,7 +481,6 @@ const SettingsModalComponent = props => (
 SettingsModalComponent.propTypes = {
     intl: intlShape,
     onClose: PropTypes.func,
-    reloadRequired: PropTypes.bool,
     framerate: PropTypes.number,
     onFramerateChange: PropTypes.func,
     onCustomizeFramerate: PropTypes.func,

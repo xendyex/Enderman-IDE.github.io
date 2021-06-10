@@ -20,18 +20,17 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {FormattedMessage, defineMessages, injectIntl, intlShape} from 'react-intl';
+import {getIsLoading} from '../reducers/project-state.js';
 import DOMElementRenderer from '../containers/dom-element-renderer.jsx';
 import AppStateHOC from '../lib/app-state-hoc.jsx';
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import TWProjectMetaFetcherHOC from '../lib/tw-project-meta-fetcher-hoc.jsx';
-import TWEditorWarningHOC from '../lib/tw-editor-warning-hoc.jsx';
 import TWStateManagerHOC from '../lib/tw-state-manager-hoc.jsx';
 import TWThemeHOC from '../lib/tw-theme-hoc.jsx';
 import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
 import SettingsStore from '../addons/settings-store-singleton';
 import twStageSize from '../lib/tw-stage-size';
 import '../lib/tw-fix-history-api';
-
 import GUI from './render-gui.jsx';
 import MenuBar from '../components/menu-bar/menu-bar.jsx';
 import ProjectInput from '../components/tw-project-input/project-input.jsx';
@@ -42,6 +41,7 @@ import TWEvalModal from '../components/webgl-modal/tw-eval-modal.jsx';
 import CloudVariableBadge from '../components/tw-cloud-variable-badge/cloud-variable-badge.jsx';
 import {isRendererSupported, isEvalSupported} from '../lib/tw-environment-support-prober';
 import AddonChannels from '../addons/channels';
+import loadServiceWorker from './load-service-worker';
 
 import styles from './interface.css';
 
@@ -101,13 +101,6 @@ const Footer = () => (
             </div>
             <div className={styles.footerColumns}>
                 <div className={styles.footerSection}>
-                    <div className={styles.footerHeader}>
-                        <FormattedMessage
-                            defaultMessage="Credits"
-                            description="Credits link in footer"
-                            id="tw.footer.credits"
-                        />
-                    </div>
                     <a href="https://fosshost.org/">
                         <FormattedMessage
                             defaultMessage="Hosting provided by Fosshost"
@@ -124,13 +117,6 @@ const Footer = () => (
                     </a>
                 </div>
                 <div className={styles.footerSection}>
-                    <div className={styles.footerHeader}>
-                        <FormattedMessage
-                            defaultMessage="Links"
-                            description="Title of links section of footer"
-                            id="tw.footer.links"
-                        />
-                    </div>
                     <a href="https://desktop.turbowarp.org/">
                         {/* Do not translate */}
                         {'TurboWarp Desktop'}
@@ -143,18 +129,25 @@ const Footer = () => (
                         <FormattedMessage
                             defaultMessage="Embedding"
                             description="Menu bar item for embedding link"
-                            id="tw.menuBar.embed"
+                            id="tw.footer.embed"
+                        />
+                    </a>
+                    <a href="https://github.com/TurboWarp/scratch-gui/wiki/URL-Parameters">
+                        <FormattedMessage
+                            defaultMessage="URL Parameters"
+                            description="Menu bar item for URL parameters link"
+                            id="tw.footer.parameters"
+                        />
+                    </a>
+                    <a href="https://github.com/TurboWarp/scratch-gui/wiki/Help-translate-TurboWarp">
+                        <FormattedMessage
+                            defaultMessage="Help Translate TurboWarp"
+                            description="Menu bar item for translating TurboWarp link"
+                            id="tw.footer.translate"
                         />
                     </a>
                 </div>
                 <div className={styles.footerSection}>
-                    <div className={styles.footerHeader}>
-                        <FormattedMessage
-                            defaultMessage="About"
-                            description="Title of about section of footer"
-                            id="tw.footer.about"
-                        />
-                    </div>
                     <a href="https://scratch.mit.edu/users/GarboMuffin/#comments">
                         <FormattedMessage
                             defaultMessage="Feedback & Bugs"
@@ -186,6 +179,11 @@ class Interface extends React.Component {
     constructor (props) {
         super(props);
         this.handleUpdateProjectTitle = this.handleUpdateProjectTitle.bind(this);
+    }
+    componentDidUpdate (prevProps) {
+        if (prevProps.isLoading && !this.props.isLoading) {
+            loadServiceWorker();
+        }
     }
     handleUpdateProjectTitle (title, isDefault) {
         if (isDefault || !title) {
@@ -294,8 +292,9 @@ Interface.propTypes = {
         instructions: PropTypes.string
     }),
     isFullScreen: PropTypes.bool,
-    isRtl: PropTypes.bool,
+    isLoading: PropTypes.bool,
     isPlayerOnly: PropTypes.bool,
+    isRtl: PropTypes.bool,
     onClickTheme: PropTypes.func,
     projectId: PropTypes.string
 };
@@ -304,6 +303,7 @@ const mapStateToProps = state => ({
     hasCloudVariables: state.scratchGui.tw.hasCloudVariables,
     description: state.scratchGui.tw.description,
     isFullScreen: state.scratchGui.mode.isFullScreen,
+    isLoading: getIsLoading(state.scratchGui.projectState.loadingState),
     isPlayerOnly: state.scratchGui.mode.isPlayerOnly,
     isRtl: state.locales.isRtl,
     projectId: state.scratchGui.projectState.projectId
@@ -320,7 +320,6 @@ const WrappedInterface = compose(
     AppStateHOC,
     ErrorBoundaryHOC('TW Interface'),
     TWProjectMetaFetcherHOC,
-    TWEditorWarningHOC,
     TWStateManagerHOC,
     TWThemeHOC
 )(ConnectedInterface);
