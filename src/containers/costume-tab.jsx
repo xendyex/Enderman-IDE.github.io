@@ -144,7 +144,11 @@ class CostumeTab extends React.Component {
     }
     handleExportCostume (costumeIndex) {
         const item = this.props.vm.editingTarget.sprite.costumes[costumeIndex];
-        const blob = new Blob([item.asset.data], {type: item.asset.assetType.contentType});
+        const data = [item.asset.data];
+        if (item.asset.assetType.name === 'ImageVector') {
+            data.push(`<!--rotationCenterX:${item.rotationCenterX},rotationCenterY:${item.rotationCenterY}-->`);
+        }
+        const blob = new Blob(data, {type: item.asset.assetType.contentType});
         downloadBlob(`${item.name}.${item.asset.dataFormat}`, blob);
     }
     handleNewCostume (costume, fromCostumeLibrary, targetId) {
