@@ -240,61 +240,6 @@ const alerts = [
         ),
         iconSpinner: true,
         level: AlertLevels.SUCCESS
-    },
-    {
-        alertId: 'twWarning',
-        alertType: AlertTypes.STANDARD,
-        content: (
-            <center>
-                <div style={{marginBottom: '3px'}}>
-                    <FormattedMessage
-                        // eslint-disable-next-line max-len
-                        defaultMessage="Remember to save your project often. In the event of a crash, you can try to load an automatic backup with File > Load Restore Point, but you shouldn't rely on this."
-                        description="Warning that appears when the editor is opened"
-                        id="tw.editorWarning.1"
-                    />
-                </div>
-                <div>
-                    <FormattedMessage
-                        // eslint-disable-next-line max-len
-                        defaultMessage="Warp Timer has been enabled because you opened the editor, which may reduce performance. See Advanced for more options."
-                        description="Warning that appears when the editor is opened"
-                        id="tw.editorWarning.2"
-                    />
-                </div>
-            </center>
-        ),
-        closeButton: true,
-        level: AlertLevels.WARN
-    },
-    {
-        alertId: 'twExtendedExtensionsWarning',
-        alertType: AlertTypes.STANDARD,
-        clearList: ['twExtendedExtensionsWarning'],
-        content: (
-            <FormattedMessage
-                defaultMessage="This project uses blocks exclusive to TurboWarp. It will not work in Scratch and should not be uploaded to the Scratch website. {learnMoreLink}"
-                description="Warning that this project uses blocks that will only work in TurboWarp"
-                id="tw.alerts.extendedExtensionsWarning"
-                values={{
-                    learnMoreLink: (
-                        <a
-                            href="https://github.com/TurboWarp/scratch-gui/wiki/TurboWarp-blocks"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            <FormattedMessage
-                                defaultMessage="Learn more."
-                                description="Link text to TurboWarp-exclusive blocks FAQ"
-                                id="tw.alerts.extendedExtensionsWarning.learnMoreLink"
-                            />
-                        </a>
-                    )
-                }}
-            />
-        ),
-        closeButton: true,
-        level: AlertLevels.WARN
     }
 ];
 

@@ -153,6 +153,8 @@ const translations = getAddonTranslations(language);
 
 const getDisplayNoneWhileDisabledClass = id => `addons-display-none-${id}`;
 
+let _firstAddBlockRan = false;
+
 class Tab extends EventTargetShim {
     constructor (id) {
         super();
@@ -244,6 +246,46 @@ class Tab extends EventTargetShim {
         });
     }
 
+    addBlock (procedureCode, args, callback) {
+        const vm = this.traps.vm;
+        vm.addAddonBlock({
+            procedureCode,
+            arguments: args,
+            callback,
+            color: '#29beb8',
+            secondaryColor: '#3aa8a4'
+        });
+
+        if (!_firstAddBlockRan) {
+            _firstAddBlockRan = true;
+
+            this.traps.getBlockly().then(ScratchBlocks => {
+                const BlockSvg = ScratchBlocks.BlockSvg;
+                const oldUpdateColour = BlockSvg.prototype.updateColour;
+                BlockSvg.prototype.updateColour = function (...args2) {
+                    // procedures_prototype also has a procedure code but we do not want to color them.
+                    if (this.type === 'procedures_call') {
+                        const block = this.procCode_ && vm.runtime.getAddonBlock(this.procCode_);
+                        if (block) {
+                            this.colour_ = '#29beb8';
+                            this.colourSecondary_ = '#3aa8a4';
+                            this.colourTertiary_ = '#3aa8a4';
+                            this.customContextMenu = null;
+                        }
+                    }
+                    return oldUpdateColour.call(this, ...args2);
+                };
+                if (vm.editingTarget) {
+                    vm.emitWorkspaceUpdate();
+                }
+            });
+        }
+    }
+
+    removeBlock () {
+        throw new Error('not implemented');
+    }
+
     copyImage (dataURL) {
         if (!navigator.clipboard.write) {
             return Promise.reject(new Error('Clipboard API not supported'));
@@ -331,7 +373,6 @@ class AddonRunner {
         this.stylesheets = [];
         this.disabledStylesheet = null;
 
-        this.msg.locale = language;
         this.publicAPI = {
             global,
             console,

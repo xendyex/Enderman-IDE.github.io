@@ -8,7 +8,8 @@ const enabled =
     // Domain must match expected
     location.hostname === PLAUSIBLE_DOMAIN &&
     // Respect Do Not Track
-    navigator.doNotTrack !== '1';
+    navigator.doNotTrack !== '1' &&
+    typeof DISABLE_ANALYTICS === 'undefined';
 
 let referrer = null;
 if (enabled && document.referrer) {
@@ -51,6 +52,11 @@ const sendEvent = eventName => {
 
 if (enabled) {
     sendEvent('pageview');
+
+    window.addEventListener('appinstalled', () => {
+        if (document.hidden) return;
+        sendEvent('Installed');
+    });
 }
 
 const GoogleAnalytics = {

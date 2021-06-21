@@ -40,10 +40,15 @@
         "tw.addons.settings.unsupported": "Algunos addons no están disponibles en este navegador:"
     },
     "fr": {
+        "tw.addons.settings.addonFeedback": "Commentaires sur le module complémentaire",
+        "tw.addons.settings.confirmResetAll": "Êtes-vous sûr de vouloir réinitialiser tous les paramètres des addons à leurs valeurs par défaut ?",
         "tw.addons.settings.credits": "Crédits :",
+        "tw.addons.settings.dirty": "Rechargez TurboWarp pour appliquer les paramètres.",
+        "tw.addons.settings.dirtyButton": "Recharger maintenant",
         "tw.addons.settings.export": "Exporter les paramètres",
         "tw.addons.settings.import": "Importer les paramètres",
         "tw.addons.settings.noResults": "Aucuns résultats",
+        "tw.addons.settings.presets": "Préconfigurations",
         "tw.addons.settings.reset": "Réinitialiser",
         "tw.addons.settings.resetAll": "Tout réinitialiser",
         "tw.addons.settings.search": "Rechercher",
@@ -287,5 +292,25 @@
         "tw.addons.settings.tags.theme": "主题",
         "tw.addons.settings.title": "插件设置",
         "tw.addons.settings.unsupported": "某些插件在此浏览器中不可用："
+    },
+    "zh-tw": {
+        "tw.addons.settings.addonFeedback": "擴充功能回饋",
+        "tw.addons.settings.confirmResetAll": "你確定要重設所有擴充功能至初始設定？",
+        "tw.addons.settings.credits": "感謝：",
+        "tw.addons.settings.dirty": "你需要重新載入 TurboWarp 以應用設定。",
+        "tw.addons.settings.dirtyButton": "重新載入",
+        "tw.addons.settings.export": "匯出設定",
+        "tw.addons.settings.import": "匯入設定",
+        "tw.addons.settings.noResults": "沒有相符的結果。",
+        "tw.addons.settings.presets": "預設",
+        "tw.addons.settings.reset": "重置",
+        "tw.addons.settings.resetAll": "全部重置",
+        "tw.addons.settings.search": "搜尋……",
+        "tw.addons.settings.tags.beta": "測試版",
+        "tw.addons.settings.tags.new": "新！",
+        "tw.addons.settings.tags.recommended": "推薦",
+        "tw.addons.settings.tags.theme": "主題",
+        "tw.addons.settings.title": "擴充功能設定",
+        "tw.addons.settings.unsupported": "這些擴充功能在這個瀏覽器不可用："
     }
 }
