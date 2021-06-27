@@ -1,5 +1,7 @@
 /* eslint-disable no-extend-native */
 
+import EventTargetShim from './event-target';
+
 if (!Blob.prototype.text) {
     Blob.prototype.text = function () {
         return new Promise((resolve, reject) => {
@@ -35,4 +37,10 @@ if (typeof queueMicrotask !== 'function') {
     window.queueMicrotask = callback => {
         Promise.resolve().then(callback);
     };
+}
+
+try {
+    new EventTarget();
+} catch (e) {
+    window.EventTarget = EventTargetShim;
 }
