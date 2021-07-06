@@ -87,6 +87,10 @@ class Blocks extends React.Component {
         this.toolboxUpdateQueue = [];
     }
     componentDidMount () {
+        this.props.vm.setCompilerOptions({
+            warpTimer: true
+        });
+
         this.ScratchBlocks.FieldColourSlider.activateEyedropper_ = this.props.onActivateColorPicker;
         this.ScratchBlocks.Procedures.externalProcedureDefCallback = this.props.onActivateCustomProcedures;
         this.ScratchBlocks.ScratchMsgs.setLocale(this.props.locale);
@@ -129,9 +133,6 @@ class Blocks extends React.Component {
             } catch (e) {
                 log.warn('cannot open docs URI', e);
             }
-        });
-        toolboxWorkspace.registerButtonCallback('TW_MIGRATION', () => {
-            window.open('https://github.com/TurboWarp/scratch-gui/discussions/100');
         });
 
         // Store the xml of the toolbox that is actually rendered.

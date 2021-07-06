@@ -20,31 +20,33 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {FormattedMessage, defineMessages, injectIntl, intlShape} from 'react-intl';
+import {getIsLoading} from '../reducers/project-state.js';
 import DOMElementRenderer from '../containers/dom-element-renderer.jsx';
 import AppStateHOC from '../lib/app-state-hoc.jsx';
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import TWProjectMetaFetcherHOC from '../lib/tw-project-meta-fetcher-hoc.jsx';
-import TWEditorWarningHOC from '../lib/tw-editor-warning-hoc.jsx';
 import TWStateManagerHOC from '../lib/tw-state-manager-hoc.jsx';
 import TWThemeHOC from '../lib/tw-theme-hoc.jsx';
 import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
 import SettingsStore from '../addons/settings-store-singleton';
 import twStageSize from '../lib/tw-stage-size';
 import '../lib/tw-fix-history-api';
-
 import GUI from './render-gui.jsx';
 import MenuBar from '../components/menu-bar/menu-bar.jsx';
 import ProjectInput from '../components/tw-project-input/project-input.jsx';
 import FeaturedProjects from '../components/tw-featured-projects/featured-projects.jsx';
 import Description from '../components/tw-description/description.jsx';
 import WebGlModal from '../containers/webgl-modal.jsx';
-import TWEvalModal from '../components/webgl-modal/tw-eval-modal.jsx';
+import BrowserModal from '../components/browser-modal/browser-modal.jsx';
 import CloudVariableBadge from '../components/tw-cloud-variable-badge/cloud-variable-badge.jsx';
-import {isRendererSupported, isEvalSupported} from '../lib/tw-environment-support-prober';
+import {isRendererSupported, isBrowserSupported} from '../lib/tw-environment-support-prober';
+import AddonChannels from '../addons/channels';
+import loadServiceWorker from './load-service-worker';
 
 import styles from './interface.css';
 
 if (window.parent !== window) {
+    // eslint-disable-next-line no-alert
     alert('This page is embedding TurboWarp in a way that is unsupported and will cease to function in the near future. Please read https://github.com/TurboWarp/scratch-gui/wiki/Embedding');
 }
 
@@ -54,19 +56,6 @@ if (process.env.ANNOUNCEMENT) {
     // This is safe because process.env.ANNOUNCEMENT is set at build time.
     announcement.innerHTML = process.env.ANNOUNCEMENT;
 }
-
-window.addEventListener('message', e => {
-    if (e.origin !== location.origin) {
-        return;
-    }
-    const data = e.data;
-    if (data.type === 'reload') {
-        location.reload();
-    }
-    if (data.type === 'settings-changed') {
-        SettingsStore.setStore(data.store);
-    }
-});
 
 const handleClickAddonSettings = () => {
     const path = process.env.ROUTING_STYLE === 'wildcard' ? 'addons' : 'addons.html';
@@ -85,12 +74,116 @@ const WrappedMenuBar = compose(
     SBFileUploaderHOC
 )(MenuBar);
 
+if (AddonChannels.reloadChannel) {
+    AddonChannels.reloadChannel.addEventListener('message', () => {
+        location.reload();
+    });
+}
+
+if (AddonChannels.changeChannel) {
+    AddonChannels.changeChannel.addEventListener('message', e => {
+        SettingsStore.setStoreWithVersionCheck(e.data);
+    });
+}
+
 import(/* webpackChunkName: "addons" */ '../addons/entry');
+
+const Footer = () => (
+    <footer className={styles.footer}>
+        <div className={styles.footerContent}>
+            <div className={styles.footerText}>
+                <FormattedMessage
+                    // eslint-disable-next-line max-len
+                    defaultMessage="TurboWarp is not affiliated with Scratch, the Scratch Team, or the Scratch Foundation."
+                    description="Disclaimer that TurboWarp is not connected to Scratch"
+                    id="tw.footer.disclaimer"
+                />
+            </div>
+            <div className={styles.footerColumns}>
+                <div className={styles.footerSection}>
+                    <a href="https://fosshost.org/">
+                        <FormattedMessage
+                            defaultMessage="Hosting provided by Fosshost"
+                            description="Fosshost link in footer"
+                            id="tw.footer.fosshost"
+                        />
+                    </a>
+                    <a href="credits.html">
+                        <FormattedMessage
+                            defaultMessage="Credits"
+                            description="Credits link in footer"
+                            id="tw.footer.credits"
+                        />
+                    </a>
+                </div>
+                <div className={styles.footerSection}>
+                    <a href="https://desktop.turbowarp.org/">
+                        {/* Do not translate */}
+                        {'TurboWarp Desktop'}
+                    </a>
+                    <a href="https://packager.turbowarp.org/">
+                        {/* Do not translate */}
+                        {'TurboWarp Packager'}
+                    </a>
+                    <a href="https://github.com/TurboWarp/scratch-gui/wiki/Embedding">
+                        <FormattedMessage
+                            defaultMessage="Embedding"
+                            description="Menu bar item for embedding link"
+                            id="tw.footer.embed"
+                        />
+                    </a>
+                    <a href="https://github.com/TurboWarp/scratch-gui/wiki/URL-Parameters">
+                        <FormattedMessage
+                            defaultMessage="URL Parameters"
+                            description="Menu bar item for URL parameters link"
+                            id="tw.footer.parameters"
+                        />
+                    </a>
+                    <a href="https://github.com/TurboWarp/scratch-gui/wiki/Help-translate-TurboWarp">
+                        <FormattedMessage
+                            defaultMessage="Help Translate TurboWarp"
+                            description="Menu bar item for translating TurboWarp link"
+                            id="tw.footer.translate"
+                        />
+                    </a>
+                </div>
+                <div className={styles.footerSection}>
+                    <a href="https://scratch.mit.edu/users/GarboMuffin/#comments">
+                        <FormattedMessage
+                            defaultMessage="Feedback & Bugs"
+                            description="Link to feedback/bugs page"
+                            id="tw.feedback"
+                        />
+                    </a>
+                    <a href="https://github.com/TurboWarp/">
+                        <FormattedMessage
+                            defaultMessage="Source Code"
+                            description="Link to source code"
+                            id="tw.code"
+                        />
+                    </a>
+                    <a href="privacy.html">
+                        <FormattedMessage
+                            defaultMessage="Privacy Policy"
+                            description="Link to privacy policy"
+                            id="tw.privacy"
+                        />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+);
 
 class Interface extends React.Component {
     constructor (props) {
         super(props);
         this.handleUpdateProjectTitle = this.handleUpdateProjectTitle.bind(this);
+    }
+    componentDidUpdate (prevProps) {
+        if (prevProps.isLoading && !this.props.isLoading) {
+            loadServiceWorker();
+        }
     }
     handleUpdateProjectTitle (title, isDefault) {
         if (isDefault || !title) {
@@ -101,13 +194,18 @@ class Interface extends React.Component {
     }
     render () {
         const {
+            /* eslint-disable no-unused-vars */
+            intl,
             hasCloudVariables,
             description,
             isFullScreen,
+            isLoading,
             isPlayerOnly,
             isRtl,
             onClickTheme,
-            projectId
+            projectId,
+            /* eslint-enable no-unused-vars */
+            ...props
         } = this.props;
         const isHomepage = isPlayerOnly && !isFullScreen;
         const isEditor = !isPlayerOnly;
@@ -143,14 +241,15 @@ class Interface extends React.Component {
                         onUpdateProjectTitle={this.handleUpdateProjectTitle}
                         backpackVisible
                         backpackHost="_local_"
+                        {...props}
                     />
                     {isHomepage ? (
                         <React.Fragment>
                             {isRendererSupported() ? null : (
                                 <WebGlModal isRtl={isRtl} />
                             )}
-                            {isEvalSupported() ? null : (
-                                <TWEvalModal isRtl={isRtl} />
+                            {isBrowserSupported() ? null : (
+                                <BrowserModal isRtl={isRtl} />
                             )}
                             <div className={styles.section}>
                                 <ProjectInput />
@@ -172,6 +271,7 @@ class Interface extends React.Component {
                             <div className={styles.section}>
                                 <p>
                                     <FormattedMessage
+                                        // eslint-disable-next-line max-len
                                         defaultMessage="TurboWarp is a Scratch mod that compiles projects to JavaScript to make them run really fast. Try it out by inputting a project ID or URL above or choosing a featured project below."
                                         description="Description of TurboWarp"
                                         id="tw.home.description"
@@ -184,112 +284,7 @@ class Interface extends React.Component {
                         </React.Fragment>
                     ) : null}
                 </div>
-                {isHomepage && <footer className={styles.footer}>
-                    <div className={styles.footerContent}>
-                        <div className={styles.footerText}>
-                            <FormattedMessage
-                                defaultMessage="TurboWarp is not affiliated with Scratch, the Scratch Team, or the Scratch Foundation."
-                                description="Disclaimer that TurboWarp is not connected to Scratch"
-                                id="tw.footer.disclaimer"
-                            />
-                        </div>
-                        <div className={styles.footerColumns}>
-                            <div className={styles.footerSection}>
-                                <div className={styles.footerHeader}>
-                                    <FormattedMessage
-                                        defaultMessage="Credits"
-                                        description="Credits link in footer"
-                                        id="tw.footer.credits"
-                                    />
-                                </div>
-                                <div>
-                                    <a href="https://fosshost.org/">
-                                        <FormattedMessage
-                                            defaultMessage="Hosted by Fosshost"
-                                            description="Fosshost link in footer"
-                                            id="tw.footer.fosshost"
-                                        />
-                                    </a>
-                                </div>
-                                <div>
-                                    <a href="credits.html">
-                                        <FormattedMessage
-                                            defaultMessage="Credits"
-                                            description="Credits link in footer"
-                                            id="tw.footer.credits"
-                                        />
-                                    </a>
-                                </div>
-                            </div>
-                            <div className={styles.footerSection}>
-                                <div className={styles.footerHeader}>
-                                    <FormattedMessage
-                                        defaultMessage="Links"
-                                        description="Title of links section of footer"
-                                        id="tw.footer.links"
-                                    />
-                                </div>
-                                <div>
-                                    <a href="https://desktop.turbowarp.org/">
-                                        {/* Do not translate */}
-                                        {'TurboWarp Desktop'}
-                                    </a>
-                                </div>
-                                <div>
-                                    <a href="https://packager.turbowarp.org/">
-                                        {/* Do not translate */}
-                                        {'TurboWarp Packager'}
-                                    </a>
-                                </div>
-                                <div>
-                                    <a href="https://github.com/TurboWarp/scratch-gui/wiki/Embedding">
-                                        <FormattedMessage
-                                            defaultMessage="Embedding"
-                                            description="Menu bar item for embedding link"
-                                            id="tw.menuBar.embed"
-                                        />
-                                    </a>
-                                </div>
-                            </div>
-                            <div className={styles.footerSection}>
-                                <div className={styles.footerHeader}>
-                                    <FormattedMessage
-                                        defaultMessage="About"
-                                        description="Title of about section of footer"
-                                        id="tw.footer.about"
-                                    />
-                                </div>
-                                <div>
-                                    <a href="https://scratch.mit.edu/users/GarboMuffin/#comments">
-                                        <FormattedMessage
-                                            defaultMessage="Feedback & Bugs"
-                                            description="Link to feedback/bugs page"
-                                            id="tw.feedback"
-                                        />
-                                    </a>
-                                </div>
-                                <div>
-                                    <a href="https://github.com/TurboWarp/">
-                                        <FormattedMessage
-                                            defaultMessage="Source Code"
-                                            description="Link to source code"
-                                            id="tw.code"
-                                        />
-                                    </a>
-                                </div>
-                                <div>
-                                    <a href="privacy.html">
-                                        <FormattedMessage
-                                            defaultMessage="Privacy Policy"
-                                            description="Link to privacy policy"
-                                            id="tw.privacy"
-                                        />
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </footer>}
+                {isHomepage && <Footer />}
             </div>
         );
     }
@@ -303,8 +298,9 @@ Interface.propTypes = {
         instructions: PropTypes.string
     }),
     isFullScreen: PropTypes.bool,
-    isRtl: PropTypes.bool,
+    isLoading: PropTypes.bool,
     isPlayerOnly: PropTypes.bool,
+    isRtl: PropTypes.bool,
     onClickTheme: PropTypes.func,
     projectId: PropTypes.string
 };
@@ -313,6 +309,7 @@ const mapStateToProps = state => ({
     hasCloudVariables: state.scratchGui.tw.hasCloudVariables,
     description: state.scratchGui.tw.description,
     isFullScreen: state.scratchGui.mode.isFullScreen,
+    isLoading: getIsLoading(state.scratchGui.projectState.loadingState),
     isPlayerOnly: state.scratchGui.mode.isPlayerOnly,
     isRtl: state.locales.isRtl,
     projectId: state.scratchGui.projectState.projectId
@@ -329,7 +326,6 @@ const WrappedInterface = compose(
     AppStateHOC,
     ErrorBoundaryHOC('TW Interface'),
     TWProjectMetaFetcherHOC,
-    TWEditorWarningHOC,
     TWStateManagerHOC,
     TWThemeHOC
 )(ConnectedInterface);

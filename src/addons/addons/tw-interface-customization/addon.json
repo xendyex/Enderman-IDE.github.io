@@ -1,20 +1,12 @@
 {
   "name": "Interface customization",
-  "description": "Customize some parts of the interface.",
+  "description": "Customize some other parts of the interface.",
   "userscripts": [
     {
       "url": "remove-backpack.js",
       "matches": ["https://scratch.mit.edu/projects/*"],
       "settingMatch": {
         "id": "removeBackpack",
-        "value": true
-      }
-    },
-    {
-      "url": "remove-warning.js",
-      "matches": ["https://scratch.mit.edu/projects/*"],
-      "settingMatch": {
-        "id": "removeWarning1",
         "value": true
       }
     }
@@ -35,15 +27,9 @@
       "id": "removeBackpack",
       "type": "boolean",
       "default": false
-    },
-    {
-      "name": "Remove editor warning",
-      "id": "removeWarning1",
-      "type": "boolean",
-      "default": false
     }
   ],
-  "tags": ["beta"],
+  "tags": ["theme"],
   "enabledByDefault": false,
   "l10n": true
 }

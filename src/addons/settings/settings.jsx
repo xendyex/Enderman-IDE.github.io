@@ -18,7 +18,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import addons, {unsupportedAddons} from '../addon-manifests';
+import Search from './search';
+import importedAddons, {unsupportedAddons} from '../addon-manifests';
 import getAddonTranslations from '../get-addon-translations';
 import settingsTranslationsEnglish from './l10n/en.json';
 import settingsTranslationsOther from './l10n/translations.json';
@@ -26,12 +27,11 @@ import upstreamMeta from '../upstream-meta.json';
 import {detectLocale} from '../../lib/detect-locale';
 import {getInitialDarkMode} from '../../lib/tw-theme-hoc.jsx';
 import SettingsStore from '../settings-store-singleton';
+import Channels from '../channels';
 import extensionImageWhite from './extension-white.svg';
 import extensionImageBlack from './extension-black.svg';
 import brushImageWhite from './brush-white.svg';
 import brushImageBlack from './brush-black.svg';
-import eggImageWhite from './egg-white.svg';
-import eggImageBlack from './egg-black.svg';
 import undoImageWhite from './undo-white.svg';
 import undoImageBlack from './undo-black.svg';
 import infoImage from './info.svg';
@@ -60,22 +60,35 @@ document.title = `${settingsTranslations['tw.addons.settings.title']} - TurboWar
 const theme = getInitialDarkMode() ? 'dark' : 'light';
 document.body.setAttribute('theme', theme);
 
+let _throttleTimeout;
+const postThrottledSettingsChange = store => {
+    if (_throttleTimeout) {
+        clearTimeout(_throttleTimeout);
+    }
+    _throttleTimeout = setTimeout(() => {
+        Channels.changeChannel.postMessage({
+            version: upstreamMeta.commit,
+            store
+        });
+    }, 100);
+};
+
 const sortAddons = () => {
-    const sortedOrder = Object.keys(addons).sort((aId, bId) => {
-        const aNew = addons[aId].tags && addons[aId].tags.includes('new');
-        const bNew = addons[bId].tags && addons[bId].tags.includes('new');
+    const sortedOrder = Object.keys(importedAddons).sort((aId, bId) => {
+        const aNew = importedAddons[aId].tags.includes('new');
+        const bNew = importedAddons[bId].tags.includes('new');
         if (aNew && !bNew) return -1;
         if (bNew && !aNew) return 1;
         return 0;
     });
     const result = {};
     for (const key of sortedOrder) {
-        result[key] = addons[key];
+        result[key] = importedAddons[key];
     }
     return result;
 };
 
-const AddonCredits = ({credits}) => (
+const CreditList = ({credits}) => (
     credits.map((author, index) => {
         const isLast = index === credits.length - 1;
         return (
@@ -101,7 +114,7 @@ const AddonCredits = ({credits}) => (
         );
     })
 );
-AddonCredits.propTypes = {
+CreditList.propTypes = {
     credits: PropTypes.arrayOf(PropTypes.shape({
         name: PropTypes.string,
         link: PropTypes.string
@@ -169,11 +182,6 @@ const Tags = ({tags}) => tags.length > 0 && (
         {tags.includes('beta') && (
             <span className={classNames(styles.tag, styles.tagBeta)}>
                 {settingsTranslations['tw.addons.settings.tags.beta']}
-            </span>
-        )}
-        {tags.includes('easterEgg') && (
-            <span className={classNames(styles.tag, styles.tagEasterEgg)}>
-                {settingsTranslations['tw.addons.settings.tags.easterEgg']}
             </span>
         )}
         {tags.includes('new') && (
@@ -348,23 +356,22 @@ const Notice = ({
     notice
 }) => {
     const noticeId = notice.id;
-    // All themes require reload, so ignore these alerts from upstream.
-    // Users are already informed of this in other places of the UI.
-    if (noticeId === 'refresheditor') {
-        return null;
-    }
     const text = addonTranslations[`${addonId}/@info-${noticeId}`] || notice.text;
     return (
         <div
             className={styles.notice}
             type={notice.type}
         >
-            <img
-                className={styles.noticeIcon}
-                src={infoImage}
-                alt=""
-            />
-            {text}
+            <div>
+                <img
+                    className={styles.noticeIcon}
+                    src={infoImage}
+                    alt=""
+                />
+            </div>
+            <div>
+                {text}
+            </div>
         </div>
     );
 };
@@ -430,12 +437,6 @@ const Addon = ({
                         src={theme === 'dark' ? brushImageWhite : brushImageBlack}
                         alt=""
                     />
-                ) : manifest.tags.includes('easterEgg') ? (
-                    <img
-                        className={styles.extensionImage}
-                        src={theme === 'dark' ? eggImageWhite : eggImageBlack}
-                        alt=""
-                    />
                 ) : (
                     <img
                         className={styles.extensionImage}
@@ -482,6 +483,14 @@ const Addon = ({
                 <div className={styles.description}>
                     {addonTranslations[`${id}/@description`] || manifest.description}
                 </div>
+                {manifest.credits && (
+                    <div className={styles.creditContainer}>
+                        <span className={styles.creditTitle}>
+                            {settingsTranslations['tw.addons.settings.credits']}
+                        </span>
+                        <CreditList credits={manifest.credits} />
+                    </div>
+                )}
                 {manifest.info && (
                     <div className={styles.noticeContainer}>
                         {manifest.info.map(info => (
@@ -491,14 +500,6 @@ const Addon = ({
                                 notice={info}
                             />
                         ))}
-                    </div>
-                )}
-                {manifest.credits && (
-                    <div className={styles.creditContainer}>
-                        <span className={styles.creditTitle}>
-                            {settingsTranslations['tw.addons.settings.credits']}
-                        </span>
-                        <AddonCredits credits={manifest.credits} />
                     </div>
                 )}
                 {manifest.settings && (
@@ -590,62 +591,63 @@ UnsupportedAddons.propTypes = {
     }))
 };
 
-const normalize = i => i.toLowerCase();
+const addonToSearchItem = ({id, manifest}) => {
+    const texts = new Set();
+    const addText = (score, text) => {
+        if (text) {
+            texts.add({
+                score,
+                text
+            });
+        }
+    };
+    addText(1, id);
+    addText(1, manifest.name);
+    addText(1, addonTranslations[`${id}/@name`]);
+    addText(0.5, manifest.description);
+    addText(0.5, addonTranslations[`${id}/@description`]);
+    if (manifest.settings) {
+        for (const setting of manifest.settings) {
+            addText(0.25, setting.name);
+            addText(0.25, addonTranslations[`${id}/@settings-name-${setting.id}`]);
+        }
+    }
+    if (manifest.presets) {
+        for (const preset of manifest.presets) {
+            addText(0.1, preset.name);
+            addText(0.1, addonTranslations[`${id}/@preset-name-${preset.id}`]);
+            addText(0.1, preset.description);
+            addText(0.1, addonTranslations[`${id}/@preset-description-${preset.id}`]);
+        }
+    }
+    for (const tag of manifest.tags) {
+        const key = `tw.addons.settings.tags.${tag}`;
+        if (settingsTranslations[key]) {
+            addText(0.25, settingsTranslations[key]);
+        }
+    }
+    if (manifest.info) {
+        for (const info of manifest.info) {
+            addText(0.25, info.text);
+            addText(0.25, addonTranslations[`${id}/@info-${info.id}`]);
+        }
+    }
+    return texts;
+};
 
 class AddonList extends React.Component {
-    shouldShowAddon (state, addonId, manifest) {
-        if (!state.visible) {
-            return false;
-        }
-        const terms = normalize(this.props.search.trim()).split(' ');
-        if (terms.length === 0) {
-            return true;
-        }
-        const texts = [
-            normalize(addonId),
-            normalize(addonTranslations[`${addonId}/@name`] || manifest.name),
-            normalize(addonTranslations[`${addonId}/@name`] || manifest.description)
-        ];
-        if (manifest.settings) {
-            for (const setting of manifest.settings) {
-                texts.push(normalize(addonTranslations[`${addonId}/@settings-name-${setting.id}`] || setting.name));
-            }
-        }
-        if (manifest.presets) {
-            for (const preset of manifest.presets) {
-                texts.push(normalize(addonTranslations[`${addonId}/@preset-name-${preset.id}`] || preset.name));
-                texts.push(normalize(
-                    addonTranslations[`${addonId}/@preset-description-${preset.id}`] ||
-                    preset.description
-                ));
-            }
-        }
-        for (const tag of manifest.tags) {
-            const translatedTag = settingsTranslations[`tw.addons.settings.tags.${tag}`];
-            if (translatedTag) {
-                texts.push(normalize(settingsTranslations[`tw.addons.settings.tags.${tag}`]));
-            }
-        }
-        // For an addon to be included, all search terms must match one of the texts.
-        for (const term of terms) {
-            if (!term) continue;
-            let found = false;
-            for (const text of texts) {
-                if (text.includes(term)) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                return false;
-            }
-        }
-        return true;
+    constructor (props) {
+        super(props);
+        this.search = new Search(this.props.addons.map(addonToSearchItem));
     }
     render () {
-        const filteredAddons = this.props.addons
-            .filter(({id, manifest, state}) => this.shouldShowAddon(state, id, manifest));
-        if (filteredAddons.length === 0) {
+        let addons;
+        if (this.props.search) {
+            addons = this.search.search(this.props.search).map(({index}) => this.props.addons[index]);
+        } else {
+            addons = this.props.addons;
+        }
+        if (addons.length === 0) {
             return (
                 <div className={styles.noResults}>
                     {settingsTranslations['tw.addons.settings.noResults']}
@@ -654,7 +656,7 @@ class AddonList extends React.Component {
         }
         return (
             <div>
-                {filteredAddons.map(({id, manifest, state}) => (
+                {addons.map(({id, manifest, state}) => (
                     <Addon
                         key={id}
                         id={id}
@@ -696,12 +698,10 @@ class AddonSettingsComponent extends React.Component {
             dirty: false,
             search: ''
         };
-        this.konamiProgress = 0;
         for (const [id, manifest] of Object.entries(this.props.addons)) {
             const enabled = SettingsStore.getAddonEnabled(id);
             const addonState = {
                 enabled: enabled,
-                visible: true,
                 dirty: false
             };
             if (manifest.settings) {
@@ -721,7 +721,9 @@ class AddonSettingsComponent extends React.Component {
         document.body.removeEventListener('keydown', this.handleKeyDown);
     }
     handleSettingStoreChanged (e) {
-        const {addonId, settingId, value, reloadRequired} = e.detail;
+        const {addonId, settingId, value} = e.detail;
+        // If channels are unavailable, every change requires reload.
+        const reloadRequired = e.detail.reloadRequired || !Channels.changeChannel;
         this.setState(state => {
             const newState = {
                 [addonId]: {
@@ -735,16 +737,17 @@ class AddonSettingsComponent extends React.Component {
             }
             return newState;
         });
-        if (!reloadRequired && this.props.onSettingsChanged) {
-            this.props.onSettingsChanged(reloadRequired);
+        if (!reloadRequired) {
+            postThrottledSettingsChange(SettingsStore.store);
         }
     }
     handleReloadNow () {
-        this.props.onReloadNow();
+        // Value posted does not matter
+        Channels.reloadChannel.postMessage(0);
         this.setState({
             dirty: false
         });
-        for (const addonId of Object.keys(addons)) {
+        for (const addonId of Object.keys(importedAddons)) {
             if (this.state[addonId].dirty) {
                 this.setState(state => ({
                     [addonId]: {
@@ -861,7 +864,7 @@ class AddonSettingsComponent extends React.Component {
                     </a>
                     {this.state.dirty && (
                         <Dirty
-                            onReloadNow={this.props.onReloadNow && this.handleReloadNow}
+                            onReloadNow={Channels.reloadChannel ? this.handleReloadNow : null}
                         />
                     )}
                 </div>
@@ -908,8 +911,6 @@ class AddonSettingsComponent extends React.Component {
 AddonSettingsComponent.propTypes = {
     addons: PropTypes.objectOf(PropTypes.object),
     unsupportedAddons: PropTypes.objectOf(PropTypes.object),
-    onReloadNow: PropTypes.func,
-    onSettingsChanged: PropTypes.func,
     onExportSettings: PropTypes.func
 };
 AddonSettingsComponent.defaultProps = {

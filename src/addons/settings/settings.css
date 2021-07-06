@@ -113,7 +113,7 @@ a:active, a:focus {
     color: inherit;
     width: 150px;
     height: 16px;
-    padding: 10px 15px;
+    padding: 10px 0 10px 15px;
     border: none;
     outline: none;
     background-color: transparent;
@@ -242,6 +242,7 @@ a:active, a:focus {
 
 .addon-operations {
     margin-left: auto;
+    padding-left: 4px;
     display: flex;
     align-items: center;
 }
@@ -344,7 +345,7 @@ a:active, a:focus {
 .tag-new {
     color: white;
     background: #b117f8;
-    border-color: #b20eb8;
+    border-color: #6f0073;
 }
 .tag-turbowarp {
     color: white;
@@ -386,12 +387,12 @@ a:active, a:focus {
 .notice {
     color: black;
     padding: 10px;
-    background: rgba(255, 235, 59, 0.7);
     border-radius: 5px;
     font-weight: bold;
     margin: 10px 0;
     display: flex;
     align-items: center;
+    background: rgba(154, 212, 207, 0.7);
 }
 .notice-icon {
     height: 16px;

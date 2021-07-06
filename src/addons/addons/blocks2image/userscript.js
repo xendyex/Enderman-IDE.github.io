@@ -27,13 +27,14 @@ export default async function ({ addon, global, console, msg }) {
                 const wrapperItem = document.createElement("div");
                 wrapperItem.id = `blocks2imgCommand${index + 1}`;
                 wrapperItem.classList.add("goog-menuitem", "blocks2img");
+                if (addon.tab.direction === "rtl") wrapperItem.classList.add("goog-menuitem-rtl");
                 wrapperItem.onmouseenter = () => wrapperItem.classList.add("goog-menuitem-highlight");
                 wrapperItem.onmouseleave = () => wrapperItem.classList.remove("goog-menuitem-highlight");
                 wrapperItem.style.userSelect = "none";
                 if (index === 0) {
                   wrapperItem.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
                   // resolve borderTop style conflict with goog-menuitem-highlight class
-                  wrapperItem.style.borderBottom = "1px solid transparent";
+                  wrapperItem.style.borderBottom = "none";
                   wrapperItem.style.paddingTop = "4px";
                   wrapperItem.style.paddingBottom = "3px";
                 }
@@ -68,14 +69,15 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
-  while (true) {
-    let blocklyWorkspace = await addon.tab.waitForElement("g.blocklyWorkspace", {
-      markAsSeen: true,
-    });
-
-    // insert contextmenu
-    blocklyWorkspace.addEventListener("mousedown", (e) => eventMouseDown(e));
-  }
+  document.addEventListener(
+    "mousedown",
+    (e) => {
+      if (e.target.closest("g.blocklyWorkspace")) {
+        eventMouseDown(e);
+      }
+    },
+    true
+  );
 
   function exportBlock(request, sender, sendMessage) {
     // console.log(request)
@@ -195,6 +197,7 @@ export default async function ({ addon, global, console, msg }) {
       let y = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[2] || 0;
       xArr.push(x * (isExportPNG ? 2 : 1));
       yArr.push(y * (isExportPNG ? 2 : 1));
+      g.style.display = ""; // because of TW scratch-blocks changes
     });
 
     svgchild.setAttribute(

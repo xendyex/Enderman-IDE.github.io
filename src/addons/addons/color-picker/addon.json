@@ -1,7 +1,7 @@
 {
   "name": "Hex color picker",
   "description": "Adds hex code inputs to color pickers.",
-  "tags": ["editor", "recommended"],
+  "tags": ["editor", "costumeEditor", "recommended"],
   "credits": [
     {
       "name": "Richie Bendall"
@@ -22,7 +22,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "versionAdded": "1.6.0",
   "libraries": ["tinycolor2"],
-  "enabledByDefault": true,
-  "l10n": true
+  "enabledByDefault": true
 }

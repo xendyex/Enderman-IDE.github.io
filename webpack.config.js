@@ -5,6 +5,7 @@ var webpack = require('webpack');
 // Plugins
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var TWGenerateServiceWorkerPlugin = require('./src/playground/generate-service-worker-plugin');
 
 // PostCss
 var autoprefixer = require('autoprefixer');
@@ -113,6 +114,7 @@ module.exports = [
     defaultsDeep({}, base, {
         entry: {
             'editor': './src/playground/editor.jsx',
+            'editoronly': './src/playground/editoronly.jsx',
             'player': './src/playground/player.jsx',
             'fullscreen': './src/playground/fullscreen.jsx',
             'embed': './src/playground/embed.jsx',
@@ -146,6 +148,7 @@ module.exports = [
                 'process.env.NODE_ENV': '"' + process.env.NODE_ENV + '"',
                 'process.env.DEBUG': Boolean(process.env.DEBUG),
                 'process.env.ANNOUNCEMENT': JSON.stringify(process.env.ANNOUNCEMENT || ''),
+                'process.env.ENABLE_SERVICE_WORKER': JSON.stringify(process.env.ENABLE_SERVICE_WORKER || ''),
                 'process.env.ROOT': JSON.stringify(root),
                 'process.env.ROUTING_STYLE': JSON.stringify(process.env.ROUTING_STYLE || 'filehash'),
                 'process.env.PLAUSIBLE_API': JSON.stringify(process.env.PLAUSIBLE_API),
@@ -155,6 +158,13 @@ module.exports = [
                 chunks: ['editor'],
                 template: 'src/playground/index.ejs',
                 filename: 'editor.html',
+                title: 'TurboWarp - Run Scratch projects faster',
+                ...htmlWebpackPluginCommon
+            }),
+            new HtmlWebpackPlugin({
+                chunks: ['editoronly'],
+                template: 'src/playground/index.ejs',
+                filename: 'editoronly.html',
                 title: 'TurboWarp - Run Scratch projects faster',
                 ...htmlWebpackPluginCommon
             }),
@@ -211,7 +221,8 @@ module.exports = [
             new CopyWebpackPlugin([{
                 from: 'extension-worker.{js,js.map}',
                 context: 'node_modules/scratch-vm/dist/web'
-            }])
+            }]),
+            new TWGenerateServiceWorkerPlugin()
         ])
     })
 ].concat(

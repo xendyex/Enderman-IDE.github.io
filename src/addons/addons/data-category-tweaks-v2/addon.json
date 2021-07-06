@@ -13,6 +13,7 @@
       "runAtComplete": false
     }
   ],
+  "versionAdded": "1.7.0",
   "settings": [
     {
       "name": "Separate List Category",
@@ -36,7 +37,6 @@
       "reloadRequired": false
     }
   ],
-  "tags": ["editor", "recommended"],
-  "enabledByDefault": false,
-  "l10n": true
+  "tags": ["editor", "codeEditor", "recommended"],
+  "enabledByDefault": false
 }

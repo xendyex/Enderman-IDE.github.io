@@ -38,16 +38,21 @@ class UsernameModal extends React.Component {
             'handleWarpTimerChange',
             'handleStageWidthChange',
             'handleStageHeightChange',
-            'handleDisableCompilerChange'
+            'handleDisableCompilerChange',
+            'handleStoreProjectOptions'
         ]);
+        this.initialStageWidth = twStageSize.width;
+        this.initialStageHeight = twStageSize.height;
         this.state = {
-            stageWidth: twStageSize.width,
-            stageHeight: twStageSize.height,
-            reloadRequired: false
+            stageWidth: this.initialStageWidth,
+            stageHeight: this.initialStageHeight
         };
     }
+    getNeedsReload () {
+        return this.state.stageWidth !== this.initialStageWidth || this.state.stageHeight !== this.initialStageHeight;
+    }
     handleClose () {
-        if (this.state.reloadRequired) {
+        if (this.getNeedsReload()) {
             // eslint-disable-next-line no-alert
             if (confirm(this.props.intl.formatMessage(messages.confirmReload))) {
                 this.applyChangesThatNeedReload();
@@ -99,14 +104,12 @@ class UsernameModal extends React.Component {
     }
     handleStageWidthChange (value) {
         this.setState({
-            stageWidth: value,
-            reloadRequired: true
+            stageWidth: Math.round(value)
         });
     }
     handleStageHeightChange (value) {
         this.setState({
-            stageHeight: value,
-            reloadRequired: true
+            stageHeight: Math.round(value)
         });
     }
     applyChangesThatNeedReload () {
@@ -119,6 +122,9 @@ class UsernameModal extends React.Component {
         const search = searchParamsToString(urlParams);
         location.href = `${location.pathname}${search}`;
     }
+    handleStoreProjectOptions () {
+        this.props.vm.storeProjectOptions();
+    }
     render () {
         const {
             /* eslint-disable no-unused-vars */
@@ -130,7 +136,6 @@ class UsernameModal extends React.Component {
         return (
             <SettingsModalComponent
                 onClose={this.handleClose}
-                reloadRequired={this.state.reloadRequired}
                 onFramerateChange={this.handleFramerateChange}
                 onCustomizeFramerate={this.handleCustomizeFramerate}
                 onHighQualityPenChange={this.handleHighQualityPenChange}
@@ -145,6 +150,7 @@ class UsernameModal extends React.Component {
                 stageWidth={this.state.stageWidth}
                 stageHeight={this.state.stageHeight}
                 customStageSizeEnabled={this.state.stageWidth !== 480 || this.state.stageHeight !== 360}
+                onStoreProjectOptions={this.handleStoreProjectOptions}
                 {...props}
             />
         );
@@ -161,7 +167,8 @@ UsernameModal.propTypes = {
         setFramerate: PropTypes.func,
         setCompilerOptions: PropTypes.func,
         setInterpolation: PropTypes.func,
-        setRuntimeOptions: PropTypes.func
+        setRuntimeOptions: PropTypes.func,
+        storeProjectOptions: PropTypes.func
     }),
     framerate: PropTypes.number,
     highQualityPen: PropTypes.bool,

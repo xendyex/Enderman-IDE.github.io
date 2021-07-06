@@ -1250,14 +1250,19 @@ export default class DevTools {
         // console.log("I found a new block!!! - " + block.id);
         // todo: move the block to the mouse pointer?
         let mouseXYClone = { x: this.mouseXY.x, y: this.mouseXY.y };
+        block.setIntersects(true); // fixes offscreen block pasting in TurboWarp
         this.domHelpers.triggerDragAndDrop(block.svgPath_, null, mouseXYClone);
       }
     }
   }
 
-  eventMouseMove(e) {
+  updateMousePosition(e) {
     this.mouseXY.x = e.clientX;
     this.mouseXY.y = e.clientY;
+  }
+
+  eventMouseMove(e) {
+    this.updateMousePosition(e);
   }
 
   eventKeyDown(e) {
@@ -1283,7 +1288,7 @@ export default class DevTools {
 
     let ctrlKey = e.ctrlKey || e.metaKey;
 
-    if (e.key === "f" && ctrlKey) {
+    if (e.key === "f" && ctrlKey && !e.shiftKey) {
       // Ctrl + F (Override default Ctrl+F find)
       this.findInp.focus();
       this.findInp.select();
@@ -1351,6 +1356,8 @@ export default class DevTools {
   }
 
   eventMouseDown(e) {
+    this.updateMousePosition(e);
+
     if (this.ddOut && this.ddOut.classList.contains("vis") && !e.target.closest("#s3devDDOut")) {
       // If we click outside the dropdown, then instigate the hide code...
       this.hideDropDown();
@@ -1424,14 +1431,24 @@ export default class DevTools {
               }
               let html = cleanupPlus
                 ? `
-                  <div id="s3devCleanUp" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
+                  <div
+                    id="s3devCleanUp"
+                    class="goog-menuitem s3dev-mi ${this.addon.tab.direction === "rtl" ? "goog-menuitem-rtl" : ""}"
+                    role="menuitem"
+                    style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);"
+                  >
                       <div class="goog-menuitem-content" style="user-select: none;">${this.m("clean-plus")}</div>
                   </div>
               `
                 : "";
 
               html += `
-                  <div id="s3devPaste" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
+                  <div
+                    id="s3devPaste"
+                    class="goog-menuitem s3dev-mi ${this.addon.tab.direction === "rtl" ? "goog-menuitem-rtl" : ""}"
+                    role="menuitem"
+                    style="user-select: none;"
+                  >
                       <div class="goog-menuitem-content" style="user-select: none;">${this.m("paste")}</div>
                   </div>
               `;
@@ -1639,6 +1656,16 @@ export default class DevTools {
     }
   }
 
+  eventMouseUp(e) {
+    this.updateMousePosition(e);
+
+    if (e.button === 1 && e.target.closest("svg.blocklySvg")) {
+      // On Linux systems, middle click is often treated as a paste.
+      // We do not want this as we assign our own functionality to middle mouse.
+      e.preventDefault();
+    }
+  }
+
   middleClickWorkspace(e) {
     if (!this.isScriptEditor()) {
       return;
@@ -1660,7 +1687,7 @@ export default class DevTools {
     document.body.insertAdjacentHTML(
       "beforeend",
       `
-            <div id="s3devFloatingBar">
+            <div id="s3devFloatingBar" dir="${this.addon.tab.direction}">
                 <label class='title s3devLabel' id=s3devInsertLabel>
                     <span style="display:none;">${this.m("insert")} </span>
                     <span id=s3devInsert class="s3devWrap">
@@ -1814,7 +1841,7 @@ export default class DevTools {
 
     let options = [];
 
-    let t = Blockly.getMainWorkspace().getToolbox();
+    let t = this.utils.getWorkspace().getToolbox();
 
     let blocks = t.flyout_.getWorkspace().getTopBlocks();
     // 107 blocks, not in order... but we can sort by y value or description right :)
@@ -2041,7 +2068,9 @@ export default class DevTools {
    */
   dropDownFloatClick(e) {
     e.cancelBubble = true;
-    e.preventDefault();
+    if (!e.target.closest("input")) {
+      e.preventDefault();
+    }
 
     let wksp = this.utils.getWorkspace();
 
@@ -2227,7 +2256,7 @@ export default class DevTools {
                         <div ${
                           this.addon.self._isDevtoolsExtension ? "" : 'style="display: none;"'
                         }><a href="#" class="s3devAction" id="s3devHelp"><b>${this.m("help")}</b></a>
-                        <a href="https://www.youtube.com/griffpatch" class="s3devAction" target="_blank" id="s3devHelp">${this.m(
+                        <a href="https://www.youtube.com/griffpatch" class="s3devAction" target="_blank" id="s3devHelp" rel="noreferrer noopener">${this.m(
                           "tutorials"
                         )}</a></div>
                     </label>
@@ -2261,6 +2290,7 @@ export default class DevTools {
 
     this.domHelpers.bindOnce(document, "mousemove", (...e) => this.eventMouseMove(...e), true);
     this.domHelpers.bindOnce(document, "mousedown", (...e) => this.eventMouseDown(...e), true); // true to capture all mouse downs 'before' the dom events handle them
+    this.domHelpers.bindOnce(document, "mouseup", (...e) => this.eventMouseUp(...e), true);
     // bindOnce(document.getElementById("s3devDeep"), "click", deepSearch);
     // bindOnce(document.getElementById('s3devCleanUp'),'click', clickCleanUp);
     // bindOnce(document.getElementById("s3devInject"), "click", clickInject);

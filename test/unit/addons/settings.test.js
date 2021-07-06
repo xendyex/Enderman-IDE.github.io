@@ -1,4 +1,5 @@
 import SettingStore from '../../../src/addons/settings-store';
+import upstreamMeta from '../../../src/addons/upstream-meta.json';
 
 class LocalStorageShim {
     constructor () {
@@ -33,20 +34,34 @@ test('enabled, event', () => {
     expect(fn).toHaveBeenCalledTimes(4);
     expect(fn.mock.calls[0][0].detail.addonId).toBe('editor-devtools');
     expect(fn.mock.calls[0][0].detail.settingId).toBe('enabled');
-    expect(fn.mock.calls[0][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[0][0].detail.value).toBe(false);
     expect(fn.mock.calls[1][0].detail.addonId).toBe('editor-devtools');
     expect(fn.mock.calls[1][0].detail.settingId).toBe('enabled');
-    expect(fn.mock.calls[1][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[1][0].detail.value).toBe(true);
     expect(fn.mock.calls[2][0].detail.addonId).toBe('cat-blocks');
     expect(fn.mock.calls[2][0].detail.settingId).toBe('enabled');
-    expect(fn.mock.calls[2][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[2][0].detail.value).toBe(true);
     expect(fn.mock.calls[3][0].detail.addonId).toBe('cat-blocks');
     expect(fn.mock.calls[3][0].detail.settingId).toBe('enabled');
-    expect(fn.mock.calls[3][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[3][0].detail.value).toBe(false);
+});
+
+test('setAddonEnabled reloadRequired', () => {
+    const store = new SettingStore();
+    const fn = jest.fn();
+    store.setAddonEnabled('editor-devtools', false);
+    store.setAddonEnabled('block-palette-icons', false);
+    store.addEventListener('setting-changed', fn);
+    store.setAddonEnabled('editor-devtools', true);
+    store.setAddonEnabled('block-palette-icons', true);
+    store.setAddonEnabled('block-palette-icons', false);
+    expect(fn).toHaveBeenCalledTimes(3);
+    expect(fn.mock.calls[0][0].detail.addonId).toBe('editor-devtools');
+    expect(fn.mock.calls[0][0].detail.reloadRequired).toBe(true);
+    expect(fn.mock.calls[1][0].detail.addonId).toBe('block-palette-icons');
+    expect(fn.mock.calls[1][0].detail.reloadRequired).toBe(false);
+    expect(fn.mock.calls[2][0].detail.addonId).toBe('block-palette-icons');
+    expect(fn.mock.calls[2][0].detail.reloadRequired).toBe(false);
 });
 
 test('settings, event, default values', () => {
@@ -186,12 +201,12 @@ test('reset all addons', () => {
     store.addEventListener('setting-changed', fn);
     store.resetAllAddons();
     expect(fn).toHaveBeenCalledTimes(2);
-    expect(fn.mock.calls[0][0].detail.addonId).toBe('onion-skinning');
-    expect(fn.mock.calls[0][0].detail.settingId).toBe('default');
+    expect(fn.mock.calls[0][0].detail.addonId).toBe('cat-blocks');
+    expect(fn.mock.calls[0][0].detail.settingId).toBe('enabled');
     expect(fn.mock.calls[0][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[0][0].detail.value).toBe(false);
-    expect(fn.mock.calls[1][0].detail.addonId).toBe('cat-blocks');
-    expect(fn.mock.calls[1][0].detail.settingId).toBe('enabled');
+    expect(fn.mock.calls[1][0].detail.addonId).toBe('onion-skinning');
+    expect(fn.mock.calls[1][0].detail.settingId).toBe('default');
     expect(fn.mock.calls[1][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[1][0].detail.value).toBe(false);
 });
@@ -365,4 +380,80 @@ test('local storage is resistent to errors', () => {
     global.localStorage = undefined;
     store.readLocalStorage();
     store.setAddonEnabled('cat-blocks', false);
+});
+
+test('setStore diffing', () => {
+    const settingsStore = new SettingStore();
+    const pageStore = new SettingStore();
+    settingsStore.setAddonEnabled('editor-devtools', false);
+    pageStore.setAddonEnabled('editor-devtools', false);
+    const fn = jest.fn();
+    pageStore.addEventListener('addon-changed', fn);
+    pageStore.setStore(settingsStore.store);
+    expect(fn).toHaveBeenCalledTimes(0);
+    settingsStore.setAddonEnabled('editor-devtools', true);
+    settingsStore.setAddonSetting('onion-skinning', 'next', 10);
+    pageStore.setStore(settingsStore.store);
+    expect(fn).toHaveBeenCalledTimes(2);
+    expect(fn.mock.calls[0][0].detail.addonId).toBe('editor-devtools');
+    expect(fn.mock.calls[1][0].detail.addonId).toBe('onion-skinning');
+});
+
+test('setStore dynamic enable/disable', () => {
+    const settingsStore = new SettingStore();
+    const pageStore = new SettingStore();
+    settingsStore.setAddonEnabled('block-palette-icons', false);
+    pageStore.setStore(settingsStore.store);
+    const fn = jest.fn();
+    pageStore.addEventListener('addon-changed', fn);
+    settingsStore.setAddonEnabled('block-palette-icons', true);
+    pageStore.setStore(settingsStore.store);
+    expect(fn.mock.calls[0][0].detail.addonId).toBe('block-palette-icons');
+    expect(fn.mock.calls[0][0].detail.dynamicEnable).toBe(true);
+    expect(fn.mock.calls[0][0].detail.dynamicDisable).toBe(false);
+    settingsStore.setAddonEnabled('block-palette-icons', false);
+    pageStore.setStore(settingsStore.store);
+    expect(fn.mock.calls[1][0].detail.addonId).toBe('block-palette-icons');
+    expect(fn.mock.calls[1][0].detail.dynamicEnable).toBe(false);
+    expect(fn.mock.calls[1][0].detail.dynamicDisable).toBe(true);
+});
+
+test('setStore weird values', () => {
+    const settingsStore = new SettingStore();
+    expect(settingsStore.getAddonEnabled('pause')).toBe(true);
+    settingsStore.setAddonEnabled('pause', false);
+    settingsStore.setAddonEnabled('clones', true);
+    settingsStore.setStore({
+        invalid0: {},
+        invalid1: null,
+        pause: null
+    });
+    expect(settingsStore.getAddonEnabled('pause')).toBe(false);
+});
+
+test('resetting an addon through setStore', () => {
+    const store = new SettingStore();
+    expect(store.getAddonSetting('custom-block-shape', 'paddingSize')).toBe(100);
+    store.setAddonSetting('custom-block-shape', 'paddingSize', 50);
+    expect(store.getAddonSetting('custom-block-shape', 'paddingSize')).toBe(50);
+    const store2 = new SettingStore();
+    store.setStore(store2.store);
+    expect(store.getAddonSetting('custom-block-shape', 'paddingSize')).toBe(100);
+});
+
+test('setStoreWithVersionCheck', () => {
+    const store = new SettingStore();
+    store.setStore = jest.fn();
+    store.setStoreWithVersionCheck({
+        store: '1234',
+        version: upstreamMeta.commit
+    });
+    expect(store.setStore).toHaveBeenCalledTimes(1);
+    expect(store.setStore).toHaveBeenCalledWith('1234');
+    store.setStore = jest.fn();
+    store.setStoreWithVersionCheck({
+        store: '1234',
+        version: 'something invalid'
+    });
+    expect(store.setStore).toHaveBeenCalledTimes(0);
 });

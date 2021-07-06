@@ -18,18 +18,21 @@
       "name": "Enhance \"Clean up Blocks\"",
       "id": "enableCleanUpPlus",
       "type": "boolean",
+      "reloadRequired": false,
       "default": true
     },
     {
       "name": "Paste blocks at mouse cursor",
       "id": "enablePasteBlocksAtMouse",
       "type": "boolean",
+      "reloadRequired": false,
       "default": true
     },
     {
       "name": "Middle mouse click variables, custom blocks or events to navigate",
       "id": "enableMiddleClickFinder",
       "type": "boolean",
+      "reloadRequired": false,
       "default": true
     }
   ],
@@ -45,7 +48,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor", "recommended"],
-  "enabledByDefault": true,
-  "l10n": true
+  "versionAdded": "1.0.0",
+  "tags": ["editor", "codeEditor", "costumeEditor", "recommended"],
+  "enabledByDefault": true
 }

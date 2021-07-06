@@ -8,6 +8,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "versionAdded": "1.0.0",
   "injectAsStyleElt": true,
   "userscripts": [
     {
@@ -21,7 +22,6 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor", "theme"],
-  "enabledByDefault": false,
-  "l10n": true
+  "tags": ["editor", "codeEditor", "theme"],
+  "enabledByDefault": false
 }

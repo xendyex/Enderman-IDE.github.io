@@ -8,9 +8,9 @@ const _twGetAsset = (path) => {
 // this script was happily stolen from the color-picker addon, developed by Richie Bendall and apple502j
 
 // import required libraries
-import { normalizeHex } from "../../libraries/normalize-color.js";
-import RateLimiter from "../../libraries/rate-limiter.js";
-import tinycolor from "../../libraries/tinycolor-min.js";
+import { normalizeHex } from "../../libraries/common/cs/normalize-color.js";
+import RateLimiter from "../../libraries/common/cs/rate-limiter.js";
+import tinycolor from "../../libraries/thirdparty/cs/tinycolor-min.js";
 
 export default async ({ addon, console, msg }) => {
   let prevEventHandler;
@@ -72,9 +72,7 @@ export default async ({ addon, console, msg }) => {
     // wait for color dialog box appearance
     const element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {
       markAsSeen: true,
-      condition: () =>
-        addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 1 &&
-        !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
     rateLimiter.abort(false);
 

@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import {Provider} from 'react-redux';
 import {createStore, combineReducers, compose} from 'redux';
 import ConnectedIntlProvider from './connected-intl-provider.jsx';
+import AddonHooks from '../addons/hooks';
 
 import localesReducer, {initLocale, localesInitialState} from '../reducers/locales';
 
 import {setPlayer, setFullScreen} from '../reducers/mode.js';
 
-import locales from 'scratch-l10n';
+import locales from '@turbowarp/scratch-l10n';
 import {detectLocale} from './detect-locale';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -82,11 +83,9 @@ const AppStateHOC = function (WrappedComponent, localesOnly) {
                 enhancer = composeEnhancers(guiMiddleware);
             }
             const reducer = combineReducers(reducers);
-            const reducer2 = (a, b) => {
-                const next = reducer(a, b);
-                if (window.__APP_STATE_REDUCER__) {
-                    window.__APP_STATE_REDUCER__(b, next);
-                }
+            const reducer2 = (state, action) => {
+                const next = reducer(state, action);
+                AddonHooks.appStateReducer(action, next);
                 return next;
             };
             this.store = createStore(
@@ -94,7 +93,8 @@ const AppStateHOC = function (WrappedComponent, localesOnly) {
                 initialState,
                 enhancer
             );
-            window.__APP_STATE_STORE__ = this.store;
+            window.ReduxStore = this.store;
+            AddonHooks.appStateStore = this.store;
         }
         componentDidUpdate (prevProps) {
             if (localesOnly) return;
