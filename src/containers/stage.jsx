@@ -205,6 +205,7 @@ class Stage extends React.Component {
         const x = (width / 2) + movementX;
         const y = (height / 2) + movementY;
         const data = {
+            button: e.button,
             canvasWidth: width,
             canvasHeight: height,
             movementX: x,
