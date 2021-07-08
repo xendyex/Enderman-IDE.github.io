@@ -339,6 +339,7 @@ export default [
                 id="tw.twExtension.description"
             />
         ),
-        featured: true
+        featured: true,
+        incompatibleWithScratch: true
     }
 ];
