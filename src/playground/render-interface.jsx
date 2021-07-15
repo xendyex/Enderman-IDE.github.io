@@ -47,7 +47,8 @@ import styles from './interface.css';
 
 if (window.parent !== window) {
     // eslint-disable-next-line no-alert
-    alert('This page is embedding TurboWarp in a way that is unsupported and will cease to function in the near future. Please read https://github.com/TurboWarp/scratch-gui/wiki/Embedding');
+    alert('This page is embedding TurboWarp in a way that is unsupported and will cease to function in the near future. Please read https://docs.turbowarp.org/embedding');
+    throw new Error('Invalid embed');
 }
 
 let announcement = null;
@@ -125,21 +126,21 @@ const Footer = () => (
                         {/* Do not translate */}
                         {'TurboWarp Packager'}
                     </a>
-                    <a href="https://github.com/TurboWarp/scratch-gui/wiki/Embedding">
+                    <a href="https://docs.turbowarp.org/embedding">
                         <FormattedMessage
                             defaultMessage="Embedding"
                             description="Menu bar item for embedding link"
                             id="tw.footer.embed"
                         />
                     </a>
-                    <a href="https://github.com/TurboWarp/scratch-gui/wiki/URL-Parameters">
+                    <a href="https://docs.turbowarp.org/url-parameters">
                         <FormattedMessage
                             defaultMessage="URL Parameters"
                             description="Menu bar item for URL parameters link"
                             id="tw.footer.parameters"
                         />
                     </a>
-                    <a href="https://github.com/TurboWarp/scratch-gui/wiki/Help-translate-TurboWarp">
+                    <a href="https://docs.turbowarp.org/translate">
                         <FormattedMessage
                             defaultMessage="Help Translate TurboWarp"
                             description="Menu bar item for translating TurboWarp link"
