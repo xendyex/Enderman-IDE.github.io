@@ -23,7 +23,7 @@ import importedAddons, {unsupportedAddons} from '../addon-manifests';
 import getAddonTranslations from '../get-addon-translations';
 import settingsTranslationsEnglish from './l10n/en.json';
 import settingsTranslationsOther from './l10n/translations.json';
-import upstreamMeta from '../upstream-meta.json';
+import upstreamMeta from '../generated/upstream-meta.json';
 import {detectLocale} from '../../lib/detect-locale';
 import {getInitialDarkMode} from '../../lib/tw-theme-hoc.jsx';
 import SettingsStore from '../settings-store-singleton';
@@ -45,9 +45,15 @@ import '../../lib/normalize.css';
 /* eslint-disable react/jsx-no-bind */
 
 const locale = detectLocale(upstreamMeta.languages);
-const addonTranslations = getAddonTranslations(locale);
-const settingsTranslations = settingsTranslationsEnglish;
 document.documentElement.lang = locale;
+
+let addonTranslations;
+const loadAddonTranslations = () => getAddonTranslations(locale)
+    .then(_l10n => {
+        addonTranslations = _l10n;
+    });
+
+const settingsTranslations = settingsTranslationsEnglish;
 if (locale !== 'en') {
     const messages = settingsTranslationsOther[locale] || settingsTranslationsOther[locale.split('-')[0]];
     if (messages) {
@@ -695,6 +701,7 @@ class AddonSettingsComponent extends React.Component {
         this.searchRef = this.searchRef.bind(this);
         this.searchBar = null;
         this.state = {
+            loading: true,
             dirty: false,
             search: ''
         };
@@ -713,6 +720,12 @@ class AddonSettingsComponent extends React.Component {
         }
     }
     componentDidMount () {
+        loadAddonTranslations()
+            .then(() => {
+                this.setState({
+                    loading: false
+                });
+            });
         SettingsStore.addEventListener('setting-changed', this.handleSettingStoreChanged);
         document.body.addEventListener('keydown', this.handleKeyDown);
     }
@@ -869,40 +882,44 @@ class AddonSettingsComponent extends React.Component {
                     )}
                 </div>
                 <div className={styles.addons}>
-                    <AddonList
-                        addons={addonState}
-                        search={this.state.search}
-                    />
-                    <div className={styles.footerButtons}>
-                        <button
-                            className={classNames(styles.button, styles.resetAllButton)}
-                            onClick={this.handleResetAll}
-                        >
-                            {settingsTranslations['tw.addons.settings.resetAll']}
-                        </button>
-                        <button
-                            className={classNames(styles.button, styles.exportButton)}
-                            onClick={this.handleExport}
-                        >
-                            {settingsTranslations['tw.addons.settings.export']}
-                        </button>
-                        <button
-                            className={classNames(styles.button, styles.importButton)}
-                            onClick={this.handleImport}
-                        >
-                            {settingsTranslations['tw.addons.settings.import']}
-                        </button>
-                    </div>
-                    <footer className={styles.footer}>
-                        {unsupported.length ? (
-                            <UnsupportedAddons
-                                addons={unsupported}
+                    {!this.state.loading && (
+                        <>
+                            <AddonList
+                                addons={addonState}
+                                search={this.state.search}
                             />
-                        ) : null}
-                        <div className={styles.version}>
-                            {`v${upstreamMeta.version} (${upstreamMeta.commit})`}
-                        </div>
-                    </footer>
+                            <div className={styles.footerButtons}>
+                                <button
+                                    className={classNames(styles.button, styles.resetAllButton)}
+                                    onClick={this.handleResetAll}
+                                >
+                                    {settingsTranslations['tw.addons.settings.resetAll']}
+                                </button>
+                                <button
+                                    className={classNames(styles.button, styles.exportButton)}
+                                    onClick={this.handleExport}
+                                >
+                                    {settingsTranslations['tw.addons.settings.export']}
+                                </button>
+                                <button
+                                    className={classNames(styles.button, styles.importButton)}
+                                    onClick={this.handleImport}
+                                >
+                                    {settingsTranslations['tw.addons.settings.import']}
+                                </button>
+                            </div>
+                            <footer className={styles.footer}>
+                                {unsupported.length ? (
+                                    <UnsupportedAddons
+                                        addons={unsupported}
+                                    />
+                                ) : null}
+                                <div className={styles.version}>
+                                    {`v${upstreamMeta.version} (${upstreamMeta.commit})`}
+                                </div>
+                            </footer>
+                        </>
+                    )}
                 </div>
             </div>
         );

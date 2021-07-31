@@ -10,18 +10,20 @@
   "dynamicDisable": true,
   "userscripts": [
     {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "url": "userscript.js"
     }
   ],
   "userstyles": [
     {
-      "url": "userscript.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "url": "userscript.css"
     }
   ],
-  "versionAdded": "1.0.0",
-  "tags": ["editor", "codeEditor", "recommended"],
+  "onlyInEditor": true,
+  "tags": [
+    "editor",
+    "codeEditor",
+    "recommended"
+  ],
   "enabledByDefault": true,
   "enabledByDefaultMobile": false
 }

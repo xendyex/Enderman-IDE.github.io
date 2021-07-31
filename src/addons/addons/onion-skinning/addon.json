@@ -8,16 +8,15 @@
   ],
   "userscripts": [
     {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "url": "userscript.js"
     }
   ],
   "userstyles": [
     {
-      "url": "style.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "url": "style.css"
     }
   ],
+  "onlyInEditor": true,
   "settings": [
     {
       "id": "default",
@@ -102,8 +101,11 @@
       "default": "#0000FF"
     }
   ],
-  "versionAdded": "1.5.0",
-  "tags": ["editor", "costumeEditor", "recommended"],
+  "tags": [
+    "editor",
+    "costumeEditor",
+    "recommended"
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "enabledByDefault": true

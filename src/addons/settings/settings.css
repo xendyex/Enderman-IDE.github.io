@@ -469,6 +469,7 @@ a[href]:active, a[href]:focus {
 .setting input[type="number"] {
     border-radius: 20px;
     font-size: 14px;
+    width: 75px;
 }
 .setting input[type="color"] {
     height: 30px;
@@ -522,6 +523,7 @@ a[href]:active, a[href]:focus {
 .select-option:active, .select-option:focus-within {
     outline: none;
     box-shadow: 0 0 0 3px $motion-transparent;
+    z-index: 10;
 }
 
 .presets {
@@ -574,7 +576,7 @@ a[href]:active, a[href]:focus {
 .dirty-outer {
     display: flex;
     position: absolute;
-    top: 100%;
+    top: calc(100% - 2px);
     left: 0;
     width: calc(100% - 20px);
     margin-left: 10px;
@@ -582,7 +584,6 @@ a[href]:active, a[href]:focus {
     justify-content: center;
     animation: dirty-appear 0.2s ease;
     pointer-events: none;
-    margin-top: 2px;
 }
 .dirty-inner {
     padding: 8px;

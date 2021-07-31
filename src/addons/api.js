@@ -21,6 +21,7 @@ import dataURLToBlob from '../lib/data-uri-to-blob';
 import EventTargetShim from './event-target';
 import AddonHooks from './hooks';
 import addons from './addon-manifests';
+import addonEntries from './generated/addon-entries';
 import './polyfill';
 
 /* eslint-disable no-console */
@@ -148,8 +149,22 @@ const getEditorMode = () => {
 };
 
 const tabReduxInstance = new Redux();
-const language = tabReduxInstance.state.locales.locale.split('-')[0];
-const translations = getAddonTranslations(language);
+
+const untilInEditor = () => {
+    if (!tabReduxInstance.state.scratchGui.mode.isPlayerOnly) {
+        return;
+    }
+    return new Promise(resolve => {
+        const handler = () => {
+            if (!tabReduxInstance.state.scratchGui.mode.isPlayerOnly) {
+                resolve();
+                tabReduxInstance.removeEventListener('statechanged', handler);
+            }
+        };
+        tabReduxInstance.initialize();
+        tabReduxInstance.addEventListener('statechanged', handler);
+    });
+};
 
 const getDisplayNoneWhileDisabledClass = id => `addons-display-none-${id}`;
 
@@ -531,6 +546,7 @@ class AddonRunner {
         this.messageCache = {};
         this.stylesheets = [];
         this.disabledStylesheet = null;
+        this.loading = true;
 
         this.publicAPI = {
             global,
@@ -597,6 +613,9 @@ class AddonRunner {
     }
 
     dynamicEnable () {
+        if (this.loading) {
+            return;
+        }
         this.publicAPI.addon.self.dispatchEvent(new CustomEvent('reenabled'));
         this.publicAPI.addon.self.disabled = false;
         this.appendStylesheets();
@@ -607,6 +626,9 @@ class AddonRunner {
     }
 
     dynamicDisable () {
+        if (this.loading) {
+            return;
+        }
         this.publicAPI.addon.self.dispatchEvent(new CustomEvent('disabled'));
         this.publicAPI.addon.self.disabled = true;
         this.removeStylesheets();
@@ -629,6 +651,12 @@ class AddonRunner {
     }
 
     async run () {
+        if (this.manifest.onlyInEditor) {
+            await untilInEditor();
+        }
+
+        const {resources} = await addonEntries[this.id]();
+
         this.updateCSSVariables();
 
         if (this.manifest.userstyles) {
@@ -636,12 +664,8 @@ class AddonRunner {
                 if (!this.settingsMatch(userstyle.settingMatch)) {
                     continue;
                 }
-                const m = await import(
-                    /* webpackInclude: /\.css$/ */
-                    /* webpackMode: "eager" */
-                    `!css-loader!./addons/${this.id}/${userstyle.url}`
-                );
-                const source = m.default[0][1];
+                const m = resources[userstyle.url]();
+                const source = m[0][1];
                 const style = createStylesheet(source);
                 style.className = 'scratch-addons-theme';
                 style.dataset.addonId = this.id;
@@ -655,14 +679,12 @@ class AddonRunner {
                 if (!this.settingsMatch(userscript.settingMatch)) {
                     continue;
                 }
-                const m = await import(
-                    /* webpackInclude: /\.js$/ */
-                    /* webpackMode: "eager" */
-                    `./addons/${this.id}/${userscript.url}`
-                );
+                const m = resources[userscript.url]();
                 m.default(this.publicAPI);
             }
         }
+
+        this.loading = false;
     }
 }
 AddonRunner.instances = [];
@@ -698,28 +720,38 @@ history.pushState = function (...args) {
     emitUrlChange();
 };
 
-SettingsStore.addEventListener('addon-changed', e => {
-    const addonId = e.detail.addonId;
-    const runner = AddonRunner.instances.find(i => i.id === addonId);
-    if (e.detail.dynamicEnable) {
-        if (runner) {
-            runner.dynamicEnable();
-        } else {
-            runAddon(addonId);
+const ready = () => {
+    SettingsStore.addEventListener('addon-changed', e => {
+        const addonId = e.detail.addonId;
+        const runner = AddonRunner.instances.find(i => i.id === addonId);
+        if (e.detail.dynamicEnable) {
+            if (runner) {
+                runner.dynamicEnable();
+            } else {
+                runAddon(addonId);
+            }
+        } else if (e.detail.dynamicDisable) {
+            if (runner) {
+                runner.dynamicDisable();
+            }
         }
-    } else if (e.detail.dynamicDisable) {
         if (runner) {
-            runner.dynamicDisable();
+            runner.settingsChanged();
         }
-    }
-    if (runner) {
-        runner.settingsChanged();
-    }
-});
+    });
 
-for (const id of Object.keys(addons)) {
-    if (!SettingsStore.getAddonEnabled(id)) {
-        continue;
+    for (const id of Object.keys(addons)) {
+        if (!SettingsStore.getAddonEnabled(id)) {
+            continue;
+        }
+        runAddon(id);
     }
-    runAddon(id);
-}
+};
+
+const language = tabReduxInstance.state.locales.locale.split('-')[0];
+let translations;
+getAddonTranslations(language)
+    .then(_translations => {
+        translations = _translations;
+        ready();
+    });
