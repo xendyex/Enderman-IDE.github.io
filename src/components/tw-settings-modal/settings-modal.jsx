@@ -8,6 +8,7 @@ import Modal from '../../containers/modal.jsx';
 import FancyCheckbox from '../tw-fancy-checkbox/checkbox.jsx';
 import Input from '../forms/input.jsx';
 import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
+import DocumentationLink from '../tw-documentation-link/documentation-link.jsx';
 import styles from './settings-modal.css';
 
 /* eslint-disable react/no-multi-comp */
@@ -27,6 +28,17 @@ const messages = defineMessages({
     }
 });
 
+const LearnMore = props => (
+    <React.Fragment>
+        {' '}
+        <DocumentationLink {...props}>
+            <FormattedMessage
+                defaultMessage="Learn more."
+                id="gui.alerts.cloudInfoLearnMore"
+            />
+        </DocumentationLink>
+    </React.Fragment>
+);
 
 class UnwrappedSetting extends React.Component {
     constructor (props) {
@@ -69,6 +81,7 @@ class UnwrappedSetting extends React.Component {
                 {this.state.helpVisible && (
                     <div className={styles.detail}>
                         {this.props.help}
+                        {this.props.slug && <LearnMore slug={this.props.slug} />}
                     </div>
                 )}
                 {this.props.secondary}
@@ -82,7 +95,8 @@ UnwrappedSetting.propTypes = {
     help: PropTypes.node,
     primary: PropTypes.node,
     secondary: PropTypes.node,
-    showHelpAutomatically: PropTypes.bool
+    showHelpAutomatically: PropTypes.bool,
+    slug: PropTypes.string
 };
 const Setting = injectIntl(UnwrappedSetting);
 
@@ -123,26 +137,12 @@ const HighQualityPen = props => (
         help={
             <FormattedMessage
                 // eslint-disable-next-line max-len
-                defaultMessage="High Quality Pen allows pen projects to render at a higher resolution and disables some coordinate rounding in the editor. Not all projects benefit from this setting, and it may impact performance. {comparison}."
+                defaultMessage="Allows pen projects to render at higher resolutions and disables some coordinate rounding in the editor. Not all projects benefit from this setting and it may impact performance."
                 description="High quality pen setting help"
                 id="tw.settingsModal.highQualityPenHelp"
-                values={{
-                    comparison: (
-                        <a
-                            href="https://docs.turbowarp.org/advanced-settings#high-quality-pen"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <FormattedMessage
-                                defaultMessage="See comparison"
-                                description="Link to high quality pen comparison"
-                                id="tw.settingsModal.highQualityPenHelp.comparison"
-                            />
-                        </a>
-                    )
-                }}
             />
         }
+        slug="high-quality-pen"
     />
 );
 
@@ -179,6 +179,7 @@ const CustomFPS = props => (
                 }}
             />
         }
+        slug="custom-fps"
     />
 );
 CustomFPS.propTypes = {
@@ -200,11 +201,12 @@ const Interpolation = props => (
         help={
             <FormattedMessage
                 // eslint-disable-next-line max-len
-                defaultMessage="Interpolation makes projects appear smoother by interpolating sprite motion. Interpolation should not be used on 3D projects, raytracers, pen projects, and laggy projects as interpolation will make them run slower without making them appear smoother."
+                defaultMessage="Makes projects appear smoother by interpolating sprite motion. Interpolation should not be used on 3D projects, raytracers, pen projects, and laggy projects as interpolation will make them run slower without making them appear smoother."
                 description="Interpolation setting help"
                 id="tw.settingsModal.interpolationHelp"
             />
         }
+        slug="interpolation"
     />
 );
 
@@ -225,6 +227,7 @@ const InfiniteClones = props => (
                 id="tw.settingsModal.infiniteClonesHelp"
             />
         }
+        slug="infinite-clones"
     />
 );
 
@@ -245,6 +248,7 @@ const RemoveFencing = props => (
                 id="tw.settingsModal.removeFencingHelp"
             />
         }
+        slug="remove-fencing"
     />
 );
 
@@ -260,11 +264,12 @@ const RemoveMiscLimits = props => (
         }
         help={
             <FormattedMessage
-                defaultMessage="Removes sound effect range limits, pen size limit, and possibly more in the future."
+                defaultMessage="Removes sound effect limits and pen size limits."
                 description="Remove Miscellaneous Limits setting help"
                 id="tw.settingsModal.removeMiscLimitsHelp"
             />
         }
+        slug="remove-misc-limits"
     />
 );
 
@@ -281,11 +286,12 @@ const WarpTimer = props => (
         help={
             <FormattedMessage
                 // eslint-disable-next-line max-len
-                defaultMessage="Warp Timer makes scripts check if they are stuck in a long or infinite loop and run at a low framerate instead of getting stuck until the loop finishes. This fixes most crashes but has a significant performance impact, so it's only enabled by default in the editor."
+                defaultMessage="Makes scripts check if they are stuck in a long or infinite loop and run at a low framerate instead of getting stuck until the loop finishes. This fixes most crashes but has a significant performance impact, so it's only enabled by default in the editor."
                 description="Warp Timer help"
                 id="tw.settingsModal.warpTimerHelp"
             />
         }
+        slug="warp-timer"
     />
 );
 
@@ -307,6 +313,7 @@ const DisableCompiler = props => (
                 id="tw.settingsModal.disableCompilerHelp"
             />
         }
+        slug="disable-compiler"
     />
 );
 
@@ -346,7 +353,7 @@ const CustomStageSize = ({
             </div>
         )}
         secondary={
-            (stageWidth > 1024 || stageHeight > 1024) && (
+            (stageWidth >= 1000 || stageHeight >= 1000) && (
                 <div className={styles.warning}>
                     <FormattedMessage
                         // eslint-disable-next-line max-len
@@ -354,6 +361,7 @@ const CustomStageSize = ({
                         description="Warning about using stages that are too large in settings modal"
                         id="tw.settingsModal.largeStageWarning"
                     />
+                    <LearnMore slug="custom-stage-size" />
                 </div>
             )
         }
@@ -365,6 +373,7 @@ const CustomStageSize = ({
                 id="tw.settingsModal.customStageSizeHelp"
             />
         )}
+        slug="custom-stage-size"
     />
 );
 CustomStageSize.propTypes = {

@@ -19,4 +19,6 @@ const loadServiceWorker = () => {
     }
 };
 
-export default loadServiceWorker;
+export {
+    loadServiceWorker
+};

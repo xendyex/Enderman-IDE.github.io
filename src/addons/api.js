@@ -16,11 +16,12 @@
 
 import IntlMessageFormat from 'intl-messageformat';
 import SettingsStore from './settings-store-singleton';
-import getAddonTranslations from './get-addon-translations';
 import dataURLToBlob from '../lib/data-uri-to-blob';
 import EventTargetShim from './event-target';
 import AddonHooks from './hooks';
 import addons from './addon-manifests';
+import addonMessages from './addons-l10n/en.json';
+import l10nEntries from './generated/l10n-entries';
 import addonEntries from './generated/addon-entries';
 import './polyfill';
 
@@ -149,6 +150,15 @@ const getEditorMode = () => {
 };
 
 const tabReduxInstance = new Redux();
+const language = tabReduxInstance.state.locales.locale.split('-')[0];
+
+const getTranslations = async () => {
+    if (l10nEntries[language]) {
+        const localeMessages = await l10nEntries[language]();
+        Object.assign(addonMessages, localeMessages);
+    }
+};
+const addonMessagesPromise = getTranslations();
 
 const untilInEditor = () => {
     if (!tabReduxInstance.state.scratchGui.mode.isPlayerOnly) {
@@ -204,13 +214,23 @@ const SHARED_SPACES = {
     afterSoundTab: {
         element: () => document.querySelector("[class^='react-tabs_react-tabs__tab-list']"),
         from: () => [document.querySelector("[class^='react-tabs_react-tabs__tab-list']").children[2]],
-        until: () => [document.querySelector('.s3devToolBar')]
+        until: () => [document.querySelector('#s3devToolBar')]
     }
 };
 
+const parseArguments = code => code
+    .split(/(?=[^\\]%[nbs])/g)
+    .map(i => i.trim())
+    .filter(i => i.charAt(0) === '%')
+    .map(i => i.substring(0, 2));
 const fixDisplayName = displayName => displayName.replace(/([^\s])(%[nbs])/g, (_, before, arg) => `${before} ${arg}`);
+const compareArrays = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 let _firstAddBlockRan = false;
+
+const contextMenuCallbacks = [];
+const CONTEXT_MENU_ORDER = ['editor-devtools', 'block-switching', 'blocks2image'];
+let createdAnyBlockContextMenus = false;
 
 class Tab extends EventTargetShim {
     constructor (id) {
@@ -220,29 +240,24 @@ class Tab extends EventTargetShim {
         // traps is public API
         this.traps = {
             get vm () {
-                // We expose VM on window
-                return window.vm;
+                return tabReduxInstance.state.scratchGui.vm;
             },
             getBlockly: () => {
-                // The real Blockly is exposed on window. It may not exist until the user enters the editor.
-                if (window.ScratchBlocks) {
-                    return Promise.resolve(window.ScratchBlocks);
+                if (AddonHooks.blockly) {
+                    return Promise.resolve(AddonHooks.blockly);
                 }
                 return new Promise(resolve => {
-                    const handler = () => {
-                        if (window.ScratchBlocks) {
-                            this.removeEventListener('urlChange', handler);
-                            resolve(window.ScratchBlocks);
-                        }
-                    };
-                    this.addEventListener('urlChange', handler);
+                    AddonHooks.blocklyCallbacks.push(() => resolve(AddonHooks.blockly));
                 });
             },
             getPaper: async () => {
                 const modeSelector = await this.waitForElement("[class*='paint-editor_mode-selector']", {
-                    reduxCondition: state => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
+                    reduxCondition: state => (
+                        state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly
+                    )
                 });
-                const reactInternalKey = Object.keys(modeSelector).find(key => key.startsWith('__reactInternalInstance$'));
+                const reactInternalKey = Object.keys(modeSelector)
+                    .find(key => key.startsWith('__reactInternalInstance$'));
                 const internalState = modeSelector[reactInternalKey].child;
                 // .tool or .blob.tool only exists on the selected tool
                 let toolState = internalState;
@@ -402,8 +417,18 @@ class Tab extends EventTargetShim {
     }
 
     addBlock (procedureCode, {args, displayName, callback}) {
+        const procCodeArguments = parseArguments(procedureCode);
+        if (args.length !== procCodeArguments.length) {
+            throw new Error('Procedure code and argument list do not match');
+        }
+
         if (displayName) {
             displayName = fixDisplayName(displayName);
+            const displayNameArguments = parseArguments(displayName);
+            if (!compareArrays(procCodeArguments, displayNameArguments)) {
+                console.warn(`displayName ${displayName} for ${procedureCode} has invalid arguments, ignoring it.`);
+                displayName = procedureCode;
+            }
         } else {
             displayName = procedureCode;
         }
@@ -458,6 +483,54 @@ class Tab extends EventTargetShim {
 
     removeBlock () {
         throw new Error('not implemented');
+    }
+
+    createBlockContextMenu (callback, {workspace = false, blocks = false, flyout = false, comments = false} = {}) {
+        contextMenuCallbacks.push({addonId: this._id, callback, workspace, blocks, flyout, comments});
+        contextMenuCallbacks.sort((b, a) => (
+            CONTEXT_MENU_ORDER.indexOf(b.addonId) - CONTEXT_MENU_ORDER.indexOf(a.addonId)
+        ));
+
+        if (createdAnyBlockContextMenus) return;
+        createdAnyBlockContextMenus = true;
+
+        this.traps.getBlockly().then(blockly => {
+            const oldShow = blockly.ContextMenu.show;
+            blockly.ContextMenu.show = function (event, items, rtl) {
+                const gesture = blockly.mainWorkspace.currentGesture_;
+                const block = gesture.targetBlock_;
+
+                // eslint-disable-next-line no-shadow
+                for (const {callback, workspace, blocks, flyout, comments} of contextMenuCallbacks) {
+                    const injectMenu =
+                        // Workspace
+                        (workspace && !block && !gesture.flyout_ && !gesture.startBubble_) ||
+                        // Block in workspace
+                        (blocks && block && !gesture.flyout_) ||
+                        // Block in flyout
+                        (flyout && gesture.flyout_) ||
+                        // Comments
+                        (comments && gesture.startBubble_);
+                    if (injectMenu) {
+                        try {
+                            items = callback(items, block);
+                        } catch (e) {
+                            console.error('Error while calling context menu callback: ', e);
+                        }
+                    }
+                }
+
+                oldShow.call(this, event, items, rtl);
+
+                items.forEach((item, i) => {
+                    if (item.separator) {
+                        const itemElt = document.querySelector('.blocklyContextMenu').children[i];
+                        itemElt.style.paddingTop = '2px';
+                        itemElt.style.borderTop = '1px solid hsla(0, 0%, 0%, 0.15)';
+                    }
+                });
+            };
+        });
     }
 
     copyImage (dataURL) {
@@ -566,7 +639,7 @@ class AddonRunner {
         if (this.messageCache[namespacedKey]) {
             return this.messageCache[namespacedKey].format(vars);
         }
-        let translation = translations[namespacedKey];
+        let translation = addonMessages[namespacedKey];
         if (!translation) {
             return namespacedKey;
         }
@@ -603,13 +676,19 @@ class AddonRunner {
         }
     }
 
-    settingsMatch (settingMatch) {
-        if (!settingMatch) {
-            // No settings to match.
+    meetsCondition (condition) {
+        if (!condition) {
+            // No condition, so always active.
             return true;
         }
-        const settingValue = this.publicAPI.addon.settings.get(settingMatch.id);
-        return settingValue === settingMatch.value;
+        if (condition.settings) {
+            for (const [settingId, expectedValue] of Object.entries(condition.settings)) {
+                if (this.publicAPI.addon.settings.get(settingId) !== expectedValue) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     dynamicEnable () {
@@ -656,12 +735,15 @@ class AddonRunner {
         }
 
         const {resources} = await addonEntries[this.id]();
+        if (!this.manifest.noTranslations) {
+            await addonMessagesPromise;
+        }
 
         this.updateCSSVariables();
 
         if (this.manifest.userstyles) {
             for (const userstyle of this.manifest.userstyles) {
-                if (!this.settingsMatch(userstyle.settingMatch)) {
+                if (!this.meetsCondition(userstyle.if)) {
                     continue;
                 }
                 const m = resources[userstyle.url]();
@@ -676,7 +758,7 @@ class AddonRunner {
 
         if (this.manifest.userscripts) {
             for (const userscript of this.manifest.userscripts) {
-                if (!this.settingsMatch(userscript.settingMatch)) {
+                if (!this.meetsCondition(userscript.if)) {
                     continue;
                 }
                 const m = resources[userscript.url]();
@@ -720,38 +802,28 @@ history.pushState = function (...args) {
     emitUrlChange();
 };
 
-const ready = () => {
-    SettingsStore.addEventListener('addon-changed', e => {
-        const addonId = e.detail.addonId;
-        const runner = AddonRunner.instances.find(i => i.id === addonId);
-        if (e.detail.dynamicEnable) {
-            if (runner) {
-                runner.dynamicEnable();
-            } else {
-                runAddon(addonId);
-            }
-        } else if (e.detail.dynamicDisable) {
-            if (runner) {
-                runner.dynamicDisable();
-            }
-        }
+SettingsStore.addEventListener('addon-changed', e => {
+    const addonId = e.detail.addonId;
+    const runner = AddonRunner.instances.find(i => i.id === addonId);
+    if (e.detail.dynamicEnable) {
         if (runner) {
-            runner.settingsChanged();
+            runner.dynamicEnable();
+        } else {
+            runAddon(addonId);
         }
-    });
-
-    for (const id of Object.keys(addons)) {
-        if (!SettingsStore.getAddonEnabled(id)) {
-            continue;
+    } else if (e.detail.dynamicDisable) {
+        if (runner) {
+            runner.dynamicDisable();
         }
-        runAddon(id);
     }
-};
+    if (runner) {
+        runner.settingsChanged();
+    }
+});
 
-const language = tabReduxInstance.state.locales.locale.split('-')[0];
-let translations;
-getAddonTranslations(language)
-    .then(_translations => {
-        translations = _translations;
-        ready();
-    });
+for (const id of Object.keys(addons)) {
+    if (!SettingsStore.getAddonEnabled(id)) {
+        continue;
+    }
+    runAddon(id);
+}

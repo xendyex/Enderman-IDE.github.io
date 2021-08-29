@@ -20,7 +20,7 @@ import classNames from 'classnames';
 
 import Search from './search';
 import importedAddons, {unsupportedAddons} from '../addon-manifests';
-import getAddonTranslations from '../get-addon-translations';
+import messagesByLocale from '../generated/l10n-settings-entries';
 import settingsTranslationsEnglish from './l10n/en.json';
 import settingsTranslationsOther from './l10n/translations.json';
 import upstreamMeta from '../generated/upstream-meta.json';
@@ -47,11 +47,7 @@ import '../../lib/normalize.css';
 const locale = detectLocale(upstreamMeta.languages);
 document.documentElement.lang = locale;
 
-let addonTranslations;
-const loadAddonTranslations = () => getAddonTranslations(locale)
-    .then(_l10n => {
-        addonTranslations = _l10n;
-    });
+const addonTranslations = messagesByLocale[locale] ? messagesByLocale[locale]() : {};
 
 const settingsTranslations = settingsTranslationsEnglish;
 if (locale !== 'en') {
@@ -266,6 +262,21 @@ const Setting = ({
     setting,
     value
 }) => {
+    if (setting.if && setting.if.addonEnabled) {
+        const addons = Array.isArray(setting.if.addonEnabled) ? setting.if.addonEnabled : [setting.if.addonEnabled];
+        for (const addon of addons) {
+            if (!SettingsStore.getAddonEnabled(addon)) {
+                return null;
+            }
+        }
+    }
+    if (setting.if && setting.if.settings) {
+        for (const [settingName, expectedValue] of Object.entries(setting.if.settings)) {
+            if (SettingsStore.getAddonSetting(addonId, settingName) !== expectedValue) {
+                return null;
+            }
+        }
+    }
     const settingId = setting.id;
     const settingName = addonTranslations[`${addonId}/@settings-name-${settingId}`] || setting.name;
     const uniqueId = `setting/${addonId}/${settingId}`;
@@ -352,7 +363,12 @@ Setting.propTypes = {
         potentialValues: PropTypes.arrayOf(PropTypes.shape({
             id: PropTypes.string,
             name: PropTypes.string
-        }))
+        })),
+        if: PropTypes.shape({
+            addonEnabled: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
+            // eslint-disable-next-line react/forbid-prop-types
+            settings: PropTypes.object
+        })
     }),
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number])
 };
@@ -428,7 +444,8 @@ Presets.propTypes = {
 const Addon = ({
     id,
     settings,
-    manifest
+    manifest,
+    extended
 }) => (
     <div className={classNames(styles.addon, {[styles.addonDirty]: settings.dirty})}>
         <div className={styles.addonHeader}>
@@ -453,6 +470,11 @@ const Addon = ({
                 <div className={styles.addonTitleText}>
                     {addonTranslations[`${id}/@name`] || manifest.name}
                 </div>
+                {extended && (
+                    <div className={styles.addonId}>
+                        {`(${id})`}
+                    </div>
+                )}
             </label>
             <Tags
                 tags={manifest.tags}
@@ -548,7 +570,8 @@ Addon.propTypes = {
         })),
         presets: PropTypes.array,
         tags: PropTypes.arrayOf(PropTypes.string)
-    })
+    }),
+    extended: PropTypes.bool
 };
 
 const Dirty = props => (
@@ -668,6 +691,7 @@ class AddonList extends React.Component {
                         id={id}
                         settings={state}
                         manifest={manifest}
+                        extended={this.props.extended}
                     />
                 ))}
             </div>
@@ -684,7 +708,8 @@ AddonList.propTypes = {
 
         }).isRequired
     })).isRequired,
-    search: PropTypes.string.isRequired
+    search: PropTypes.string.isRequired,
+    extended: PropTypes.bool.isRequired
 };
 
 class AddonSettingsComponent extends React.Component {
@@ -698,12 +723,14 @@ class AddonSettingsComponent extends React.Component {
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleClickSearchButton = this.handleClickSearchButton.bind(this);
+        this.handleClickVersion = this.handleClickVersion.bind(this);
         this.searchRef = this.searchRef.bind(this);
         this.searchBar = null;
         this.state = {
-            loading: true,
+            loading: false,
             dirty: false,
-            search: ''
+            search: location.hash ? location.hash.substr(1) : '',
+            extended: false
         };
         for (const [id, manifest] of Object.entries(this.props.addons)) {
             const enabled = SettingsStore.getAddonEnabled(id);
@@ -720,12 +747,6 @@ class AddonSettingsComponent extends React.Component {
         }
     }
     componentDidMount () {
-        loadAddonTranslations()
-            .then(() => {
-                this.setState({
-                    loading: false
-                });
-            });
         SettingsStore.addEventListener('setting-changed', this.handleSettingStoreChanged);
         document.body.addEventListener('keydown', this.handleKeyDown);
     }
@@ -822,6 +843,11 @@ class AddonSettingsComponent extends React.Component {
         });
         this.searchBar.focus();
     }
+    handleClickVersion () {
+        this.setState({
+            extended: !this.state.extended
+        });
+    }
     searchRef (searchBar) {
         this.searchBar = searchBar;
     }
@@ -887,6 +913,7 @@ class AddonSettingsComponent extends React.Component {
                             <AddonList
                                 addons={addonState}
                                 search={this.state.search}
+                                extended={this.state.extended}
                             />
                             <div className={styles.footerButtons}>
                                 <button
@@ -914,9 +941,16 @@ class AddonSettingsComponent extends React.Component {
                                         addons={unsupported}
                                     />
                                 ) : null}
-                                <div className={styles.version}>
-                                    {`v${upstreamMeta.version} (${upstreamMeta.commit})`}
-                                </div>
+                                <span
+                                    className={styles.version}
+                                    onClick={this.handleClickVersion}
+                                >
+                                    {this.state.extended ?
+                                        // Don't bother translating, pretty much no one will ever see this.
+                                        // eslint-disable-next-line max-len
+                                        `You have enabled debug mode. v${upstreamMeta.version} (${upstreamMeta.commit})` :
+                                        `v${upstreamMeta.version}`}
+                                </span>
                             </footer>
                         </>
                     )}
