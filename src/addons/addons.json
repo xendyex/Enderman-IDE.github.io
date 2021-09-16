@@ -35,6 +35,9 @@
     "remove-curved-stage-border",
     "transparent-orphans",
     "paint-by-default",
+    "block-cherry-picking",
+    "hide-new-variables",
+    "editor-extra-keys",
     "hide-delete-button",
     "no-script-bumping",
     "tw-interface-customization"
