@@ -754,7 +754,7 @@ export default async function ({ addon, global, console, msg }) {
           fixSoundOrder();
         }
       };
-      const renameFolder = () => {
+      const renameFolder = async () => {
         let newName = await prompt(msg("rename-folder-prompt"), data.folder);
         // Prompt cancelled, do not rename
         if (newName === null) {
