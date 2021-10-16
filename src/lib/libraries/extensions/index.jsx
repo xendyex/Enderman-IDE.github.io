@@ -341,5 +341,24 @@ export default [
         ),
         featured: true,
         incompatibleWithScratch: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Custom Extension"
+                description="Name of custom extension category"
+                id="tw.customExtension.name"
+            />
+        ),
+        extensionId: '',
+        iconURL: customExtensionIcon,
+        description: (
+            <FormattedMessage
+                defaultMessage="Load custom extensions from URLs. For developers. Experimental."
+                description="Description of custom extension category"
+                id="tw.customExtension.description"
+            />
+        ),
+        featured: true
     }
 ];
