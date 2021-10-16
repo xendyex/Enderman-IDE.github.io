@@ -109,6 +109,13 @@ const PromptComponent = props => (
                         </Box> : null}
                 </div> : null}
 
+            {props.cloudSelected && props.canAddCloudVariable && (
+                <Box className={styles.infoMessage}>
+                    {/* eslint-disable-next-line max-len */}
+                    {'Although you can create cloud variables, they won\'t actually work unless this project is uploaded to Scratch or a tool such as the TurboWarp Packager.'}
+                </Box>
+            )}
+
             <Box className={styles.buttonRow}>
                 <button
                     className={styles.cancelButton}
