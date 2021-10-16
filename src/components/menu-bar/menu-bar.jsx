@@ -201,6 +201,7 @@ class MenuBar extends React.Component {
         bindAll(this, [
             'handleClickSeeInside',
             'handleClickNew',
+            'handleClickNewWindow',
             'handleClickRemix',
             'handleClickSave',
             'handleClickSaveAsCopy',
@@ -233,6 +234,9 @@ class MenuBar extends React.Component {
             this.props.onClickNew(this.props.canSave && this.props.canCreateNew);
         }
         this.props.onRequestCloseFile();
+    }
+    handleClickNewWindow () {
+        this.props.onClickNewWindow();
     }
     handleClickRemix () {
         this.props.onClickRemix();
@@ -553,6 +557,14 @@ class MenuBar extends React.Component {
                                         >
                                             {newProjectMessage}
                                         </MenuItem>
+                                        {this.props.onClickNewWindow && (
+                                            <MenuItem
+                                                isRtl={this.props.isRtl}
+                                                onClick={this.handleClickNewWindow}
+                                            >
+                                                {'New window'}
+                                            </MenuItem>
+                                        )}
                                     </MenuSection>
                                     {(this.props.canSave || this.props.canCreateCopy || this.props.canRemix) && (
                                         <MenuSection>
@@ -932,6 +944,7 @@ MenuBar.propTypes = {
     onClickLogin: PropTypes.func,
     onClickLogo: PropTypes.func,
     onClickNew: PropTypes.func,
+    onClickNewWindow: PropTypes.func,
     onClickRemix: PropTypes.func,
     onClickSave: PropTypes.func,
     onClickSaveAsCopy: PropTypes.func,
