@@ -813,8 +813,8 @@ export default async function ({ addon, global, console, msg }) {
         }
       };
 
-      const createFolder = () => {
-        const name = prompt(msg("name-prompt"), getNameWithoutFolder(data.realName));
+      const createFolder = async () => {
+        const name = await prompt(msg("name-prompt"), getNameWithoutFolder(data.realName));
         if (name === null) {
           return;
         }
