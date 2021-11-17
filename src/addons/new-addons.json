@@ -1,4 +1,4 @@
 [
-    "disable-paste-offset",
-    "block-duplicate"
+    "swap-local-global",
+    "editor-comment-previews"
 ]
