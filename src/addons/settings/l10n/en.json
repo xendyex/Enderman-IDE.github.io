@@ -8,7 +8,7 @@
   "tw.addons.settings.dirtyButton": "Reload now",
   "tw.addons.settings.presets": "Presets",
   "tw.addons.settings.tags.recommended": "Recommended",
-  "tw.addons.settings.tags.featured": "Featured",
+  "tw.addons.settings.tags.danger": "Dangerous",
   "tw.addons.settings.tags.theme": "Theme",
   "tw.addons.settings.tags.beta": "Beta",
   "tw.addons.settings.tags.new": "New!",
@@ -17,5 +17,6 @@
   "tw.addons.settings.export": "Export settings",
   "tw.addons.settings.import": "Import settings",
   "tw.addons.settings.unsupported": "Some addons are not available in this browser:",
-  "tw.addons.settings.addonFeedback": "Addon Feedback"
+  "tw.addons.settings.addonFeedback": "Addon Feedback",
+  "tw.addons.settings.enableDangerous": "This addon is dangerous and may intentionally DISABLE features. Most users SHOULD NOT enable this addon. Are you sure you want to?"
 }

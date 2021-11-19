@@ -191,9 +191,9 @@ const Tags = ({tags}) => tags.length > 0 && (
                 {settingsTranslations['tw.addons.settings.tags.new']}
             </span>
         )}
-        {tags.includes('turbowarp') && (
-            <span className={classNames(styles.tag, styles.tagTurbowarp)}>
-                {'TurboWarp'}
+        {tags.includes('danger') && (
+            <span className={classNames(styles.tag, styles.tagDanger)}>
+                {settingsTranslations['tw.addons.settings.tags.danger']}
             </span>
         )}
     </span>
@@ -502,7 +502,15 @@ const Addon = ({
                     id={id}
                     aria-labelledby={`${id}-label`}
                     value={settings.enabled}
-                    onChange={value => SettingsStore.setAddonEnabled(id, value)}
+                    onChange={value => {
+                        if (
+                            !value ||
+                            !manifest.tags.includes('danger') ||
+                            confirm(settingsTranslations['tw.addons.settings.enableDangerous'])
+                        ) {
+                            SettingsStore.setAddonEnabled(id, value);
+                        }
+                    }}
                 />
             </div>
         </div>
