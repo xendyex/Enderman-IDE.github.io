@@ -19,21 +19,19 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import Search from './search';
-import importedAddons, {unsupportedAddons} from '../addon-manifests';
+import importedAddons from '../generated/addon-manifests';
 import messagesByLocale from '../generated/l10n-settings-entries';
-import settingsTranslationsEnglish from './l10n/en.json';
-import settingsTranslationsOther from './l10n/translations.json';
+import settingsTranslationsEnglish from './en.json';
+import settingsTranslationsOther from './translations.json';
 import upstreamMeta from '../generated/upstream-meta.json';
 import {detectLocale} from '../../lib/detect-locale';
 import {getInitialDarkMode} from '../../lib/tw-theme-hoc.jsx';
 import SettingsStore from '../settings-store-singleton';
 import Channels from '../channels';
-import extensionImageWhite from './extension-white.svg';
-import extensionImageBlack from './extension-black.svg';
-import brushImageWhite from './brush-white.svg';
-import brushImageBlack from './brush-black.svg';
-import undoImageWhite from './undo-white.svg';
-import undoImageBlack from './undo-black.svg';
+import extensionImage from './extension.svg';
+import brushImage from './brush.svg';
+import undoImage from './undo.svg';
+import expandImageBlack from './expand.svg';
 import infoImage from './info.svg';
 import styles from './settings.css';
 import '../polyfill';
@@ -57,7 +55,7 @@ if (locale !== 'en') {
     }
 }
 
-document.title = `${settingsTranslations['tw.addons.settings.title']} - TurboWarp`;
+document.title = `${settingsTranslations.title} - TurboWarp`;
 
 const theme = getInitialDarkMode() ? 'dark' : 'light';
 document.body.setAttribute('theme', theme);
@@ -75,20 +73,55 @@ const postThrottledSettingsChange = store => {
     }, 100);
 };
 
-const sortAddons = () => {
-    const sortedOrder = Object.keys(importedAddons).sort((aId, bId) => {
-        const aNew = importedAddons[aId].tags.includes('new');
-        const bNew = importedAddons[bId].tags.includes('new');
-        if (aNew && !bNew) return -1;
-        if (bNew && !aNew) return 1;
-        return 0;
-    });
-    const result = {};
-    for (const key of sortedOrder) {
-        result[key] = importedAddons[key];
+const filterAddonsBySupport = () => {
+    const supported = {};
+    const unsupported = {};
+    for (const [id, manifest] of Object.entries(importedAddons)) {
+        if (manifest.unsupported) {
+            unsupported[id] = manifest;
+        } else {
+            supported[id] = manifest;
+        }
     }
-    return result;
+    return {
+        supported,
+        unsupported
+    };
 };
+const {supported: supportedAddons, unsupported: unsupportedAddons} = filterAddonsBySupport();
+
+const groupAddons = () => {
+    const groups = {
+        new: {
+            label: settingsTranslations.groupNew,
+            open: true,
+            addons: []
+        },
+        others: {
+            label: settingsTranslations.groupOthers,
+            open: true,
+            addons: []
+        },
+        danger: {
+            label: settingsTranslations.groupDanger,
+            open: false,
+            addons: []
+        }
+    };
+    const manifests = Object.values(supportedAddons);
+    for (let index = 0; index < manifests.length; index++) {
+        const manifest = manifests[index];
+        if (manifest.tags.includes('new')) {
+            groups.new.addons.push(index);
+        } else if (manifest.tags.includes('danger') || manifest.noCompiler) {
+            groups.danger.addons.push(index);
+        } else {
+            groups.others.addons.push(index);
+        }
+    }
+    return groups;
+};
+const groupedAddons = groupAddons();
 
 const CreditList = ({credits}) => (
     credits.map((author, index) => {
@@ -169,37 +202,45 @@ Select.propTypes = {
     }))
 };
 
-const Tags = ({tags}) => tags.length > 0 && (
+const Tags = ({manifest}) => (
     <span className={styles.tagContainer}>
-        {tags.includes('recommended') && (
+        {manifest.tags.includes('recommended') && (
             <span className={classNames(styles.tag, styles.tagRecommended)}>
-                {settingsTranslations['tw.addons.settings.tags.recommended']}
+                {settingsTranslations.tagRecommended}
             </span>
         )}
-        {tags.includes('theme') && (
+        {manifest.tags.includes('theme') && (
             <span className={classNames(styles.tag, styles.tagTheme)}>
-                {settingsTranslations['tw.addons.settings.tags.theme']}
+                {settingsTranslations.tagTheme}
             </span>
         )}
-        {tags.includes('beta') && (
+        {manifest.tags.includes('beta') && (
             <span className={classNames(styles.tag, styles.tagBeta)}>
-                {settingsTranslations['tw.addons.settings.tags.beta']}
+                {settingsTranslations.tagBeta}
             </span>
         )}
-        {tags.includes('new') && (
+        {manifest.tags.includes('new') && (
             <span className={classNames(styles.tag, styles.tagNew)}>
-                {settingsTranslations['tw.addons.settings.tags.new']}
+                {settingsTranslations.tagNew}
             </span>
         )}
-        {tags.includes('danger') && (
+        {manifest.tags.includes('danger') && (
             <span className={classNames(styles.tag, styles.tagDanger)}>
-                {settingsTranslations['tw.addons.settings.tags.danger']}
+                {settingsTranslations.tagDanger}
+            </span>
+        )}
+        {manifest.noCompiler && (
+            <span className={classNames(styles.tag, styles.tagDanger)}>
+                {settingsTranslations.tagNoCompiler}
             </span>
         )}
     </span>
 );
 Tags.propTypes = {
-    tags: PropTypes.arrayOf(PropTypes.string)
+    manifest: PropTypes.shape({
+        tags: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+        noCompiler: PropTypes.bool
+    }).isRequired
 };
 
 class BufferedInput extends React.Component {
@@ -329,8 +370,12 @@ const Setting = ({
                     <button
                         className={classNames(styles.button, styles.resetColorButton)}
                         onClick={() => SettingsStore.setAddonSetting(addonId, settingId, setting.default)}
+                        title={settingsTranslations.reset}
                     >
-                        {settingsTranslations['tw.addons.settings.reset']}
+                        <img
+                            src={undoImage}
+                            alt={settingsTranslations.reset}
+                        />
                     </button>
                 </React.Fragment>
             )}
@@ -389,6 +434,7 @@ const Notice = ({
                     className={styles.noticeIcon}
                     src={infoImage}
                     alt=""
+                    draggable={false}
                 />
             </div>
             <div>
@@ -412,7 +458,7 @@ const Presets = ({
 }) => (
     <div className={classNames(styles.setting, styles.presets)}>
         <div className={styles.settingLabel}>
-            {settingsTranslations['tw.addons.settings.presets']}
+            {settingsTranslations.presets}
         </div>
         {presets.map(preset => {
             const presetId = preset.id;
@@ -437,7 +483,7 @@ Presets.propTypes = {
         name: PropTypes.string,
         id: PropTypes.string,
         description: PropTypes.string,
-        values: PropTypes.object
+        values: PropTypes.shape({})
     }))
 };
 
@@ -449,21 +495,33 @@ const Addon = ({
 }) => (
     <div className={classNames(styles.addon, {[styles.addonDirty]: settings.dirty})}>
         <div className={styles.addonHeader}>
-            <label
-                htmlFor={id}
-                id={`${id}-label`}
-                className={styles.addonTitle}
-            >
+            <label className={styles.addonTitle}>
+                <div className={styles.addonSwitch}>
+                    <Switch
+                        value={settings.enabled}
+                        onChange={value => {
+                            if (
+                                !value ||
+                                !manifest.tags.includes('danger') ||
+                                confirm(settingsTranslations.enableDangerous)
+                            ) {
+                                SettingsStore.setAddonEnabled(id, value);
+                            }
+                        }}
+                    />
+                </div>
                 {manifest.tags.includes('theme') ? (
                     <img
                         className={styles.extensionImage}
-                        src={theme === 'dark' ? brushImageWhite : brushImageBlack}
+                        src={brushImage}
+                        draggable={false}
                         alt=""
                     />
                 ) : (
                     <img
                         className={styles.extensionImage}
-                        src={theme === 'dark' ? extensionImageWhite : extensionImageBlack}
+                        src={extensionImage}
+                        draggable={false}
                         alt=""
                     />
                 )}
@@ -476,9 +534,7 @@ const Addon = ({
                     </div>
                 )}
             </label>
-            <Tags
-                tags={manifest.tags}
-            />
+            <Tags manifest={manifest} />
             {!settings.enabled && (
                 <div className={styles.inlineDescription}>
                     {addonTranslations[`${id}/@description`] || manifest.description}
@@ -489,29 +545,16 @@ const Addon = ({
                     <button
                         className={styles.resetButton}
                         onClick={() => SettingsStore.resetAddon(id)}
-                        title={settingsTranslations['tw.addons.settings.reset']}
+                        title={settingsTranslations.reset}
                     >
                         <img
-                            src={theme === 'dark' ? undoImageWhite : undoImageBlack}
+                            src={undoImage}
                             className={styles.resetButtonImage}
-                            alt={settingsTranslations['tw.addons.settings.reset']}
+                            alt={settingsTranslations.reset}
+                            draggable={false}
                         />
                     </button>
                 )}
-                <Switch
-                    id={id}
-                    aria-labelledby={`${id}-label`}
-                    value={settings.enabled}
-                    onChange={value => {
-                        if (
-                            !value ||
-                            !manifest.tags.includes('danger') ||
-                            confirm(settingsTranslations['tw.addons.settings.enableDangerous'])
-                        ) {
-                            SettingsStore.setAddonEnabled(id, value);
-                        }
-                    }}
-                />
             </div>
         </div>
         {settings.enabled && (
@@ -522,7 +565,7 @@ const Addon = ({
                 {manifest.credits && (
                     <div className={styles.creditContainer}>
                         <span className={styles.creditTitle}>
-                            {settingsTranslations['tw.addons.settings.credits']}
+                            {settingsTranslations.credits}
                         </span>
                         <CreditList credits={manifest.credits} />
                     </div>
@@ -569,14 +612,14 @@ Addon.propTypes = {
     manifest: PropTypes.shape({
         name: PropTypes.string,
         description: PropTypes.string,
-        credits: PropTypes.array,
+        credits: PropTypes.arrayOf(PropTypes.shape({})),
         info: PropTypes.arrayOf(PropTypes.shape({
             id: PropTypes.string
         })),
         settings: PropTypes.arrayOf(PropTypes.shape({
             id: PropTypes.string
         })),
-        presets: PropTypes.array,
+        presets: PropTypes.arrayOf(PropTypes.shape({})),
         tags: PropTypes.arrayOf(PropTypes.string)
     }),
     extended: PropTypes.bool
@@ -585,13 +628,13 @@ Addon.propTypes = {
 const Dirty = props => (
     <div className={styles.dirtyOuter}>
         <div className={styles.dirtyInner}>
-            {settingsTranslations['tw.addons.settings.dirty']}
+            {settingsTranslations.dirty}
             {props.onReloadNow && (
                 <button
                     className={classNames(styles.button, styles.dirtyButton)}
                     onClick={props.onReloadNow}
                 >
-                    {settingsTranslations['tw.addons.settings.dirtyButton']}
+                    {settingsTranslations.dirtyButton}
                 </button>
             )}
         </div>
@@ -604,7 +647,7 @@ Dirty.propTypes = {
 const UnsupportedAddons = ({addons: addonList}) => (
     <div className={styles.unsupportedContainer}>
         <span className={styles.unsupportedText}>
-            {settingsTranslations['tw.addons.settings.unsupported']}
+            {settingsTranslations.unsupported}
         </span>
         {addonList.map(({id, manifest}, index) => (
             <span
@@ -626,6 +669,68 @@ UnsupportedAddons.propTypes = {
             name: PropTypes.string
         })
     }))
+};
+
+const InternalAddonList = ({addons, extended}) => (
+    addons.map(({id, manifest, state}) => (
+        <Addon
+            key={id}
+            id={id}
+            settings={state}
+            manifest={manifest}
+            extended={extended}
+        />
+    ))
+);
+
+class AddonGroup extends React.Component {
+    constructor (props) {
+        super(props);
+        this.state = {
+            open: props.open
+        };
+    }
+    render () {
+        if (this.props.addons.length === 0) {
+            return null;
+        }
+        return (
+            <div className={styles.addonGroup}>
+                <button
+                    className={styles.addonGroupName}
+                    onClick={() => {
+                        this.setState({
+                            open: !this.state.open
+                        });
+                    }}
+                >
+                    <img
+                        className={styles.addonGroupExpand}
+                        src={expandImageBlack}
+                        data-open={this.state.open}
+                        alt=""
+                    />
+                    {this.props.label.replace('{number}', this.props.addons.length)}
+                </button>
+                {this.state.open && (
+                    <InternalAddonList
+                        addons={this.props.addons}
+                        extended={this.props.extended}
+                    />
+                )}
+            </div>
+        );
+    }
+}
+AddonGroup.propTypes = {
+    label: PropTypes.string,
+    open: PropTypes.bool,
+    addons: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        state: PropTypes.shape({}).isRequired,
+        manifest: PropTypes.shape({}).isRequired
+    })).isRequired,
+    extended: PropTypes.bool.isRequired
 };
 
 const addonToSearchItem = ({id, manifest}) => {
@@ -658,7 +763,7 @@ const addonToSearchItem = ({id, manifest}) => {
         }
     }
     for (const tag of manifest.tags) {
-        const key = `tw.addons.settings.tags.${tag}`;
+        const key = `tags.${tag}`;
         if (settingsTranslations[key]) {
             addText(0.25, settingsTranslations[key]);
         }
@@ -676,29 +781,37 @@ class AddonList extends React.Component {
     constructor (props) {
         super(props);
         this.search = new Search(this.props.addons.map(addonToSearchItem));
+        this.groups = [];
     }
     render () {
-        let addons;
         if (this.props.search) {
-            addons = this.search.search(this.props.search).map(({index}) => this.props.addons[index]);
-        } else {
-            addons = this.props.addons;
-        }
-        if (addons.length === 0) {
+            const addons = this.search.search(this.props.search)
+                .slice(0, 20)
+                .map(({index}) => this.props.addons[index]);
+            if (addons.length === 0) {
+                return (
+                    <div className={styles.noResults}>
+                        {settingsTranslations.noResults}
+                    </div>
+                );
+            }
             return (
-                <div className={styles.noResults}>
-                    {settingsTranslations['tw.addons.settings.noResults']}
+                <div>
+                    <InternalAddonList
+                        addons={addons}
+                        extended={this.props.extended}
+                    />
                 </div>
             );
         }
         return (
             <div>
-                {addons.map(({id, manifest, state}) => (
-                    <Addon
+                {Object.entries(groupedAddons).map(([id, {label, addons, open}]) => (
+                    <AddonGroup
                         key={id}
-                        id={id}
-                        settings={state}
-                        manifest={manifest}
+                        label={label}
+                        open={open}
+                        addons={addons.map(index => this.props.addons[index])}
                         extended={this.props.extended}
                     />
                 ))}
@@ -709,12 +822,8 @@ class AddonList extends React.Component {
 AddonList.propTypes = {
     addons: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
-        state: PropTypes.shape({
-
-        }).isRequired,
-        manifest: PropTypes.shape({
-
-        }).isRequired
+        state: PropTypes.shape({}).isRequired,
+        manifest: PropTypes.shape({}).isRequired
     })).isRequired,
     search: PropTypes.string.isRequired,
     extended: PropTypes.bool.isRequired
@@ -738,9 +847,27 @@ class AddonSettingsComponent extends React.Component {
             loading: false,
             dirty: false,
             search: location.hash ? location.hash.substr(1) : '',
-            extended: false
+            extended: false,
+            ...this.readFullAddonState()
         };
-        for (const [id, manifest] of Object.entries(this.props.addons)) {
+        if (Channels.changeChannel) {
+            Channels.changeChannel.addEventListener('message', () => {
+                SettingsStore.readLocalStorage();
+                this.setState(this.readFullAddonState());
+            });
+        }
+    }
+    componentDidMount () {
+        SettingsStore.addEventListener('setting-changed', this.handleSettingStoreChanged);
+        document.body.addEventListener('keydown', this.handleKeyDown);
+    }
+    componentWillUnmount () {
+        SettingsStore.removeEventListener('setting-changed', this.handleSettingStoreChanged);
+        document.body.removeEventListener('keydown', this.handleKeyDown);
+    }
+    readFullAddonState () {
+        const result = {};
+        for (const [id, manifest] of Object.entries(supportedAddons)) {
             const enabled = SettingsStore.getAddonEnabled(id);
             const addonState = {
                 enabled: enabled,
@@ -751,16 +878,9 @@ class AddonSettingsComponent extends React.Component {
                     addonState[setting.id] = SettingsStore.getAddonSetting(id, setting.id);
                 }
             }
-            this.state[id] = addonState;
+            result[id] = addonState;
         }
-    }
-    componentDidMount () {
-        SettingsStore.addEventListener('setting-changed', this.handleSettingStoreChanged);
-        document.body.addEventListener('keydown', this.handleKeyDown);
-    }
-    componentWillUnmount () {
-        SettingsStore.removeEventListener('setting-changed', this.handleSettingStoreChanged);
-        document.body.removeEventListener('keydown', this.handleKeyDown);
+        return result;
     }
     handleSettingStoreChanged (e) {
         const {addonId, settingId, value} = e.detail;
@@ -789,7 +909,7 @@ class AddonSettingsComponent extends React.Component {
         this.setState({
             dirty: false
         });
-        for (const addonId of Object.keys(importedAddons)) {
+        for (const addonId of Object.keys(supportedAddons)) {
             if (this.state[addonId].dirty) {
                 this.setState(state => ({
                     [addonId]: {
@@ -801,7 +921,7 @@ class AddonSettingsComponent extends React.Component {
         }
     }
     handleResetAll () {
-        if (confirm(settingsTranslations['tw.addons.settings.confirmResetAll'])) {
+        if (confirm(settingsTranslations.confirmResetAll)) {
             SettingsStore.resetAllAddons();
             this.setState({
                 search: ''
@@ -864,51 +984,54 @@ class AddonSettingsComponent extends React.Component {
         if (key.length === 1 && key !== ' ' && e.target === document.body && !(e.ctrlKey || e.metaKey || e.altKey)) {
             this.searchBar.focus();
         }
-        if (key === 'f' && (e.ctrlKey || e.metaKey)) {
+        // Only preventDefault() if the search bar isn't already focused so
+        // that we don't break the browser's builtin ctrl+f
+        if (key === 'f' && (e.ctrlKey || e.metaKey) && document.activeElement !== this.searchBar) {
             this.searchBar.focus();
-            // TODO: disabling the builtin ctrl+f seems like a rude thing to do, consider only doing this in electron?
             e.preventDefault();
         }
     }
     render () {
-        const addonState = Object.entries(this.props.addons).map(([id, manifest]) => ({
+        const addonState = Object.entries(supportedAddons).map(([id, manifest]) => ({
             id,
             manifest,
             state: this.state[id]
         }));
-        const unsupported = Object.entries(this.props.unsupportedAddons).map(([id, manifest]) => ({
+        const unsupported = Object.entries(unsupportedAddons).map(([id, manifest]) => ({
             id,
             manifest
         }));
         return (
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.searchContainer}>
-                        <input
-                            className={styles.searchInput}
-                            value={this.state.search}
-                            onChange={this.handleSearch}
-                            placeholder={settingsTranslations['tw.addons.settings.search']}
-                            aria-label={settingsTranslations['tw.addons.settings.search']}
-                            ref={this.searchRef}
-                            spellCheck="false"
-                            autoFocus
-                        />
-                        <div
-                            className={styles.searchButton}
-                            onClick={this.handleClickSearchButton}
-                        />
+                    <div className={styles.section}>
+                        <div className={styles.searchContainer}>
+                            <input
+                                className={styles.searchInput}
+                                value={this.state.search}
+                                onChange={this.handleSearch}
+                                placeholder={settingsTranslations.search}
+                                aria-label={settingsTranslations.search}
+                                ref={this.searchRef}
+                                spellCheck="false"
+                                autoFocus
+                            />
+                            <div
+                                className={styles.searchButton}
+                                onClick={this.handleClickSearchButton}
+                            />
+                        </div>
+                        <a
+                            href="https://scratch.mit.edu/users/World_Languages/#comments"
+                            target="_blank"
+                            rel="noreferrer"
+                            className={styles.feedbackButtonOuter}
+                        >
+                            <span className={styles.feedbackButtonInner}>
+                                {settingsTranslations.addonFeedback}
+                            </span>
+                        </a>
                     </div>
-                    <a
-                        href="https://scratch.mit.edu/users/World_Languages/#comments"
-                        target="_blank"
-                        rel="noreferrer"
-                        className={styles.feedbackButtonOuter}
-                    >
-                        <span className={styles.feedbackButtonInner}>
-                            {settingsTranslations['tw.addons.settings.addonFeedback']}
-                        </span>
-                    </a>
                     {this.state.dirty && (
                         <Dirty
                             onReloadNow={Channels.reloadChannel ? this.handleReloadNow : null}
@@ -917,7 +1040,7 @@ class AddonSettingsComponent extends React.Component {
                 </div>
                 <div className={styles.addons}>
                     {!this.state.loading && (
-                        <>
+                        <div className={styles.section}>
                             <AddonList
                                 addons={addonState}
                                 search={this.state.search}
@@ -928,19 +1051,19 @@ class AddonSettingsComponent extends React.Component {
                                     className={classNames(styles.button, styles.resetAllButton)}
                                     onClick={this.handleResetAll}
                                 >
-                                    {settingsTranslations['tw.addons.settings.resetAll']}
+                                    {settingsTranslations.resetAll}
                                 </button>
                                 <button
                                     className={classNames(styles.button, styles.exportButton)}
                                     onClick={this.handleExport}
                                 >
-                                    {settingsTranslations['tw.addons.settings.export']}
+                                    {settingsTranslations.export}
                                 </button>
                                 <button
                                     className={classNames(styles.button, styles.importButton)}
                                     onClick={this.handleImport}
                                 >
-                                    {settingsTranslations['tw.addons.settings.import']}
+                                    {settingsTranslations.import}
                                 </button>
                             </div>
                             <footer className={styles.footer}>
@@ -960,7 +1083,7 @@ class AddonSettingsComponent extends React.Component {
                                         `Addons version ${upstreamMeta.commit}`}
                                 </span>
                             </footer>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
@@ -968,13 +1091,7 @@ class AddonSettingsComponent extends React.Component {
     }
 }
 AddonSettingsComponent.propTypes = {
-    addons: PropTypes.objectOf(PropTypes.object),
-    unsupportedAddons: PropTypes.objectOf(PropTypes.object),
     onExportSettings: PropTypes.func
-};
-AddonSettingsComponent.defaultProps = {
-    addons: sortAddons(),
-    unsupportedAddons
 };
 
 export default AddonSettingsComponent;
