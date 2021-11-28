@@ -237,6 +237,7 @@ class MenuBar extends React.Component {
     }
     handleClickNewWindow () {
         this.props.onClickNewWindow();
+        this.props.onRequestCloseFile();
     }
     handleClickRemix () {
         this.props.onClickRemix();
