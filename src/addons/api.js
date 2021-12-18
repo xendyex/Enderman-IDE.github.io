@@ -197,10 +197,30 @@ const compareArrays = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 let _firstAddBlockRan = false;
 
 const contextMenuCallbacks = [];
-const CONTEXT_MENU_ORDER = ['editor-devtools', 'block-switching', 'blocks2image'];
+const CONTEXT_MENU_ORDER = ['editor-devtools', 'block-switching', 'blocks2image', 'swap-local-global'];
 let createdAnyBlockContextMenus = false;
 
 const getInternalKey = element => Object.keys(element).find(key => key.startsWith('__reactInternalInstance$'));
+
+// Stylesheets are added at the start of <body> so that they have higher precedence
+// than those in <head>
+const stylesheetContainer = document.createElement('div');
+document.body.insertBefore(stylesheetContainer, document.body.firstChild);
+const getStylesheetPrecedence = styleElement => {
+    // columns must have higher precedence than hide-flyout
+    if (styleElement.dataset.addonId === 'columns') return 1;
+    return 0;
+};
+const addStylesheet = styleElement => {
+    const priority = getStylesheetPrecedence(styleElement);
+    for (const child of stylesheetContainer.children) {
+        if (getStylesheetPrecedence(child) >= priority) {
+            stylesheetContainer.insertBefore(styleElement, child);
+            return;
+        }
+    }
+    stylesheetContainer.appendChild(styleElement);
+};
 
 class Tab extends EventTargetShim {
     constructor (id) {
@@ -256,10 +276,6 @@ class Tab extends EventTargetShim {
 
     get redux () {
         return tabReduxInstance;
-    }
-
-    loadScript () {
-        throw new Error('loadScript is not supported');
     }
 
     waitForElement (selector, {markAsSeen = false, condition, reduxCondition, reduxEvents} = {}) {
@@ -511,10 +527,6 @@ class Tab extends EventTargetShim {
         }
     }
 
-    removeBlock () {
-        throw new Error('not implemented');
-    }
-
     createBlockContextMenu (callback, {workspace = false, blocks = false, flyout = false, comments = false} = {}) {
         contextMenuCallbacks.push({addonId: this._id, callback, workspace, blocks, flyout, comments});
         contextMenuCallbacks.sort((b, a) => (
@@ -735,25 +747,25 @@ class AddonRunner {
         if (this.loading) {
             return;
         }
-        this.publicAPI.addon.self.dispatchEvent(new CustomEvent('reenabled'));
-        this.publicAPI.addon.self.disabled = false;
         this.appendStylesheets();
         if (this.disabledStylesheet) {
             this.disabledStylesheet.remove();
             this.disabledStylesheet = null;
         }
+        this.publicAPI.addon.self.disabled = false;
+        this.publicAPI.addon.self.dispatchEvent(new CustomEvent('reenabled'));
     }
 
     dynamicDisable () {
         if (this.loading) {
             return;
         }
-        this.publicAPI.addon.self.dispatchEvent(new CustomEvent('disabled'));
-        this.publicAPI.addon.self.disabled = true;
         this.removeStylesheets();
         const disabledCSS = `.${getDisplayNoneWhileDisabledClass(this.id)}{display:none !important;}`;
         this.disabledStylesheet = createStylesheet(disabledCSS);
-        document.body.insertBefore(this.disabledStylesheet, document.body.firstChild);
+        addStylesheet(this.disabledStylesheet);
+        this.publicAPI.addon.self.disabled = true;
+        this.publicAPI.addon.self.dispatchEvent(new CustomEvent('disabled'));
     }
 
     removeStylesheets () {
@@ -764,8 +776,7 @@ class AddonRunner {
 
     appendStylesheets () {
         for (const style of this.stylesheets) {
-            // Insert styles at the start of the body so that they have higher precedence than those in <head>
-            document.body.insertBefore(style, document.body.firstChild);
+            addStylesheet(style);
         }
     }
 
@@ -775,6 +786,7 @@ class AddonRunner {
         }
 
         const {resources} = await addonEntries[this.id]();
+
         if (!this.manifest.noTranslations) {
             await addonMessagesPromise;
         }
@@ -786,7 +798,7 @@ class AddonRunner {
                 if (!this.meetsCondition(userstyle.if)) {
                     continue;
                 }
-                const m = resources[userstyle.url]();
+                const m = resources[userstyle.url];
                 const source = m[0][1];
                 const style = createStylesheet(source);
                 style.className = 'scratch-addons-theme';
@@ -801,8 +813,8 @@ class AddonRunner {
                 if (!this.meetsCondition(userscript.if)) {
                     continue;
                 }
-                const m = resources[userscript.url]();
-                m.default(this.publicAPI);
+                const fn = resources[userscript.url];
+                fn(this.publicAPI);
             }
         }
 
@@ -845,6 +857,9 @@ history.pushState = function (...args) {
 SettingsStore.addEventListener('addon-changed', e => {
     const addonId = e.detail.addonId;
     const runner = AddonRunner.instances.find(i => i.id === addonId);
+    if (runner) {
+        runner.settingsChanged();
+    }
     if (e.detail.dynamicEnable) {
         if (runner) {
             runner.dynamicEnable();
@@ -855,9 +870,6 @@ SettingsStore.addEventListener('addon-changed', e => {
         if (runner) {
             runner.dynamicDisable();
         }
-    }
-    if (runner) {
-        runner.settingsChanged();
     }
 });
 

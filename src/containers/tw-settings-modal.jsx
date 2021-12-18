@@ -67,8 +67,9 @@ class UsernameModal extends React.Component {
     async handleCustomizeFramerate () {
         // eslint-disable-next-line no-alert
         const newFramerate = +await prompt(this.props.intl.formatMessage(messages.newFramerate), this.props.framerate);
-        if (newFramerate > 0 && isFinite(newFramerate)) {
-            this.props.vm.setFramerate(+newFramerate);
+        const parsed = parseFloat(newFramerate);
+        if (isFinite(parsed)) {
+            this.props.vm.setFramerate(parsed);
         }
     }
     handleHighQualityPenChange (e) {

@@ -16,7 +16,7 @@ const addons = [
     'mouse-pos',
     'color-picker',
     'remove-sprite-confirm',
-    'tw-project-info',
+    'block-count',
     'onion-skinning',
     'bitmap-copy',
     '2d-color-picker',
@@ -49,15 +49,17 @@ const addons = [
     'swap-local-global',
     'editor-comment-previews',
     'columns',
-    'tw-interface-customization',
+    'script-snap',
+    'tw-straighten-comments',
+    'tw-remove-backpack',
+    'tw-remove-feedback',
     'tw-disable-compiler',
     'editor-stepping'
 ];
 
 const newAddons = [
-    'swap-local-global',
-    'editor-comment-previews',
-    'columns'
+    'script-snap',
+    'tw-straighten-comments'
 ];
 
 // eslint-disable-next-line import/no-commonjs
