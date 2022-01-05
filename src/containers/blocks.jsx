@@ -95,6 +95,7 @@ class Blocks extends React.Component {
         this.props.vm.setCompilerOptions({
             warpTimer: true
         });
+        this.props.vm.setInEditor(false);
 
         this.ScratchBlocks.FieldColourSlider.activateEyedropper_ = this.props.onActivateColorPicker;
         this.ScratchBlocks.Procedures.externalProcedureDefCallback = this.props.onActivateCustomProcedures;
@@ -223,6 +224,7 @@ class Blocks extends React.Component {
         this.detachVM();
         this.workspace.dispose();
         clearTimeout(this.toolboxUpdateTimeout);
+        this.props.vm.setInEditor(false);
     }
     requestToolboxUpdate () {
         clearTimeout(this.toolboxUpdateTimeout);
@@ -577,6 +579,7 @@ class Blocks extends React.Component {
                     <Prompt
                         defaultValue={this.state.prompt.defaultValue}
                         isStage={vm.runtime.getEditingTarget().isStage}
+                        showListMessage={this.state.prompt.varType === this.ScratchBlocks.LIST_VARIABLE_TYPE}
                         label={this.state.prompt.message}
                         showCloudOption={this.state.prompt.showCloudOption}
                         showVariableOptions={this.state.prompt.showVariableOptions}

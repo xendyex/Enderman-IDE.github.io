@@ -599,9 +599,9 @@ class MenuBar extends React.Component {
                                                         {extended.name !== null && (
                                                             <MenuItem onClick={this.getSaveToComputerHandler(extended.saveToLastFile)}>
                                                                 <FormattedMessage
-                                                                    defaultMessage="Save as {file}"
+                                                                    defaultMessage="Save to {file}"
                                                                     description="Menu bar item to save project to an existing file on the user's computer"
-                                                                    id="tw.menuBar.saveAs"
+                                                                    id="tw.saveTo"
                                                                     values={{
                                                                         file: extended.name
                                                                     }}
@@ -610,9 +610,9 @@ class MenuBar extends React.Component {
                                                         )}
                                                         <MenuItem onClick={this.getSaveToComputerHandler(extended.saveAsNew)}>
                                                             <FormattedMessage
-                                                                defaultMessage="Save to your computer"
-                                                                description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
-                                                                id="gui.menuBar.downloadToComputer"
+                                                                defaultMessage="Save as..."
+                                                                description="Menu bar item to select a new file to save the project as" // eslint-disable-line max-len
+                                                                id="tw.saveAs"
                                                             />
                                                         </MenuItem>
                                                     </React.Fragment>
