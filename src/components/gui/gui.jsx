@@ -83,6 +83,7 @@ const GUIComponent = props => {
         enableCommunity,
         intl,
         isCreating,
+        isDark,
         isEmbedded,
         isFullScreen,
         isPlayerOnly,
@@ -352,7 +353,10 @@ const GUIComponent = props => {
                                     </Box>
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
-                                    {costumesTabVisible ? <CostumeTab vm={vm} /> : null}
+                                    {costumesTabVisible ? <CostumeTab
+                                        vm={vm}
+                                        isDark={isDark}
+                                    /> : null}
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
                                     {soundsTabVisible ? <SoundTab vm={vm} /> : null}
@@ -413,6 +417,7 @@ GUIComponent.propTypes = {
     enableCommunity: PropTypes.bool,
     intl: intlShape.isRequired,
     isCreating: PropTypes.bool,
+    isDark: PropTypes.bool,
     isEmbedded: PropTypes.bool,
     isFullScreen: PropTypes.bool,
     isPlayerOnly: PropTypes.bool,
