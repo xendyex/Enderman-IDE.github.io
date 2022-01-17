@@ -9,7 +9,6 @@ import {STAGE_DISPLAY_SIZES} from '../lib/layout-constants';
 import {getEventXY} from '../lib/touch-utils';
 import VideoProvider from '../lib/video/video-provider';
 import {BitmapAdapter as V2BitmapAdapter} from 'scratch-svg-renderer';
-import twStageSize from '../lib/tw-stage-size';
 
 import StageComponent from '../components/stage/stage.jsx';
 
@@ -62,13 +61,15 @@ class Stage extends React.Component {
             this.canvas = document.createElement('canvas');
             this.renderer = new Renderer(
                 this.canvas,
-                -twStageSize.width / 2,
-                twStageSize.width / 2,
-                -twStageSize.height / 2,
-                twStageSize.height / 2
+                -this.props.customStageSize.width / 2,
+                this.props.customStageSize.width / 2,
+                -this.props.customStageSize.height / 2,
+                this.props.customStageSize.height / 2
             );
-            this.props.vm.runtime.stageWidth = twStageSize.width;
-            this.props.vm.runtime.stageHeight = twStageSize.height;
+            this.props.vm.setStageSize(
+                this.props.customStageSize.width,
+                this.props.customStageSize.height
+            );
             this.props.vm.attachRenderer(this.renderer);
 
             // Only attach a video provider once because it is stateful
@@ -96,12 +97,12 @@ class Stage extends React.Component {
             this.props.isColorPicking !== nextProps.isColorPicking ||
             this.state.colorInfo !== nextState.colorInfo ||
             this.props.isFullScreen !== nextProps.isFullScreen ||
-            // tw: update when dimensions or isWindowFullScreen changes
             this.props.isWindowFullScreen !== nextProps.isWindowFullScreen ||
             this.props.dimensions !== nextProps.dimensions ||
             this.state.question !== nextState.question ||
             this.props.micIndicator !== nextProps.micIndicator ||
-            this.props.isStarted !== nextProps.isStarted;
+            this.props.isStarted !== nextProps.isStarted ||
+            this.props.customStageSize !== nextProps.customStageSize;
     }
     componentDidUpdate (prevProps) {
         if (this.props.isColorPicking && !prevProps.isColorPicking) {
@@ -461,15 +462,16 @@ class Stage extends React.Component {
 }
 
 Stage.propTypes = {
-    // tw: High quality pen properties
     onHighQualityPenChanged: PropTypes.func,
     highQualityPen: PropTypes.bool,
-    // tw: Disable editing target changing in certain circumstances to avoid lag
+    customStageSize: PropTypes.shape({
+        width: PropTypes.number,
+        height: PropTypes.number
+    }),
     disableEditingTargetChange: PropTypes.bool,
     isColorPicking: PropTypes.bool,
     isFullScreen: PropTypes.bool.isRequired,
     isPlayerOnly: PropTypes.bool,
-    // tw: update when dimensions or isWindowFullScreen changes
     isWindowFullScreen: PropTypes.bool,
     dimensions: PropTypes.arrayOf(PropTypes.number),
     isStarted: PropTypes.bool,
@@ -486,19 +488,16 @@ Stage.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-    // tw: High quality pen property
     highQualityPen: state.scratchGui.tw.highQualityPen,
-    // tw: Disable editing target changing in certain circumstances to avoid lag
+    customStageSize: state.scratchGui.customStageSize,
     disableEditingTargetChange: (
         state.scratchGui.mode.isFullScreen ||
         state.scratchGui.mode.isEmbedded ||
         state.scratchGui.mode.isPlayerOnly
     ),
     isColorPicking: state.scratchGui.colorPicker.active,
-    // tw: embed is always considered fullscreen
     isFullScreen: state.scratchGui.mode.isFullScreen || state.scratchGui.mode.isEmbedded,
     isPlayerOnly: state.scratchGui.mode.isPlayerOnly,
-    // tw: update when dimensions or isWindowFullScreen changes
     isWindowFullScreen: state.scratchGui.tw.isWindowFullScreen,
     dimensions: state.scratchGui.tw.dimensions,
     isStarted: state.scratchGui.vmStatus.started,

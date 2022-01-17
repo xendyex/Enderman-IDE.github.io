@@ -5,15 +5,9 @@ import bindAll from 'lodash.bindall';
 import {connect} from 'react-redux';
 import {closeSettingsModal} from '../reducers/modals';
 import SettingsModalComponent from '../components/tw-settings-modal/settings-modal.jsx';
-import twStageSize from '../lib/tw-stage-size';
-import {searchParamsToString} from '../lib/tw-navigation-utils';
+import {defaultStageSize} from '../reducers/custom-stage-size';
 
 const messages = defineMessages({
-    confirmReload: {
-        defaultMessage: 'A reload is required to change stage size, are you sure you want to reload?',
-        description: 'Confirmation that user wants to reload to apply settings',
-        id: 'tw.settingsModal.confirmReload'
-    },
     newFramerate: {
         defaultMessage: 'New framerate:',
         description: 'Prompt shown to choose a new framerate',
@@ -21,13 +15,10 @@ const messages = defineMessages({
     }
 });
 
-const isDefaultStageSize = (width, height) => width === 480 && height === 360;
-
 class UsernameModal extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleClose',
             'handleFramerateChange',
             'handleCustomizeFramerate',
             'handleHighQualityPenChange',
@@ -41,25 +32,6 @@ class UsernameModal extends React.Component {
             'handleDisableCompilerChange',
             'handleStoreProjectOptions'
         ]);
-        this.initialStageWidth = twStageSize.width;
-        this.initialStageHeight = twStageSize.height;
-        this.state = {
-            stageWidth: this.initialStageWidth,
-            stageHeight: this.initialStageHeight
-        };
-    }
-    getNeedsReload () {
-        return this.state.stageWidth !== this.initialStageWidth || this.state.stageHeight !== this.initialStageHeight;
-    }
-    handleClose () {
-        if (this.getNeedsReload()) {
-            // eslint-disable-next-line no-alert
-            if (confirm(this.props.intl.formatMessage(messages.confirmReload))) {
-                this.applyChangesThatNeedReload();
-                return;
-            }
-        }
-        this.props.onCloseSettingsModal();
     }
     handleFramerateChange (e) {
         this.props.vm.setFramerate(e.target.checked ? 60 : 30);
@@ -104,24 +76,10 @@ class UsernameModal extends React.Component {
         });
     }
     handleStageWidthChange (value) {
-        this.setState({
-            stageWidth: Math.round(value)
-        });
+        this.props.vm.setStageSize(value, this.props.customStageSize.height);
     }
     handleStageHeightChange (value) {
-        this.setState({
-            stageHeight: Math.round(value)
-        });
-    }
-    applyChangesThatNeedReload () {
-        const urlParams = new URLSearchParams(location.search);
-        if (isDefaultStageSize(this.state.stageWidth, this.state.stageHeight)) {
-            urlParams.delete('size');
-        } else {
-            urlParams.set('size', `${this.state.stageWidth}x${this.state.stageHeight}`);
-        }
-        const search = searchParamsToString(urlParams);
-        location.href = `${location.pathname}${search}`;
+        this.props.vm.setStageSize(this.props.customStageSize.width, value);
     }
     handleStoreProjectOptions () {
         this.props.vm.storeProjectOptions();
@@ -129,14 +87,14 @@ class UsernameModal extends React.Component {
     render () {
         const {
             /* eslint-disable no-unused-vars */
-            onCloseSettingsModal,
+            onClose,
             vm,
             /* eslint-enable no-unused-vars */
             ...props
         } = this.props;
         return (
             <SettingsModalComponent
-                onClose={this.handleClose}
+                onClose={this.props.onClose}
                 onFramerateChange={this.handleFramerateChange}
                 onCustomizeFramerate={this.handleCustomizeFramerate}
                 onHighQualityPenChange={this.handleHighQualityPenChange}
@@ -148,9 +106,12 @@ class UsernameModal extends React.Component {
                 onStageWidthChange={this.handleStageWidthChange}
                 onStageHeightChange={this.handleStageHeightChange}
                 onDisableCompilerChange={this.handleDisableCompilerChange}
-                stageWidth={this.state.stageWidth}
-                stageHeight={this.state.stageHeight}
-                customStageSizeEnabled={this.state.stageWidth !== 480 || this.state.stageHeight !== 360}
+                stageWidth={this.props.customStageSize.width}
+                stageHeight={this.props.customStageSize.height}
+                customStageSizeEnabled={
+                    this.props.customStageSize.width !== defaultStageSize.width ||
+                    this.props.customStageSize.height !== defaultStageSize.height
+                }
                 onStoreProjectOptions={this.handleStoreProjectOptions}
                 {...props}
             />
@@ -160,7 +121,7 @@ class UsernameModal extends React.Component {
 
 UsernameModal.propTypes = {
     intl: intlShape,
-    onCloseSettingsModal: PropTypes.func,
+    onClose: PropTypes.func,
     vm: PropTypes.shape({
         renderer: PropTypes.shape({
             setUseHighQualityRender: PropTypes.func
@@ -169,6 +130,7 @@ UsernameModal.propTypes = {
         setCompilerOptions: PropTypes.func,
         setInterpolation: PropTypes.func,
         setRuntimeOptions: PropTypes.func,
+        setStageSize: PropTypes.func,
         storeProjectOptions: PropTypes.func
     }),
     framerate: PropTypes.number,
@@ -178,6 +140,10 @@ UsernameModal.propTypes = {
     removeFencing: PropTypes.bool,
     removeLimits: PropTypes.bool,
     warpTimer: PropTypes.bool,
+    customStageSize: PropTypes.shape({
+        width: PropTypes.number,
+        height: PropTypes.number
+    }),
     disableCompiler: PropTypes.bool
 };
 
@@ -190,11 +156,12 @@ const mapStateToProps = state => ({
     removeFencing: !state.scratchGui.tw.runtimeOptions.fencing,
     removeLimits: !state.scratchGui.tw.runtimeOptions.miscLimits,
     warpTimer: state.scratchGui.tw.compilerOptions.warpTimer,
+    customStageSize: state.scratchGui.customStageSize,
     disableCompiler: !state.scratchGui.tw.compilerOptions.enabled
 });
 
 const mapDispatchToProps = dispatch => ({
-    onCloseSettingsModal: () => dispatch(closeSettingsModal())
+    onClose: () => dispatch(closeSettingsModal())
 });
 
 export default injectIntl(connect(

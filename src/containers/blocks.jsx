@@ -179,7 +179,8 @@ class Blocks extends React.Component {
             this.props.customProceduresVisible !== nextProps.customProceduresVisible ||
             this.props.locale !== nextProps.locale ||
             this.props.anyModalVisible !== nextProps.anyModalVisible ||
-            this.props.stageSize !== nextProps.stageSize
+            this.props.stageSize !== nextProps.stageSize ||
+            this.props.customStageSize !== nextProps.customStageSize
         );
     }
     componentDidUpdate (prevProps) {
@@ -196,7 +197,10 @@ class Blocks extends React.Component {
         }
 
         if (this.props.isVisible === prevProps.isVisible) {
-            if (this.props.stageSize !== prevProps.stageSize) {
+            if (
+                this.props.stageSize !== prevProps.stageSize ||
+                this.props.customStageSize !== prevProps.customStageSize
+            ) {
                 // force workspace to redraw for the new stage size
                 window.dispatchEvent(new Event('resize'));
             }
@@ -548,6 +552,7 @@ class Blocks extends React.Component {
         const {
             anyModalVisible,
             canUseCloud,
+            customStageSize,
             customProceduresVisible,
             extensionLibraryVisible,
             options,
@@ -612,6 +617,10 @@ class Blocks extends React.Component {
 Blocks.propTypes = {
     anyModalVisible: PropTypes.bool,
     canUseCloud: PropTypes.bool,
+    customStageSize: PropTypes.shape({
+        width: PropTypes.number,
+        height: PropTypes.number
+    }),
     customProceduresVisible: PropTypes.bool,
     extensionLibraryVisible: PropTypes.bool,
     isRtl: PropTypes.bool,
@@ -694,6 +703,7 @@ const mapStateToProps = state => ({
         Object.keys(state.scratchGui.modals).some(key => state.scratchGui.modals[key]) ||
         state.scratchGui.mode.isFullScreen
     ),
+    customStageSize: state.scratchGui.customStageSize,
     extensionLibraryVisible: state.scratchGui.modals.extensionLibrary,
     isRtl: state.locales.isRtl,
     locale: state.locales.locale,
