@@ -23,9 +23,11 @@ const addons = [
     'better-img-uploads',
     'custom-block-shape',
     'editor-theme3',
+    'custom-block-text',
     'editor-colored-context-menus',
     'editor-stage-left',
     'variable-manager',
+    'search-sprites',
     'gamepad',
     'editor-sounds',
     'folders',
@@ -50,6 +52,7 @@ const addons = [
     'editor-comment-previews',
     'columns',
     'script-snap',
+    'fullscreen',
     'tw-straighten-comments',
     'tw-remove-backpack',
     'tw-remove-feedback',
@@ -58,8 +61,9 @@ const addons = [
 ];
 
 const newAddons = [
-    'script-snap',
-    'tw-straighten-comments'
+    'custom-block-text',
+    'search-sprites',
+    'fullscreen'
 ];
 
 // eslint-disable-next-line import/no-commonjs
