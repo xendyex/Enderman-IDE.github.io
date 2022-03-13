@@ -22,7 +22,6 @@
 const fs = require('fs');
 const childProcess = require('child_process');
 const rimraf = require('rimraf');
-const request = require('request');
 const pathUtil = require('path');
 const {addons, newAddons} = require('./addons.js');
 
@@ -49,7 +48,7 @@ const clone = obj => JSON.parse(JSON.stringify(obj));
 const repoPath = pathUtil.resolve(__dirname, 'ScratchAddons');
 if (!process.argv.includes('-')) {
     rimraf.sync(repoPath);
-    childProcess.execSync(`git clone --depth=1 https://github.com/TurboWarp/addons ${repoPath}`);
+    childProcess.execSync(`git clone --depth=1 --branch=tw https://github.com/TurboWarp/addons ${repoPath}`);
 }
 
 for (const folder of ['addons', 'addons-l10n', 'addons-l10n-settings', 'libraries']) {
@@ -66,13 +65,6 @@ process.chdir(repoPath);
 const commitHash = childProcess.execSync('git rev-parse --short HEAD')
     .toString()
     .trim();
-
-request('https://raw.githubusercontent.com/ScratchAddons/contributors/master/.all-contributorsrc', (err, response, body) => {
-    const parsed = JSON.parse(body);
-    const contributors = parsed.contributors.filter(({contributions}) => contributions.includes('translation'));
-    const contributorsPath = pathUtil.resolve(generatedPath, 'translators.json');
-    fs.writeFileSync(contributorsPath, JSON.stringify(contributors, null, 4));
-});
 
 class GeneratedImports {
     constructor () {
@@ -284,6 +276,16 @@ const SKIP_MESSAGES = [
     'debugger/@settings-name-log_invalid_cloud_data',
     'debugger/log-cloud-data-nan',
     'debugger/log-cloud-data-too-long',
+    'debugger/tab-threads',
+    'debugger/no-threads-running',
+    'debugger/thread',
+    'debugger/step',
+    'debugger/step-desc',
+    'debugger/tab-performance',
+    'debugger/performance-framerate-title',
+    'debugger/performance-framerate-graph-tooltip',
+    'debugger/performance-clonecount-title',
+    'debugger/performance-clonecount-graph-tooltip',
     'editor-devtools/help-by',
     'editor-devtools/extension-description-not-for-addon',
     'mediarecorder/added-by',
