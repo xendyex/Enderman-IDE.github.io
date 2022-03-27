@@ -23,6 +23,7 @@
     color: $motion-primary;
     text-align: center;
     background: none;
+    pointer-events: none;
 }
 
 $fade-out-distance: 100px;
@@ -50,7 +51,7 @@ $fade-out-distance: 100px;
     /* Must have some height (recalculated by flex-grow) in order to scroll */
     height: 0;
     flex-grow: 1;
-    overflow-y: scroll;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
 }

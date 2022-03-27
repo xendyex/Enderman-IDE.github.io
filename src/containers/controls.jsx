@@ -5,6 +5,7 @@ import VM from 'scratch-vm';
 import {connect} from 'react-redux';
 
 import ControlsComponent from '../components/controls/controls.jsx';
+import {STAGE_SIZE_MODES} from '../lib/layout-constants.js';
 
 class Controls extends React.Component {
     constructor (props) {
@@ -65,6 +66,7 @@ Controls.propTypes = {
     turbo: PropTypes.bool.isRequired,
     framerate: PropTypes.number.isRequired,
     interpolation: PropTypes.bool.isRequired,
+    isSmall: PropTypes.bool,
     vm: PropTypes.instanceOf(VM)
 };
 

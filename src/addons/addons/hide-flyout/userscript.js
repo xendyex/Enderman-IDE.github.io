@@ -1,6 +1,6 @@
 /* inserted by pull.js */
-import _twAsset0 from "./lock.svg";
-import _twAsset1 from "./unlock.svg";
+import _twAsset0 from "!url-loader!./lock.svg";
+import _twAsset1 from "!url-loader!./unlock.svg";
 const _twGetAsset = (path) => {
   if (path === "/lock.svg") return _twAsset0;
   if (path === "/unlock.svg") return _twAsset1;
@@ -26,15 +26,22 @@ export default async function ({ addon, global, console }) {
     };
     return data[addon.settings.get("speed")];
   }
-  function onmouseenter(speed = {}) {
-    speed = typeof speed === "object" ? getSpeedValue() : speed;
-    flyOut.classList.remove("sa-flyoutClose");
-    flyOut.style.transitionDuration = `${speed}s`;
-    scrollBar.classList.remove("sa-flyoutClose");
-    scrollBar.style.transitionDuration = `${speed}s`;
-    lockDisplay.classList.remove("sa-flyoutClose");
-    lockDisplay.style.transitionDuration = `${speed}s`;
-    setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), speed * 1000);
+  function onmouseenter(e, speed = {}) {
+    // If a mouse event was passed, only open flyout if the workspace isn't being dragged
+    if (
+      !e ||
+      e.buttons === 0 ||
+      document.querySelector(".blocklyToolboxDiv").className.includes("blocklyToolboxDelete")
+    ) {
+      speed = typeof speed === "object" ? getSpeedValue() : speed;
+      flyOut.classList.remove("sa-flyoutClose");
+      flyOut.style.transitionDuration = `${speed}s`;
+      scrollBar.classList.remove("sa-flyoutClose");
+      scrollBar.style.transitionDuration = `${speed}s`;
+      lockDisplay.classList.remove("sa-flyoutClose");
+      lockDisplay.style.transitionDuration = `${speed}s`;
+      setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), speed * 1000);
+    }
   }
   function onmouseleave(e, speed = getSpeedValue()) {
     // If we go behind the flyout or the user has locked it, let's return
@@ -64,7 +71,7 @@ export default async function ({ addon, global, console }) {
           lockDisplay.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
           placeHolderDiv.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
           if (e.detail.action.activeTabIndex === 0) {
-            onmouseenter(0);
+            onmouseenter(null, 0);
             toggle = true;
           }
           break;
@@ -96,10 +103,6 @@ export default async function ({ addon, global, console }) {
             }
             if (toggleSetting === "category") toggle = !toggle;
           };
-          if (toggleSetting === "cathover") {
-            category.onmouseover = onmouseenter;
-            flyOut.onmouseleave = onmouseleave;
-          }
         }
       })();
     }
@@ -108,7 +111,6 @@ export default async function ({ addon, global, console }) {
   while (true) {
     flyOut = await addon.tab.waitForElement(".blocklyFlyout", {
       markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     let blocklySvg = document.querySelector(".blocklySvg");
@@ -135,11 +137,23 @@ export default async function ({ addon, global, console }) {
     if (toggleSetting === "hover") tabs.appendChild(lockDisplay);
 
     if (toggleSetting === "hover") {
-      placeHolderDiv.onmouseenter = onmouseenter;
-      blocklySvg.onmouseenter = onmouseleave;
+      placeHolderDiv.onmouseenter = (e) => onmouseenter(e);
+      placeHolderDiv.onmouseup = (e) => onmouseenter();
+      document.querySelector(".blocklyToolboxDiv").onmouseenter = (e) => onmouseenter(e); // for columns
+      blocklySvg.onmouseenter = (e) => onmouseleave(e);
     }
 
-    if (toggleSetting === "cathover") onmouseleave(null, 0);
+    if (toggleSetting === "cathover") {
+      onmouseleave(null, 0);
+
+      const toolbox = document.querySelector(".blocklyToolboxDiv");
+      const addExtensionButton = document.querySelector("[class^=gui_extension-button-container_]");
+
+      for (let e of [toolbox, addExtensionButton, flyOut, scrollBar]) {
+        e.onmouseenter = onmouseenter;
+        e.onmouseleave = onmouseleave;
+      }
+    }
 
     doOneTimeSetup();
   }

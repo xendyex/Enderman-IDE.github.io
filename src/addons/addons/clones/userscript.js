@@ -42,32 +42,35 @@ export default async function ({ addon, global, console, msg }) {
     const v = vm.runtime._cloneCounter;
     // performance
     if (v === lastChecked) return;
-    countContainerContainer.dataset.count = lastChecked = v;
+    lastChecked = v;
+    if (v === 0) {
+      countContainerContainer.dataset.count = "none";
+    } else if (v >= vm.runtime.runtimeOptions.maxClones) {
+      countContainerContainer.dataset.count = "full";
+    } else {
+      countContainerContainer.dataset.count = "";
+    }
     count.dataset.str = cache[v] || msg("clones", { cloneCount: v });
 
     if (v === 0) countContainerContainer.style.display = "none";
     else countContainerContainer.style.display = "flex";
   }
 
-  vm.runtime.on("targetWasRemoved", (t) => {
-    // Fix bug with inaccurate clone counter
-    if (t.isOriginal) vm.runtime.changeCloneCounter(1);
-  });
-  const oldStep = vm.runtime.constructor.prototype._step;
-  vm.runtime.constructor.prototype._step = function (...args) {
+  const oldStep = vm.runtime._step;
+  vm.runtime._step = function (...args) {
     const ret = oldStep.call(this, ...args);
     doCloneChecks();
     return ret;
   };
 
   while (true) {
-    let bar = await addon.tab.waitForElement('[class*="controls_controls-container"]', {
+    await addon.tab.waitForElement('[class*="controls_controls-container"]', {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
 
     if (addon.tab.editorMode === "editor") {
-      bar.appendChild(countContainerContainer);
+      addon.tab.appendToSharedSpace({ space: "afterStopButton", element: countContainerContainer, order: 2 });
     }
   }
 }

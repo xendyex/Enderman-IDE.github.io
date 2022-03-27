@@ -29,7 +29,6 @@ import TWStateManagerHOC from '../lib/tw-state-manager-hoc.jsx';
 import TWThemeHOC from '../lib/tw-theme-hoc.jsx';
 import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
 import SettingsStore from '../addons/settings-store-singleton';
-import twStageSize from '../lib/tw-stage-size';
 import '../lib/tw-fix-history-api';
 import GUI from './render-gui.jsx';
 import MenuBar from '../components/menu-bar/menu-bar.jsx';
@@ -41,13 +40,15 @@ import BrowserModal from '../components/browser-modal/browser-modal.jsx';
 import CloudVariableBadge from '../components/tw-cloud-variable-badge/cloud-variable-badge.jsx';
 import {isRendererSupported, isBrowserSupported} from '../lib/tw-environment-support-prober';
 import AddonChannels from '../addons/channels';
-import loadServiceWorker from './load-service-worker';
+import {loadServiceWorker} from './load-service-worker';
+import runAddons from '../addons/entry';
 
 import styles from './interface.css';
 
 if (window.parent !== window) {
     // eslint-disable-next-line no-alert
-    alert('This page is embedding TurboWarp in a way that is unsupported and will cease to function in the near future. Please read https://github.com/TurboWarp/scratch-gui/wiki/Embedding');
+    alert('This page is embedding TurboWarp in a way that is unsupported and will cease to function in the near future. Please read https://docs.turbowarp.org/embedding');
+    throw new Error('Invalid embed');
 }
 
 let announcement = null;
@@ -86,7 +87,7 @@ if (AddonChannels.changeChannel) {
     });
 }
 
-import(/* webpackChunkName: "addons" */ '../addons/entry');
+runAddons();
 
 const Footer = () => (
     <footer className={styles.footer}>
@@ -125,21 +126,21 @@ const Footer = () => (
                         {/* Do not translate */}
                         {'TurboWarp Packager'}
                     </a>
-                    <a href="https://github.com/TurboWarp/scratch-gui/wiki/Embedding">
+                    <a href="https://docs.turbowarp.org/embedding">
                         <FormattedMessage
                             defaultMessage="Embedding"
                             description="Menu bar item for embedding link"
                             id="tw.footer.embed"
                         />
                     </a>
-                    <a href="https://github.com/TurboWarp/scratch-gui/wiki/URL-Parameters">
+                    <a href="https://docs.turbowarp.org/url-parameters">
                         <FormattedMessage
                             defaultMessage="URL Parameters"
                             description="Menu bar item for URL parameters link"
                             id="tw.footer.parameters"
                         />
                     </a>
-                    <a href="https://github.com/TurboWarp/scratch-gui/wiki/Help-translate-TurboWarp">
+                    <a href="https://docs.turbowarp.org/translate">
                         <FormattedMessage
                             defaultMessage="Help Translate TurboWarp"
                             description="Menu bar item for translating TurboWarp link"
@@ -231,7 +232,7 @@ class Interface extends React.Component {
                     className={styles.center}
                     style={isPlayerOnly ? ({
                         // add a couple pixels to account for border (TODO: remove weird hack)
-                        width: `${Math.max(480, twStageSize.width) + 2}px`
+                        width: `${Math.max(480, props.customStageSize.width) + 2}px`
                     }) : null}
                 >
                     {isHomepage && announcement ? <DOMElementRenderer domElement={announcement} /> : null}
@@ -293,6 +294,10 @@ class Interface extends React.Component {
 Interface.propTypes = {
     intl: intlShape,
     hasCloudVariables: PropTypes.bool,
+    customStageSize: PropTypes.shape({
+        width: PropTypes.number,
+        height: PropTypes.number
+    }),
     description: PropTypes.shape({
         credits: PropTypes.string,
         instructions: PropTypes.string
@@ -307,6 +312,7 @@ Interface.propTypes = {
 
 const mapStateToProps = state => ({
     hasCloudVariables: state.scratchGui.tw.hasCloudVariables,
+    customStageSize: state.scratchGui.customStageSize,
     description: state.scratchGui.tw.description,
     isFullScreen: state.scratchGui.mode.isFullScreen,
     isLoading: getIsLoading(state.scratchGui.projectState.loadingState),

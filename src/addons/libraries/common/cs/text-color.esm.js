@@ -21,10 +21,60 @@ function convertToHex(obj) {
   return `#${r}${g}${b}${a}`;
 }
 
-function textColor(hex, black, white, threshold) {
+function convertFromHsv({ h, s, v }) {
+  if (s === 0) return { r: 255 * v, g: 255 * v, b: 255 * v };
+  const h1 = h / 60;
+  const hi = Math.floor(h1);
+  const x = v * (1 - s * (1 - h1 + hi));
+  const y = v * (1 - s * (h1 - hi));
+  const z = v * (1 - s);
+  switch (hi) {
+    case 0:
+      return { r: 255 * v, g: 255 * x, b: 255 * z };
+    case 1:
+      return { r: 255 * y, g: 255 * v, b: 255 * z };
+    case 2:
+      return { r: 255 * z, g: 255 * v, b: 255 * x };
+    case 3:
+      return { r: 255 * z, g: 255 * y, b: 255 * v };
+    case 4:
+      return { r: 255 * x, g: 255 * z, b: 255 * v };
+    case 5:
+      return { r: 255 * v, g: 255 * z, b: 255 * y };
+    default:
+      // ???
+      return { r: 0, g: 0, b: 0 };
+  }
+}
+
+function convertToHsv({ r, g, b }) {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const v = Math.max(r, g, b);
+  const d = v - Math.min(r, g, b);
+  if (d === 0) return { h: 0, s: 0, v: v }; // gray
+  const s = d / v;
+  const hr = (v - r) / d;
+  const hg = (v - g) / d;
+  const hb = (v - b) / d;
+  let h1;
+  if (!hr) h1 = hb - hg;
+  else if (!hg) h1 = 2 + hr - hb;
+  else if (!hb) h1 = 4 + hg - hr;
+  const h = (60 * h1) % 360;
+  return { h, s, v };
+}
+
+function brightness(hex) {
   const { r, g, b } = parseHex(hex);
+  return r * 0.299 + g * 0.587 + b * 0.114;
+}
+
+function textColor(hex, black, white, threshold) {
   threshold = threshold !== undefined ? threshold : 170;
-  if (r * 0.299 + g * 0.587 + b * 0.114 > threshold) {
+  if (typeof threshold !== "number") threshold = brightness(threshold);
+  if (brightness(hex) > threshold) {
     // https://stackoverflow.com/a/3943023
     return black !== undefined ? black : "#575e75";
   } else {
@@ -51,7 +101,7 @@ function brighten(hex, c) {
     r: (1 - c.r) * 255 + c.r * r,
     g: (1 - c.g) * 255 + c.g * g,
     b: (1 - c.b) * 255 + c.b * b,
-    a: (1 - c.a) * 255 + c.a * a,
+    a: 1 - c.a + c.a * a,
   });
 }
 
@@ -63,6 +113,18 @@ function alphaBlend(opaqueHex, transparentHex) {
     g: (1 - a) * g1 + a * g2,
     b: (1 - a) * b1 + a * b2,
   });
+}
+
+function makeHsv(hSource, sSource, vSource) {
+  const h = typeof hSource === "number" ? hSource : convertToHsv(parseHex(hSource)).h;
+  const s =
+    typeof hSource !== "number" && convertToHsv(parseHex(hSource)).s === 0
+      ? 0
+      : typeof sSource === "number"
+      ? sSource
+      : convertToHsv(parseHex(sSource)).s;
+  const v = typeof vSource === "number" ? vSource : convertToHsv(parseHex(vSource)).v;
+  return convertToHex(convertFromHsv({ h, s, v }));
 }
 
 function recolorFilter(hex) {
@@ -83,4 +145,16 @@ function recolorFilter(hex) {
     .join("");
 }
 
-export { textColor, multiply, brighten, alphaBlend, recolorFilter };
+export {
+  parseHex,
+  convertToHex,
+  convertFromHsv,
+  convertToHsv,
+  brightness,
+  textColor,
+  multiply,
+  brighten,
+  alphaBlend,
+  makeHsv,
+  recolorFilter,
+};

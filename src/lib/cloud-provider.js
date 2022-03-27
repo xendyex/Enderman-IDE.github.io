@@ -1,6 +1,12 @@
 import log from './log.js';
 import throttle from 'lodash.throttle';
 
+const anonymizeUsername = username => {
+    if (/^player\d{2,7}$/i.test(username)) {
+        return 'player';
+    }
+    return username;
+};
 
 class CloudProvider {
     /**
@@ -15,7 +21,7 @@ class CloudProvider {
      */
     constructor (cloudHost, vm, username, projectId) {
         this.vm = vm;
-        this.username = username;
+        this.username = anonymizeUsername(username);
         this.projectId = projectId;
         this.cloudHost = cloudHost;
 
@@ -95,6 +101,14 @@ class CloudProvider {
         if (e && e.code === 4002) {
             log.info('Cloud username is invalid. Not reconnecting.');
             this.onInvalidUsername();
+            return;
+        }
+        // tw: code 4004 is "Project Unavailable" -- do not try to reconnect
+        if (e && e.code === 4004) {
+            // this is temporary
+            // eslint-disable-next-line no-alert
+            alert('TurboWarp cloud variables are temporarily disabled in this project.');
+            log.info('Cloud project is unavailable. Not reconnecting.');
             return;
         }
         log.info(`Closed connection to websocket`);

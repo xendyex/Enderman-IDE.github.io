@@ -30,6 +30,12 @@ const messages = defineMessages({
         description: 'A message that displays in a variable modal when the stage is selected indicating ' +
             'that the variable being created will available to all sprites.',
         id: 'gui.gui.variablePromptAllSpritesMessage'
+    },
+    listAvailableToAllSpritesMessage: {
+        defaultMessage: 'This list will be available to all sprites.',
+        description: 'A message that displays in a list modal when the stage is selected indicating ' +
+            'that the list being created will available to all sprites.',
+        id: 'gui.gui.listPromptAllSpritesMessage'
     }
 });
 
@@ -58,9 +64,15 @@ const PromptComponent = props => (
                 <div>
                     {props.isStage ?
                         <div className={styles.infoMessage}>
-                            <FormattedMessage
-                                {...messages.availableToAllSpritesMessage}
-                            />
+                            {props.showListMessage ? (
+                                <FormattedMessage
+                                    {...messages.listAvailableToAllSpritesMessage}
+                                />
+                            ) : (
+                                <FormattedMessage
+                                    {...messages.availableToAllSpritesMessage}
+                                />
+                            )}
                         </div> :
                         <Box className={styles.optionsRow}>
                             <label>
@@ -109,6 +121,29 @@ const PromptComponent = props => (
                         </Box> : null}
                 </div> : null}
 
+            {props.cloudSelected && props.canAddCloudVariable && (
+                <Box className={styles.infoMessage}>
+                    <FormattedMessage
+                        /* eslint-disable-next-line max-len */
+                        defaultMessage="Although you can create cloud variables, they won't work unless this project is uploaded to Scratch or using a tool such as the {packager}."
+                        description="Reminder that cloud variables may not work when the editor is open"
+                        values={{
+                            packager: (
+                                <a
+                                    href="https://packager.turbowarp.org"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {/* Should not be translated */}
+                                    {'TurboWarp Packager'}
+                                </a>
+                            )
+                        }}
+                        id="tw.cantUseCloud"
+                    />
+                </Box>
+            )}
+
             <Box className={styles.buttonRow}>
                 <button
                     className={styles.cancelButton}
@@ -141,6 +176,7 @@ PromptComponent.propTypes = {
     defaultValue: PropTypes.string,
     globalSelected: PropTypes.bool.isRequired,
     isStage: PropTypes.bool.isRequired,
+    showListMessage: PropTypes.bool.isRequired,
     label: PropTypes.string.isRequired,
     onCancel: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,

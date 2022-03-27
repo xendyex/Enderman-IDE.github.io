@@ -34,10 +34,6 @@ const vmManagerHOC = function (WrappedComponent) {
                 this.props.vm.attachAudioEngine(this.audioEngine);
                 this.props.vm.initialized = true;
                 this.props.vm.setLocale(this.props.locale, this.props.messages);
-                /* eslint-disable no-console */
-                console.log('The VM is exposed as `vm`');
-                console.log('To log compiled scripts to the console, run `vm.enableDebug()`');
-                /* eslint-enable no-console */
             }
             if (!this.props.isPlayerOnly && !this.props.isStarted) {
                 this.props.vm.start();

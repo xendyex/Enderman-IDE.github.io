@@ -1,5 +1,5 @@
 import SettingStore from '../../../src/addons/settings-store';
-import upstreamMeta from '../../../src/addons/upstream-meta.json';
+import upstreamMeta from '../../../src/addons/generated/upstream-meta.json';
 
 class LocalStorageShim {
     constructor () {
@@ -46,24 +46,6 @@ test('enabled, event', () => {
     expect(fn.mock.calls[3][0].detail.value).toBe(false);
 });
 
-test('setAddonEnabled reloadRequired', () => {
-    const store = new SettingStore();
-    const fn = jest.fn();
-    store.setAddonEnabled('editor-devtools', false);
-    store.setAddonEnabled('block-palette-icons', false);
-    store.addEventListener('setting-changed', fn);
-    store.setAddonEnabled('editor-devtools', true);
-    store.setAddonEnabled('block-palette-icons', true);
-    store.setAddonEnabled('block-palette-icons', false);
-    expect(fn).toHaveBeenCalledTimes(3);
-    expect(fn.mock.calls[0][0].detail.addonId).toBe('editor-devtools');
-    expect(fn.mock.calls[0][0].detail.reloadRequired).toBe(true);
-    expect(fn.mock.calls[1][0].detail.addonId).toBe('block-palette-icons');
-    expect(fn.mock.calls[1][0].detail.reloadRequired).toBe(false);
-    expect(fn.mock.calls[2][0].detail.addonId).toBe('block-palette-icons');
-    expect(fn.mock.calls[2][0].detail.reloadRequired).toBe(false);
-});
-
 test('settings, event, default values', () => {
     const store = new SettingStore();
     const fn = jest.fn();
@@ -79,11 +61,9 @@ test('settings, event, default values', () => {
     expect(fn).toHaveBeenCalledTimes(2);
     expect(fn.mock.calls[0][0].detail.addonId).toBe('onion-skinning');
     expect(fn.mock.calls[0][0].detail.settingId).toBe('default');
-    expect(fn.mock.calls[0][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[0][0].detail.value).toBe(true);
     expect(fn.mock.calls[1][0].detail.addonId).toBe('onion-skinning');
     expect(fn.mock.calls[1][0].detail.settingId).toBe('default');
-    expect(fn.mock.calls[1][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[1][0].detail.value).toBe(false);
 });
 
@@ -185,11 +165,9 @@ test('reset settings, event', () => {
     expect(fn).toHaveBeenCalledTimes(2);
     expect(fn.mock.calls[0][0].detail.addonId).toBe('onion-skinning');
     expect(fn.mock.calls[0][0].detail.settingId).toBe('default');
-    expect(fn.mock.calls[0][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[0][0].detail.value).toBe(false);
     expect(fn.mock.calls[1][0].detail.addonId).toBe('onion-skinning');
     expect(fn.mock.calls[1][0].detail.settingId).toBe('next');
-    expect(fn.mock.calls[1][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[1][0].detail.value).toBe(0);
 });
 
@@ -203,11 +181,9 @@ test('reset all addons', () => {
     expect(fn).toHaveBeenCalledTimes(2);
     expect(fn.mock.calls[0][0].detail.addonId).toBe('cat-blocks');
     expect(fn.mock.calls[0][0].detail.settingId).toBe('enabled');
-    expect(fn.mock.calls[0][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[0][0].detail.value).toBe(false);
     expect(fn.mock.calls[1][0].detail.addonId).toBe('onion-skinning');
     expect(fn.mock.calls[1][0].detail.settingId).toBe('default');
-    expect(fn.mock.calls[1][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[1][0].detail.value).toBe(false);
 });
 
@@ -278,11 +254,9 @@ test('import, event', () => {
     expect(fn).toHaveBeenCalledTimes(2);
     expect(fn.mock.calls[0][0].detail.addonId).toBe('onion-skinning');
     expect(fn.mock.calls[0][0].detail.settingId).toBe('enabled');
-    expect(fn.mock.calls[0][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[0][0].detail.value).toBe(false);
     expect(fn.mock.calls[1][0].detail.addonId).toBe('onion-skinning');
     expect(fn.mock.calls[1][0].detail.settingId).toBe('next');
-    expect(fn.mock.calls[1][0].detail.reloadRequired).toBe(true);
     expect(fn.mock.calls[1][0].detail.value).toBe(5);
 });
 
@@ -456,4 +430,35 @@ test('setStoreWithVersionCheck', () => {
         version: 'something invalid'
     });
     expect(store.setStore).toHaveBeenCalledTimes(0);
+});
+
+test('parseSearchParameter', () => {
+    const store = new SettingStore();
+    expect(store.getAddonEnabled('pause')).toBe(true);
+    expect(store.getAddonEnabled('mute-project')).toBe(true);
+    expect(store.getAddonEnabled('remove-curved-stage-border')).toBe(false);
+    expect(store.remote).toBe(false);
+    store.parseUrlParameter('pause,remove-curved-stage-border,,invalid addon??43t987(*&$');
+    expect(store.getAddonEnabled('pause')).toBe(true);
+    expect(store.getAddonEnabled('mute-project')).toBe(false);
+    expect(store.getAddonEnabled('remove-curved-stage-border')).toBe(true);
+    expect(store.remote).toBe(true);
+});
+
+test('Settings migration 1 -> 2', () => {
+    const store = new SettingStore();
+
+    // eslint-disable-next-line max-len
+    global.localStorage.getItem = () => `{"_":1,"tw-project-info":{"enabled":false},"tw-interface-customization":{"enabled":false,"removeFeedback":true,"removeBackpack":true}}`;
+    store.readLocalStorage();
+    expect(store.getAddonEnabled('block-count')).toBe(false);
+    expect(store.getAddonEnabled('tw-remove-backpack')).toBe(false);
+    expect(store.getAddonEnabled('tw-remove-feedback')).toBe(false);
+
+    // eslint-disable-next-line max-len
+    global.localStorage.getItem = () => `{"_":1,"tw-project-info":{"enabled":true},"tw-interface-customization":{"enabled":true,"removeFeedback":true,"removeBackpack":true}}`;
+    store.readLocalStorage();
+    expect(store.getAddonEnabled('block-count')).toBe(true);
+    expect(store.getAddonEnabled('tw-remove-backpack')).toBe(true);
+    expect(store.getAddonEnabled('tw-remove-feedback')).toBe(true);
 });

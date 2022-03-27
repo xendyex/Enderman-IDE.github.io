@@ -1,9 +1,9 @@
 /* inserted by pull.js */
-import _twAsset0 from "./active.png";
-import _twAsset1 from "./close.svg";
-import _twAsset2 from "./cursor.png";
-import _twAsset3 from "./dot.svg";
-import _twAsset4 from "./gamepad.svg";
+import _twAsset0 from "!url-loader!./active.png";
+import _twAsset1 from "!url-loader!./close.svg";
+import _twAsset2 from "!url-loader!./cursor.png";
+import _twAsset3 from "!url-loader!./dot.svg";
+import _twAsset4 from "!url-loader!./gamepad.svg";
 const _twGetAsset = (path) => {
   if (path === "/active.png") return _twAsset0;
   if (path === "/close.svg") return _twAsset1;
@@ -101,8 +101,8 @@ export default async function ({ addon, global, console, msg }) {
   GamepadLib.setConsole(console);
   const gamepad = new GamepadLib();
 
-  const parsedOptions = parseOptionsComment();
   gamepad.getHintsLazily = () => {
+    const parsedOptions = parseOptionsComment();
     if (parsedOptions) {
       return {
         importedSettings: parsedOptions,
@@ -112,6 +112,9 @@ export default async function ({ addon, global, console, msg }) {
       usedKeys: getKeysUsedByProject(),
     };
   };
+  vm.runtime.on("PROJECT_LOADED", () => {
+    gamepad.resetControls();
+  });
 
   if (addon.settings.get("hide")) {
     await new Promise((resolve) => {
@@ -148,9 +151,6 @@ export default async function ({ addon, global, console, msg }) {
   buttonContent.appendChild(buttonImage);
   buttonContainer.appendChild(buttonContent);
   container.appendChild(buttonContainer);
-
-  const spacer = document.createElement("div");
-  spacer.className = "sa-gamepad-spacer";
 
   let editor;
   let shouldStoreSettingsInProject = false;
@@ -446,11 +446,9 @@ export default async function ({ addon, global, console, msg }) {
     );
     container.dataset.editorMode = addon.tab.editorMode;
     if (target.className.includes("stage-size-row")) {
-      target.insertBefore(container, target.firstChild);
-      spacer.remove();
+      addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 1 });
     } else {
-      spacer.appendChild(container);
-      target.parentElement.insertBefore(spacer, target);
+      addon.tab.appendToSharedSpace({ space: "fullscreenStageHeader", element: container, order: 0 });
     }
 
     const monitorListScaler = document.querySelector("[class^='monitor-list_monitor-list-scaler']");

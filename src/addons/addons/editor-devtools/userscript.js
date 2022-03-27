@@ -1,5 +1,5 @@
 /* inserted by pull.js */
-import _twAsset0 from "./icon--close.svg";
+import _twAsset0 from "!url-loader!./icon--close.svg";
 const _twGetAsset = (path) => {
   if (path === "/icon--close.svg") return _twAsset0;
   throw new Error(`Unknown asset: ${path}`);
@@ -8,21 +8,6 @@ const _twGetAsset = (path) => {
 import DevTools from "./DevTools.js";
 
 export default async function ({ addon, global, console, msg, safeMsg: m }) {
-  const untilInEditor = () => {
-    if (addon.tab.editorMode === "editor") return;
-    return new Promise((resolve, reject) => {
-      const handler = () => {
-        if (addon.tab.editorMode === "editor") {
-          resolve();
-          addon.tab.removeEventListener("urlChange", handler);
-        }
-      };
-      addon.tab.addEventListener("urlChange", handler);
-    });
-  };
-
-  await untilInEditor();
-
   const guiDirection = addon.tab.direction;
   const helpHTML = `
 <div id="s3devHelpPop" class="${addon.tab.scratchClass("modal_modal-overlay")}" dir="${guiDirection}">
@@ -38,13 +23,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   </div>
 </div>
 <div id="s3devHelpContent">
-<!-- tw: we don't put this in because including "Scratch Addons" would probably violate BE/US policy :(
-<p>${m("help-title")} ${m("help-by", {
-    ndash: "&ndash;",
-    url: '<a target="_blank" rel="noreferrer noopener" href="https://www.youtube.com/griffpatch">Griffpatch</a>',
-  })}</p>
-<hr />
--->
 <h2><strong>${m("code-tab-features")}</strong></h2>
 <p dir="auto"><strong>${m("interactive-find-bar")}</strong> &ndash; ${m("interactive-find-bar-desc")}</p>
 <p dir="auto"><strong>${m("improved-tidy-up")}</strong> &ndash; ${m("improved-tidy-up-desc")}</p>
@@ -59,7 +37,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 <h2><strong>${m("costume-tab-features")}</strong></h2>
 <p dir="auto"><strong>${m("find-bar")}</strong> &ndash; ${m("find-bar-costume-desc")}</p>
 <p dir="auto"><strong>${m("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-costume-desc")}</p>
-<p dir="auto"><strong>${m("send-top-bottom")}</strong> &ndash; ${m("send-top-bottom-desc")}</p>
 <hr />
 <p>${m(
     "youtube"

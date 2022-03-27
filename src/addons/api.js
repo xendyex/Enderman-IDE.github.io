@@ -16,11 +16,14 @@
 
 import IntlMessageFormat from 'intl-messageformat';
 import SettingsStore from './settings-store-singleton';
-import getAddonTranslations from './get-addon-translations';
 import dataURLToBlob from '../lib/data-uri-to-blob';
 import EventTargetShim from './event-target';
 import AddonHooks from './hooks';
-import addons from './addon-manifests';
+import addons from './generated/addon-manifests';
+import addonMessages from './addons-l10n/en.json';
+import l10nEntries from './generated/l10n-entries';
+import addonEntries from './generated/addon-entries';
+import {addContextMenu} from './contextmenu';
 import './polyfill';
 
 /* eslint-disable no-console */
@@ -107,6 +110,7 @@ const removeMutationObserverCallback = callback => {
 class Redux extends EventTargetShim {
     constructor () {
         super();
+        this._isInReducer = false;
         this._initialized = false;
         this._nextState = null;
     }
@@ -114,6 +118,7 @@ class Redux extends EventTargetShim {
     initialize () {
         if (!this._initialized) {
             AddonHooks.appStateReducer = (action, next) => {
+                this._isInReducer = true;
                 this._nextState = next;
                 this.dispatchEvent(new CustomEvent('statechanged', {
                     detail: {
@@ -122,6 +127,7 @@ class Redux extends EventTargetShim {
                     }
                 }));
                 this._nextState = null;
+                this._isInReducer = false;
             };
 
             this._initialized = true;
@@ -129,7 +135,11 @@ class Redux extends EventTargetShim {
     }
 
     dispatch (m) {
-        return AddonHooks.appStateStore.dispatch(m);
+        if (this._isInReducer) {
+            queueMicrotask(() => AddonHooks.appStateStore.dispatch(m));
+        } else {
+            AddonHooks.appStateStore.dispatch(m);
+        }
     }
 
     get state () {
@@ -149,11 +159,68 @@ const getEditorMode = () => {
 
 const tabReduxInstance = new Redux();
 const language = tabReduxInstance.state.locales.locale.split('-')[0];
-const translations = getAddonTranslations(language);
+
+const getTranslations = async () => {
+    if (l10nEntries[language]) {
+        const localeMessages = await l10nEntries[language]();
+        Object.assign(addonMessages, localeMessages);
+    }
+};
+const addonMessagesPromise = getTranslations();
+
+const untilInEditor = () => {
+    if (!tabReduxInstance.state.scratchGui.mode.isPlayerOnly) {
+        return;
+    }
+    return new Promise(resolve => {
+        const handler = () => {
+            if (!tabReduxInstance.state.scratchGui.mode.isPlayerOnly) {
+                resolve();
+                tabReduxInstance.removeEventListener('statechanged', handler);
+            }
+        };
+        tabReduxInstance.initialize();
+        tabReduxInstance.addEventListener('statechanged', handler);
+    });
+};
 
 const getDisplayNoneWhileDisabledClass = id => `addons-display-none-${id}`;
 
+const parseArguments = code => code
+    .split(/(?=[^\\]%[nbs])/g)
+    .map(i => i.trim())
+    .filter(i => i.charAt(0) === '%')
+    .map(i => i.substring(0, 2));
+const fixDisplayName = displayName => displayName.replace(/([^\s])(%[nbs])/g, (_, before, arg) => `${before} ${arg}`);
+const compareArrays = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
 let _firstAddBlockRan = false;
+
+const contextMenuCallbacks = [];
+const CONTEXT_MENU_ORDER = ['editor-devtools', 'block-switching', 'blocks2image', 'swap-local-global'];
+let createdAnyBlockContextMenus = false;
+
+const getInternalKey = element => Object.keys(element).find(key => key.startsWith('__reactInternalInstance$'));
+
+// Stylesheets are added at the start of <body> so that they have higher precedence
+// than those in <head>
+const stylesheetContainer = document.createElement('div');
+document.body.insertBefore(stylesheetContainer, document.body.firstChild);
+const getStylesheetPrecedence = styleElement => {
+    // columns must have higher precedence than hide-flyout
+    if (styleElement.dataset.addonId === 'columns') return 1;
+    return 0;
+};
+const addStylesheet = styleElement => {
+    const priority = getStylesheetPrecedence(styleElement);
+    for (const child of stylesheetContainer.children) {
+        if (getStylesheetPrecedence(child) >= priority) {
+            stylesheetContainer.insertBefore(styleElement, child);
+            return;
+        }
+    }
+    stylesheetContainer.appendChild(styleElement);
+};
 
 class Tab extends EventTargetShim {
     constructor (id) {
@@ -163,33 +230,52 @@ class Tab extends EventTargetShim {
         // traps is public API
         this.traps = {
             get vm () {
-                // We expose VM on window
-                return window.vm;
+                return tabReduxInstance.state.scratchGui.vm;
             },
             getBlockly: () => {
-                // The real Blockly is exposed on window. It may not exist until the user enters the editor.
-                if (window.ScratchBlocks) {
-                    return Promise.resolve(window.ScratchBlocks);
+                if (AddonHooks.blockly) {
+                    return Promise.resolve(AddonHooks.blockly);
                 }
                 return new Promise(resolve => {
-                    const handler = () => {
-                        if (window.ScratchBlocks) {
-                            this.removeEventListener('urlChange', handler);
-                            resolve(window.ScratchBlocks);
-                        }
-                    };
-                    this.addEventListener('urlChange', handler);
+                    AddonHooks.blocklyCallbacks.push(() => resolve(AddonHooks.blockly));
                 });
-            }
+            },
+            getPaper: async () => {
+                const modeSelector = await this.waitForElement("[class*='paint-editor_mode-selector']", {
+                    reduxCondition: state => (
+                        state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly
+                    )
+                });
+                const reactInternalKey = Object.keys(modeSelector)
+                    .find(key => key.startsWith('__reactInternalInstance$'));
+                const internalState = modeSelector[reactInternalKey].child;
+                // .tool or .blob.tool only exists on the selected tool
+                let toolState = internalState;
+                let tool;
+                while (toolState) {
+                    const toolInstance = toolState.child.stateNode;
+                    if (toolInstance.tool) {
+                        tool = toolInstance.tool;
+                        break;
+                    }
+                    if (toolInstance.blob && toolInstance.blob.tool) {
+                        tool = toolInstance.blob.tool;
+                        break;
+                    }
+                    toolState = toolState.sibling;
+                }
+                if (tool) {
+                    const paperScope = tool._scope;
+                    return paperScope;
+                }
+                throw new Error('cannot find paper :(');
+            },
+            getInternalKey
         };
     }
 
     get redux () {
         return tabReduxInstance;
-    }
-
-    loadScript () {
-        throw new Error('loadScript is not supported');
     }
 
     waitForElement (selector, {markAsSeen = false, condition, reduxCondition, reduxEvents} = {}) {
@@ -246,14 +332,161 @@ class Tab extends EventTargetShim {
         });
     }
 
-    addBlock (procedureCode, args, callback) {
+    appendToSharedSpace ({space, element, order, scope}) {
+        const SHARED_SPACES = {
+            stageHeader: {
+                element: () => document.querySelector("[class^='stage-header_stage-size-row']"),
+                from: () => [],
+                until: () => [
+                    document.querySelector("[class^='stage-header_stage-size-toggle-group']"),
+                    document.querySelector("[class^='stage-header_stage-size-row']").lastChild
+                ]
+            },
+            fullscreenStageHeader: {
+                element: () => document.querySelector("[class^='stage-header_stage-menu-wrapper']"),
+                from: function () {
+                    let emptyDiv = this.element().querySelector('.addon-spacer');
+                    if (!emptyDiv) {
+                        emptyDiv = document.createElement('div');
+                        emptyDiv.style.marginLeft = 'auto';
+                        emptyDiv.className = 'addon-spacer';
+                        this.element().insertBefore(emptyDiv, this.element().lastChild);
+                    }
+                    return [emptyDiv];
+                },
+                until: () => [document.querySelector("[class^='stage-header_stage-menu-wrapper']").lastChild]
+            },
+            afterGreenFlag: {
+                element: () => document.querySelector("[class^='controls_controls-container']"),
+                from: () => [],
+                until: () => [document.querySelector("[class^='stop-all_stop-all']")]
+            },
+            afterStopButton: {
+                element: () => document.querySelector("[class^='controls_controls-container']"),
+                from: () => [document.querySelector("[class^='stop-all_stop-all']")],
+                until: () => []
+            },
+            afterSoundTab: {
+                element: () => document.querySelector("[class^='react-tabs_react-tabs__tab-list']"),
+                from: () => [document.querySelector("[class^='react-tabs_react-tabs__tab-list']").children[2]],
+                until: () => [document.querySelector('#s3devToolBar')]
+            },
+            assetContextMenuAfterExport: {
+                element: () => scope,
+                from: () => Array.prototype.filter.call(
+                    scope.children,
+                    c => c.textContent === this.scratchMessage('gui.spriteSelectorItem.contextMenuExport')
+                ),
+                until: () => Array.prototype.filter.call(
+                    scope.children,
+                    c => c.textContent === this.scratchMessage('gui.spriteSelectorItem.contextMenuDelete')
+                )
+            },
+            assetContextMenuAfterDelete: {
+                element: () => scope,
+                from: () => Array.prototype.filter.call(
+                    scope.children,
+                    c => c.textContent === this.scratchMessage('gui.spriteSelectorItem.contextMenuDelete')
+                ),
+                until: () => []
+            }
+        };
+
+        const spaceInfo = SHARED_SPACES[space];
+        const spaceElement = spaceInfo.element();
+        if (!spaceElement) return false;
+        const from = spaceInfo.from();
+        const until = spaceInfo.until();
+
+        element.dataset.saSharedSpaceOrder = order;
+
+        let foundFrom = false;
+        if (from.length === 0) foundFrom = true;
+
+        // insertAfter = element whose nextSibling will be the new element
+        // -1 means append at beginning of space (prepend)
+        // This will stay null if we need to append at the end of space
+        let insertAfter = null;
+
+        const children = Array.from(spaceElement.children);
+        for (const indexString of children.keys()) {
+            const child = children[indexString];
+            const i = Number(indexString);
+
+            // Find either element from "from" before doing anything
+            if (!foundFrom) {
+                if (from.includes(child)) {
+                    foundFrom = true;
+                    // If this is the last child, insertAfter will stay null
+                    // and the element will be appended at the end of space
+                }
+                continue;
+            }
+
+            if (until.includes(child)) {
+                // This is the first SA element appended to this space
+                // If from = [] then prepend, otherwise append after
+                // previous child (likely a "from" element)
+                if (i === 0) insertAfter = -1;
+                else insertAfter = children[i - 1];
+                break;
+            }
+
+            if (child.dataset.addonSharedSpaceOrder) {
+                if (Number(child.dataset.addonSharedSpaceOrder) > order) {
+                    // We found another SA element with higher order number
+                    // If from = [] and this is the first child, prepend.
+                    // Otherwise, append before this child.
+                    if (i === 0) insertAfter = -1;
+                    else insertAfter = children[i - 1];
+                    break;
+                }
+            }
+        }
+
+        if (!foundFrom) return false;
+        // It doesn't matter if we didn't find an "until"
+
+        if (insertAfter === null) {
+            // This might happen with until = []
+            spaceElement.appendChild(element);
+        } else if (insertAfter === -1) {
+            // This might happen with from = []
+            spaceElement.prepend(element);
+        } else {
+            // Works like insertAfter but using insertBefore API.
+            // nextSibling cannot be null because insertAfter
+            // is always set to children[i-1], so it must exist
+            spaceElement.insertBefore(element, insertAfter.nextSibling);
+        }
+        return true;
+    }
+
+    addBlock (procedureCode, {args, displayName, callback}) {
+        const procCodeArguments = parseArguments(procedureCode);
+        if (args.length !== procCodeArguments.length) {
+            throw new Error('Procedure code and argument list do not match');
+        }
+
+        if (displayName) {
+            displayName = fixDisplayName(displayName);
+            const displayNameArguments = parseArguments(displayName);
+            if (!compareArrays(procCodeArguments, displayNameArguments)) {
+                console.warn(`displayName ${displayName} for ${procedureCode} has invalid arguments, ignoring it.`);
+                displayName = procedureCode;
+            }
+        } else {
+            displayName = procedureCode;
+        }
+
         const vm = this.traps.vm;
         vm.addAddonBlock({
             procedureCode,
             arguments: args,
             callback,
             color: '#29beb8',
-            secondaryColor: '#3aa8a4'
+            secondaryColor: '#3aa8a4',
+            displayName
         });
 
         if (!_firstAddBlockRan) {
@@ -275,6 +508,18 @@ class Tab extends EventTargetShim {
                     }
                     return oldUpdateColour.call(this, ...args2);
                 };
+                const originalCreateAllInputs = ScratchBlocks.Blocks.procedures_call.createAllInputs_;
+                ScratchBlocks.Blocks.procedures_call.createAllInputs_ = function (...args2) {
+                    const block = this.procCode_ && vm.runtime.getAddonBlock(this.procCode_);
+                    if (block && block.displayName) {
+                        const originalProcCode = this.procCode_;
+                        this.procCode_ = block.displayName;
+                        const ret = originalCreateAllInputs.call(this, ...args2);
+                        this.procCode_ = originalProcCode;
+                        return ret;
+                    }
+                    return originalCreateAllInputs.call(this, ...args2);
+                };
                 if (vm.editingTarget) {
                     vm.emitWorkspaceUpdate();
                 }
@@ -282,8 +527,63 @@ class Tab extends EventTargetShim {
         }
     }
 
-    removeBlock () {
-        throw new Error('not implemented');
+    getCustomBlock (procedureCode) {
+        const vm = this.traps.vm;
+        return vm.getAddonBlock(procedureCode);
+    }
+
+    createBlockContextMenu (callback, {workspace = false, blocks = false, flyout = false, comments = false} = {}) {
+        contextMenuCallbacks.push({addonId: this._id, callback, workspace, blocks, flyout, comments});
+        contextMenuCallbacks.sort((b, a) => (
+            CONTEXT_MENU_ORDER.indexOf(b.addonId) - CONTEXT_MENU_ORDER.indexOf(a.addonId)
+        ));
+
+        if (createdAnyBlockContextMenus) return;
+        createdAnyBlockContextMenus = true;
+
+        this.traps.getBlockly().then(ScratchBlocks => {
+            const oldShow = ScratchBlocks.ContextMenu.show;
+            ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
+                const gesture = ScratchBlocks.mainWorkspace.currentGesture_;
+                const block = gesture.targetBlock_;
+
+                // eslint-disable-next-line no-shadow
+                for (const {callback, workspace, blocks, flyout, comments} of contextMenuCallbacks) {
+                    const injectMenu =
+                        // Workspace
+                        (workspace && !block && !gesture.flyout_ && !gesture.startBubble_) ||
+                        // Block in workspace
+                        (blocks && block && !gesture.flyout_) ||
+                        // Block in flyout
+                        (flyout && gesture.flyout_) ||
+                        // Comments
+                        (comments && gesture.startBubble_);
+                    if (injectMenu) {
+                        try {
+                            items = callback(items, block);
+                        } catch (e) {
+                            console.error('Error while calling context menu callback: ', e);
+                        }
+                    }
+                }
+
+                oldShow.call(this, event, items, rtl);
+
+                const blocklyContextMenu = ScratchBlocks.WidgetDiv.DIV.firstChild;
+                items.forEach((item, i) => {
+                    if (i !== 0 && item.separator) {
+                        const itemElt = blocklyContextMenu.children[i];
+                        itemElt.style.paddingTop = '2px';
+                        itemElt.classList.add('sa-blockly-menu-item-border');
+                        itemElt.style.borderTop = '1px solid hsla(0, 0%, 0%, 0.15)';
+                    }
+                });
+            };
+        });
+    }
+
+    createEditorContextMenu (callback, options) {
+        addContextMenu(this, callback, options);
     }
 
     copyImage (dataURL) {
@@ -297,6 +597,10 @@ class Tab extends EventTargetShim {
             })
         ];
         return navigator.clipboard.write(items);
+    }
+
+    scratchMessage (id) {
+        return tabReduxInstance.state.locales.messages[id];
     }
 
     scratchClass (...args) {
@@ -372,6 +676,7 @@ class AddonRunner {
         this.messageCache = {};
         this.stylesheets = [];
         this.disabledStylesheet = null;
+        this.loading = true;
 
         this.publicAPI = {
             global,
@@ -391,7 +696,7 @@ class AddonRunner {
         if (this.messageCache[namespacedKey]) {
             return this.messageCache[namespacedKey].format(vars);
         }
-        let translation = translations[namespacedKey];
+        let translation = addonMessages[namespacedKey];
         if (!translation) {
             return namespacedKey;
         }
@@ -428,32 +733,44 @@ class AddonRunner {
         }
     }
 
-    settingsMatch (settingMatch) {
-        if (!settingMatch) {
-            // No settings to match.
+    meetsCondition (condition) {
+        if (!condition) {
+            // No condition, so always active.
             return true;
         }
-        const settingValue = this.publicAPI.addon.settings.get(settingMatch.id);
-        return settingValue === settingMatch.value;
+        if (condition.settings) {
+            for (const [settingId, expectedValue] of Object.entries(condition.settings)) {
+                if (this.publicAPI.addon.settings.get(settingId) !== expectedValue) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     dynamicEnable () {
-        this.publicAPI.addon.self.dispatchEvent(new CustomEvent('reenabled'));
-        this.publicAPI.addon.self.disabled = false;
+        if (this.loading) {
+            return;
+        }
         this.appendStylesheets();
         if (this.disabledStylesheet) {
             this.disabledStylesheet.remove();
             this.disabledStylesheet = null;
         }
+        this.publicAPI.addon.self.disabled = false;
+        this.publicAPI.addon.self.dispatchEvent(new CustomEvent('reenabled'));
     }
 
     dynamicDisable () {
-        this.publicAPI.addon.self.dispatchEvent(new CustomEvent('disabled'));
-        this.publicAPI.addon.self.disabled = true;
+        if (this.loading) {
+            return;
+        }
         this.removeStylesheets();
         const disabledCSS = `.${getDisplayNoneWhileDisabledClass(this.id)}{display:none !important;}`;
         this.disabledStylesheet = createStylesheet(disabledCSS);
-        document.body.insertBefore(this.disabledStylesheet, document.body.firstChild);
+        addStylesheet(this.disabledStylesheet);
+        this.publicAPI.addon.self.disabled = true;
+        this.publicAPI.addon.self.dispatchEvent(new CustomEvent('disabled'));
     }
 
     removeStylesheets () {
@@ -464,25 +781,30 @@ class AddonRunner {
 
     appendStylesheets () {
         for (const style of this.stylesheets) {
-            // Insert styles at the start of the body so that they have higher precedence than those in <head>
-            document.body.insertBefore(style, document.body.firstChild);
+            addStylesheet(style);
         }
     }
 
     async run () {
+        if (this.manifest.editorOnly) {
+            await untilInEditor();
+        }
+
+        const {resources} = await addonEntries[this.id]();
+
+        if (!this.manifest.noTranslations) {
+            await addonMessagesPromise;
+        }
+
         this.updateCSSVariables();
 
         if (this.manifest.userstyles) {
             for (const userstyle of this.manifest.userstyles) {
-                if (!this.settingsMatch(userstyle.settingMatch)) {
+                if (!this.meetsCondition(userstyle.if)) {
                     continue;
                 }
-                const m = await import(
-                    /* webpackInclude: /\.css$/ */
-                    /* webpackMode: "eager" */
-                    `!css-loader!./addons/${this.id}/${userstyle.url}`
-                );
-                const source = m.default[0][1];
+                const m = resources[userstyle.url];
+                const source = m[0][1];
                 const style = createStylesheet(source);
                 style.className = 'scratch-addons-theme';
                 style.dataset.addonId = this.id;
@@ -493,17 +815,15 @@ class AddonRunner {
 
         if (this.manifest.userscripts) {
             for (const userscript of this.manifest.userscripts) {
-                if (!this.settingsMatch(userscript.settingMatch)) {
+                if (!this.meetsCondition(userscript.if)) {
                     continue;
                 }
-                const m = await import(
-                    /* webpackInclude: /\.js$/ */
-                    /* webpackMode: "eager" */
-                    `./addons/${this.id}/${userscript.url}`
-                );
-                m.default(this.publicAPI);
+                const fn = resources[userscript.url];
+                fn(this.publicAPI);
             }
         }
+
+        this.loading = false;
     }
 }
 AddonRunner.instances = [];
@@ -542,6 +862,9 @@ history.pushState = function (...args) {
 SettingsStore.addEventListener('addon-changed', e => {
     const addonId = e.detail.addonId;
     const runner = AddonRunner.instances.find(i => i.id === addonId);
+    if (runner) {
+        runner.settingsChanged();
+    }
     if (e.detail.dynamicEnable) {
         if (runner) {
             runner.dynamicEnable();
@@ -552,9 +875,6 @@ SettingsStore.addEventListener('addon-changed', e => {
         if (runner) {
             runner.dynamicDisable();
         }
-    }
-    if (runner) {
-        runner.settingsChanged();
     }
 });
 

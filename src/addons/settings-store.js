@@ -14,17 +14,50 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import addons from './addon-manifests';
-import upstreamMeta from './upstream-meta.json';
+import addons from './generated/addon-manifests';
+import upstreamMeta from './generated/upstream-meta.json';
 import EventTargetShim from './event-target';
 
 const SETTINGS_KEY = 'tw:addons';
-const VERSION = 1;
+const VERSION = 2;
+
+const migrateSettings = settings => {
+    const oldVersion = settings._;
+    if (oldVersion === VERSION || !oldVersion) {
+        return settings;
+    }
+    // Migrate 1 -> 2
+    // tw-project-info is now block-count
+    // tw-interface-customization split into tw-remove-backpack and tw-remove-feedback
+    if (oldVersion < 2) {
+        const projectInfo = settings['tw-project-info'];
+        if (projectInfo && projectInfo.enabled) {
+            settings['block-count'] = {
+                enabled: true
+            };
+        }
+        const interfaceCustomization = settings['tw-interface-customization'];
+        if (interfaceCustomization && interfaceCustomization.enabled) {
+            if (interfaceCustomization.removeBackpack) {
+                settings['tw-remove-backpack'] = {
+                    enabled: true
+                };
+            }
+            if (interfaceCustomization.removeFeedback) {
+                settings['tw-remove-feedback'] = {
+                    enabled: true
+                };
+            }
+        }
+    }
+    return settings;
+};
 
 class SettingsStore extends EventTargetShim {
     constructor () {
         super();
         this.store = this.createEmptyStore();
+        this.remote = false;
     }
 
     /**
@@ -43,8 +76,9 @@ class SettingsStore extends EventTargetShim {
         try {
             const local = localStorage.getItem(SETTINGS_KEY);
             if (local) {
-                const result = JSON.parse(local);
-                if (result && typeof result === 'object' && result._ === VERSION) {
+                let result = JSON.parse(local);
+                if (result && typeof result === 'object') {
+                    result = migrateSettings(result);
                     for (const key of Object.keys(result)) {
                         if (base.hasOwnProperty(key)) {
                             const value = result[key];
@@ -65,6 +99,9 @@ class SettingsStore extends EventTargetShim {
      * @private
      */
     saveToLocalStorage () {
+        if (this.remote) {
+            return;
+        }
         try {
             const result = {
                 _: VERSION
@@ -117,11 +154,14 @@ class SettingsStore extends EventTargetShim {
     }
 
     getAddonEnabled (addonId) {
+        const manifest = this.getAddonManifest(addonId);
+        if (manifest.unsupported) {
+            return false;
+        }
         const storage = this.getAddonStorage(addonId);
         if (storage.hasOwnProperty('enabled')) {
             return storage.enabled;
         }
-        const manifest = this.getAddonManifest(addonId);
         return !!manifest.enabledByDefault;
     }
 
@@ -212,7 +252,7 @@ class SettingsStore extends EventTargetShim {
                 detail: {
                     addonId,
                     settingId,
-                    reloadRequired: settingObject.reloadRequired !== false,
+                    reloadRequired: !settingObject.dynamic,
                     value
                 }
             }));
@@ -263,13 +303,21 @@ class SettingsStore extends EventTargetShim {
         }
     }
 
+    parseUrlParameter (parameter) {
+        this.remote = true;
+        const enabled = parameter.split(',');
+        for (const id of Object.keys(addons)) {
+            this.setAddonEnabled(id, enabled.includes(id));
+        }
+    }
+
     export ({theme}) {
         const result = {
             core: {
                 // Upstream property. We don't use this.
                 lightTheme: theme === 'light',
-                // Append -tw to all versions, for example 1.8.0-prerelease-tw
-                version: `${upstreamMeta.version}-tw`
+                // Doesn't matter what we set this to
+                version: `v1.0.0-tw-${upstreamMeta.commit}`
             },
             addons: {}
         };

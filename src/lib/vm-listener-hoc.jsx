@@ -21,10 +21,9 @@ import {
     setInterpolationState,
     setHasCloudVariables
 } from '../reducers/tw';
-import analytics from './analytics';
+import {setCustomStageSize} from '../reducers/custom-stage-size';
 
 let compileErrorCounter = 0;
-let sentCompileErrorEvent = false;
 
 /*
  * Higher Order Component to manage events emitted by the VM
@@ -71,6 +70,7 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('INTERPOLATION_CHANGED', this.props.onInterpolationChanged);
             this.props.vm.on('COMPILE_ERROR', this.handleCompileError);
             this.props.vm.on('RUNTIME_STARTED', this.props.onClearCompileErrors);
+            this.props.vm.on('STAGE_SIZE_CHANGED', this.props.onStageSizeChanged);
         }
         componentDidMount () {
             if (this.props.attachKeyboardEvents) {
@@ -113,11 +113,6 @@ const vmListenerHOC = function (WrappedComponent) {
             // Ignore intentonal errors
             if (errorMessage.includes('Script explicitly disables compilation')) {
                 return;
-            }
-            // Send an analytics event the first time this happens
-            if (!sentCompileErrorEvent) {
-                sentCompileErrorEvent = true;
-                analytics.twEvent('Compile Error');
             }
             this.props.onCompileError({
                 sprite: target.getName(),
@@ -204,6 +199,7 @@ const vmListenerHOC = function (WrappedComponent) {
                 onInterpolationChanged,
                 onCompilerOptionsChanged,
                 onRuntimeOptionsChanged,
+                onStageSizeChanged,
                 onCompileError,
                 onClearCompileErrors,
                 onShowExtensionAlert,
@@ -237,6 +233,7 @@ const vmListenerHOC = function (WrappedComponent) {
         onInterpolationChanged: PropTypes.func.isRequired,
         onCompilerOptionsChanged: PropTypes.func.isRequired,
         onRuntimeOptionsChanged: PropTypes.func.isRequired,
+        onStageSizeChanged: PropTypes.func,
         onCompileError: PropTypes.func,
         onClearCompileErrors: PropTypes.func,
         projectChanged: PropTypes.bool,
@@ -285,6 +282,7 @@ const vmListenerHOC = function (WrappedComponent) {
         onInterpolationChanged: interpolation => dispatch(setInterpolationState(interpolation)),
         onCompilerOptionsChanged: options => dispatch(setCompilerOptionsState(options)),
         onRuntimeOptionsChanged: options => dispatch(setRuntimeOptionsState(options)),
+        onStageSizeChanged: (width, height) => dispatch(setCustomStageSize(width, height)),
         onCompileError: errors => dispatch(addCompileError(errors)),
         onClearCompileErrors: () => dispatch(clearCompileErrors()),
         onShowExtensionAlert: data => {

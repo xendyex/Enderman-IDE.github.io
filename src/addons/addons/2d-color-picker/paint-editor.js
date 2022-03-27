@@ -1,5 +1,5 @@
 /* inserted by pull.js */
-import _twAsset0 from "./assets/sv-gr.png";
+import _twAsset0 from "!url-loader!./assets/sv-gr.png";
 const _twGetAsset = (path) => {
   if (path === "/assets/sv-gr.png") return _twAsset0;
   throw new Error(`Unknown asset: ${path}`);
@@ -75,6 +75,10 @@ export default async ({ addon, console, msg }) => {
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
     rateLimiter.abort(false);
+    if (!("colorIndex" in addon.tab.redux.state.scratchPaint.fillMode)) {
+      console.error("Detected new paint editor; this will be supported in future versions.");
+      return;
+    }
 
     // update the bg color of the picker
     function updateColor() {
