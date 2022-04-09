@@ -236,7 +236,7 @@ class MenuBar extends React.Component {
         this.props.onRequestCloseFile();
     }
     handleClickNewWindow () {
-        this.props.onClickNewWindow();
+        this.props.onClickNewWindow[1]();
         this.props.onRequestCloseFile();
     }
     handleClickRemix () {
@@ -563,7 +563,7 @@ class MenuBar extends React.Component {
                                                 isRtl={this.props.isRtl}
                                                 onClick={this.handleClickNewWindow}
                                             >
-                                                {'New window'}
+                                                {this.props.onClickNewWindow[0]}
                                             </MenuItem>
                                         )}
                                     </MenuSection>
@@ -945,7 +945,7 @@ MenuBar.propTypes = {
     onClickLogin: PropTypes.func,
     onClickLogo: PropTypes.func,
     onClickNew: PropTypes.func,
-    onClickNewWindow: PropTypes.func,
+    onClickNewWindow: PropTypes.array, // [string label, callback]
     onClickRemix: PropTypes.func,
     onClickSave: PropTypes.func,
     onClickSaveAsCopy: PropTypes.func,
