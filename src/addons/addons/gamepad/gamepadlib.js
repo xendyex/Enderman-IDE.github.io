@@ -559,6 +559,10 @@ class GamepadLib extends EventTarget {
   }
 
   update(time) {
+    // In pointerlock, mouse events should be deltas
+    this.virtualCursor.x = 0;
+    this.virtualCursor.y = 0;
+
     this.oldKeysPressed = this.keysPressedThisFrame;
     this.oldMouseButtonsPressed = this.mouseButtonsPressedThisFrame;
     this.keysPressedThisFrame = new Set();
