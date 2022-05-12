@@ -370,11 +370,16 @@ export default async function ({ addon, global, console, msg }) {
     });
   };
   const handleGamepadMouseMove = (e) => {
-    const SPEED_MULTIPLIER = 4.0;
+    const deltaX = e.detail.x;
+    const deltaY = -e.detail.y;
+    const SPEED_MULTIPLIER = 3.0;
+    const [width, height] = getCanvasSize();
+    const zoomMultiplierX = width / vm.runtime.stageWidth;
+    const zoomMultiplierY = height / vm.runtime.stageHeight;
     postMouseData({
       useMovement: true,
-      deltaX: e.detail.x * SPEED_MULTIPLIER,
-      deltaY: -e.detail.y * SPEED_MULTIPLIER,
+      deltaX: deltaX * zoomMultiplierX * SPEED_MULTIPLIER,
+      deltaY: deltaY * zoomMultiplierY * SPEED_MULTIPLIER,
     });
   };
 
