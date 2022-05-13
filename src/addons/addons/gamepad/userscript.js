@@ -372,7 +372,7 @@ export default async function ({ addon, global, console, msg }) {
   const handleGamepadMouseMove = (e) => {
     const deltaX = e.detail.x;
     const deltaY = -e.detail.y;
-    const SPEED_MULTIPLIER = 3.0;
+    const SPEED_MULTIPLIER = 4.0;
     const [width, height] = getCanvasSize();
     const zoomMultiplierX = width / vm.runtime.stageWidth;
     const zoomMultiplierY = height / vm.runtime.stageHeight;
