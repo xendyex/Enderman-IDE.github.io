@@ -22,7 +22,7 @@ import {compose} from 'redux';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import AppStateHOC from '../lib/app-state-hoc.jsx';
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
-import TWStateManagerHOC from '../lib/tw-state-manager-hoc.jsx';
+import HashParserHOC from '../lib/hash-parser-hoc.jsx';
 import TWThemeHOC from '../lib/tw-theme-hoc.jsx';
 import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
 import SettingsStore from '../addons/settings-store-singleton';
@@ -185,7 +185,7 @@ const ConnectedInterface = injectIntl(connect(
 const WrappedInterface = compose(
     AppStateHOC,
     ErrorBoundaryHOC('TW Interface'),
-    TWStateManagerHOC,
+    HashParserHOC,
     TWThemeHOC
 )(ConnectedInterface);
 
