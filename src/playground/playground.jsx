@@ -24,7 +24,6 @@ import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import HashParserHOC from '../lib/hash-parser-hoc.jsx';
 import TWThemeHOC from '../lib/tw-theme-hoc.jsx';
 import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
-import '../lib/tw-fix-history-api';
 import GUI from './render-gui.jsx';
 import MenuBar from '../components/menu-bar/menu-bar.jsx';
 import runAddons from '../addons/entry';
