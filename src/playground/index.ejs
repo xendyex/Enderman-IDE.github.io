@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google" value="notranslate">
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.options.root %>images/apple-touch-icon.png">
-    <% if (htmlWebpackPlugin.options.root === "/" || htmlWebpackPlugin.options.root === "") { %>
-      <link rel="manifest" href="<%= htmlWebpackPlugin.options.root %>manifest.webmanifest">
-    <% } %>
     <style>
       #splash {
         position: absolute; width: 100%; height: 100%; top: 0; left: 0;
@@ -27,9 +23,6 @@
         100% { transform: rotate(360deg); }
       }
     </style>
-    <link rel="dns-prefetch" href="https://trampoline.turbowarp.org/">
-    <link rel="dns-prefetch" href="https://projects.scratch.mit.edu/">
-    <link rel="dns-prefetch" href="https://assets.scratch.mit.edu/">
   </head>
   <body>
     <div id="splash" aria-hidden="true">
