@@ -24,6 +24,7 @@ import addonMessages from './addons-l10n/en.json';
 import l10nEntries from './generated/l10n-entries';
 import addonEntries from './generated/addon-entries';
 import {addContextMenu} from './contextmenu';
+import AddonChannels from './channels';
 import './polyfill';
 
 /* eslint-disable no-console */
@@ -859,6 +860,18 @@ history.pushState = function (...args) {
     originalPushState.apply(this, args);
     emitUrlChange();
 };
+
+if (AddonChannels.reloadChannel) {
+    AddonChannels.reloadChannel.addEventListener('message', () => {
+        location.reload();
+    });
+}
+
+if (AddonChannels.changeChannel) {
+    AddonChannels.changeChannel.addEventListener('message', e => {
+        SettingsStore.setStoreWithVersionCheck(e.data);
+    });
+}
 
 SettingsStore.addEventListener('addon-changed', e => {
     const addonId = e.detail.addonId;

@@ -24,14 +24,9 @@ import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import HashParserHOC from '../lib/hash-parser-hoc.jsx';
 import TWThemeHOC from '../lib/tw-theme-hoc.jsx';
 import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
-import SettingsStore from '../addons/settings-store-singleton';
 import '../lib/tw-fix-history-api';
 import GUI from './render-gui.jsx';
 import MenuBar from '../components/menu-bar/menu-bar.jsx';
-import WebGlModal from '../containers/webgl-modal.jsx';
-import BrowserModal from '../components/browser-modal/browser-modal.jsx';
-import {isRendererSupported, isBrowserSupported} from '../lib/tw-environment-support-prober';
-import AddonChannels from '../addons/channels';
 import runAddons from '../addons/entry';
 
 import styles from './interface.css';
@@ -43,18 +38,6 @@ const handleClickAddonSettings = () => {
 const WrappedMenuBar = compose(
     SBFileUploaderHOC
 )(MenuBar);
-
-if (AddonChannels.reloadChannel) {
-    AddonChannels.reloadChannel.addEventListener('message', () => {
-        location.reload();
-    });
-}
-
-if (AddonChannels.changeChannel) {
-    AddonChannels.changeChannel.addEventListener('message', e => {
-        SettingsStore.setStoreWithVersionCheck(e.data);
-    });
-}
 
 runAddons();
 
