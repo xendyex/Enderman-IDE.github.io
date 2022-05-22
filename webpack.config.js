@@ -190,14 +190,6 @@ module.exports = [
                 title: 'Addon Settings - TurboWarp',
                 ...htmlWebpackPluginCommon
             }),
-            new HtmlWebpackPlugin({
-                chunks: ['credits'],
-                template: 'src/playground/simple.ejs',
-                filename: 'credits.html',
-                title: 'TurboWarp Credits',
-                noSplash: true,
-                ...htmlWebpackPluginCommon
-            }),
             new CopyWebpackPlugin({
                 patterns: [
                     {
