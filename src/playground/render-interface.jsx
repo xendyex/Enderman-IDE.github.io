@@ -19,8 +19,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
-import {FormattedMessage, defineMessages, injectIntl, intlShape} from 'react-intl';
-import {getIsLoading} from '../reducers/project-state.js';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import DOMElementRenderer from '../containers/dom-element-renderer.jsx';
 import AppStateHOC from '../lib/app-state-hoc.jsx';
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
@@ -35,7 +34,6 @@ import WebGlModal from '../containers/webgl-modal.jsx';
 import BrowserModal from '../components/browser-modal/browser-modal.jsx';
 import {isRendererSupported, isBrowserSupported} from '../lib/tw-environment-support-prober';
 import AddonChannels from '../addons/channels';
-import {loadServiceWorker} from './load-service-worker';
 import runAddons from '../addons/entry';
 
 import styles from './interface.css';
@@ -89,11 +87,6 @@ class Interface extends React.Component {
         super(props);
         this.handleUpdateProjectTitle = this.handleUpdateProjectTitle.bind(this);
     }
-    componentDidUpdate (prevProps) {
-        if (prevProps.isLoading && !this.props.isLoading) {
-            loadServiceWorker();
-        }
-    }
     handleUpdateProjectTitle (title, isDefault) {
         if (isDefault || !title) {
             document.title = `TurboWarp - ${this.props.intl.formatMessage(messages.defaultTitle)}`;
@@ -108,7 +101,6 @@ class Interface extends React.Component {
             hasCloudVariables,
             description,
             isFullScreen,
-            isLoading,
             isPlayerOnly,
             isRtl,
             onClickTheme,
@@ -179,7 +171,6 @@ Interface.propTypes = {
         instructions: PropTypes.string
     }),
     isFullScreen: PropTypes.bool,
-    isLoading: PropTypes.bool,
     isPlayerOnly: PropTypes.bool,
     isRtl: PropTypes.bool,
     onClickTheme: PropTypes.func
@@ -189,7 +180,6 @@ const mapStateToProps = state => ({
     hasCloudVariables: state.scratchGui.tw.hasCloudVariables,
     customStageSize: state.scratchGui.customStageSize,
     isFullScreen: state.scratchGui.mode.isFullScreen,
-    isLoading: getIsLoading(state.scratchGui.projectState.loadingState),
     isPlayerOnly: state.scratchGui.mode.isPlayerOnly,
     isRtl: state.locales.isRtl
 });
