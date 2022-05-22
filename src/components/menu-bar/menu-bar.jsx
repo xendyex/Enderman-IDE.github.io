@@ -430,6 +430,7 @@ class MenuBar extends React.Component {
             >
                 <div className={styles.mainMenu}>
                     <div className={styles.fileGroup}>
+                        {/* TW: don't reserve space for logo if it isn't visible */}
                         {this.props.onClickLogo ? (
                             <div className={classNames(styles.menuBarItem)}>
                                 <img
@@ -462,7 +463,7 @@ class MenuBar extends React.Component {
                             </div>
                             <LanguageSelector label={this.props.intl.formatMessage(ariaMessages.language)} />
                         </div>)}
-                        {/* tw: theme toggler */}
+                        {/* TW: theme toggle */}
                         {this.props.onClickTheme && (
                             <div
                                 className={classNames(styles.menuBarItem, styles.hoverable)}
@@ -475,7 +476,7 @@ class MenuBar extends React.Component {
                                 />
                             </div>
                         )}
-                        {/* tw: display compile errors */}
+                        {/* TW: display compile errors */}
                         {this.props.compileErrors.length > 0 && <div>
                             <div
                                 className={classNames(styles.menuBarItem, styles.hoverable, {
@@ -859,7 +860,7 @@ class MenuBar extends React.Component {
                             />
                         ) : []))}
                     </div>
-                    {/* tw: add a feedback button */}
+                    {/* TW: add a feedback button */}
                     <div className={styles.menuBarItem}>
                         <a
                             className={styles.feedbackLink}
@@ -867,7 +868,6 @@ class MenuBar extends React.Component {
                             rel="noopener noreferrer"
                             target="_blank"
                         >
-                            {/* todo: icon */}
                             <Button className={styles.feedbackButton}>
                                 <FormattedMessage
                                     defaultMessage="TurboWarp Feedback"
@@ -991,8 +991,6 @@ const mapStateToProps = (state, ownProps) => {
     return {
         aboutMenuOpen: aboutMenuOpen(state),
         accountMenuOpen: accountMenuOpen(state),
-        authorThumbnailUrl: state.scratchGui.tw.author.thumbnail,
-        authorUsername: state.scratchGui.tw.author.username,
         compileErrors: state.scratchGui.tw.compileErrors,
         fileMenuOpen: fileMenuOpen(state),
         editMenuOpen: editMenuOpen(state),

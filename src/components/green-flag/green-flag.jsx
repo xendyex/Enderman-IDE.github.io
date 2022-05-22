@@ -26,7 +26,7 @@ const GreenFlagComponent = function (props) {
             src={greenFlagIcon}
             title={title}
             onClick={onClick}
-            // tw: also fire click when opening context menu (right click on all systems and alt+click on chromebooks)
+            // TW: We'll also treat context menu as a click event as this is alt+click on Chromebooks.
             onContextMenu={onClick}
             {...componentProps}
         />

@@ -149,7 +149,7 @@ const GUIComponent = props => {
 
         return isPlayerOnly ? (
             <React.Fragment>
-                {/* tw: when window is fullscreen, put a solid white background behind the stage */}
+                {/* TW: when window is fullscreen, put a solid white background behind the stage */}
                 {isWindowFullScreen ? (
                     <div className={styles.fullscreenBackground} />
                 ) : null}

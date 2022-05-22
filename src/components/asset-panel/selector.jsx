@@ -103,6 +103,7 @@ Selector.propTypes = {
     isRtl: PropTypes.bool,
     items: PropTypes.arrayOf(PropTypes.shape({
         url: PropTypes.string,
+        // TW: Disable warnings caused by folders addon
         // eslint-disable-next-line react/forbid-prop-types
         name: PropTypes.any
     })),
