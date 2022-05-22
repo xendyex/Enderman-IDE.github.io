@@ -27,6 +27,10 @@ body[theme="dark"] {
     color: white;
 }
 
+button, input {
+    font: inherit;
+}
+
 a[href] {
     color: #2a67eb;
     text-decoration: underline;

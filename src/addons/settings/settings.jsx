@@ -35,7 +35,6 @@ import expandImageBlack from './expand.svg';
 import infoImage from './info.svg';
 import styles from './settings.css';
 import '../polyfill';
-import '../../lib/normalize.css';
 
 /* eslint-disable no-alert */
 /* eslint-disable no-console */
