@@ -32,6 +32,10 @@ button, input {
     color: inherit;
 }
 
+button {
+    cursor: pointer;
+}
+
 a[href] {
     color: #2a67eb;
     text-decoration: underline;
