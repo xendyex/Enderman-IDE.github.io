@@ -13,15 +13,6 @@ var postcssImport = require('postcss-import');
 
 const STATIC_PATH = process.env.STATIC_PATH || '/static';
 
-let root = process.env.ROOT || '';
-if (root.length > 0 && !root.endsWith('/')) {
-    throw new Error('If ROOT is defined, it must have a trailing slash.');
-}
-
-const htmlWebpackPluginCommon = {
-    root: root
-};
-
 const base = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     devtool: process.env.SOURCEMAP ? process.env.SOURCEMAP : process.env.NODE_ENV === 'production' ? false : 'cheap-module-source-map',
@@ -34,8 +25,7 @@ const base = {
     output: {
         library: 'GUI',
         filename: process.env.NODE_ENV === 'production' ? 'js/[name].[contenthash].js' : 'js/[name].js',
-        chunkFilename: process.env.NODE_ENV === 'production' ? 'js/[name].[contenthash].js' : 'js/[name].js',
-        publicPath: root
+        chunkFilename: process.env.NODE_ENV === 'production' ? 'js/[name].[contenthash].js' : 'js/[name].js'
     },
     resolve: {
         symlinks: false,
@@ -140,36 +130,31 @@ module.exports = [
                 chunks: ['editor'],
                 template: 'src/playground/index.ejs',
                 filename: 'editor.html',
-                title: 'GUI playground',
-                ...htmlWebpackPluginCommon
+                title: 'GUI playground'
             }),
             new HtmlWebpackPlugin({
                 chunks: ['player'],
                 template: 'src/playground/index.ejs',
                 filename: 'index.html',
-                title: 'GUI playground',
-                ...htmlWebpackPluginCommon
+                title: 'GUI playground'
             }),
             new HtmlWebpackPlugin({
                 chunks: ['fullscreen'],
                 template: 'src/playground/index.ejs',
                 filename: 'fullscreen.html',
-                title: 'GUI playground',
-                ...htmlWebpackPluginCommon
+                title: 'GUI playground'
             }),
             new HtmlWebpackPlugin({
                 chunks: ['embed'],
                 template: 'src/playground/index.ejs',
                 filename: 'embed.html',
-                title: 'GUI playground',
-                ...htmlWebpackPluginCommon
+                title: 'GUI playground'
             }),
             new HtmlWebpackPlugin({
                 chunks: ['addon-settings'],
                 template: 'src/playground/index.ejs',
                 filename: 'addons.html',
-                title: 'Addon Settings',
-                ...htmlWebpackPluginCommon
+                title: 'Addon Settings'
             }),
             new CopyWebpackPlugin({
                 patterns: [
