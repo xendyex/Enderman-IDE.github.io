@@ -36,12 +36,6 @@ import runAddons from '../addons/entry';
 
 import styles from './interface.css';
 
-if (window.parent !== window) {
-    // eslint-disable-next-line no-alert
-    alert('This page is embedding TurboWarp in a way that is unsupported and will cease to function in the near future. Please read https://docs.turbowarp.org/embedding');
-    throw new Error('Invalid embed');
-}
-
 const handleClickAddonSettings = () => {
     window.open('addons.html');
 };
@@ -64,84 +58,68 @@ if (AddonChannels.changeChannel) {
 
 runAddons();
 
-const defaultTitle = document.title;
-
-class Interface extends React.Component {
-    constructor (props) {
-        super(props);
-        this.handleUpdateProjectTitle = this.handleUpdateProjectTitle.bind(this);
-    }
-    handleUpdateProjectTitle (title, isDefault) {
-        if (isDefault || !title) {
-            document.title = defaultTitle;
-        } else {
-            document.title = title;
-        }
-    }
-    render () {
-        const {
-            /* eslint-disable no-unused-vars */
-            hasCloudVariables,
-            description,
-            isFullScreen,
-            isPlayerOnly,
-            isRtl,
-            onClickTheme,
-            /* eslint-enable no-unused-vars */
-            ...props
-        } = this.props;
-        const isHomepage = isPlayerOnly && !isFullScreen;
-        const isEditor = !isPlayerOnly;
-        return (
-            <div
-                className={classNames(styles.container, {
-                    [styles.playerOnly]: isHomepage,
-                    [styles.editor]: isEditor
-                })}
-            >
-                {isHomepage ? (
-                    <div className={styles.menu}>
-                        <WrappedMenuBar
-                            canChangeLanguage
-                            canManageFiles
-                            enableSeeInside
-                            onClickAddonSettings={handleClickAddonSettings}
-                            onClickTheme={onClickTheme}
-                        />
-                    </div>
-                ) : null}
-                <div
-                    className={styles.center}
-                    style={isPlayerOnly ? ({
-                        // add a couple pixels to account for border (TODO: remove weird hack)
-                        width: `${Math.max(480, props.customStageSize.width) + 2}px`
-                    }) : null}
-                >
-                    <GUI
+const Playground = props => {
+    const {
+        /* eslint-disable no-unused-vars */
+        hasCloudVariables,
+        description,
+        isFullScreen,
+        isPlayerOnly,
+        isRtl,
+        onClickTheme,
+        /* eslint-enable no-unused-vars */
+        ...guiProps
+    } = props;
+    const isHomepage = isPlayerOnly && !isFullScreen;
+    const isEditor = !isPlayerOnly;
+    return (
+        <div
+            className={classNames(styles.container, {
+                [styles.playerOnly]: isHomepage,
+                [styles.editor]: isEditor
+            })}
+        >
+            {isHomepage ? (
+                <div className={styles.menu}>
+                    <WrappedMenuBar
+                        canChangeLanguage
+                        canManageFiles
+                        enableSeeInside
                         onClickAddonSettings={handleClickAddonSettings}
                         onClickTheme={onClickTheme}
-                        onUpdateProjectTitle={this.handleUpdateProjectTitle}
-                        backpackVisible
-                        backpackHost="_local_"
-                        {...props}
                     />
-                    {isHomepage ? (
-                        <React.Fragment>
-                            {isRendererSupported() ? null : (
-                                <WebGlModal isRtl={isRtl} />
-                            )}
-                            {isBrowserSupported() ? null : (
-                                <BrowserModal isRtl={isRtl} />
-                            )}
-                        </React.Fragment>
-                    ) : null}
                 </div>
+            ) : null}
+            <div
+                className={styles.center}
+                style={isPlayerOnly ? ({
+                    // add a couple pixels to account for border
+                    width: `${Math.max(480, props.customStageSize.width) + 2}px`
+                }) : null}
+            >
+                <GUI
+                    onClickAddonSettings={handleClickAddonSettings}
+                    onClickTheme={onClickTheme}
+                    backpackVisible
+                    backpackHost="_local_"
+                    {...guiProps}
+                />
+                {isHomepage ? (
+                    <React.Fragment>
+                        {isRendererSupported() ? null : (
+                            <WebGlModal isRtl={isRtl} />
+                        )}
+                        {isBrowserSupported() ? null : (
+                            <BrowserModal isRtl={isRtl} />
+                        )}
+                    </React.Fragment>
+                ) : null}
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
 
-Interface.propTypes = {
+Playground.propTypes = {
     hasCloudVariables: PropTypes.bool,
     customStageSize: PropTypes.shape({
         width: PropTypes.number,
@@ -167,16 +145,16 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = () => ({});
 
-const ConnectedInterface = connect(
+const ConnectedPlayground = connect(
     mapStateToProps,
     mapDispatchToProps
-)(Interface);
+)(Playground);
 
-const WrappedInterface = compose(
+const WrappedPlayground = compose(
     AppStateHOC,
-    ErrorBoundaryHOC('TW Interface'),
+    ErrorBoundaryHOC('Playground'),
     HashParserHOC,
     TWThemeHOC
-)(ConnectedInterface);
+)(ConnectedPlayground);
 
-export default WrappedInterface;
+export default WrappedPlayground;
