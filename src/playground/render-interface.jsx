@@ -20,7 +20,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import DOMElementRenderer from '../containers/dom-element-renderer.jsx';
 import AppStateHOC from '../lib/app-state-hoc.jsx';
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import TWStateManagerHOC from '../lib/tw-state-manager-hoc.jsx';
@@ -42,13 +41,6 @@ if (window.parent !== window) {
     // eslint-disable-next-line no-alert
     alert('This page is embedding TurboWarp in a way that is unsupported and will cease to function in the near future. Please read https://docs.turbowarp.org/embedding');
     throw new Error('Invalid embed');
-}
-
-let announcement = null;
-if (process.env.ANNOUNCEMENT) {
-    announcement = document.createElement('p');
-    // This is safe because process.env.ANNOUNCEMENT is set at build time.
-    announcement.innerHTML = process.env.ANNOUNCEMENT;
 }
 
 const handleClickAddonSettings = () => {
@@ -134,7 +126,6 @@ class Interface extends React.Component {
                         width: `${Math.max(480, props.customStageSize.width) + 2}px`
                     }) : null}
                 >
-                    {isHomepage && announcement ? <DOMElementRenderer domElement={announcement} /> : null}
                     <GUI
                         onClickAddonSettings={handleClickAddonSettings}
                         onClickTheme={onClickTheme}
