@@ -27,8 +27,7 @@ import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
 import GUI from './render-gui.jsx';
 import MenuBar from '../components/menu-bar/menu-bar.jsx';
 import runAddons from '../addons/entry';
-
-import styles from './interface.css';
+import styles from './playground.css';
 
 const handleClickAddonSettings = () => {
     window.open('addons.html');
