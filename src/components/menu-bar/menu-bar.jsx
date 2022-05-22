@@ -864,22 +864,24 @@ class MenuBar extends React.Component {
                         ) : []))}
                     </div>
                     {/* TW: add a feedback button */}
-                    <div className={styles.menuBarItem}>
-                        <a
-                            className={styles.feedbackLink}
-                            href="https://scratch.mit.edu/users/GarboMuffin/#comments"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            <Button className={styles.feedbackButton}>
-                                <FormattedMessage
-                                    defaultMessage="TurboWarp Feedback"
-                                    description="Button to give feedback in the menu bar"
-                                    id="tw.feedbackButton"
-                                />
-                            </Button>
-                        </a>
-                    </div>
+                    {this.props.enableFeedback && (
+                        <div className={styles.menuBarItem}>
+                            <a
+                                className={styles.feedbackLink}
+                                href="https://scratch.mit.edu/users/GarboMuffin/#comments"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                            >
+                                <Button className={styles.feedbackButton}>
+                                    <FormattedMessage
+                                        defaultMessage="TurboWarp Feedback"
+                                        description="Button to give feedback in the menu bar"
+                                        id="tw.feedbackButton"
+                                    />
+                                </Button>
+                            </a>
+                        </div>
+                    )}
                 </div>
 
                 {/* show the proper UI in the account menu, given whether the user is
@@ -1046,6 +1048,7 @@ MenuBar.propTypes = {
     confirmReadyToReplaceProject: PropTypes.func,
     editMenuOpen: PropTypes.bool,
     enableCommunity: PropTypes.bool,
+    enableFeedback: PropTypes.bool,
     fileMenuOpen: PropTypes.bool,
     handleSaveProject: PropTypes.func,
     intl: intlShape,

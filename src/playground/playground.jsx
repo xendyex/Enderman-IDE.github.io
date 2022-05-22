@@ -48,6 +48,7 @@ const Playground = props => {
                         canChangeLanguage
                         canManageFiles
                         enableSeeInside
+                        enableFeedback
                         onClickAddonSettings={handleClickAddonSettings}
                         onClickTheme={onClickTheme}
                     />

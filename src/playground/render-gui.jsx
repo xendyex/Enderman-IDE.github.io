@@ -11,6 +11,7 @@ const RenderGUI = props => (
         canSave={false}
         canEditTitle
         enableCommunity
+        enableFeedback
         {...props}
     />
 );

@@ -82,6 +82,7 @@ const GUIComponent = props => {
         costumesTabVisible,
         customStageSize,
         enableCommunity,
+        enableFeedback,
         intl,
         isCreating,
         isDark,
@@ -245,6 +246,7 @@ const GUIComponent = props => {
                     canShare={canShare}
                     className={styles.menuBarPosition}
                     enableCommunity={enableCommunity}
+                    enableFeedback={enableFeedback}
                     isShared={isShared}
                     logo={logo}
                     renderLogin={renderLogin}
@@ -420,6 +422,7 @@ GUIComponent.propTypes = {
         height: PropTypes.number
     }),
     enableCommunity: PropTypes.bool,
+    enableFeedback: PropTypes.bool,
     intl: intlShape.isRequired,
     isCreating: PropTypes.bool,
     isDark: PropTypes.bool,
@@ -479,6 +482,7 @@ GUIComponent.defaultProps = {
     canShare: false,
     canUseCloud: false,
     enableCommunity: false,
+    enableFeedback: false,
     isCreating: false,
     isShared: false,
     loading: false,
