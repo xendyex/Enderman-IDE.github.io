@@ -19,7 +19,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import AppStateHOC from '../lib/app-state-hoc.jsx';
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import HashParserHOC from '../lib/hash-parser-hoc.jsx';
@@ -44,17 +43,8 @@ if (window.parent !== window) {
 }
 
 const handleClickAddonSettings = () => {
-    const path = process.env.ROUTING_STYLE === 'wildcard' ? 'addons' : 'addons.html';
-    window.open(`${process.env.ROOT}${path}`);
+    window.open('addons.html');
 };
-
-const messages = defineMessages({
-    defaultTitle: {
-        defaultMessage: 'Run Scratch projects faster',
-        description: 'Title of homepage',
-        id: 'tw.guiDefaultTitle'
-    }
-});
 
 const WrappedMenuBar = compose(
     SBFileUploaderHOC
@@ -74,6 +64,8 @@ if (AddonChannels.changeChannel) {
 
 runAddons();
 
+const defaultTitle = document.title;
+
 class Interface extends React.Component {
     constructor (props) {
         super(props);
@@ -81,15 +73,14 @@ class Interface extends React.Component {
     }
     handleUpdateProjectTitle (title, isDefault) {
         if (isDefault || !title) {
-            document.title = `TurboWarp - ${this.props.intl.formatMessage(messages.defaultTitle)}`;
+            document.title = defaultTitle;
         } else {
-            document.title = `${title} - TurboWarp`;
+            document.title = title;
         }
     }
     render () {
         const {
             /* eslint-disable no-unused-vars */
-            intl,
             hasCloudVariables,
             description,
             isFullScreen,
@@ -151,7 +142,6 @@ class Interface extends React.Component {
 }
 
 Interface.propTypes = {
-    intl: intlShape,
     hasCloudVariables: PropTypes.bool,
     customStageSize: PropTypes.shape({
         width: PropTypes.number,
@@ -177,10 +167,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = () => ({});
 
-const ConnectedInterface = injectIntl(connect(
+const ConnectedInterface = connect(
     mapStateToProps,
     mapDispatchToProps
-)(Interface));
+)(Interface);
 
 const WrappedInterface = compose(
     AppStateHOC,
