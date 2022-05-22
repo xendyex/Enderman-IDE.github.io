@@ -29,6 +29,7 @@ body[theme="dark"] {
 
 button, input {
     font: inherit;
+    color: inherit;
 }
 
 a[href] {
