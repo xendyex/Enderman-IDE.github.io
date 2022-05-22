@@ -162,12 +162,11 @@ module.exports = [
                 template: 'src/playground/index.ejs',
                 filename: 'embed.html',
                 title: 'TurboWarp/scratch-gui playground',
-                noTheme: true,
                 ...htmlWebpackPluginCommon
             }),
             new HtmlWebpackPlugin({
                 chunks: ['addon-settings'],
-                template: 'src/playground/simple.ejs',
+                template: 'src/playground/index.ejs',
                 filename: 'addons.html',
                 title: 'Addon Settings',
                 ...htmlWebpackPluginCommon
