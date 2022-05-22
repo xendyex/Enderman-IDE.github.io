@@ -61,8 +61,6 @@ runAddons();
 const Playground = props => {
     const {
         /* eslint-disable no-unused-vars */
-        hasCloudVariables,
-        description,
         isFullScreen,
         isPlayerOnly,
         isRtl,
@@ -120,14 +118,9 @@ const Playground = props => {
 };
 
 Playground.propTypes = {
-    hasCloudVariables: PropTypes.bool,
     customStageSize: PropTypes.shape({
         width: PropTypes.number,
         height: PropTypes.number
-    }),
-    description: PropTypes.shape({
-        credits: PropTypes.string,
-        instructions: PropTypes.string
     }),
     isFullScreen: PropTypes.bool,
     isPlayerOnly: PropTypes.bool,
@@ -136,7 +129,6 @@ Playground.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    hasCloudVariables: state.scratchGui.tw.hasCloudVariables,
     customStageSize: state.scratchGui.customStageSize,
     isFullScreen: state.scratchGui.mode.isFullScreen,
     isPlayerOnly: state.scratchGui.mode.isPlayerOnly,
