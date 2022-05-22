@@ -1,5 +1,5 @@
 const runAddons = () => {
-    import(/* webpackChunkName: "addons" */ './api');
+    import(/* webpackChunkName: "addons-api" */ './api');
 };
 
 export default runAddons;
