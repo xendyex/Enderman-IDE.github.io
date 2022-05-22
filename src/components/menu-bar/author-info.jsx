@@ -25,9 +25,9 @@ const ActualAuthorInfo = ({
             imageUrl={imageUrl}
         />
         <div className={styles.titleAuthor}>
-            <h1 className={styles.projectTitle}>
+            <span className={styles.projectTitle}>
                 {projectTitle}
-            </h1>
+            </span>
             <div>
                 <span className={styles.usernameLine}>
                     <FormattedMessage

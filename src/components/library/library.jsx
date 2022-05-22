@@ -68,16 +68,17 @@ class LibraryComponent extends React.Component {
         }
         if (this.props.setStopHandler) this.props.setStopHandler(this.handlePlayingEnd);
     }
+    componentWillReceiveProps (nextProps) {
+        if (this.props.data !== nextProps.data) {
+            this.setState({
+                data: this.props.data
+            });
+        }
+    }
     componentDidUpdate (prevProps, prevState) {
         if (prevState.filterQuery !== this.state.filterQuery ||
             prevState.selectedTag !== this.state.selectedTag) {
             this.scrollToTop();
-        }
-        if (prevProps.data !== this.props.data) {
-            // eslint-disable-next-line react/no-did-update-set-state
-            this.setState({
-                data: this.props.data
-            });
         }
     }
     handleSelect (id) {

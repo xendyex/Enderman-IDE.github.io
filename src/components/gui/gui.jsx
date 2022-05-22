@@ -147,6 +147,13 @@ const GUIComponent = props => {
     return (<MediaQuery minWidth={minWidth}>{isFullSize => {
         const stageSize = resolveStageSize(stageSizeMode, isFullSize);
 
+        const modals = (
+            <React.Fragment>
+                {usernameModalVisible && <TWUsernameModal />}
+                {settingsModalVisible && <TWSettingsModal />}
+            </React.Fragment>
+        );
+
         return isPlayerOnly ? (
             <React.Fragment>
                 {/* TW: when window is fullscreen, put a solid white background behind the stage */}
@@ -166,8 +173,7 @@ const GUIComponent = props => {
                         <Alerts className={styles.alertsContainer} />
                     ) : null}
                 </StageWrapper>
-                {usernameModalVisible && <TWUsernameModal />}
-                {settingsModalVisible && <TWSettingsModal />}
+                {modals}
             </React.Fragment>
         ) : (
             <Box
@@ -175,8 +181,7 @@ const GUIComponent = props => {
                 dir={isRtl ? 'rtl' : 'ltr'}
                 {...componentProps}
             >
-                {usernameModalVisible && <TWUsernameModal />}
-                {settingsModalVisible && <TWSettingsModal />}
+                {modals}
                 {telemetryModalVisible ? (
                     <TelemetryModal
                         isRtl={isRtl}
