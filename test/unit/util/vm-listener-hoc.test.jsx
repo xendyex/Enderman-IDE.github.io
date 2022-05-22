@@ -16,8 +16,7 @@ describe('VMListenerHOC', () => {
             scratchGui: {
                 mode: {},
                 modals: {},
-                vm: vm,
-                tw: {hasCloudVariables: false}
+                vm: vm
             }
         });
     });
@@ -77,8 +76,7 @@ describe('VMListenerHOC', () => {
             scratchGui: {
                 mode: {},
                 modals: {soundRecorder: true},
-                vm: vm,
-                tw: {hasCloudVariables: false}
+                vm: vm
             }
         });
         mount(
@@ -101,8 +99,7 @@ describe('VMListenerHOC', () => {
             scratchGui: {
                 mode: {},
                 modals: {soundRecorder: true},
-                vm: vm,
-                tw: {hasCloudVariables: false}
+                vm: vm
             }
         });
         mount(
@@ -123,8 +120,7 @@ describe('VMListenerHOC', () => {
             scratchGui: {
                 mode: {isFullScreen: true},
                 modals: {soundRecorder: true},
-                vm: vm,
-                tw: {hasCloudVariables: false}
+                vm: vm
             }
         });
         mount(
@@ -155,8 +151,7 @@ describe('VMListenerHOC', () => {
             scratchGui: {
                 mode: {isFullScreen: true},
                 modals: {soundRecorder: true},
-                vm: vm,
-                tw: {hasCloudVariables: false}
+                vm: vm
             }
         });
         mount(

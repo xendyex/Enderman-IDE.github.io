@@ -18,8 +18,7 @@ import {
     addCompileError,
     clearCompileErrors,
     setRuntimeOptionsState,
-    setInterpolationState,
-    setHasCloudVariables
+    setInterpolationState
 } from '../reducers/tw';
 import {setCustomStageSize} from '../reducers/custom-stage-size';
 
@@ -39,7 +38,6 @@ const vmListenerHOC = function (WrappedComponent) {
                 'handleKeyUp',
                 'handleProjectChanged',
                 'handleTargetsUpdate',
-                'handleCloudDataUpdate',
                 'handleCompileError'
             ]);
             // We have to start listening to the vm here rather than in
@@ -63,7 +61,6 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
             // tw: add handlers for our events
-            this.props.vm.on('HAS_CLOUD_DATA_UPDATE', this.handleCloudDataUpdate);
             this.props.vm.on('COMPILER_OPTIONS_CHANGED', this.props.onCompilerOptionsChanged);
             this.props.vm.on('RUNTIME_OPTIONS_CHANGED', this.props.onRuntimeOptionsChanged);
             this.props.vm.on('FRAMERATE_CHANGED', this.props.onFramerateChanged);
@@ -95,11 +92,6 @@ const vmListenerHOC = function (WrappedComponent) {
             if (this.props.attachKeyboardEvents) {
                 document.removeEventListener('keydown', this.handleKeyDown);
                 document.removeEventListener('keyup', this.handleKeyUp);
-            }
-        }
-        handleCloudDataUpdate (hasCloudVariables) {
-            if (this.props.hasCloudVariables !== hasCloudVariables) {
-                this.props.onHasCloudVariablesChanged(hasCloudVariables);
             }
         }
         // tw: handling for compile errors
@@ -193,8 +185,6 @@ const vmListenerHOC = function (WrappedComponent) {
                 onRuntimeStopped,
                 onTurboModeOff,
                 onTurboModeOn,
-                hasCloudVariables,
-                onHasCloudVariablesChanged,
                 onFramerateChanged,
                 onInterpolationChanged,
                 onCompilerOptionsChanged,
@@ -227,8 +217,6 @@ const vmListenerHOC = function (WrappedComponent) {
         onTargetsUpdate: PropTypes.func.isRequired,
         onTurboModeOff: PropTypes.func.isRequired,
         onTurboModeOn: PropTypes.func.isRequired,
-        hasCloudVariables: PropTypes.bool,
-        onHasCloudVariablesChanged: PropTypes.func.isRequired,
         onFramerateChanged: PropTypes.func.isRequired,
         onInterpolationChanged: PropTypes.func.isRequired,
         onCompilerOptionsChanged: PropTypes.func.isRequired,
@@ -247,7 +235,6 @@ const vmListenerHOC = function (WrappedComponent) {
         onGreenFlag: () => ({})
     };
     const mapStateToProps = state => ({
-        hasCloudVariables: state.scratchGui.tw.hasCloudVariables,
         projectChanged: state.scratchGui.projectChanged,
         // Do not emit target or project updates in fullscreen or player only mode
         // or when recording sounds (it leads to garbled recordings on low-power machines)
@@ -277,7 +264,6 @@ const vmListenerHOC = function (WrappedComponent) {
         onRuntimeStopped: () => dispatch(setStartedState(false)),
         onTurboModeOn: () => dispatch(setTurboState(true)),
         onTurboModeOff: () => dispatch(setTurboState(false)),
-        onHasCloudVariablesChanged: hasCloudVariables => dispatch(setHasCloudVariables(hasCloudVariables)),
         onFramerateChanged: framerate => dispatch(setFramerateState(framerate)),
         onInterpolationChanged: interpolation => dispatch(setInterpolationState(interpolation)),
         onCompilerOptionsChanged: options => dispatch(setCompilerOptionsState(options)),
