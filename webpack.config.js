@@ -140,28 +140,28 @@ module.exports = [
                 chunks: ['editor'],
                 template: 'src/playground/index.ejs',
                 filename: 'editor.html',
-                title: 'TurboWarp/scratch-gui playground',
+                title: 'GUI playground',
                 ...htmlWebpackPluginCommon
             }),
             new HtmlWebpackPlugin({
                 chunks: ['player'],
                 template: 'src/playground/index.ejs',
                 filename: 'index.html',
-                title: 'TurboWarp/scratch-gui playground',
+                title: 'GUI playground',
                 ...htmlWebpackPluginCommon
             }),
             new HtmlWebpackPlugin({
                 chunks: ['fullscreen'],
                 template: 'src/playground/index.ejs',
                 filename: 'fullscreen.html',
-                title: 'TurboWarp/scratch-gui playground',
+                title: 'GUI playground',
                 ...htmlWebpackPluginCommon
             }),
             new HtmlWebpackPlugin({
                 chunks: ['embed'],
                 template: 'src/playground/index.ejs',
                 filename: 'embed.html',
-                title: 'TurboWarp/scratch-gui playground',
+                title: 'GUI playground',
                 ...htmlWebpackPluginCommon
             }),
             new HtmlWebpackPlugin({

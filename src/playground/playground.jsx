@@ -69,7 +69,7 @@ const Playground = props => {
                 />
                 {isHomepage && (
                     <div>
-                        <p>{'TurboWarp/scratch-gui development playground'}</p>
+                        <p>{'GUI development playground'}</p>
                         <p>{'To load projects, enter the project ID as the URL hash.'}</p>
                         <p><a href="https://github.com/TurboWarp/scratch-gui">{'GitHub'}</a></p>
                     </div>
