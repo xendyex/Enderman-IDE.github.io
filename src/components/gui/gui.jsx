@@ -151,6 +151,8 @@ const GUIComponent = props => {
             <React.Fragment>
                 {usernameModalVisible && <TWUsernameModal />}
                 {settingsModalVisible && <TWSettingsModal />}
+                {!isRendererSupported() && <WebGlModal isRtl={isRtl} />}
+                {!isBrowserSupported() && <BrowserModal isRtl={isRtl} />}
             </React.Fragment>
         );
 
@@ -181,7 +183,6 @@ const GUIComponent = props => {
                 dir={isRtl ? 'rtl' : 'ltr'}
                 {...componentProps}
             >
-                {modals}
                 {telemetryModalVisible ? (
                     <TelemetryModal
                         isRtl={isRtl}
@@ -202,12 +203,7 @@ const GUIComponent = props => {
                         messageId="gui.loader.creating"
                     />
                 ) : null}
-                {isRendererSupported() ? null : (
-                    <WebGlModal isRtl={isRtl} />
-                )}
-                {isBrowserSupported() ? null : (
-                    <BrowserModal isRtl={isRtl} />
-                )}
+                {modals}
                 {tipsLibraryVisible ? (
                     <TipsLibrary />
                 ) : null}

@@ -102,16 +102,6 @@ const Playground = props => {
                     backpackHost="_local_"
                     {...guiProps}
                 />
-                {isHomepage ? (
-                    <React.Fragment>
-                        {isRendererSupported() ? null : (
-                            <WebGlModal isRtl={isRtl} />
-                        )}
-                        {isBrowserSupported() ? null : (
-                            <BrowserModal isRtl={isRtl} />
-                        )}
-                    </React.Fragment>
-                ) : null}
             </div>
         </div>
     );
