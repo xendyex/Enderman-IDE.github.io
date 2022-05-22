@@ -34,6 +34,7 @@ import ChangeUsername from '../../containers/tw-change-username.jsx';
 import CloudVariablesToggler from '../../containers/tw-cloud-toggler.jsx';
 import TWRestorePointLoader from '../../containers/tw-restore-point-loader.jsx';
 import TWSaveStatus from './tw-save-status.jsx';
+import {APP_NAME} from '../../lib/brand';
 
 import {openTipsLibrary, openSettingsModal} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
@@ -874,9 +875,12 @@ class MenuBar extends React.Component {
                             >
                                 <Button className={styles.feedbackButton}>
                                     <FormattedMessage
-                                        defaultMessage="TurboWarp Feedback"
-                                        description="Button to give feedback in the menu bar"
+                                        defaultMessage="{appName} Feedback"
+                                        description="Button to give feedback in the menu bar. appName might be a string like 'TurboWarp'"
                                         id="tw.feedbackButton"
+                                        values={{
+                                            appName: APP_NAME
+                                        }}
                                     />
                                 </Button>
                             </a>

@@ -5,6 +5,7 @@ import React from 'react';
 
 import Box from '../box/box.jsx';
 import Modal from '../../containers/modal.jsx';
+import {APP_NAME} from '../../lib/brand.js';
 
 import styles from './prompt.css';
 
@@ -135,7 +136,7 @@ const PromptComponent = props => (
                                     rel="noopener noreferrer"
                                 >
                                     {/* Should not be translated */}
-                                    {'TurboWarp Packager'}
+                                    {`${APP_NAME} Packager`}
                                 </a>
                             )
                         }}

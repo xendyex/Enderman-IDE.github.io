@@ -47,6 +47,7 @@ import gdxforConnectionIconURL from './gdxfor/gdxfor-illustration.svg';
 import gdxforConnectionSmallIconURL from './gdxfor/gdxfor-small.svg';
 
 import twIcon from './tw/tw.svg';
+import {APP_NAME} from '../../brand';
 
 import customExtensionIcon from './custom/custom.svg';
 
@@ -325,9 +326,12 @@ export default [
     {
         name: (
             <FormattedMessage
-                defaultMessage="TurboWarp Blocks"
-                description="Name of TW extension"
+                defaultMessage="{appName} Blocks"
+                description="Name of extension with extra blocks. appName might be a string like 'TurboWarp'"
                 id="tw.twExtension.name"
+                values={{
+                    appName: APP_NAME
+                }}
             />
         ),
         extensionId: 'tw',

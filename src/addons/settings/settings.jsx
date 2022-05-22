@@ -34,6 +34,7 @@ import undoImage from './undo.svg';
 import expandImageBlack from './expand.svg';
 import infoImage from './info.svg';
 import styles from './settings.css';
+import {APP_NAME} from '../../lib/brand';
 import '../polyfill';
 
 /* eslint-disable no-alert */
@@ -54,7 +55,7 @@ if (locale !== 'en') {
     }
 }
 
-document.title = `${settingsTranslations.title} - TurboWarp`;
+document.title = `${settingsTranslations.title} - ${APP_NAME}`;
 
 const theme = getInitialDarkMode() ? 'dark' : 'light';
 document.body.setAttribute('theme', theme);

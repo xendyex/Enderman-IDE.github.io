@@ -11,6 +11,7 @@ import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
 import GUI from './render-gui.jsx';
 import MenuBar from '../components/menu-bar/menu-bar.jsx';
 import runAddons from '../addons/entry';
+import {APP_NAME} from '../lib/brand.js';
 import styles from './playground.css';
 
 const handleClickAddonSettings = () => {
@@ -70,7 +71,7 @@ const Playground = props => {
                 />
                 {isHomepage && (
                     <div>
-                        <p>{'GUI development playground'}</p>
+                        <p>{`${APP_NAME} GUI development playground`}</p>
                         <p>{'To load projects, enter the project ID as the URL hash.'}</p>
                         <p><a href="https://github.com/TurboWarp/scratch-gui">{'GitHub'}</a></p>
                     </div>
