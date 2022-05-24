@@ -40,6 +40,10 @@ const fetchProjectToken = projectId => {
         .then(dataOrNull => {
             const token = dataOrNull ? dataOrNull.project_token : null;
             return token;
+        })
+        .catch(err => {
+            log.error(err);
+            return null;
         });
 };
 
