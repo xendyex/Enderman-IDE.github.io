@@ -28,6 +28,7 @@ import TWProjectMetaFetcherHOC from '../lib/tw-project-meta-fetcher-hoc.jsx';
 import TWStateManagerHOC from '../lib/tw-state-manager-hoc.jsx';
 import TWThemeHOC from '../lib/tw-theme-hoc.jsx';
 import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
+import TWPackagerIntegrationHOC from '../lib/tw-packager-integration-hoc.jsx';
 import SettingsStore from '../addons/settings-store-singleton';
 import '../lib/tw-fix-history-api';
 import GUI from './render-gui.jsx';
@@ -72,7 +73,8 @@ const messages = defineMessages({
 });
 
 const WrappedMenuBar = compose(
-    SBFileUploaderHOC
+    SBFileUploaderHOC,
+    TWPackagerIntegrationHOC
 )(MenuBar);
 
 if (AddonChannels.reloadChannel) {
@@ -265,11 +267,11 @@ class Interface extends React.Component {
                                     {/* https://github.com/LLK/scratch-gui/pull/8269 */}
                                     {/* https://github.com/LLK/scratch-www/pull/6773 */}
                                     <p>
-                                        <i>{'Updated May 27, 2022'}</i>
+                                        <i>{'Updated June 1, 2022'}</i>
                                     </p>
                                     <p>
                                         {/* eslint-disable-next-line max-len */}
-                                        {'Unshared projects will PROBABLY no longer be accessible using their project ID at some point in the future due to upcoming Scratch API changes.'}
+                                        {'Unshared projects will no longer be accessible using just their project ID **at some point in the future** due to upcoming Scratch API changes.'}
                                     </p>
                                     <p>
                                         {/* eslint-disable-next-line max-len */}
