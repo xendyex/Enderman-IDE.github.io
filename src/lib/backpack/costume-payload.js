@@ -17,16 +17,15 @@ const costumePayload = (costume, vm) => {
     switch (assetDataFormat) {
     case 'svg':
         payload.mime = 'image/svg+xml';
-        payload.body = assetDataUrl.replace('data:image/svg+xml;base64,', '');
+        payload.body = assetDataUrl;
         break;
     case 'png':
         payload.mime = 'image/png';
-        payload.body = assetDataUrl.replace('data:image/png;base64,', '');
+        payload.body = assetDataUrl;
         break;
     case 'jpg':
         payload.mime = 'image/jpeg';
-        // The data URL from scratch-storage will always claim to be a PNG even when it's not.
-        payload.body = assetDataUrl.replace('data:image/png;base64,', '');
+        payload.body = assetDataUrl;
         break;
     default:
         alert(`Cannot serialize for format: ${assetDataFormat}`); // eslint-disable-line
