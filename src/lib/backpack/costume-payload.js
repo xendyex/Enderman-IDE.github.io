@@ -1,9 +1,9 @@
 import createThumbnail from './thumbnail';
 import getCostumeUrl from '../get-costume-url';
 
-const costumePayload = costume => {
+const costumePayload = (costume, vm) => {
     // TODO is it ok to base64 encode SVGs? What about unicode text inside them?
-    const assetDataUrl = costume.asset.encodeDataURI();
+    const assetDataUrl = vm.getExportedCostumeBase64(costume);
     const assetDataFormat = costume.dataFormat;
     const payload = {
         type: 'costume',
