@@ -47,10 +47,8 @@ const manifest = {
     }
   ],
   "tags": [
-    "beta",
-    "new"
+    "beta"
   ],
-  "dynamicEnable": true,
   "dynamicDisable": true,
   "enabledByDefault": false
 };

@@ -25,6 +25,7 @@ import _editor_theme3 from "../addons/editor-theme3/_manifest_entry.js";
 import _custom_block_text from "../addons/custom-block-text/_manifest_entry.js";
 import _editor_colored_context_menus from "../addons/editor-colored-context-menus/_manifest_entry.js";
 import _editor_stage_left from "../addons/editor-stage-left/_manifest_entry.js";
+import _editor_buttons_reverse_order from "../addons/editor-buttons-reverse-order/_manifest_entry.js";
 import _variable_manager from "../addons/variable-manager/_manifest_entry.js";
 import _search_sprites from "../addons/search-sprites/_manifest_entry.js";
 import _gamepad from "../addons/gamepad/_manifest_entry.js";
@@ -52,6 +53,7 @@ import _editor_comment_previews from "../addons/editor-comment-previews/_manifes
 import _columns from "../addons/columns/_manifest_entry.js";
 import _script_snap from "../addons/script-snap/_manifest_entry.js";
 import _fullscreen from "../addons/fullscreen/_manifest_entry.js";
+import _hide_stage from "../addons/hide-stage/_manifest_entry.js";
 import _tw_straighten_comments from "../addons/tw-straighten-comments/_manifest_entry.js";
 import _tw_remove_backpack from "../addons/tw-remove-backpack/_manifest_entry.js";
 import _tw_remove_feedback from "../addons/tw-remove-feedback/_manifest_entry.js";
@@ -84,6 +86,7 @@ export default {
   "custom-block-text": _custom_block_text,
   "editor-colored-context-menus": _editor_colored_context_menus,
   "editor-stage-left": _editor_stage_left,
+  "editor-buttons-reverse-order": _editor_buttons_reverse_order,
   "variable-manager": _variable_manager,
   "search-sprites": _search_sprites,
   "gamepad": _gamepad,
@@ -111,6 +114,7 @@ export default {
   "columns": _columns,
   "script-snap": _script_snap,
   "fullscreen": _fullscreen,
+  "hide-stage": _hide_stage,
   "tw-straighten-comments": _tw_straighten_comments,
   "tw-remove-backpack": _tw_remove_backpack,
   "tw-remove-feedback": _tw_remove_feedback,
