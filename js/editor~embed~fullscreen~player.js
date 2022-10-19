@@ -8159,7 +8159,7 @@ GreenFlagComponent.defaultProps = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "static/assets/d62e140fe6741baa18ae968c3f4cc8df.svg";
+module.exports = __webpack_require__.p + "static/assets/f4e66c825b431fde91a3b96047ebeca5.svg";
 
 /***/ }),
 
