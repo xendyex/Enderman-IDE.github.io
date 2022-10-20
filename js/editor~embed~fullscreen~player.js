@@ -33368,6 +33368,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _tw_tw_svg__WEBPACK_IMPORTED_MODULE_31___default = /*#__PURE__*/__webpack_require__.n(_tw_tw_svg__WEBPACK_IMPORTED_MODULE_31__);
 /* harmony import */ var _custom_custom_svg__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./custom/custom.svg */ "./src/lib/libraries/extensions/custom/custom.svg");
 /* harmony import */ var _custom_custom_svg__WEBPACK_IMPORTED_MODULE_32___default = /*#__PURE__*/__webpack_require__.n(_custom_custom_svg__WEBPACK_IMPORTED_MODULE_32__);
+/* harmony import */ var _penguinmod_extensions_files_png__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./penguinmod/extensions/files.png */ "./src/lib/libraries/extensions/penguinmod/extensions/files.png");
+/* harmony import */ var _penguinmod_extensions_files_png__WEBPACK_IMPORTED_MODULE_33___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_files_png__WEBPACK_IMPORTED_MODULE_33__);
 
 
 
@@ -33391,6 +33393,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
  // TODO: Rename file names to match variable/prop names?
+
 
 
 
@@ -33620,13 +33623,13 @@ __webpack_require__.r(__webpack_exports__);
 }, {
   name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "File Blocks",
-    id: "jg_files.jg_filesExtension.name"
+    id: "jgFiles.jgFilesExtension.name"
   }),
-  extensionId: 'jg_files',
-  iconURL: _tw_tw_svg__WEBPACK_IMPORTED_MODULE_31___default.a,
+  extensionId: 'jgFiles',
+  iconURL: _penguinmod_extensions_files_png__WEBPACK_IMPORTED_MODULE_33___default.a,
   description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "Blocks for reading and creating files.",
-    id: "jg_files.jg_filesExtension.description"
+    id: "jgFiles.jgFilesExtension.description"
   }),
   featured: true,
   incompatibleWithScratch: true
@@ -33742,6 +33745,17 @@ module.exports = __webpack_require__.p + "static/assets/800f6f1573677d59954e8d31
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "static/assets/7679e8aa3b5a6b745823e00a7b950065.png";
+
+/***/ }),
+
+/***/ "./src/lib/libraries/extensions/penguinmod/extensions/files.png":
+/*!**********************************************************************!*\
+  !*** ./src/lib/libraries/extensions/penguinmod/extensions/files.png ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/assets/333b5b49e1753ebb8908212c06a354a3.png";
 
 /***/ }),
 
