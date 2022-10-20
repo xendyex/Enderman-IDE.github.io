@@ -33491,6 +33491,32 @@ __webpack_require__.r(__webpack_exports__);
   }),
   featured: true
 }, {
+  name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "File Blocks",
+    id: "jgFiles.jgFilesExtension.name"
+  }),
+  extensionId: 'jgFiles',
+  iconURL: _penguinmod_extensions_files_png__WEBPACK_IMPORTED_MODULE_33___default.a,
+  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Blocks for reading and creating files.",
+    id: "jgFiles.jgFilesExtension.description"
+  }),
+  featured: true,
+  incompatibleWithScratch: true
+}, {
+  name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "TurboWarp Blocks",
+    id: "tw.twExtension.name"
+  }),
+  extensionId: 'tw',
+  iconURL: _tw_tw_svg__WEBPACK_IMPORTED_MODULE_31___default.a,
+  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Weird new blocks. Not compatible with Scratch.",
+    id: "tw.twExtension.description"
+  }),
+  featured: true,
+  incompatibleWithScratch: true
+}, {
   name: 'micro:bit',
   extensionId: 'microbit',
   collaborator: 'micro:bit',
@@ -33607,32 +33633,6 @@ __webpack_require__.r(__webpack_exports__);
     id: "gui.extension.gdxfor.connectingMessage"
   }),
   helpLink: 'https://scratch.mit.edu/vernier'
-}, {
-  name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "TurboWarp Blocks",
-    id: "tw.twExtension.name"
-  }),
-  extensionId: 'tw',
-  iconURL: _tw_tw_svg__WEBPACK_IMPORTED_MODULE_31___default.a,
-  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "Weird new blocks. Not compatible with Scratch.",
-    id: "tw.twExtension.description"
-  }),
-  featured: true,
-  incompatibleWithScratch: true
-}, {
-  name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "File Blocks",
-    id: "jgFiles.jgFilesExtension.name"
-  }),
-  extensionId: 'jgFiles',
-  iconURL: _penguinmod_extensions_files_png__WEBPACK_IMPORTED_MODULE_33___default.a,
-  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "Blocks for reading and creating files.",
-    id: "jgFiles.jgFilesExtension.description"
-  }),
-  featured: true,
-  incompatibleWithScratch: true
 }, {
   name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "Custom Extension",
