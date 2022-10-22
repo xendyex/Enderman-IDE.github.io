@@ -91,6 +91,7 @@ Blockly.Msg.DATA_INDEX_RANDOM = 'random';
 
 // Event blocks
 Blockly.Msg.EVENT_WHENFLAGCLICKED = 'when %1 clicked';
+Blockly.Msg.EVENT_WHENANYTHING = 'when %1';
 Blockly.Msg.EVENT_WHENTHISSPRITECLICKED = 'when this sprite clicked';
 Blockly.Msg.EVENT_WHENSTAGECLICKED = 'when stage clicked';
 Blockly.Msg.EVENT_WHENTOUCHINGOBJECT = 'when this sprite touches %1';
@@ -229,6 +230,7 @@ Blockly.Msg.OPERATORS_MATHOP_LN = 'ln';
 Blockly.Msg.OPERATORS_MATHOP_LOG = 'log';
 Blockly.Msg.OPERATORS_MATHOP_EEXP = 'e ^';
 Blockly.Msg.OPERATORS_MATHOP_10EXP = '10 ^';
+Blockly.Msg.OPERATORS_ADVLOG = 'log %1 %2';
 
 // Procedures blocks
 Blockly.Msg.PROCEDURES_DEFINITION = 'define %1';
@@ -5732,6 +5734,7 @@ Blockly.ScratchMsgs.locales["en"] =
     "OPERATORS_MATHOP_LOG": "log",
     "OPERATORS_MATHOP_EEXP": "e ^",
     "OPERATORS_MATHOP_10EXP": "10 ^",
+    "OPERATORS_MATHOP": "log %1 %2",
     "PROCEDURES_DEFINITION": "define %1",
     "SENSING_TOUCHINGOBJECT": "touching %1?",
     "SENSING_TOUCHINGOBJECT_POINTER": "mouse-pointer",
