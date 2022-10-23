@@ -16191,7 +16191,7 @@ StageComponent.defaultProps = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "static/assets/b5e9b40f4819b2b4d8c6c3b45dee81c0.svg";
+module.exports = __webpack_require__.p + "static/assets/10db5ce4c37ebd51abc46eb6840d4cfa.svg";
 
 /***/ }),
 
