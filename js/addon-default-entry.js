@@ -3335,7 +3335,7 @@ class DevTools {
           x: this.mouseXY.x,
           y: this.mouseXY.y
         };
-        block.setIntersects(true); // fixes offscreen block pasting in TurboWarp
+        block.setIntersects(true); // fixes offscreen block pasting in Turbo Warp
 
         this.domHelpers.triggerDragAndDrop(block.svgPath_, null, mouseXYClone);
       }

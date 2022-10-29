@@ -1809,7 +1809,7 @@ const _twGetAsset = path => {
     virtualCursorSetVisible(false);
     showRealCursor();
   });
-  let getCanvasSize; // Support modern ResizeObserver and slow getBoundingClientRect version for improved browser support (matters for TurboWarp)
+  let getCanvasSize; // Support modern ResizeObserver and slow getBoundingClientRect version for improved browser support (matters for Turbo Warp)
 
   if (window.ResizeObserver) {
     let canvasWidth = width;

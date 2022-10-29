@@ -1445,7 +1445,7 @@ const CloudVariableBadge = () => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__
   className: _cloud_variable_badge_css__WEBPACK_IMPORTED_MODULE_3___default.a.text
 }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"] // eslint-disable-next-line max-len
 , {
-  defaultMessage: "This project uses cloud variables. TurboWarp uses its own cloud variable server independent of Scratch. Beware of impersonation as anyone can change their username to anything. {learnMore}",
+  defaultMessage: "This project uses cloud variables. PenguinMod uses its own cloud variable server independent of Scratch. Beware of impersonation as anyone can change their username to anything. {learnMore}",
   id: "tw.cloudVariableBadge",
   values: {
     learnMore: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
@@ -3184,7 +3184,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 
 if (window.parent !== window) {
   // eslint-disable-next-line no-alert
-  alert('This page is embedding TurboWarp in a way that is unsupported and will cease to function in the near future. Please read https://docs.turbowarp.org/embedding');
+  alert('This page is embedding PenguinMod/TurboWarp in a way that is unsupported and will cease to function in the near future. Please read https://docs.turbowarp.org/embedding');
   throw new Error('Invalid embed');
 }
 
@@ -3227,7 +3227,7 @@ const Footer = () => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.c
   className: _interface_css__WEBPACK_IMPORTED_MODULE_30___default.a.footerText
 }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_5__["FormattedMessage"] // eslint-disable-next-line max-len
 , {
-  defaultMessage: "TurboWarp is not affiliated with Scratch, the Scratch Team, or the Scratch Foundation.",
+  defaultMessage: "PenguinMod and TurboWarp are not affiliated with Scratch, the Scratch Team, or the Scratch Foundation.",
   id: "tw.footer.disclaimer"
 })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
   className: _interface_css__WEBPACK_IMPORTED_MODULE_30___default.a.footerColumns
@@ -3302,9 +3302,9 @@ class Interface extends react__WEBPACK_IMPORTED_MODULE_2___default.a.Component {
 
   handleUpdateProjectTitle(title, isDefault) {
     if (isDefault || !title) {
-      document.title = "TurboWarp - ".concat(this.props.intl.formatMessage(messages.defaultTitle));
+      document.title = "PenguinMod - ".concat(this.props.intl.formatMessage(messages.defaultTitle));
     } else {
-      document.title = "".concat(title, " - TurboWarp");
+      document.title = "".concat(title, " - PenguinMod");
     }
   }
 
@@ -3392,7 +3392,7 @@ class Interface extends react__WEBPACK_IMPORTED_MODULE_2___default.a.Component {
       className: _interface_css__WEBPACK_IMPORTED_MODULE_30___default.a.section
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_5__["FormattedMessage"] // eslint-disable-next-line max-len
     , {
-      defaultMessage: "TurboWarp is a Scratch mod that compiles projects to JavaScript to make them run really fast. Try it out by inputting a project ID or URL above or choosing a featured project below.",
+      defaultMessage: "PenguinMod is a mod of TurboWarp to add new blocks and features. TurboWarp is a Scratch mod that compiles projects to JavaScript to make them run really fast. Try it out by inputting a project ID or URL above or choosing a featured project below.",
       id: "tw.home.description"
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
       className: _interface_css__WEBPACK_IMPORTED_MODULE_30___default.a.section
