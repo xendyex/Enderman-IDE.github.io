@@ -33522,6 +33522,20 @@ __webpack_require__.r(__webpack_exports__);
   incompatibleWithScratch: true
 }, {
   name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Unite",
+    id: "jwUnite.jwUniteExtension.name"
+  }),
+  extensionId: 'jwUnite',
+  iconURL: _tw_tw_svg__WEBPACK_IMPORTED_MODULE_31___default.a,
+  //will change soon
+  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Useful blocks that should of been added to scratch already",
+    id: "jwUnite.jwUniteExtension.description"
+  }),
+  featured: true,
+  incompatibleWithScratch: true
+}, {
+  name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "TurboWarp Blocks",
     id: "tw.twExtension.name"
   }),
