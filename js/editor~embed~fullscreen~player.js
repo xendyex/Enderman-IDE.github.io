@@ -33370,6 +33370,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _custom_custom_svg__WEBPACK_IMPORTED_MODULE_32___default = /*#__PURE__*/__webpack_require__.n(_custom_custom_svg__WEBPACK_IMPORTED_MODULE_32__);
 /* harmony import */ var _penguinmod_extensions_files_png__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./penguinmod/extensions/files.png */ "./src/lib/libraries/extensions/penguinmod/extensions/files.png");
 /* harmony import */ var _penguinmod_extensions_files_png__WEBPACK_IMPORTED_MODULE_33___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_files_png__WEBPACK_IMPORTED_MODULE_33__);
+/* harmony import */ var _penguinmod_extensions_websiteRequests_png__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./penguinmod/extensions/websiteRequests.png */ "./src/lib/libraries/extensions/penguinmod/extensions/websiteRequests.png");
+/* harmony import */ var _penguinmod_extensions_websiteRequests_png__WEBPACK_IMPORTED_MODULE_34___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_websiteRequests_png__WEBPACK_IMPORTED_MODULE_34__);
 
 
 
@@ -33393,6 +33395,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
  // TODO: Rename file names to match variable/prop names?
+
 
 
 
@@ -33502,6 +33505,20 @@ __webpack_require__.r(__webpack_exports__);
     id: "jgFiles.jgFilesExtension.description"
   }),
   featured: true,
+  incompatibleWithScratch: true
+}, {
+  name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Website Request Blocks",
+    id: "jgWebsiteRequests.jgWebsiteRequestsExtension.name"
+  }),
+  extensionId: 'jgWebsiteRequests',
+  iconURL: _penguinmod_extensions_websiteRequests_png__WEBPACK_IMPORTED_MODULE_34___default.a,
+  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Blocks to communicate with APIs and websites.",
+    id: "jgWebsiteRequests.jgWebsiteRequestsExtension.description"
+  }),
+  featured: true,
+  internetConnectionRequired: true,
   incompatibleWithScratch: true
 }, {
   name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
@@ -33756,6 +33773,17 @@ module.exports = __webpack_require__.p + "static/assets/7679e8aa3b5a6b745823e00a
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "static/assets/333b5b49e1753ebb8908212c06a354a3.png";
+
+/***/ }),
+
+/***/ "./src/lib/libraries/extensions/penguinmod/extensions/websiteRequests.png":
+/*!********************************************************************************!*\
+  !*** ./src/lib/libraries/extensions/penguinmod/extensions/websiteRequests.png ***!
+  \********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/assets/cd7616ddcc603802ffc1958cd8cf1d33.png";
 
 /***/ }),
 
