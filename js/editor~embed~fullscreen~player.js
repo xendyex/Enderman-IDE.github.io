@@ -33372,6 +33372,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _penguinmod_extensions_files_png__WEBPACK_IMPORTED_MODULE_33___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_files_png__WEBPACK_IMPORTED_MODULE_33__);
 /* harmony import */ var _penguinmod_extensions_websiteRequests_png__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./penguinmod/extensions/websiteRequests.png */ "./src/lib/libraries/extensions/penguinmod/extensions/websiteRequests.png");
 /* harmony import */ var _penguinmod_extensions_websiteRequests_png__WEBPACK_IMPORTED_MODULE_34___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_websiteRequests_png__WEBPACK_IMPORTED_MODULE_34__);
+/* harmony import */ var _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./penguinmod/extensions/jwUnite_temp.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/jwUnite_temp.svg");
+/* harmony import */ var _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_35___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_35__);
 
 
 
@@ -33395,6 +33397,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
  // TODO: Rename file names to match variable/prop names?
+
 
 
 
@@ -33526,7 +33529,7 @@ __webpack_require__.r(__webpack_exports__);
     id: "jwUnite.jwUniteExtension.name"
   }),
   extensionId: 'jwUnite',
-  iconURL: _tw_tw_svg__WEBPACK_IMPORTED_MODULE_31___default.a,
+  iconURL: _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_35___default.a,
   //will change soon
   description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "Useful blocks that should of been added to scratch already",
@@ -33787,6 +33790,17 @@ module.exports = __webpack_require__.p + "static/assets/7679e8aa3b5a6b745823e00a
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "static/assets/333b5b49e1753ebb8908212c06a354a3.png";
+
+/***/ }),
+
+/***/ "./src/lib/libraries/extensions/penguinmod/extensions/jwUnite_temp.svg":
+/*!*****************************************************************************!*\
+  !*** ./src/lib/libraries/extensions/penguinmod/extensions/jwUnite_temp.svg ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/assets/ee38bd5ac442eb6e5daec34142857712.svg";
 
 /***/ }),
 
