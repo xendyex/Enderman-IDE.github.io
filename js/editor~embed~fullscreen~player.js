@@ -33378,8 +33378,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _penguinmod_extensions_runtime_png__WEBPACK_IMPORTED_MODULE_36___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_runtime_png__WEBPACK_IMPORTED_MODULE_36__);
 /* harmony import */ var _penguinmod_extensions_prism_png__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./penguinmod/extensions/prism.png */ "./src/lib/libraries/extensions/penguinmod/extensions/prism.png");
 /* harmony import */ var _penguinmod_extensions_prism_png__WEBPACK_IMPORTED_MODULE_37___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_prism_png__WEBPACK_IMPORTED_MODULE_37__);
-/* harmony import */ var _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./penguinmod/extensions/jwUnite_temp.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/jwUnite_temp.svg");
-/* harmony import */ var _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_38___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_38__);
+/* harmony import */ var _penguinmod_extensions_Unite_png__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./penguinmod/extensions/Unite.png */ "./src/lib/libraries/extensions/penguinmod/extensions/Unite.png");
+/* harmony import */ var _penguinmod_extensions_Unite_png__WEBPACK_IMPORTED_MODULE_38___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_Unite_png__WEBPACK_IMPORTED_MODULE_38__);
+/* harmony import */ var _penguinmod_extensions_UniteSmall_png__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./penguinmod/extensions/UniteSmall.png */ "./src/lib/libraries/extensions/penguinmod/extensions/UniteSmall.png");
+/* harmony import */ var _penguinmod_extensions_UniteSmall_png__WEBPACK_IMPORTED_MODULE_39___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_UniteSmall_png__WEBPACK_IMPORTED_MODULE_39__);
 
 
 
@@ -33403,6 +33405,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
  // TODO: Rename file names to match variable/prop names?
+
 
 
 
@@ -33551,8 +33554,8 @@ __webpack_require__.r(__webpack_exports__);
     id: "jwUnite.jwUniteExtension.name"
   }),
   extensionId: 'jwUnite',
-  iconURL: _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_38___default.a,
-  //will change soon
+  iconURL: _penguinmod_extensions_Unite_png__WEBPACK_IMPORTED_MODULE_38___default.a,
+  insetIconURL: _penguinmod_extensions_UniteSmall_png__WEBPACK_IMPORTED_MODULE_39___default.a,
   description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "Useful blocks that should of been added to scratch already",
     id: "jwUnite.jwUniteExtension.description"
@@ -33832,6 +33835,28 @@ module.exports = __webpack_require__.p + "static/assets/7679e8aa3b5a6b745823e00a
 
 /***/ }),
 
+/***/ "./src/lib/libraries/extensions/penguinmod/extensions/Unite.png":
+/*!**********************************************************************!*\
+  !*** ./src/lib/libraries/extensions/penguinmod/extensions/Unite.png ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/assets/195b65444703293e0624ff4e09c13c81.png";
+
+/***/ }),
+
+/***/ "./src/lib/libraries/extensions/penguinmod/extensions/UniteSmall.png":
+/*!***************************************************************************!*\
+  !*** ./src/lib/libraries/extensions/penguinmod/extensions/UniteSmall.png ***!
+  \***************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/assets/4b74f619cb959e9ca7d72de2c1797a54.png";
+
+/***/ }),
+
 /***/ "./src/lib/libraries/extensions/penguinmod/extensions/files.png":
 /*!**********************************************************************!*\
   !*** ./src/lib/libraries/extensions/penguinmod/extensions/files.png ***!
@@ -33851,17 +33876,6 @@ module.exports = __webpack_require__.p + "static/assets/333b5b49e1753ebb8908212c
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "static/assets/44541df59fd6a8070d12e95c6c4b63bd.png";
-
-/***/ }),
-
-/***/ "./src/lib/libraries/extensions/penguinmod/extensions/jwUnite_temp.svg":
-/*!*****************************************************************************!*\
-  !*** ./src/lib/libraries/extensions/penguinmod/extensions/jwUnite_temp.svg ***!
-  \*****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "static/assets/ee38bd5ac442eb6e5daec34142857712.svg";
 
 /***/ }),
 
