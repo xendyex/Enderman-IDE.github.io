@@ -33376,8 +33376,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _penguinmod_extensions_json_png__WEBPACK_IMPORTED_MODULE_35___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_json_png__WEBPACK_IMPORTED_MODULE_35__);
 /* harmony import */ var _penguinmod_extensions_runtime_png__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./penguinmod/extensions/runtime.png */ "./src/lib/libraries/extensions/penguinmod/extensions/runtime.png");
 /* harmony import */ var _penguinmod_extensions_runtime_png__WEBPACK_IMPORTED_MODULE_36___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_runtime_png__WEBPACK_IMPORTED_MODULE_36__);
-/* harmony import */ var _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./penguinmod/extensions/jwUnite_temp.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/jwUnite_temp.svg");
-/* harmony import */ var _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_37___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_37__);
+/* harmony import */ var _penguinmod_extensions_prism_png__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./penguinmod/extensions/prism.png */ "./src/lib/libraries/extensions/penguinmod/extensions/prism.png");
+/* harmony import */ var _penguinmod_extensions_prism_png__WEBPACK_IMPORTED_MODULE_37___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_prism_png__WEBPACK_IMPORTED_MODULE_37__);
+/* harmony import */ var _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./penguinmod/extensions/jwUnite_temp.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/jwUnite_temp.svg");
+/* harmony import */ var _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_38___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_38__);
 
 
 
@@ -33401,6 +33403,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
  // TODO: Rename file names to match variable/prop names?
+
 
 
 
@@ -33548,13 +33551,27 @@ __webpack_require__.r(__webpack_exports__);
     id: "jwUnite.jwUniteExtension.name"
   }),
   extensionId: 'jwUnite',
-  iconURL: _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_37___default.a,
+  iconURL: _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_38___default.a,
   //will change soon
   description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "Useful blocks that should of been added to scratch already",
     id: "jwUnite.jwUniteExtension.description"
   }),
   featured: true,
+  incompatibleWithScratch: true
+}, {
+  name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Prism",
+    id: "jgPrism.jgPrismExtension.name"
+  }),
+  extensionId: 'jgPrism',
+  iconURL: _penguinmod_extensions_prism_png__WEBPACK_IMPORTED_MODULE_37___default.a,
+  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Blocks for specific use-cases or major convenience.",
+    id: "jgPrism.jgPrismExtension.description"
+  }),
+  featured: true,
+  internetConnectionRequired: true,
   incompatibleWithScratch: true
 }, {
   name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
@@ -33845,6 +33862,17 @@ module.exports = __webpack_require__.p + "static/assets/44541df59fd6a8070d12e95c
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "static/assets/ee38bd5ac442eb6e5daec34142857712.svg";
+
+/***/ }),
+
+/***/ "./src/lib/libraries/extensions/penguinmod/extensions/prism.png":
+/*!**********************************************************************!*\
+  !*** ./src/lib/libraries/extensions/penguinmod/extensions/prism.png ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/assets/4bfd8156fc8a4ea8f495c5da5b1dbc42.png";
 
 /***/ }),
 
