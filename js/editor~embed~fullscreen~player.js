@@ -33568,6 +33568,7 @@ __webpack_require__.r(__webpack_exports__);
     id: "jgRuntime.jgRuntimeExtension.description"
   }),
   featured: true,
+  internetConnectionRequired: true,
   incompatibleWithScratch: true
 }, {
   name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
