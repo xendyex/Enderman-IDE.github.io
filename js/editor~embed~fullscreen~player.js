@@ -33374,8 +33374,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _penguinmod_extensions_websiteRequests_png__WEBPACK_IMPORTED_MODULE_34___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_websiteRequests_png__WEBPACK_IMPORTED_MODULE_34__);
 /* harmony import */ var _penguinmod_extensions_json_png__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./penguinmod/extensions/json.png */ "./src/lib/libraries/extensions/penguinmod/extensions/json.png");
 /* harmony import */ var _penguinmod_extensions_json_png__WEBPACK_IMPORTED_MODULE_35___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_json_png__WEBPACK_IMPORTED_MODULE_35__);
-/* harmony import */ var _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./penguinmod/extensions/jwUnite_temp.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/jwUnite_temp.svg");
-/* harmony import */ var _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_36___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_36__);
+/* harmony import */ var _penguinmod_extensions_runtime_png__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./penguinmod/extensions/runtime.png */ "./src/lib/libraries/extensions/penguinmod/extensions/runtime.png");
+/* harmony import */ var _penguinmod_extensions_runtime_png__WEBPACK_IMPORTED_MODULE_36___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_runtime_png__WEBPACK_IMPORTED_MODULE_36__);
+/* harmony import */ var _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./penguinmod/extensions/jwUnite_temp.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/jwUnite_temp.svg");
+/* harmony import */ var _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_37___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_37__);
 
 
 
@@ -33399,6 +33401,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
  // TODO: Rename file names to match variable/prop names?
+
 
 
 
@@ -33545,11 +33548,24 @@ __webpack_require__.r(__webpack_exports__);
     id: "jwUnite.jwUniteExtension.name"
   }),
   extensionId: 'jwUnite',
-  iconURL: _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_36___default.a,
+  iconURL: _penguinmod_extensions_jwUnite_temp_svg__WEBPACK_IMPORTED_MODULE_37___default.a,
   //will change soon
   description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "Useful blocks that should of been added to scratch already",
     id: "jwUnite.jwUniteExtension.description"
+  }),
+  featured: true,
+  incompatibleWithScratch: true
+}, {
+  name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Runtime tools",
+    id: "jgRuntime.jgRuntimeExtension.name"
+  }),
+  extensionId: 'jgRuntime',
+  iconURL: _penguinmod_extensions_runtime_png__WEBPACK_IMPORTED_MODULE_36___default.a,
+  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Blocks for updating Scratch objects like the stage.",
+    id: "jgRuntime.jgRuntimeExtension.description"
   }),
   featured: true,
   incompatibleWithScratch: true
@@ -33828,6 +33844,17 @@ module.exports = __webpack_require__.p + "static/assets/44541df59fd6a8070d12e95c
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "static/assets/ee38bd5ac442eb6e5daec34142857712.svg";
+
+/***/ }),
+
+/***/ "./src/lib/libraries/extensions/penguinmod/extensions/runtime.png":
+/*!************************************************************************!*\
+  !*** ./src/lib/libraries/extensions/penguinmod/extensions/runtime.png ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/assets/3eb1599270a7125b2240e7ddc0d5bda1.png";
 
 /***/ }),
 
