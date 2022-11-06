@@ -18,7 +18,7 @@ jobs:
       - name: Generate Static Site🛠
         run: |
          npm list npm-fast-install || npm install -g npm-fast-install
-         npm-fast-install
+         npm-fast-install ./src
          webpack --colors --bail
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
