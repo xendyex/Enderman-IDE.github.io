@@ -33386,10 +33386,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_40___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_40__);
 /* harmony import */ var _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./penguinmod/extensions/griffpatch_physicsIcon.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/griffpatch_physicsIcon.svg");
 /* harmony import */ var _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_41___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_41__);
-/* harmony import */ var _penguinmod_extensions_jslogo_svg__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./penguinmod/extensions/jslogo.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/jslogo.svg");
-/* harmony import */ var _penguinmod_extensions_jslogo_svg__WEBPACK_IMPORTED_MODULE_42___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_jslogo_svg__WEBPACK_IMPORTED_MODULE_42__);
-/* harmony import */ var _penguinmod_extensions_3d_png__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./penguinmod/extensions/3d.png */ "./src/lib/libraries/extensions/penguinmod/extensions/3d.png");
-/* harmony import */ var _penguinmod_extensions_3d_png__WEBPACK_IMPORTED_MODULE_43___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_3d_png__WEBPACK_IMPORTED_MODULE_43__);
 
 
 
@@ -33436,9 +33432,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
  // griffpatch stuff that hopefully we can keep pls plsplspl !!S!
-
-
- // fresh js extension with alert,prompt,confirm blocks very kool
 
 
 
@@ -33616,18 +33609,6 @@ __webpack_require__.r(__webpack_exports__);
   }),
   featured: true,
   disabled: false
-}, {
-  name: 'JavaScript',
-  extensionId: 'JavaScript',
-  iconURL: _penguinmod_extensions_jslogo_svg__WEBPACK_IMPORTED_MODULE_42___default.a,
-  insetIconURL: FreshJsExtThumb,
-  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "JavaScript Extension with some blocks of javascript functions.",
-    id: "fresh_js.name"
-  }),
-  featured: true,
-  disabled: false,
-  incompatibleWithScratch: true
 }, {
   name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "TurboWarp Blocks",
@@ -33873,17 +33854,6 @@ module.exports = __webpack_require__.p + "static/assets/7679e8aa3b5a6b745823e00a
 
 /***/ }),
 
-/***/ "./src/lib/libraries/extensions/penguinmod/extensions/3d.png":
-/*!*******************************************************************!*\
-  !*** ./src/lib/libraries/extensions/penguinmod/extensions/3d.png ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "static/assets/893e1dad82f4cd3a4ea08e0ccc2c2238.png";
-
-/***/ }),
-
 /***/ "./src/lib/libraries/extensions/penguinmod/extensions/Unite.png":
 /*!**********************************************************************!*\
   !*** ./src/lib/libraries/extensions/penguinmod/extensions/Unite.png ***!
@@ -33936,17 +33906,6 @@ module.exports = __webpack_require__.p + "static/assets/f87904843f21a05464c4acc3
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "static/assets/7cde88cd98adaaf1e911f68bacdbe719.svg";
-
-/***/ }),
-
-/***/ "./src/lib/libraries/extensions/penguinmod/extensions/jslogo.svg":
-/*!***********************************************************************!*\
-  !*** ./src/lib/libraries/extensions/penguinmod/extensions/jslogo.svg ***!
-  \***********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "static/assets/cbee6152a5442b25634b3963981dd484.svg";
 
 /***/ }),
 
