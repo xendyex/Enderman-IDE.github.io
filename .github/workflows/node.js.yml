@@ -24,4 +24,5 @@ jobs:
          github_token: ${{ secrets.GITHUB_TOKEN }}
          publish_dir: ./build
          publish_branch: gh-pages
+         allow_empty_commit: true
 
