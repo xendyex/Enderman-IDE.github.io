@@ -62,6 +62,9 @@ import jwUniteInsetIcon from './penguinmod/extensions/UniteSmall.png'
 // griffpatch stuff that hopefully we can keep pls plsplspl !!S!
 import griffpatchPhysicsThumb from './penguinmod/extensions/griffpatch_physics.png'
 import griffpatchPhysicsIcon from './penguinmod/extensions/griffpatch_physicsIcon.svg'
+// fresh js extension with alert,prompt,confirm blocks very kool
+import freshJsExtIcon from './penguinmod/extensions/jslogo.svg'
+import freshJsExtThumb from './penguinmod/extensions/3d.png'
 
 export default [
     {
