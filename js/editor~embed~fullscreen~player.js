@@ -34789,6 +34789,18 @@ const messages = Object(react_intl__WEBPACK_IMPORTED_MODULE_0__["defineMessages"
     "id": "gui.opcodeLabels.answer",
     "defaultMessage": "answer"
   },
+  sensing_mousedown: {
+    "id": "tw.opcode.mousedown",
+    "defaultMessage": "mouse down?"
+  },
+  sensing_mousex: {
+    "id": "tw.opcode.mousex",
+    "defaultMessage": "mouse x"
+  },
+  sensing_mousey: {
+    "id": "tw.opcode.mousey",
+    "defaultMessage": "mouse y"
+  },
   sensing_loudness: {
     "id": "gui.opcodeLabels.loudness",
     "defaultMessage": "loudness"
@@ -34828,6 +34840,10 @@ const messages = Object(react_intl__WEBPACK_IMPORTED_MODULE_0__["defineMessages"
   sensing_timer: {
     "id": "gui.opcodeLabels.timer",
     "defaultMessage": "timer"
+  },
+  sensing_dayssince2000: {
+    "id": "tw.opcode.2000",
+    "defaultMessage": "days since 2000"
   }
 });
 
@@ -34888,6 +34904,15 @@ class OpcodeLabels {
       sensing_answer: {
         category: 'sensing'
       },
+      sensing_mousedown: {
+        category: 'sensing'
+      },
+      sensing_mousex: {
+        category: 'sensing'
+      },
+      sensing_mousey: {
+        category: 'sensing'
+      },
       sensing_loudness: {
         category: 'sensing'
       },
@@ -34898,6 +34923,9 @@ class OpcodeLabels {
         category: 'sensing'
       },
       sensing_timer: {
+        category: 'sensing'
+      },
+      sensing_dayssince2000: {
         category: 'sensing'
       }
     }; // Initialize opcodeMap with default strings
@@ -34964,6 +34992,12 @@ class OpcodeLabels {
 
     this._opcodeMap.sensing_answer.labelFn = () => this._translator(messages.sensing_answer);
 
+    this._opcodeMap.sensing_mousedown.labelFn = () => this._translator(messages.sensing_mousedown);
+
+    this._opcodeMap.sensing_mousex.labelFn = () => this._translator(messages.sensing_mousex);
+
+    this._opcodeMap.sensing_mousey.labelFn = () => this._translator(messages.sensing_mousey);
+
     this._opcodeMap.sensing_loudness.labelFn = () => this._translator(messages.sensing_loudness);
 
     this._opcodeMap.sensing_username.labelFn = () => this._translator(messages.sensing_username);
@@ -34994,6 +35028,8 @@ class OpcodeLabels {
     };
 
     this._opcodeMap.sensing_timer.labelFn = () => this._translator(messages.sensing_timer);
+
+    this._opcodeMap.sensing_dayssince2000.labelFn = () => this._translator(messages.sensing_dayssince2000);
   }
   /**
    * Return the label for an opcode
@@ -43431,7 +43467,14 @@ __webpack_require__.r(__webpack_exports__);
 const SET_VM = 'scratch-gui/vm/SET_VM';
 const defaultVM = new scratch_vm__WEBPACK_IMPORTED_MODULE_0___default.a();
 defaultVM.setCompatibilityMode(true);
-defaultVM.extensionManager.workerMode = 'iframe';
+
+defaultVM.extensionManager.securityManager.getSandboxMode = () => Promise.resolve('iframe');
+
+defaultVM.extensionManager.securityManager.canLoadExtensionFromProject = url => {
+  alert("Please load the ".concat(url, " extension manually for now. We're working on improving this."));
+  return Promise.resolve(false);
+};
+
 defaultVM.runtime.cloudOptions.limit = _lib_tw_cloud_limits__WEBPACK_IMPORTED_MODULE_2__["MAXIMUM_CLOUD_VARIABLES"];
 defaultVM.attachStorage(_lib_storage__WEBPACK_IMPORTED_MODULE_1__["default"]);
 const initialState = defaultVM;
