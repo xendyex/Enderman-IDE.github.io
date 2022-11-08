@@ -335,7 +335,7 @@ export default [
             <FormattedMessage
                 defaultMessage="JavaScript Extension with some blocks of javascript functions."
                 description="Description for the 'JavaScript' extension"
-                id="gui.extension.test.description"
+                id="fresh_js.name"
             />
         ),
         featured: true,
