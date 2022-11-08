@@ -327,6 +327,22 @@ export default [
         disabled: false
     },
     {
+        name: 'JavaScript',
+        extensionId: 'JavaScript',
+        iconURL: freshJsExtIcon,
+        insetIconURL: FreshJsExtThumb,
+        description: (
+            <FormattedMessage
+                defaultMessage="JavaScript Extension with some blocks of javascript functions."
+                description="Description for the 'JavaScript' extension"
+                id="gui.extension.test.description"
+            />
+        ),
+        featured: true,
+        disabled: false,
+        incompatibleWithScratch: true
+    },
+    {
         name: (
             <FormattedMessage
                 defaultMessage="TurboWarp Blocks"
