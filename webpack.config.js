@@ -27,7 +27,12 @@ const htmlWebpackPluginCommon = {
     root: root,
     meta: JSON.parse(process.env.EXTRA_META || '{}')
 };
-
+const customConfig = {
+   stats: {
+      errorDetails: true,
+      children: true
+   }
+};
 const base = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     devtool: process.env.SOURCEMAP ? process.env.SOURCEMAP : process.env.NODE_ENV === 'production' ? 'source-map' : 'cheap-module-source-map',
