@@ -37381,7 +37381,7 @@ const load = () => {
     return Promise.resolve();
   }
 
-  return __webpack_require__.e(/*! import() | sb */ "sb").then(__webpack_require__.t.bind(null, /*! scratch-blocks */ "./node_modules/scratch-blocks/shim/vertical.js", 7)).then(m => {
+  return __webpack_require__.e(/*! import() | sb */ "sb").then(__webpack_require__.t.bind(null, /*! scratch-blocks */ "./node_modules/scratch-blocks/dist/vertical.js", 7)).then(m => {
     _ScratchBlocks = m.default;
     return _ScratchBlocks;
   });
