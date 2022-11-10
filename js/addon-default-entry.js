@@ -1076,9 +1076,18 @@ __webpack_require__.r(__webpack_exports__);
       }, noopSwitch];
       blockSwitches["operator_and"] = [noopSwitch, {
         opcode: "operator_or"
+      }, {
+        opcode: "operator_xor"
       }];
       blockSwitches["operator_or"] = [{
         opcode: "operator_and"
+      }, noopSwitch, {
+        opcode: "operator_xor"
+      }];
+      blockSwitches["operator_xor"] = [{
+        opcode: "operator_and"
+      }, {
+        opcode: "operator_or"
       }, noopSwitch];
     }
 
