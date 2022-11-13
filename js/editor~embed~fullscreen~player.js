@@ -33382,10 +33382,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _penguinmod_extensions_Unite_png__WEBPACK_IMPORTED_MODULE_38___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_Unite_png__WEBPACK_IMPORTED_MODULE_38__);
 /* harmony import */ var _penguinmod_extensions_UniteSmall_png__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./penguinmod/extensions/UniteSmall.png */ "./src/lib/libraries/extensions/penguinmod/extensions/UniteSmall.png");
 /* harmony import */ var _penguinmod_extensions_UniteSmall_png__WEBPACK_IMPORTED_MODULE_39___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_UniteSmall_png__WEBPACK_IMPORTED_MODULE_39__);
-/* harmony import */ var _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./penguinmod/extensions/griffpatch_physics.png */ "./src/lib/libraries/extensions/penguinmod/extensions/griffpatch_physics.png");
-/* harmony import */ var _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_40___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_40__);
-/* harmony import */ var _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./penguinmod/extensions/griffpatch_physicsIcon.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/griffpatch_physicsIcon.svg");
-/* harmony import */ var _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_41___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_41__);
+/* harmony import */ var _penguinmod_extensions_Structs_png__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./penguinmod/extensions/Structs.png */ "./src/lib/libraries/extensions/penguinmod/extensions/Structs.png");
+/* harmony import */ var _penguinmod_extensions_Structs_png__WEBPACK_IMPORTED_MODULE_40___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_Structs_png__WEBPACK_IMPORTED_MODULE_40__);
+/* harmony import */ var _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./penguinmod/extensions/griffpatch_physics.png */ "./src/lib/libraries/extensions/penguinmod/extensions/griffpatch_physics.png");
+/* harmony import */ var _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_41___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_41__);
+/* harmony import */ var _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./penguinmod/extensions/griffpatch_physicsIcon.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/griffpatch_physicsIcon.svg");
+/* harmony import */ var _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_42___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_42__);
 
 
 
@@ -33409,6 +33411,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
  // TODO: Rename file names to match variable/prop names?
+
 
 
 
@@ -33571,6 +33574,20 @@ __webpack_require__.r(__webpack_exports__);
   incompatibleWithScratch: true
 }, {
   name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Structs",
+    id: "jwStructs.jwStructsExtension.name"
+  }),
+  extensionId: 'jwStructs',
+  iconURL: _penguinmod_extensions_Structs_png__WEBPACK_IMPORTED_MODULE_40___default.a,
+  insetIconURL: _penguinmod_extensions_Structs_png__WEBPACK_IMPORTED_MODULE_40___default.a,
+  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Structs for struct things. Usful for oop",
+    id: "jwStructs.jwStructsExtension.description"
+  }),
+  featured: true,
+  incompatibleWithScratch: true
+}, {
+  name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "Prism",
     id: "jgPrism.jgPrismExtension.name"
   }),
@@ -33601,8 +33618,8 @@ __webpack_require__.r(__webpack_exports__);
   name: 'Physics',
   extensionId: 'griffpatch',
   collaborator: 'Griffpatch',
-  iconURL: _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_40___default.a,
-  insetIconURL: _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_41___default.a,
+  iconURL: _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_41___default.a,
+  insetIconURL: _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_42___default.a,
   description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "Box2D Physics extension created by Griffpatch.",
     id: "gui.extension.test.description"
@@ -33851,6 +33868,17 @@ module.exports = __webpack_require__.p + "static/assets/800f6f1573677d59954e8d31
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "static/assets/7679e8aa3b5a6b745823e00a7b950065.png";
+
+/***/ }),
+
+/***/ "./src/lib/libraries/extensions/penguinmod/extensions/Structs.png":
+/*!************************************************************************!*\
+  !*** ./src/lib/libraries/extensions/penguinmod/extensions/Structs.png ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/assets/195b65444703293e0624ff4e09c13c81.png";
 
 /***/ }),
 
