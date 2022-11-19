@@ -1,3 +1,5 @@
+last 3 versions
+electron >= 11
 chrome >= 70
 chromeandroid >= 70
 ios >= 12
