@@ -168,7 +168,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "/* #E5F0FF */ /* #E9F1FC */ /* #D9E3F2 */ /* 90% transparent version of motion-primary */ /* #FFFFFF */ /* 25% transparent version of ui-white */ /* 25% transparent version of ui-white */ /* 25% transparent version of ui-white */ /* 15% transparent version of black */ /* #575E75 */ /* 35% transparent version of motion-primary */ /* 15% transparent version of motion-primary */ /* opt-in theme overrides */ /* #FF661A */ /* #E64D00 */ /* #CF63CF */ /* #BD42BD */ /* #FFAB19 */ /* #FF8C1A */ /* #0FBD8C */ /* #0FBD8C */ /* #FF8C1A */ /* #FFB366 */ /* #FF8C1A */ /* 35% transparent version of extensions-primary */ /* opaque version of extensions-transparent, on white bg */ /* lighter than motion-primary */ * {\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n} body {\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n    margin: 0;\n    padding: 0;\n    background: white;\n} body[theme=\"dark\"] {\n    background-color: #111;\n    color: #eee;\n} a {\n    color: blue;\n} [theme=\"dark\"] a {\n    color: #4af;\n} .credits_main_1Rb15 section {\n    max-width: 900px;\n    margin: auto;\n    margin-bottom: 30px;\n} .credits_header-container_10IXn {\n    color: white;\n    background-color: hsla(0, 100%, 65%, 1);\n    padding: 20px 0;\n    text-align: center;\n    margin-bottom: 30px;\n} .credits_header-text_2vWAl {\n\n} .credits_users_2AuwB {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -ms-flex-wrap: wrap;\n        flex-wrap: wrap;\n} .credits_user-image_2rw9X {\n    margin-right: 12px;\n} .credits_user_2nYLS {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    width: 300px;\n    padding: 4px;\n    border-radius: 4px;\n    font-size: 1.25rem;\n    color: inherit !important;\n    text-decoration: none;\n    -webkit-transition: background .2s;\n    -o-transition: background .2s;\n    transition: background .2s;\n} .credits_user_2nYLS:link:hover {\n    background: #eee;\n} [theme=\"dark\"] .credits_user_2nYLS:link:hover {\n    background: #222;\n}\n", ""]);
+exports.push([module.i, "/* #E5F0FF */ /* #E9F1FC */ /* #D9E3F2 */ /* 90% transparent version of motion-primary */ /* #FFFFFF */ /* 25% transparent version of ui-white */ /* 25% transparent version of ui-white */ /* 25% transparent version of ui-white */ /* 15% transparent version of black */ /* #575E75 */ /* 35% transparent version of motion-primary */ /* 15% transparent version of motion-primary */ /* opt-in theme overrides */ /* #FF661A */ /* #E64D00 */ /* #CF63CF */ /* #BD42BD */ /* #FFAB19 */ /* #FF8C1A */ /* #0FBD8C */ /* #0FBD8C */ /* #FF8C1A */ /* #FFB366 */ /* #FF8C1A */ /* 35% transparent version of extensions-primary */ /* opaque version of extensions-transparent, on white bg */ /* lighter than motion-primary */ * {\n    box-sizing: border-box;\n} body {\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n    margin: 0;\n    padding: 0;\n    background: white;\n} body[theme=\"dark\"] {\n    background-color: #111;\n    color: #eee;\n} a {\n    color: blue;\n} [theme=\"dark\"] a {\n    color: #4af;\n} .credits_main_1Rb15 section {\n    max-width: 900px;\n    margin: auto;\n    margin-bottom: 30px;\n} .credits_header-container_10IXn {\n    color: white;\n    background-color: hsla(0, 100%, 65%, 1);\n    padding: 20px 0;\n    text-align: center;\n    margin-bottom: 30px;\n} .credits_header-text_2vWAl {\n\n} .credits_users_2AuwB {\n    display: flex;\n    flex-direction: row;\n    flex-wrap: wrap;\n} .credits_user-image_2rw9X {\n    margin-right: 12px;\n} .credits_user_2nYLS {\n    display: flex;\n    align-items: center;\n    width: 300px;\n    padding: 4px;\n    border-radius: 4px;\n    font-size: 1.25rem;\n    color: inherit !important;\n    text-decoration: none;\n    transition: background .2s;\n} .credits_user_2nYLS:link:hover {\n    background: #eee;\n} [theme=\"dark\"] .credits_user_2nYLS:link:hover {\n    background: #222;\n}\n", ""]);
 
 // exports
 exports.locals = {
@@ -211,37 +211,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _raw_loader_tw_theme_dark_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! raw-loader!./tw-theme-dark.css */ "./node_modules/raw-loader/index.js!./src/lib/tw-theme-dark.css");
 /* harmony import */ var _raw_loader_tw_theme_dark_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_raw_loader_tw_theme_dark_css__WEBPACK_IMPORTED_MODULE_1__);
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 
-
-var THEME_KEY = 'tw:theme';
-var darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-var getInitialDarkMode = function getInitialDarkMode() {
+const THEME_KEY = 'tw:theme';
+const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+const getInitialDarkMode = () => {
   try {
-    var item = localStorage.getItem(THEME_KEY);
+    const item = localStorage.getItem(THEME_KEY);
 
     if (item !== null) {
       return item === 'dark';
@@ -251,97 +229,76 @@ var getInitialDarkMode = function getInitialDarkMode() {
 
   return darkMediaQuery.matches;
 };
-var darkModeStylesheet = document.createElement('style');
+const darkModeStylesheet = document.createElement('style');
 darkModeStylesheet.textContent = _raw_loader_tw_theme_dark_css__WEBPACK_IMPORTED_MODULE_1___default.a;
 
-var ThemeHOC = function ThemeHOC(WrappedComponent) {
-  var ThemeComponent = /*#__PURE__*/function (_React$Component) {
-    _inherits(ThemeComponent, _React$Component);
-
-    var _super = _createSuper(ThemeComponent);
-
-    function ThemeComponent(props) {
-      var _this;
-
-      _classCallCheck(this, ThemeComponent);
-
-      _this = _super.call(this, props);
-      _this.handleQueryChange = _this.handleQueryChange.bind(_assertThisInitialized(_this));
-      _this.handleClickTheme = _this.handleClickTheme.bind(_assertThisInitialized(_this));
-      _this.state = {
+const ThemeHOC = function ThemeHOC(WrappedComponent) {
+  class ThemeComponent extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+    constructor(props) {
+      super(props);
+      this.handleQueryChange = this.handleQueryChange.bind(this);
+      this.handleClickTheme = this.handleClickTheme.bind(this);
+      this.state = {
         dark: getInitialDarkMode()
       };
-      return _this;
     }
 
-    _createClass(ThemeComponent, [{
-      key: "componentDidMount",
-      value: function componentDidMount() {
-        // media query does not have listeners in legacy edge
-        if (darkMediaQuery.addEventListener) {
-          darkMediaQuery.addEventListener('change', this.handleQueryChange);
-        }
+    componentDidMount() {
+      // media query does not have listeners in legacy edge
+      if (darkMediaQuery.addEventListener) {
+        darkMediaQuery.addEventListener('change', this.handleQueryChange);
+      }
 
-        this.updateDark();
-      }
-    }, {
-      key: "componentDidUpdate",
-      value: function componentDidUpdate() {
-        try {
-          localStorage.setItem(THEME_KEY, this.state.dark ? 'dark' : 'light');
-        } catch (e) {// ignore
-        }
+      this.updateDark();
+    }
 
-        this.updateDark();
+    componentDidUpdate() {
+      try {
+        localStorage.setItem(THEME_KEY, this.state.dark ? 'dark' : 'light');
+      } catch (e) {// ignore
       }
-    }, {
-      key: "componentWillUnmount",
-      value: function componentWillUnmount() {
-        // media query does not have listeners in legacy edge
-        if (darkMediaQuery.removeEventListener) {
-          darkMediaQuery.removeEventListener('change', this.handleQueryChange);
-        }
-      }
-    }, {
-      key: "updateDark",
-      value: function updateDark() {
-        var dark = this.state.dark;
-        document.body.setAttribute('theme', dark ? 'dark' : 'light');
 
-        if (dark && !darkModeStylesheet.parentNode) {
-          document.body.insertBefore(darkModeStylesheet, document.body.firstChild);
-        } else if (!dark && darkModeStylesheet.parentNode) {
-          darkModeStylesheet.parentNode.removeChild(darkModeStylesheet);
-        }
-      }
-    }, {
-      key: "handleQueryChange",
-      value: function handleQueryChange() {
-        this.setState({
-          dark: darkMediaQuery.matches
-        });
-      }
-    }, {
-      key: "handleClickTheme",
-      value: function handleClickTheme() {
-        this.setState(function (state) {
-          return {
-            dark: !state.dark
-          };
-        });
-      }
-    }, {
-      key: "render",
-      value: function render() {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(WrappedComponent, _extends({
-          onClickTheme: this.handleClickTheme,
-          isDark: this.state.dark
-        }, this.props));
-      }
-    }]);
+      this.updateDark();
+    }
 
-    return ThemeComponent;
-  }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+    componentWillUnmount() {
+      // media query does not have listeners in legacy edge
+      if (darkMediaQuery.removeEventListener) {
+        darkMediaQuery.removeEventListener('change', this.handleQueryChange);
+      }
+    }
+
+    updateDark() {
+      const dark = this.state.dark;
+      document.body.setAttribute('theme', dark ? 'dark' : 'light');
+
+      if (dark && !darkModeStylesheet.parentNode) {
+        document.body.insertBefore(darkModeStylesheet, document.body.firstChild);
+      } else if (!dark && darkModeStylesheet.parentNode) {
+        darkModeStylesheet.parentNode.removeChild(darkModeStylesheet);
+      }
+    }
+
+    handleQueryChange() {
+      this.setState({
+        dark: darkMediaQuery.matches
+      });
+    }
+
+    handleClickTheme() {
+      this.setState(state => ({
+        dark: !state.dark
+      }));
+    }
+
+    render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(WrappedComponent, _extends({
+        onClickTheme: this.handleClickTheme,
+        isDark: this.state.dark
+      }, this.props));
+    }
+
+  }
 
   return ThemeComponent;
 };
@@ -359,7 +316,7 @@ var ThemeHOC = function ThemeHOC(WrappedComponent) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var appTarget = document.getElementById('app'); // Remove everything from the target to fix macOS Safari "Save Page As",
+const appTarget = document.getElementById('app'); // Remove everything from the target to fix macOS Safari "Save Page As",
 
 while (appTarget.firstChild) {
   appTarget.removeChild(appTarget.firstChild);
@@ -436,24 +393,23 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 document.documentElement.lang = 'en';
 
-var User = function User(_ref) {
-  var image = _ref.image,
-      text = _ref.text,
-      href = _ref.href;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: href,
-    target: "_blank",
-    rel: "noreferrer",
-    className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.user
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.userImage,
-    src: image,
-    width: "60",
-    height: "60"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.userInfo
-  }, text));
-};
+const User = ({
+  image,
+  text,
+  href
+}) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  href: href,
+  target: "_blank",
+  rel: "noreferrer",
+  className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.user
+}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+  className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.userImage,
+  src: image,
+  width: "60",
+  height: "60"
+}), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.userInfo
+}, text));
 
 User.propTypes = {
   image: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.string.isRequired,
@@ -461,46 +417,41 @@ User.propTypes = {
   href: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.string
 };
 
-var UserList = function UserList(_ref2) {
-  var users = _ref2.users;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.users
-  }, users.map(function (data, index) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(User, _extends({
-      key: index
-    }, data));
-  }));
-};
+const UserList = ({
+  users
+}) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.users
+}, users.map((data, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(User, _extends({
+  key: index
+}, data))));
 
 UserList.propTypes = {
   users: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.object)
 };
 
-var Credits = function Credits() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("main", {
-    className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.main
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
-    className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.headerContainer
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
-    className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.headerText
-  }, "TurboWarp Credits")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "The TurboWarp project is made possible by the work of many volunteers.")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Fosshost"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "The TurboWarp project is proudly hosted by ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: "https://fosshost.org/"
-  }, "Fosshost"), " who provide free computing resources to the open source community."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: "https://fosshost.org/donate"
-  }, "Donate to support Fosshost.")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: "https://fosshost.org/"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: _fosshost_light_png__WEBPACK_IMPORTED_MODULE_6___default.a,
-    width: "250",
-    height: "125"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Scratch"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "TurboWarp is based on the work of the ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: "https://scratch.mit.edu/credits"
-  }, "Scratch contributors"), " but is not endorsed by Scratch in any way."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: "https://scratch.mit.edu/donate"
-  }, "Donate to support Scratch."))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Addons"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserList, {
-    users: _users__WEBPACK_IMPORTED_MODULE_7__["default"].addonDevelopers
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Translators"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "More than 100 people have helped translate TurboWarp and its addons into many languages -- far more than we could hope to list here.")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", null, "Individual contributors are listed in no particular order. The order is randomized each visit."))));
-};
+const Credits = () => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("main", {
+  className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.main
+}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
+  className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.headerContainer
+}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+  className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.headerText
+}, "TurboWarp Credits")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "The TurboWarp project is made possible by the work of many volunteers.")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Fosshost"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "The TurboWarp project is proudly hosted by ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  href: "https://fosshost.org/"
+}, "Fosshost"), " who provide free computing resources to the open source community."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  href: "https://fosshost.org/donate"
+}, "Donate to support Fosshost.")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  href: "https://fosshost.org/"
+}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+  src: _fosshost_light_png__WEBPACK_IMPORTED_MODULE_6___default.a,
+  width: "250",
+  height: "125"
+}))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Scratch"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "TurboWarp is based on the work of the ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  href: "https://scratch.mit.edu/credits"
+}, "Scratch contributors"), " but is not endorsed by Scratch in any way."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  href: "https://scratch.mit.edu/donate"
+}, "Donate to support Scratch."))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Addons"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserList, {
+  users: _users__WEBPACK_IMPORTED_MODULE_7__["default"].addonDevelopers
+})), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Translators"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "More than 100 people have helped translate TurboWarp and its addons into many languages -- far more than we could hope to list here.")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", null, "Individual contributors are listed in no particular order. The order is randomized each visit."))));
 
 document.body.setAttribute('theme', Object(_lib_tw_theme_hoc_jsx__WEBPACK_IMPORTED_MODULE_5__["getInitialDarkMode"])() ? 'dark' : 'light');
 react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Credits, null), _app_target__WEBPACK_IMPORTED_MODULE_3__["default"]);
@@ -527,10 +478,10 @@ module.exports = __webpack_require__.p + "static/assets/caabb627d674254770f4108f
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var shuffle = function shuffle(list) {
-  for (var i = list.length - 1; i > 0; i--) {
-    var random = Math.floor(Math.random() * (i + 1));
-    var tmp = list[i];
+const shuffle = list => {
+  for (let i = list.length - 1; i > 0; i--) {
+    const random = Math.floor(Math.random() * (i + 1));
+    const tmp = list[i];
     list[i] = list[random];
     list[random] = tmp;
   }
@@ -538,18 +489,17 @@ var shuffle = function shuffle(list) {
   return list;
 };
 
-var fromHardcoded = function fromHardcoded(_ref) {
-  var userId = _ref.userId,
-      username = _ref.username,
-      name = _ref.name;
-  return {
-    image: "https://trampoline.turbowarp.org/avatars/".concat(userId),
-    href: "https://scratch.mit.edu/users/".concat(username, "/"),
-    text: name || username
-  };
-};
+const fromHardcoded = ({
+  userId,
+  username,
+  name
+}) => ({
+  image: "https://trampoline.turbowarp.org/avatars/".concat(userId),
+  href: "https://scratch.mit.edu/users/".concat(username, "/"),
+  text: name || username
+});
 
-var addonDevelopers = [{
+const addonDevelopers = [{
   userId: '34018398',
   username: 'Jeffalo'
 }, {

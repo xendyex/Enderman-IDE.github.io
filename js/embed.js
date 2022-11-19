@@ -65,7 +65,7 @@ var GUI =
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/" + ({"addon-settings~addons~editor~fullscreen~player":"addon-settings~addons~editor~fullscreen~player","addons":"addons","iframe-extension-worker":"iframe-extension-worker","library-backdrops":"library-backdrops","library-costumes":"library-costumes","library-sounds":"library-sounds","library-sprites":"library-sprites","addon-default-entry":"addon-default-entry","addon-entry-2d-color-picker":"addon-entry-2d-color-picker","addon-entry-better-img-uploads":"addon-entry-better-img-uploads","addon-entry-block-count":"addon-entry-block-count","addon-entry-block-palette-icons":"addon-entry-block-palette-icons","addon-entry-blocks2image":"addon-entry-blocks2image","addon-entry-cat-blocks":"addon-entry-cat-blocks","addon-entry-clones":"addon-entry-clones","addon-entry-columns":"addon-entry-columns","addon-entry-custom-block-shape":"addon-entry-custom-block-shape","addon-entry-custom-block-text":"addon-entry-custom-block-text","addon-entry-custom-zoom":"addon-entry-custom-zoom","addon-entry-data-category-tweaks-v2":"addon-entry-data-category-tweaks-v2","addon-entry-debugger":"addon-entry-debugger","addon-entry-default-costume-editor-color":"addon-entry-default-costume-editor-color","addon-entry-disable-paste-offset":"addon-entry-disable-paste-offset","addon-entry-disable-stage-drag-select":"addon-entry-disable-stage-drag-select","addon-entry-editor-buttons-reverse-order":"addon-entry-editor-buttons-reverse-order","addon-entry-editor-colored-context-menus":"addon-entry-editor-colored-context-menus","addon-entry-editor-extra-keys":"addon-entry-editor-extra-keys","addon-entry-editor-sounds":"addon-entry-editor-sounds","addon-entry-editor-stage-left":"addon-entry-editor-stage-left","addon-entry-editor-stepping":"addon-entry-editor-stepping","addon-entry-editor-theme3":"addon-entry-editor-theme3","addon-entry-fullscreen":"addon-entry-fullscreen","addon-entry-gamepad":"addon-entry-gamepad","addon-entry-hide-delete-button":"addon-entry-hide-delete-button","addon-entry-hide-flyout":"addon-entry-hide-flyout","addon-entry-hide-new-variables":"addon-entry-hide-new-variables","addon-entry-hide-stage":"addon-entry-hide-stage","addon-entry-initialise-sprite-position":"addon-entry-initialise-sprite-position","addon-entry-load-extensions":"addon-entry-load-extensions","addon-entry-mediarecorder":"addon-entry-mediarecorder","addon-entry-mouse-pos":"addon-entry-mouse-pos","addon-entry-no-script-bumping":"addon-entry-no-script-bumping","addon-entry-paint-by-default":"addon-entry-paint-by-default","addon-entry-remove-curved-stage-border":"addon-entry-remove-curved-stage-border","addon-entry-remove-sprite-confirm":"addon-entry-remove-sprite-confirm","addon-entry-script-snap":"addon-entry-script-snap","addon-entry-search-sprites":"addon-entry-search-sprites","addon-entry-swap-local-global":"addon-entry-swap-local-global","addon-entry-transparent-orphans":"addon-entry-transparent-orphans","addon-entry-tw-disable-compiler":"addon-entry-tw-disable-compiler","addon-entry-tw-remove-backpack":"addon-entry-tw-remove-backpack","addon-entry-tw-remove-feedback":"addon-entry-tw-remove-feedback","addon-entry-tw-straighten-comments":"addon-entry-tw-straighten-comments","addon-entry-variable-manager":"addon-entry-variable-manager","addon-entry-zebra-striping":"addon-entry-zebra-striping","addon-l10n-de":"addon-l10n-de","addon-l10n-es":"addon-l10n-es","addon-l10n-fr":"addon-l10n-fr","addon-l10n-hu":"addon-l10n-hu","addon-l10n-it":"addon-l10n-it","addon-l10n-ja":"addon-l10n-ja","addon-l10n-ko":"addon-l10n-ko","addon-l10n-nl":"addon-l10n-nl","addon-l10n-pl":"addon-l10n-pl","addon-l10n-pt":"addon-l10n-pt","addon-l10n-ro":"addon-l10n-ro","addon-l10n-ru":"addon-l10n-ru","addon-l10n-sl":"addon-l10n-sl","addon-l10n-tr":"addon-l10n-tr"}[chunkId]||chunkId) + ".js"
+/******/ 		return __webpack_require__.p + "js/" + ({"addon-settings~addons~editor~fullscreen~player":"addon-settings~addons~editor~fullscreen~player","addons":"addons","iframe-extension-worker":"iframe-extension-worker","library-backdrops":"library-backdrops","library-costumes":"library-costumes","library-sounds":"library-sounds","library-sprites":"library-sprites","sb":"sb","addon-default-entry":"addon-default-entry","addon-entry-2d-color-picker":"addon-entry-2d-color-picker","addon-entry-better-img-uploads":"addon-entry-better-img-uploads","addon-entry-block-count":"addon-entry-block-count","addon-entry-block-palette-icons":"addon-entry-block-palette-icons","addon-entry-blocks2image":"addon-entry-blocks2image","addon-entry-cat-blocks":"addon-entry-cat-blocks","addon-entry-clones":"addon-entry-clones","addon-entry-columns":"addon-entry-columns","addon-entry-custom-block-shape":"addon-entry-custom-block-shape","addon-entry-custom-block-text":"addon-entry-custom-block-text","addon-entry-custom-zoom":"addon-entry-custom-zoom","addon-entry-data-category-tweaks-v2":"addon-entry-data-category-tweaks-v2","addon-entry-debugger":"addon-entry-debugger","addon-entry-default-costume-editor-color":"addon-entry-default-costume-editor-color","addon-entry-disable-paste-offset":"addon-entry-disable-paste-offset","addon-entry-disable-stage-drag-select":"addon-entry-disable-stage-drag-select","addon-entry-editor-buttons-reverse-order":"addon-entry-editor-buttons-reverse-order","addon-entry-editor-colored-context-menus":"addon-entry-editor-colored-context-menus","addon-entry-editor-extra-keys":"addon-entry-editor-extra-keys","addon-entry-editor-sounds":"addon-entry-editor-sounds","addon-entry-editor-stage-left":"addon-entry-editor-stage-left","addon-entry-editor-stepping":"addon-entry-editor-stepping","addon-entry-editor-theme3":"addon-entry-editor-theme3","addon-entry-fullscreen":"addon-entry-fullscreen","addon-entry-gamepad":"addon-entry-gamepad","addon-entry-hide-delete-button":"addon-entry-hide-delete-button","addon-entry-hide-flyout":"addon-entry-hide-flyout","addon-entry-hide-new-variables":"addon-entry-hide-new-variables","addon-entry-hide-stage":"addon-entry-hide-stage","addon-entry-initialise-sprite-position":"addon-entry-initialise-sprite-position","addon-entry-load-extensions":"addon-entry-load-extensions","addon-entry-mediarecorder":"addon-entry-mediarecorder","addon-entry-mouse-pos":"addon-entry-mouse-pos","addon-entry-no-script-bumping":"addon-entry-no-script-bumping","addon-entry-paint-by-default":"addon-entry-paint-by-default","addon-entry-remove-curved-stage-border":"addon-entry-remove-curved-stage-border","addon-entry-remove-sprite-confirm":"addon-entry-remove-sprite-confirm","addon-entry-script-snap":"addon-entry-script-snap","addon-entry-search-sprites":"addon-entry-search-sprites","addon-entry-swap-local-global":"addon-entry-swap-local-global","addon-entry-transparent-orphans":"addon-entry-transparent-orphans","addon-entry-tw-disable-compiler":"addon-entry-tw-disable-compiler","addon-entry-tw-remove-backpack":"addon-entry-tw-remove-backpack","addon-entry-tw-remove-feedback":"addon-entry-tw-remove-feedback","addon-entry-tw-straighten-comments":"addon-entry-tw-straighten-comments","addon-entry-variable-manager":"addon-entry-variable-manager","addon-entry-zebra-striping":"addon-entry-zebra-striping","addon-l10n-de":"addon-l10n-de","addon-l10n-es":"addon-l10n-es","addon-l10n-fr":"addon-l10n-fr","addon-l10n-hu":"addon-l10n-hu","addon-l10n-it":"addon-l10n-it","addon-l10n-ja":"addon-l10n-ja","addon-l10n-ko":"addon-l10n-ko","addon-l10n-nl":"addon-l10n-nl","addon-l10n-pl":"addon-l10n-pl","addon-l10n-pt":"addon-l10n-pt","addon-l10n-ro":"addon-l10n-ro","addon-l10n-ru":"addon-l10n-ru","addon-l10n-sl":"addon-l10n-sl","addon-l10n-tr":"addon-l10n-tr"}[chunkId]||chunkId) + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -245,33 +245,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reducers_mode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../reducers/mode */ "./src/reducers/mode.js");
 /* harmony import */ var _reducers_tw__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../reducers/tw */ "./src/reducers/tw.js");
 /* harmony import */ var _tw_fullscreen_api__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./tw-fullscreen-api */ "./src/lib/tw-fullscreen-api.js");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-var _excluded = ["isFullScreen", "onSetIsFullScreen", "onSetWindowIsFullScreen"];
+const _excluded = ["isFullScreen", "onSetIsFullScreen", "onSetWindowIsFullScreen"];
 
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 
 
@@ -280,73 +259,57 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-
-var TWFullScreenHOC = function TWFullScreenHOC(WrappedComponent) {
-  var FullScreenComponent = /*#__PURE__*/function (_React$Component) {
-    _inherits(FullScreenComponent, _React$Component);
-
-    var _super = _createSuper(FullScreenComponent);
-
-    function FullScreenComponent(props) {
-      var _this;
-
-      _classCallCheck(this, FullScreenComponent);
-
-      _this = _super.call(this, props);
-      lodash_bindall__WEBPACK_IMPORTED_MODULE_0___default()(_assertThisInitialized(_this), ['handleFullScreenChange']);
-      return _this;
+const TWFullScreenHOC = function TWFullScreenHOC(WrappedComponent) {
+  class FullScreenComponent extends react__WEBPACK_IMPORTED_MODULE_1___default.a.Component {
+    constructor(props) {
+      super(props);
+      lodash_bindall__WEBPACK_IMPORTED_MODULE_0___default()(this, ['handleFullScreenChange']);
     }
 
-    _createClass(FullScreenComponent, [{
-      key: "componentDidMount",
-      value: function componentDidMount() {
-        document.addEventListener('fullscreenchange', this.handleFullScreenChange);
-        document.addEventListener('webkitfullscreenchange', this.handleFullScreenChange);
-      }
-    }, {
-      key: "shouldComponentUpdate",
-      value: function shouldComponentUpdate(nextProps) {
-        return this.props.isFullScreen !== nextProps.isFullScreen;
-      }
-    }, {
-      key: "componentDidUpdate",
-      value: function componentDidUpdate() {
-        if (_tw_fullscreen_api__WEBPACK_IMPORTED_MODULE_6__["default"].available()) {
-          if (this.props.isFullScreen) {
-            _tw_fullscreen_api__WEBPACK_IMPORTED_MODULE_6__["default"].request();
-          } else if (_tw_fullscreen_api__WEBPACK_IMPORTED_MODULE_6__["default"].enabled()) {
-            _tw_fullscreen_api__WEBPACK_IMPORTED_MODULE_6__["default"].exit();
-          }
+    componentDidMount() {
+      document.addEventListener('fullscreenchange', this.handleFullScreenChange);
+      document.addEventListener('webkitfullscreenchange', this.handleFullScreenChange);
+    }
+
+    shouldComponentUpdate(nextProps) {
+      return this.props.isFullScreen !== nextProps.isFullScreen;
+    }
+
+    componentDidUpdate() {
+      if (_tw_fullscreen_api__WEBPACK_IMPORTED_MODULE_6__["default"].available()) {
+        if (this.props.isFullScreen) {
+          _tw_fullscreen_api__WEBPACK_IMPORTED_MODULE_6__["default"].request();
+        } else if (_tw_fullscreen_api__WEBPACK_IMPORTED_MODULE_6__["default"].enabled()) {
+          _tw_fullscreen_api__WEBPACK_IMPORTED_MODULE_6__["default"].exit();
         }
       }
-    }, {
-      key: "componentWillUnmount",
-      value: function componentWillUnmount() {
-        document.removeEventListener('fullscreenchange', this.handleFullScreenChange);
-        document.removeEventListener('webkitfullscreenchange', this.handleFullScreenChange);
-      }
-    }, {
-      key: "handleFullScreenChange",
-      value: function handleFullScreenChange() {
-        var isFullScreen = _tw_fullscreen_api__WEBPACK_IMPORTED_MODULE_6__["default"].enabled();
-        this.props.onSetWindowIsFullScreen(isFullScreen);
-        this.props.onSetIsFullScreen(isFullScreen);
-      }
-    }, {
-      key: "render",
-      value: function render() {
-        var _this$props = this.props,
-            isFullScreen = _this$props.isFullScreen,
-            onSetIsFullScreen = _this$props.onSetIsFullScreen,
-            onSetWindowIsFullScreen = _this$props.onSetWindowIsFullScreen,
+    }
+
+    componentWillUnmount() {
+      document.removeEventListener('fullscreenchange', this.handleFullScreenChange);
+      document.removeEventListener('webkitfullscreenchange', this.handleFullScreenChange);
+    }
+
+    handleFullScreenChange() {
+      const isFullScreen = _tw_fullscreen_api__WEBPACK_IMPORTED_MODULE_6__["default"].enabled();
+      this.props.onSetWindowIsFullScreen(isFullScreen);
+      this.props.onSetIsFullScreen(isFullScreen);
+    }
+
+    render() {
+      const _this$props = this.props,
+            {
+        /* eslint-disable no-unused-vars */
+        isFullScreen,
+        onSetIsFullScreen,
+        onSetWindowIsFullScreen
+      } = _this$props,
             props = _objectWithoutProperties(_this$props, _excluded);
 
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(WrappedComponent, props);
-      }
-    }]);
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(WrappedComponent, props);
+    }
 
-    return FullScreenComponent;
-  }(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+  }
 
   FullScreenComponent.propTypes = {
     isFullScreen: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.bool,
@@ -354,22 +317,14 @@ var TWFullScreenHOC = function TWFullScreenHOC(WrappedComponent) {
     onSetWindowIsFullScreen: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func
   };
 
-  var mapStateToProps = function mapStateToProps(state) {
-    return {
-      isFullScreen: state.scratchGui.mode.isFullScreen
-    };
-  };
+  const mapStateToProps = state => ({
+    isFullScreen: state.scratchGui.mode.isFullScreen
+  });
 
-  var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-    return {
-      onSetIsFullScreen: function onSetIsFullScreen(isFullScreen) {
-        return dispatch(Object(_reducers_mode__WEBPACK_IMPORTED_MODULE_4__["setFullScreen"])(isFullScreen));
-      },
-      onSetWindowIsFullScreen: function onSetWindowIsFullScreen(isFullScreen) {
-        return dispatch(Object(_reducers_tw__WEBPACK_IMPORTED_MODULE_5__["setIsWindowFullScreen"])(isFullScreen));
-      }
-    };
-  };
+  const mapDispatchToProps = dispatch => ({
+    onSetIsFullScreen: isFullScreen => dispatch(Object(_reducers_mode__WEBPACK_IMPORTED_MODULE_4__["setFullScreen"])(isFullScreen)),
+    onSetWindowIsFullScreen: isFullScreen => dispatch(Object(_reducers_tw__WEBPACK_IMPORTED_MODULE_5__["setIsWindowFullScreen"])(isFullScreen))
+  });
 
   return Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapStateToProps, mapDispatchToProps)(FullScreenComponent);
 };
@@ -413,10 +368,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var getProjectId = function getProjectId() {
+const getProjectId = () => {
   // For compatibility reasons, we first look at the hash.
   // eg. https://turbowarp.org/embed.html#1
-  var hashMatch = location.hash.match(/#(\d+)/);
+  const hashMatch = location.hash.match(/#(\d+)/);
 
   if (hashMatch !== null) {
     return hashMatch[1];
@@ -424,7 +379,7 @@ var getProjectId = function getProjectId() {
   // eg. https://turbowarp.org/1/embed
 
 
-  var pathMatch = location.pathname.match(/(\d+)\/embed/);
+  const pathMatch = location.pathname.match(/(\d+)\/embed/);
 
   if (pathMatch !== null) {
     return pathMatch[pathMatch.length - 1];
@@ -433,23 +388,23 @@ var getProjectId = function getProjectId() {
   return '0';
 };
 
-var projectId = getProjectId();
-var urlParams = new URLSearchParams(location.search);
-var vm;
+const projectId = getProjectId();
+const urlParams = new URLSearchParams(location.search);
+let vm;
 
-var onVmInit = function onVmInit(_vm) {
+const onVmInit = _vm => {
   vm = _vm;
   vm.runtime.renderer.setPrivateSkinAccess(false);
 };
 
-var onProjectLoaded = function onProjectLoaded() {
+const onProjectLoaded = () => {
   if (urlParams.has('autoplay')) {
     vm.start();
     vm.greenFlag();
   }
 };
 
-var WrappedGUI = Object(redux__WEBPACK_IMPORTED_MODULE_3__["compose"])(_lib_app_state_hoc_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], _lib_tw_state_manager_hoc_jsx__WEBPACK_IMPORTED_MODULE_7__["default"], _lib_tw_embed_fullscreen_hoc_jsx__WEBPACK_IMPORTED_MODULE_6__["default"])(_render_gui_jsx__WEBPACK_IMPORTED_MODULE_9__["default"]);
+const WrappedGUI = Object(redux__WEBPACK_IMPORTED_MODULE_3__["compose"])(_lib_app_state_hoc_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], _lib_tw_state_manager_hoc_jsx__WEBPACK_IMPORTED_MODULE_7__["default"], _lib_tw_embed_fullscreen_hoc_jsx__WEBPACK_IMPORTED_MODULE_6__["default"])(_render_gui_jsx__WEBPACK_IMPORTED_MODULE_9__["default"]);
 Object(react_modal__WEBPACK_IMPORTED_MODULE_4__["setAppElement"])(_app_target__WEBPACK_IMPORTED_MODULE_10__["default"]);
 react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(WrappedGUI, {
   isEmbedded: true,

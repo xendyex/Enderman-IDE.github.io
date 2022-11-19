@@ -127,38 +127,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "singleStep", function() { return singleStep; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setup", function() { return setup; });
 /* harmony import */ var _event_target_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../event-target.js */ "./src/addons/event-target.js");
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 
 /* inserted by pull.js */
 // https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/thread.js#L198
 
-var STATUS_RUNNING = 0;
-var STATUS_PROMISE_WAIT = 1;
-var STATUS_YIELD = 2;
-var STATUS_YIELD_TICK = 3;
-var STATUS_DONE = 4;
-var vm;
-var paused = false;
-var pausedThreadState = new WeakMap();
-var pauseNewThreads = false;
-var steppingThread = null;
-var eventTarget = new _event_target_js__WEBPACK_IMPORTED_MODULE_0__["default"]();
-var isPaused = function isPaused() {
-  return paused;
-};
+const STATUS_RUNNING = 0;
+const STATUS_PROMISE_WAIT = 1;
+const STATUS_YIELD = 2;
+const STATUS_YIELD_TICK = 3;
+const STATUS_DONE = 4;
+let vm;
+let paused = false;
+let pausedThreadState = new WeakMap();
+let pauseNewThreads = false;
+let steppingThread = null;
+const eventTarget = new _event_target_js__WEBPACK_IMPORTED_MODULE_0__["default"]();
+const isPaused = () => paused;
 
-var pauseThread = function pauseThread(thread) {
+const pauseThread = thread => {
   if (thread.updateMonitor || pausedThreadState.has(thread)) {
     // Thread is already paused or shouldn't be paused.
     return;
   }
 
-  var pauseState = {
+  const pauseState = {
     time: vm.runtime.currentMSecs,
     status: thread.status
   };
@@ -174,13 +166,13 @@ var pauseThread = function pauseThread(thread) {
   thread.status = STATUS_PROMISE_WAIT;
 };
 
-var ensurePausedThreadIsStillPaused = function ensurePausedThreadIsStillPaused(thread) {
+const ensurePausedThreadIsStillPaused = thread => {
   if (thread.status === STATUS_DONE) {
     // If a paused thread is finished by single stepping, let it keep being done.
     return;
   }
 
-  var pauseState = pausedThreadState.get(thread);
+  const pauseState = pausedThreadState.get(thread);
 
   if (pauseState) {
     if (thread.status !== STATUS_PROMISE_WAIT) {
@@ -191,33 +183,33 @@ var ensurePausedThreadIsStillPaused = function ensurePausedThreadIsStillPaused(t
   }
 };
 
-var setSteppingThread = function setSteppingThread(thread) {
+const setSteppingThread = thread => {
   steppingThread = thread;
 };
 
-var compensateForTimePassedWhilePaused = function compensateForTimePassedWhilePaused(thread, pauseState) {
+const compensateForTimePassedWhilePaused = (thread, pauseState) => {
   // TW: Compiled threads store their timer in a different place.
   if (thread.timer) {
     thread.timer.startTime += vm.runtime.currentMSecs - pauseState.time;
   }
 
-  var stackFrame = thread.peekStackFrame();
+  const stackFrame = thread.peekStackFrame();
 
   if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
     stackFrame.executionContext.timer.startTime += vm.runtime.currentMSecs - pauseState.time;
   }
 };
 
-var stepUnsteppedThreads = function stepUnsteppedThreads(lastSteppedThread) {
+const stepUnsteppedThreads = lastSteppedThread => {
   // If we paused in the middle of a tick, we need to make sure to step the scripts that didn't get
   // stepped in that tick to avoid affecting project behavior.
-  var threads = vm.runtime.threads;
-  var startingIndex = getThreadIndex(lastSteppedThread);
+  const threads = vm.runtime.threads;
+  const startingIndex = getThreadIndex(lastSteppedThread);
 
   if (startingIndex !== -1) {
-    for (var i = startingIndex; i < threads.length; i++) {
-      var thread = threads[i];
-      var status = thread.status;
+    for (let i = startingIndex; i < threads.length; i++) {
+      const thread = threads[i];
+      const status = thread.status;
 
       if (status === STATUS_RUNNING || status === STATUS_YIELD || status === STATUS_YIELD_TICK) {
         vm.runtime.sequencer.activeThread = thread;
@@ -227,7 +219,7 @@ var stepUnsteppedThreads = function stepUnsteppedThreads(lastSteppedThread) {
   }
 };
 
-var setPaused = function setPaused(_paused) {
+const setPaused = _paused => {
   if (paused !== _paused) {
     paused = _paused;
     eventTarget.dispatchEvent(new CustomEvent("change"));
@@ -241,7 +233,7 @@ var setPaused = function setPaused(_paused) {
     }
 
     vm.runtime.threads.forEach(pauseThread);
-    var activeThread = vm.runtime.sequencer.activeThread;
+    const activeThread = vm.runtime.sequencer.activeThread;
 
     if (activeThread) {
       setSteppingThread(activeThread);
@@ -251,47 +243,33 @@ var setPaused = function setPaused(_paused) {
     vm.runtime.audioEngine.audioContext.resume();
     vm.runtime.ioDevices.clock.resume();
 
-    var _iterator = _createForOfIteratorHelper(vm.runtime.threads),
-        _step;
+    for (const thread of vm.runtime.threads) {
+      const pauseState = pausedThreadState.get(thread);
 
-    try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var thread = _step.value;
-        var pauseState = pausedThreadState.get(thread);
-
-        if (pauseState) {
-          compensateForTimePassedWhilePaused(thread, pauseState);
-          thread.status = pauseState.status;
-        }
+      if (pauseState) {
+        compensateForTimePassedWhilePaused(thread, pauseState);
+        thread.status = pauseState.status;
       }
-    } catch (err) {
-      _iterator.e(err);
-    } finally {
-      _iterator.f();
     }
 
     pausedThreadState = new WeakMap();
-    var lastSteppedThread = steppingThread; // This must happen after the "change" event is fired to fix https://github.com/ScratchAddons/ScratchAddons/issues/4281
+    const lastSteppedThread = steppingThread; // This must happen after the "change" event is fired to fix https://github.com/ScratchAddons/ScratchAddons/issues/4281
 
     stepUnsteppedThreads(lastSteppedThread);
     steppingThread = null;
   }
 };
-var onPauseChanged = function onPauseChanged(listener) {
-  eventTarget.addEventListener("change", function () {
-    return listener(paused);
-  });
+const onPauseChanged = listener => {
+  eventTarget.addEventListener("change", () => listener(paused));
 };
-var onSingleStep = function onSingleStep(listener) {
+const onSingleStep = listener => {
   eventTarget.addEventListener("step", listener);
 };
-var getRunningThread = function getRunningThread() {
-  return steppingThread;
-}; // A modified version of this function
+const getRunningThread = () => steppingThread; // A modified version of this function
 // https://github.com/LLK/scratch-vm/blob/0e86a78a00db41af114df64255e2cd7dd881329f/src/engine/sequencer.js#L179
 // Returns if we should continue executing this thread.
 
-var singleStepThread = function singleStepThread(thread) {
+const singleStepThread = thread => {
   if (thread.status === STATUS_DONE) {
     return false;
   } // TW: Can't single-step compiled threads
@@ -301,7 +279,7 @@ var singleStepThread = function singleStepThread(thread) {
     return false;
   }
 
-  var currentBlockId = thread.peekStack();
+  const currentBlockId = thread.peekStack();
 
   if (!currentBlockId) {
     thread.popStack();
@@ -324,11 +302,12 @@ var singleStepThread = function singleStepThread(thread) {
      Why are we here just to suffer?
   */
 
-  var specialError = ["special error used by Scratch Addons for implementing single-stepping"];
+  const specialError = ["special error used by Scratch Addons for implementing single-stepping"];
   Object.defineProperty(thread, "blockGlowInFrame", {
-    set: function set(_block) {
+    set(_block) {
       throw specialError;
     }
+
   });
 
   try {
@@ -361,7 +340,7 @@ var singleStepThread = function singleStepThread(thread) {
         return false;
       }
 
-      var stackFrame = thread.peekStackFrame();
+      const stackFrame = thread.peekStackFrame();
 
       if (stackFrame.isLoop) {
         if (thread.peekStackFrame().warpMode) {
@@ -393,8 +372,8 @@ var singleStepThread = function singleStepThread(thread) {
   }
 };
 
-var getRealStatus = function getRealStatus(thread) {
-  var pauseState = pausedThreadState.get(thread);
+const getRealStatus = thread => {
+  const pauseState = pausedThreadState.get(thread);
 
   if (pauseState) {
     return pauseState.status;
@@ -403,21 +382,19 @@ var getRealStatus = function getRealStatus(thread) {
   return thread.status;
 };
 
-var getThreadIndex = function getThreadIndex(thread) {
+const getThreadIndex = thread => {
   // We can't use vm.runtime.threads.indexOf(thread) because threads can be restarted.
   // This can happens when, for example, a "when I receive message1" script broadcasts message1.
   // The object in runtime.threads is replaced when this happens.
   if (!thread) return -1;
-  return vm.runtime.threads.findIndex(function (otherThread) {
-    return otherThread.target === thread.target && otherThread.topBlock === thread.topBlock && otherThread.stackClick === thread.stackClick && otherThread.updateMonitor === thread.updateMonitor;
-  });
+  return vm.runtime.threads.findIndex(otherThread => otherThread.target === thread.target && otherThread.topBlock === thread.topBlock && otherThread.stackClick === thread.stackClick && otherThread.updateMonitor === thread.updateMonitor);
 };
 
-var findNewSteppingThread = function findNewSteppingThread(startingIndex) {
-  var threads = vm.runtime.threads;
+const findNewSteppingThread = startingIndex => {
+  const threads = vm.runtime.threads;
 
-  for (var i = startingIndex; i < threads.length; i++) {
-    var possibleNewThread = threads[i];
+  for (let i = startingIndex; i < threads.length; i++) {
+    const possibleNewThread = threads[i];
 
     if (possibleNewThread.updateMonitor) {
       // Never single-step monitor update threads.
@@ -429,7 +406,7 @@ var findNewSteppingThread = function findNewSteppingThread(startingIndex) {
       continue;
     }
 
-    var status = getRealStatus(possibleNewThread);
+    const status = getRealStatus(possibleNewThread);
 
     if (status === STATUS_RUNNING || status === STATUS_YIELD || status === STATUS_YIELD_TICK) {
       // Thread must not be running for single stepping to work.
@@ -441,15 +418,15 @@ var findNewSteppingThread = function findNewSteppingThread(startingIndex) {
   return null;
 };
 
-var singleStep = function singleStep() {
+const singleStep = () => {
   if (steppingThread) {
-    var pauseState = pausedThreadState.get(steppingThread); // We can assume pauseState is defined as any single stepping threads must already be paused.
+    const pauseState = pausedThreadState.get(steppingThread); // We can assume pauseState is defined as any single stepping threads must already be paused.
     // Make it look like no time has passed
 
     compensateForTimePassedWhilePaused(steppingThread, pauseState);
     pauseState.time = vm.runtime.currentMSecs; // Execute the block
 
-    var continueExecuting = singleStepThread(steppingThread);
+    const continueExecuting = singleStepThread(steppingThread);
 
     if (!continueExecuting) {
       // Try to move onto the next thread
@@ -464,60 +441,37 @@ var singleStep = function singleStep() {
     vm.runtime.ioDevices.clock._pausedTime += vm.runtime.currentStepTime; // Skip all sounds forward by vm.runtime.currentStepTime milliseconds so it's as
     //  if they where playing for one frame.
 
-    var audioContext = vm.runtime.audioEngine.audioContext;
+    const audioContext = vm.runtime.audioEngine.audioContext;
 
-    var _iterator2 = _createForOfIteratorHelper(vm.runtime.targets),
-        _step2;
+    for (const target of vm.runtime.targets) {
+      for (const soundId of Object.keys(target.sprite.soundBank.soundPlayers)) {
+        const soundPlayer = target.sprite.soundBank.soundPlayers[soundId];
 
-    try {
-      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-        var target = _step2.value;
+        if (soundPlayer.outputNode) {
+          soundPlayer.outputNode.stop(audioContext.currentTime);
 
-        for (var _i = 0, _Object$keys = Object.keys(target.sprite.soundBank.soundPlayers); _i < _Object$keys.length; _i++) {
-          var soundId = _Object$keys[_i];
-          var soundPlayer = target.sprite.soundBank.soundPlayers[soundId];
+          soundPlayer._createSource();
 
-          if (soundPlayer.outputNode) {
-            soundPlayer.outputNode.stop(audioContext.currentTime);
-
-            soundPlayer._createSource();
-
-            soundPlayer.outputNode.start(audioContext.currentTime, audioContext.currentTime - soundPlayer.startingUntil + vm.runtime.currentStepTime / 1000);
-            soundPlayer.startingUntil -= vm.runtime.currentStepTime / 1000;
-          }
+          soundPlayer.outputNode.start(audioContext.currentTime, audioContext.currentTime - soundPlayer.startingUntil + vm.runtime.currentStepTime / 1000);
+          soundPlayer.startingUntil -= vm.runtime.currentStepTime / 1000;
         }
-      } // Move all threads forward one frame in time. For blocks like `wait () seconds`
+      }
+    } // Move all threads forward one frame in time. For blocks like `wait () seconds`
 
-    } catch (err) {
-      _iterator2.e(err);
-    } finally {
-      _iterator2.f();
-    }
 
-    var _iterator3 = _createForOfIteratorHelper(vm.runtime.threads),
-        _step3;
+    for (const thread of vm.runtime.threads) {
+      if (pausedThreadState.has(thread)) {
+        pausedThreadState.get(thread).time += vm.runtime.currentStepTime;
+      }
+    } // Try to run edge activated hats
 
-    try {
-      for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-        var thread = _step3.value;
-
-        if (pausedThreadState.has(thread)) {
-          pausedThreadState.get(thread).time += vm.runtime.currentStepTime;
-        }
-      } // Try to run edge activated hats
-
-    } catch (err) {
-      _iterator3.e(err);
-    } finally {
-      _iterator3.f();
-    }
 
     pauseNewThreads = true;
-    var hats = vm.runtime._hats;
+    const hats = vm.runtime._hats;
 
-    for (var hatType in hats) {
+    for (const hatType in hats) {
       if (!Object.prototype.hasOwnProperty.call(hats, hatType)) continue;
-      var hat = hats[hatType];
+      const hat = hats[hatType];
 
       if (hat.edgeActivated) {
         vm.runtime.startHats(hatType);
@@ -529,28 +483,18 @@ var singleStep = function singleStep() {
 
   eventTarget.dispatchEvent(new CustomEvent("step"));
 };
-var setup = function setup(_vm) {
+const setup = _vm => {
   if (vm) {
     return;
   }
 
   vm = _vm;
-  var originalStepThreads = vm.runtime.sequencer.stepThreads;
+  const originalStepThreads = vm.runtime.sequencer.stepThreads;
 
   vm.runtime.sequencer.stepThreads = function () {
     if (isPaused()) {
-      var _iterator4 = _createForOfIteratorHelper(this.runtime.threads),
-          _step4;
-
-      try {
-        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-          var thread = _step4.value;
-          ensurePausedThreadIsStillPaused(thread);
-        }
-      } catch (err) {
-        _iterator4.e(err);
-      } finally {
-        _iterator4.f();
+      for (const thread of this.runtime.threads) {
+        ensurePausedThreadIsStillPaused(thread);
       }
     }
 
@@ -558,7 +502,7 @@ var setup = function setup(_vm) {
   }; // Unpause when green flag
 
 
-  var originalGreenFlag = vm.runtime.greenFlag;
+  const originalGreenFlag = vm.runtime.greenFlag;
 
   vm.runtime.greenFlag = function () {
     setPaused(false);
@@ -566,36 +510,22 @@ var setup = function setup(_vm) {
   }; // Disable edge-activated hats and hats like "when key pressed" while paused.
 
 
-  var originalStartHats = vm.runtime.startHats;
+  const originalStartHats = vm.runtime.startHats;
 
-  vm.runtime.startHats = function () {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+  vm.runtime.startHats = function (...args) {
+    const hat = args[0]; // These hats can be manually started by the user when paused or while single stepping.
 
-    var hat = args[0]; // These hats can be manually started by the user when paused or while single stepping.
-
-    var isUserInitiated = hat === "event_whenbroadcastreceived" || hat === "control_start_as_clone";
+    const isUserInitiated = hat === "event_whenbroadcastreceived" || hat === "control_start_as_clone";
 
     if (pauseNewThreads) {
       if (!isUserInitiated && !this.getIsEdgeActivatedHat(hat)) {
         return [];
       }
 
-      var newThreads = originalStartHats.apply(this, args);
+      const newThreads = originalStartHats.apply(this, args);
 
-      var _iterator5 = _createForOfIteratorHelper(newThreads),
-          _step5;
-
-      try {
-        for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
-          var thread = _step5.value;
-          pauseThread(thread);
-        }
-      } catch (err) {
-        _iterator5.e(err);
-      } finally {
-        _iterator5.f();
+      for (const thread of newThreads) {
+        pauseThread(thread);
       }
 
       return newThreads;
@@ -607,27 +537,16 @@ var setup = function setup(_vm) {
   }; // Paused threads should not be counted as running when updating GUI state.
 
 
-  var originalGetMonitorThreadCount = vm.runtime._getMonitorThreadCount;
+  const originalGetMonitorThreadCount = vm.runtime._getMonitorThreadCount;
 
   vm.runtime._getMonitorThreadCount = function (threads) {
-    var count = originalGetMonitorThreadCount.call(this, threads);
+    let count = originalGetMonitorThreadCount.call(this, threads);
 
     if (paused) {
-      var _iterator6 = _createForOfIteratorHelper(threads),
-          _step6;
-
-      try {
-        for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-          var thread = _step6.value;
-
-          if (pausedThreadState.has(thread)) {
-            count++;
-          }
+      for (const thread of threads) {
+        if (pausedThreadState.has(thread)) {
+          count++;
         }
-      } catch (err) {
-        _iterator6.e(err);
-      } finally {
-        _iterator6.f();
       }
     }
 
@@ -653,7 +572,7 @@ __webpack_require__.r(__webpack_exports__);
 /* generated by pull.js */
 
 
-var resources = {
+const resources = {
   "userscript.js": _userscript_js__WEBPACK_IMPORTED_MODULE_0__["default"],
   "dragged-over.css": _css_loader_dragged_over_css__WEBPACK_IMPORTED_MODULE_1___default.a
 };
@@ -669,192 +588,149 @@ var resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon,
+  global,
+  console
+}) {
+  const DRAG_OVER_CLASS = "sa-dragged-over";
+  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
 
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+  const reactAwareSetValue = (el, value) => {
+    nativeInputValueSetter.call(el, value);
+    el.dispatchEvent(new Event("change", {
+      bubbles: true
+    }));
+  };
 
-/* harmony default export */ __webpack_exports__["default"] = (function (_x) {
-  return _ref2.apply(this, arguments);
-});
+  const globalHandleDragOver = e => {
+    if (addon.self.disabled) return;
 
-function _ref2() {
-  _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(_ref) {
-    var addon, global, console, DRAG_OVER_CLASS, nativeInputValueSetter, reactAwareSetValue, globalHandleDragOver;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            addon = _ref.addon, global = _ref.global, console = _ref.console;
-            DRAG_OVER_CLASS = "sa-dragged-over";
-            nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+    if (!e.dataTransfer.types.includes("Files")) {
+      return;
+    }
 
-            reactAwareSetValue = function reactAwareSetValue(el, value) {
-              nativeInputValueSetter.call(el, value);
-              el.dispatchEvent(new Event("change", {
-                bubbles: true
-              }));
-            };
+    let el;
+    let callback;
 
-            globalHandleDragOver = function globalHandleDragOver(e) {
-              if (addon.self.disabled) return;
+    if ((el = e.target.closest('div[class*="sprite-selector_sprite-selector"]')) || (el = e.target.closest('div[class*="stage-selector_stage-selector"]')) || (el = e.target.closest('div[class*="selector_wrapper"]'))) {
+      callback = files => {
+        const hdFilter = addon.settings.get("use-hd-upload") ? "" : ":not(.sa-better-img-uploads-input)";
+        const fileInput = el.querySelector('input[class*="action-menu_file-input"]' + hdFilter);
+        fileInput.files = files;
+        fileInput.dispatchEvent(new Event("change", {
+          bubbles: true
+        }));
+      };
+    } else if (el = e.target.closest('div[class*="monitor_list-monitor"]')) {
+      callback = files => {
+        const contextMenuBefore = document.querySelector("body > .react-contextmenu.react-contextmenu--visible"); // Simulate a right click on the list monitor
 
-              if (!e.dataTransfer.types.includes("Files")) {
-                return;
-              }
+        el.dispatchEvent(new MouseEvent("contextmenu", {
+          bubbles: true
+        })); // Get the right click menu that opened (monitor context menus are
+        // children of <body>)
 
-              var el;
-              var callback;
+        const contextMenuAfter = document.querySelector("body > .react-contextmenu.react-contextmenu--visible"); // `contextMenuAfter` is only null if the context menu was already open
+        // for the list monitor, in which case we can use the context menu from
+        // before the simulated right click
 
-              if ((el = e.target.closest('div[class*="sprite-selector_sprite-selector"]')) || (el = e.target.closest('div[class*="stage-selector_stage-selector"]')) || (el = e.target.closest('div[class*="selector_wrapper"]'))) {
-                callback = function callback(files) {
-                  var hdFilter = addon.settings.get("use-hd-upload") ? "" : ":not(.sa-better-img-uploads-input)";
-                  var fileInput = el.querySelector('input[class*="action-menu_file-input"]' + hdFilter);
-                  fileInput.files = files;
-                  fileInput.dispatchEvent(new Event("change", {
-                    bubbles: true
-                  }));
-                };
-              } else if (el = e.target.closest('div[class*="monitor_list-monitor"]')) {
-                callback = function callback(files) {
-                  var contextMenuBefore = document.querySelector("body > .react-contextmenu.react-contextmenu--visible"); // Simulate a right click on the list monitor
+        const contextMenu = contextMenuAfter === null ? contextMenuBefore : contextMenuAfter; // Sometimes the menu flashes open, so force hide it.
 
-                  el.dispatchEvent(new MouseEvent("contextmenu", {
-                    bubbles: true
-                  })); // Get the right click menu that opened (monitor context menus are
-                  // children of <body>)
+        contextMenu.style.display = "none"; // Override DOM methods to import the text file directly
+        // See: https://github.com/LLK/scratch-gui/blob/develop/src/lib/import-csv.js#L21-L22
 
-                  var contextMenuAfter = document.querySelector("body > .react-contextmenu.react-contextmenu--visible"); // `contextMenuAfter` is only null if the context menu was already open
-                  // for the list monitor, in which case we can use the context menu from
-                  // before the simulated right click
+        const appendChild = document.body.appendChild;
 
-                  var contextMenu = contextMenuAfter === null ? contextMenuBefore : contextMenuAfter; // Sometimes the menu flashes open, so force hide it.
+        document.body.appendChild = fileInput => {
+          // Restore appendChild to <body>
+          document.body.appendChild = appendChild;
 
-                  contextMenu.style.display = "none"; // Override DOM methods to import the text file directly
-                  // See: https://github.com/LLK/scratch-gui/blob/develop/src/lib/import-csv.js#L21-L22
+          if (fileInput instanceof HTMLInputElement) {
+            document.body.appendChild(fileInput); // Prevent Scratch from opening the file input dialog
 
-                  var appendChild = document.body.appendChild;
-
-                  document.body.appendChild = function (fileInput) {
-                    // Restore appendChild to <body>
-                    document.body.appendChild = appendChild;
-
-                    if (fileInput instanceof HTMLInputElement) {
-                      document.body.appendChild(fileInput); // Prevent Scratch from opening the file input dialog
-
-                      fileInput.click = function () {}; // Insert files from the drop event into the file input
+            fileInput.click = () => {}; // Insert files from the drop event into the file input
 
 
-                      fileInput.files = files;
-                      fileInput.dispatchEvent(new Event("change"));
-                      window.requestAnimationFrame(function () {
-                        window.requestAnimationFrame(function () {
-                          contextMenu.style.display = null;
-                          contextMenu.style.opacity = 0;
-                          contextMenu.style.pointerEvents = "none";
-                        });
-                      });
-                    } else {
-                      // The next call for `appendChild` SHOULD be the file input, but if
-                      // it's not, then make `appendChild` behave as normal.
-                      console.error('File input was not immediately given to appendChild upon clicking "Import"!');
-                      return appendChild(fileInput);
-                    }
-                  }; // Simulate clicking on the "Import" option
-
-
-                  contextMenu.children[0].click();
-                };
-              } else if (el = e.target.closest('div[class*="question_question-input"] > input[class*="input_input-form_l9eYg"]')) {
-                callback = /*#__PURE__*/function () {
-                  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(files) {
-                    var text, selectionStart;
-                    return regeneratorRuntime.wrap(function _callee$(_context) {
-                      while (1) {
-                        switch (_context.prev = _context.next) {
-                          case 0:
-                            _context.next = 2;
-                            return Promise.all(Array.from(files, function (file) {
-                              return file.text();
-                            }));
-
-                          case 2:
-                            text = _context.sent.join("").replace(/[\r\n]+$/, "").replace(/\r?\n|\r/g, " ");
-                            selectionStart = el.selectionStart;
-                            reactAwareSetValue(el, el.value.slice(0, selectionStart) + text + el.value.slice(el.selectionEnd));
-                            el.setSelectionRange(selectionStart, selectionStart + text.length);
-
-                          case 6:
-                          case "end":
-                            return _context.stop();
-                        }
-                      }
-                    }, _callee);
-                  }));
-
-                  return function callback(_x2) {
-                    return _ref3.apply(this, arguments);
-                  };
-                }();
-              }
-
-              if (!el) {
-                return;
-              }
-
-              e.preventDefault();
-
-              if (el.classList.contains(DRAG_OVER_CLASS)) {
-                return;
-              }
-
-              el.classList.add(DRAG_OVER_CLASS);
-
-              var handleDrop = function handleDrop(e) {
-                e.preventDefault();
-                cleanup();
-
-                if (e.dataTransfer.types.includes("Files") && e.dataTransfer.files.length > 0) {
-                  callback(e.dataTransfer.files);
-                }
-              };
-
-              var handleDragOver = function handleDragOver(e) {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = "copy";
-              };
-
-              e.dataTransfer.dropEffect = "copy";
-
-              var handleDragLeave = function handleDragLeave(e) {
-                e.preventDefault();
-                cleanup();
-              };
-
-              var cleanup = function cleanup() {
-                el.classList.remove(DRAG_OVER_CLASS);
-                el.removeEventListener("dragover", handleDragOver);
-                el.removeEventListener("dragleave", handleDragLeave);
-                el.removeEventListener("drop", handleDrop);
-              };
-
-              el.addEventListener("dragover", handleDragOver);
-              el.addEventListener("dragleave", handleDragLeave);
-              el.addEventListener("drop", handleDrop);
-            };
-
-            document.addEventListener("dragover", globalHandleDragOver, {
-              useCapture: true
+            fileInput.files = files;
+            fileInput.dispatchEvent(new Event("change"));
+            window.requestAnimationFrame(() => {
+              window.requestAnimationFrame(() => {
+                contextMenu.style.display = null;
+                contextMenu.style.opacity = 0;
+                contextMenu.style.pointerEvents = "none";
+              });
             });
+          } else {
+            // The next call for `appendChild` SHOULD be the file input, but if
+            // it's not, then make `appendChild` behave as normal.
+            console.error('File input was not immediately given to appendChild upon clicking "Import"!');
+            return appendChild(fileInput);
+          }
+        }; // Simulate clicking on the "Import" option
 
-          case 6:
-          case "end":
-            return _context2.stop();
-        }
+
+        contextMenu.children[0].click();
+      };
+    } else if (el = e.target.closest('div[class*="question_question-input"] > input[class*="input_input-form_l9eYg"]')) {
+      callback = async files => {
+        const text = (await Promise.all(Array.from(files, file => file.text()))).join("") // Match pasting behaviour: remove all newline characters at the end
+        .replace(/[\r\n]+$/, "").replace(/\r?\n|\r/g, " ");
+        const selectionStart = el.selectionStart;
+        reactAwareSetValue(el, el.value.slice(0, selectionStart) + text + el.value.slice(el.selectionEnd));
+        el.setSelectionRange(selectionStart, selectionStart + text.length);
+      };
+    }
+
+    if (!el) {
+      return;
+    }
+
+    e.preventDefault();
+
+    if (el.classList.contains(DRAG_OVER_CLASS)) {
+      return;
+    }
+
+    el.classList.add(DRAG_OVER_CLASS);
+
+    const handleDrop = e => {
+      e.preventDefault();
+      cleanup();
+
+      if (e.dataTransfer.types.includes("Files") && e.dataTransfer.files.length > 0) {
+        callback(e.dataTransfer.files);
       }
-    }, _callee2);
-  }));
-  return _ref2.apply(this, arguments);
-}
+    };
+
+    const handleDragOver = e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "copy";
+    };
+
+    e.dataTransfer.dropEffect = "copy";
+
+    const handleDragLeave = e => {
+      e.preventDefault();
+      cleanup();
+    };
+
+    const cleanup = () => {
+      el.classList.remove(DRAG_OVER_CLASS);
+      el.removeEventListener("dragover", handleDragOver);
+      el.removeEventListener("dragleave", handleDragLeave);
+      el.removeEventListener("drop", handleDrop);
+    };
+
+    el.addEventListener("dragover", handleDragOver);
+    el.addEventListener("dragleave", handleDragLeave);
+    el.addEventListener("drop", handleDrop);
+  };
+
+  document.addEventListener("dragover", globalHandleDragOver, {
+    useCapture: true
+  });
+});
 
 /***/ }),
 
@@ -871,7 +747,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _userscript_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./userscript.js */ "./src/addons/addons/mute-project/userscript.js");
 /* generated by pull.js */
 
-var resources = {
+const resources = {
   "userscript.js": _userscript_js__WEBPACK_IMPORTED_MODULE_0__["default"]
 };
 
@@ -887,89 +763,62 @@ var resources = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _url_loader_icon_mute_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./icon--mute.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/mute-project/icon--mute.svg");
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 /* inserted by pull.js */
 
 
-var _twGetAsset = function _twGetAsset(path) {
+const _twGetAsset = path => {
   if (path === "/icon--mute.svg") return _url_loader_icon_mute_svg__WEBPACK_IMPORTED_MODULE_0__["default"];
   throw new Error("Unknown asset: ".concat(path));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (function (_x) {
-  return _ref2.apply(this, arguments);
-});
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon,
+  global,
+  console
+}) {
+  const vm = addon.tab.traps.vm;
+  let muted = false;
+  let icon = document.createElement("img");
+  icon.loading = "lazy";
+  icon.src = _twGetAsset("/icon--mute.svg");
+  icon.style.display = "none";
 
-function _ref2() {
-  _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(_ref) {
-    var addon, global, console, vm, muted, icon, toggleMute, button;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            addon = _ref.addon, global = _ref.global, console = _ref.console;
-            vm = addon.tab.traps.vm;
-            muted = false;
-            icon = document.createElement("img");
-            icon.loading = "lazy";
-            icon.src = _twGetAsset("/icon--mute.svg");
-            icon.style.display = "none";
+  const toggleMute = e => {
+    if (!addon.self.disabled && (e.ctrlKey || e.metaKey)) {
+      e.cancelBubble = true;
+      e.preventDefault();
+      muted = !muted;
 
-            toggleMute = function toggleMute(e) {
-              if (!addon.self.disabled && (e.ctrlKey || e.metaKey)) {
-                e.cancelBubble = true;
-                e.preventDefault();
-                muted = !muted;
-
-                if (muted) {
-                  vm.runtime.audioEngine.inputNode.gain.value = 0;
-                  icon.style.display = "block";
-                } else {
-                  vm.runtime.audioEngine.inputNode.gain.value = 1;
-                  icon.style.display = "none";
-                }
-              }
-            };
-
-            addon.self.addEventListener("disabled", function () {
-              muted = false;
-              vm.runtime.audioEngine.inputNode.gain.value = 1;
-              icon.style.display = "none";
-            });
-
-          case 9:
-            if (false) {}
-
-            _context.next = 12;
-            return addon.tab.waitForElement("[class^='green-flag_green-flag']", {
-              markAsSeen: true,
-              reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"]
-            });
-
-          case 12:
-            button = _context.sent;
-            addon.tab.appendToSharedSpace({
-              space: "afterStopButton",
-              element: icon,
-              order: 0
-            });
-            button.addEventListener("click", toggleMute);
-            button.addEventListener("contextmenu", toggleMute);
-            _context.next = 9;
-            break;
-
-          case 18:
-          case "end":
-            return _context.stop();
-        }
+      if (muted) {
+        vm.runtime.audioEngine.inputNode.gain.value = 0;
+        icon.style.display = "block";
+      } else {
+        vm.runtime.audioEngine.inputNode.gain.value = 1;
+        icon.style.display = "none";
       }
-    }, _callee);
-  }));
-  return _ref2.apply(this, arguments);
-}
+    }
+  };
+
+  addon.self.addEventListener("disabled", () => {
+    muted = false;
+    vm.runtime.audioEngine.inputNode.gain.value = 1;
+    icon.style.display = "none";
+  });
+
+  while (true) {
+    let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"]
+    });
+    addon.tab.appendToSharedSpace({
+      space: "afterStopButton",
+      element: icon,
+      order: 0
+    });
+    button.addEventListener("click", toggleMute);
+    button.addEventListener("contextmenu", toggleMute);
+  }
+});
 
 /***/ }),
 
@@ -989,7 +838,7 @@ __webpack_require__.r(__webpack_exports__);
 /* generated by pull.js */
 
 
-var resources = {
+const resources = {
   "userscript.js": _userscript_js__WEBPACK_IMPORTED_MODULE_0__["default"],
   "style.css": _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1___default.a
 };
@@ -1008,80 +857,49 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _url_loader_pause_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./pause.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/pause/pause.svg");
 /* harmony import */ var _url_loader_play_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-loader!./play.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/pause/play.svg");
 /* harmony import */ var _debugger_module_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../debugger/module.js */ "./src/addons/addons/debugger/module.js");
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 /* inserted by pull.js */
 
 
 
-var _twGetAsset = function _twGetAsset(path) {
+const _twGetAsset = path => {
   if (path === "/pause.svg") return _url_loader_pause_svg__WEBPACK_IMPORTED_MODULE_0__["default"];
   if (path === "/play.svg") return _url_loader_play_svg__WEBPACK_IMPORTED_MODULE_1__["default"];
   throw new Error("Unknown asset: ".concat(path));
 };
 
 
-/* harmony default export */ __webpack_exports__["default"] = (function (_x) {
-  return _ref2.apply(this, arguments);
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon,
+  global,
+  console,
+  msg
+}) {
+  Object(_debugger_module_js__WEBPACK_IMPORTED_MODULE_2__["setup"])(addon.tab.traps.vm);
+  const img = document.createElement("img");
+  img.className = "pause-btn";
+  img.draggable = false;
+  img.title = msg("pause");
+
+  const setSrc = () => img.src = _twGetAsset(Object(_debugger_module_js__WEBPACK_IMPORTED_MODULE_2__["isPaused"])() ? "/play.svg" : "/pause.svg");
+
+  img.addEventListener("click", () => Object(_debugger_module_js__WEBPACK_IMPORTED_MODULE_2__["setPaused"])(!Object(_debugger_module_js__WEBPACK_IMPORTED_MODULE_2__["isPaused"])()));
+  addon.tab.displayNoneWhileDisabled(img);
+  addon.self.addEventListener("disabled", () => Object(_debugger_module_js__WEBPACK_IMPORTED_MODULE_2__["setPaused"])(false));
+  setSrc();
+  Object(_debugger_module_js__WEBPACK_IMPORTED_MODULE_2__["onPauseChanged"])(setSrc);
+
+  while (true) {
+    await addon.tab.waitForElement("[class^='green-flag']", {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"]
+    });
+    addon.tab.appendToSharedSpace({
+      space: "afterGreenFlag",
+      element: img,
+      order: 0
+    });
+  }
 });
-
-function _ref2() {
-  _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(_ref) {
-    var addon, global, console, msg, img, setSrc;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            addon = _ref.addon, global = _ref.global, console = _ref.console, msg = _ref.msg;
-            Object(_debugger_module_js__WEBPACK_IMPORTED_MODULE_2__["setup"])(addon.tab.traps.vm);
-            img = document.createElement("img");
-            img.className = "pause-btn";
-            img.draggable = false;
-            img.title = msg("pause");
-
-            setSrc = function setSrc() {
-              return img.src = _twGetAsset(Object(_debugger_module_js__WEBPACK_IMPORTED_MODULE_2__["isPaused"])() ? "/play.svg" : "/pause.svg");
-            };
-
-            img.addEventListener("click", function () {
-              return Object(_debugger_module_js__WEBPACK_IMPORTED_MODULE_2__["setPaused"])(!Object(_debugger_module_js__WEBPACK_IMPORTED_MODULE_2__["isPaused"])());
-            });
-            addon.tab.displayNoneWhileDisabled(img);
-            addon.self.addEventListener("disabled", function () {
-              return Object(_debugger_module_js__WEBPACK_IMPORTED_MODULE_2__["setPaused"])(false);
-            });
-            setSrc();
-            Object(_debugger_module_js__WEBPACK_IMPORTED_MODULE_2__["onPauseChanged"])(setSrc);
-
-          case 12:
-            if (false) {}
-
-            _context.next = 15;
-            return addon.tab.waitForElement("[class^='green-flag']", {
-              markAsSeen: true,
-              reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"]
-            });
-
-          case 15:
-            addon.tab.appendToSharedSpace({
-              space: "afterGreenFlag",
-              element: img,
-              order: 0
-            });
-            _context.next = 12;
-            break;
-
-          case 18:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
-  return _ref2.apply(this, arguments);
-}
 
 /***/ }),
 
@@ -1109,54 +927,6 @@ var _addons_l10n_en_json__WEBPACK_IMPORTED_MODULE_6___namespace = /*#__PURE__*/_
 /* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modal */ "./src/addons/modal.js");
 /* harmony import */ var _polyfill__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./polyfill */ "./src/addons/polyfill.js");
 /* harmony import */ var _polyfill__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_polyfill__WEBPACK_IMPORTED_MODULE_11__);
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 /**
  * Copyright (C) 2021 Thomas Weber
  *
@@ -1186,82 +956,42 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 /* eslint-disable no-console */
 
-var escapeHTML = function escapeHTML(str) {
-  return str.replace(/([<>'"&])/g, function (_, l) {
-    return "&#".concat(l.charCodeAt(0), ";");
-  });
-};
+const escapeHTML = str => str.replace(/([<>'"&])/g, (_, l) => "&#".concat(l.charCodeAt(0), ";"));
 
-var kebabCaseToCamelCase = function kebabCaseToCamelCase(str) {
-  return str.replace(/-([a-z])/g, function (g) {
-    return g[1].toUpperCase();
-  });
-};
+const kebabCaseToCamelCase = str => str.replace(/-([a-z])/g, g => g[1].toUpperCase());
 
-var createStylesheet = function createStylesheet(css) {
-  var style = document.createElement('style');
+const createStylesheet = css => {
+  const style = document.createElement('style');
   style.textContent = css;
   return style;
 };
 
-var _scratchClassNames = null;
+let _scratchClassNames = null;
 
-var getScratchClassNames = function getScratchClassNames() {
+const getScratchClassNames = () => {
   if (_scratchClassNames) {
     return _scratchClassNames;
   }
 
-  var cssRules = Array.from(document.styleSheets) // Ignore some scratch-paint stylesheets
-  .filter(function (styleSheet) {
-    return !(styleSheet.ownerNode.textContent.startsWith('/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.') && (styleSheet.ownerNode.textContent.includes('input_input-form') || styleSheet.ownerNode.textContent.includes('label_input-group_')));
-  }).map(function (e) {
+  const cssRules = Array.from(document.styleSheets) // Ignore some scratch-paint stylesheets
+  .filter(styleSheet => !(styleSheet.ownerNode.textContent.startsWith('/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.') && (styleSheet.ownerNode.textContent.includes('input_input-form') || styleSheet.ownerNode.textContent.includes('label_input-group_')))).map(e => {
     try {
-      return _toConsumableArray(e.cssRules);
+      return [...e.cssRules];
     } catch (_e) {
       return [];
     }
   }).flat();
-  var classes = cssRules.map(function (e) {
-    return e.selectorText;
-  }).filter(function (e) {
-    return e;
-  }).map(function (e) {
-    return e.match(/(([\w-]+?)_([\w-]+)_([\w\d-]+))/g);
-  }).filter(function (e) {
-    return e;
-  }).flat();
-  _scratchClassNames = _toConsumableArray(new Set(classes));
-  var observer = new MutationObserver(function (mutationList) {
-    var _iterator = _createForOfIteratorHelper(mutationList),
-        _step;
-
-    try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var mutation = _step.value;
-
-        var _iterator2 = _createForOfIteratorHelper(mutation.addedNodes),
-            _step2;
-
-        try {
-          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-            var node = _step2.value;
-
-            if (node.tagName === 'STYLE') {
-              _scratchClassNames = null;
-              observer.disconnect();
-              return;
-            }
-          }
-        } catch (err) {
-          _iterator2.e(err);
-        } finally {
-          _iterator2.f();
+  const classes = cssRules.map(e => e.selectorText).filter(e => e).map(e => e.match(/(([\w-]+?)_([\w-]+)_([\w\d-]+))/g)).filter(e => e).flat();
+  _scratchClassNames = [...new Set(classes)];
+  const observer = new MutationObserver(mutationList => {
+    for (const mutation of mutationList) {
+      for (const node of mutation.addedNodes) {
+        if (node.tagName === 'STYLE') {
+          _scratchClassNames = null;
+          observer.disconnect();
+          return;
         }
       }
-    } catch (err) {
-      _iterator.e(err);
-    } finally {
-      _iterator.f();
     }
   });
   observer.observe(document.head, {
@@ -1270,25 +1000,15 @@ var getScratchClassNames = function getScratchClassNames() {
   return _scratchClassNames;
 };
 
-var _mutationObserver;
+let _mutationObserver;
 
-var _mutationObserverCallbacks = [];
+let _mutationObserverCallbacks = [];
 
-var addMutationObserverCallback = function addMutationObserverCallback(newCallback) {
+const addMutationObserverCallback = newCallback => {
   if (!_mutationObserver) {
-    _mutationObserver = new MutationObserver(function () {
-      var _iterator3 = _createForOfIteratorHelper(_mutationObserverCallbacks),
-          _step3;
-
-      try {
-        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-          var cb = _step3.value;
-          cb();
-        }
-      } catch (err) {
-        _iterator3.e(err);
-      } finally {
-        _iterator3.f();
+    _mutationObserver = new MutationObserver(() => {
+      for (const cb of _mutationObserverCallbacks) {
+        cb();
       }
     });
 
@@ -1302,129 +1022,81 @@ var addMutationObserverCallback = function addMutationObserverCallback(newCallba
   _mutationObserverCallbacks.push(newCallback);
 };
 
-var removeMutationObserverCallback = function removeMutationObserverCallback(callback) {
-  _mutationObserverCallbacks = _mutationObserverCallbacks.filter(function (i) {
-    return i !== callback;
-  });
+const removeMutationObserverCallback = callback => {
+  _mutationObserverCallbacks = _mutationObserverCallbacks.filter(i => i !== callback);
 };
 
-var Redux = /*#__PURE__*/function (_EventTargetShim) {
-  _inherits(Redux, _EventTargetShim);
-
-  var _super = _createSuper(Redux);
-
-  function Redux() {
-    var _this;
-
-    _classCallCheck(this, Redux);
-
-    _this = _super.call(this);
-    _this._isInReducer = false;
-    _this._initialized = false;
-    _this._nextState = null;
-    return _this;
+class Redux extends _event_target__WEBPACK_IMPORTED_MODULE_3__["default"] {
+  constructor() {
+    super();
+    this._isInReducer = false;
+    this._initialized = false;
+    this._nextState = null;
   }
 
-  _createClass(Redux, [{
-    key: "initialize",
-    value: function initialize() {
-      var _this2 = this;
+  initialize() {
+    if (!this._initialized) {
+      _hooks__WEBPACK_IMPORTED_MODULE_4__["default"].appStateReducer = (action, prev, next) => {
+        this._isInReducer = true;
+        this._nextState = next;
+        this.dispatchEvent(new CustomEvent('statechanged', {
+          detail: {
+            action,
+            prev,
+            next
+          }
+        }));
+        this._nextState = null;
+        this._isInReducer = false;
+      };
 
-      if (!this._initialized) {
-        _hooks__WEBPACK_IMPORTED_MODULE_4__["default"].appStateReducer = function (action, prev, next) {
-          _this2._isInReducer = true;
-          _this2._nextState = next;
-
-          _this2.dispatchEvent(new CustomEvent('statechanged', {
-            detail: {
-              action: action,
-              prev: prev,
-              next: next
-            }
-          }));
-
-          _this2._nextState = null;
-          _this2._isInReducer = false;
-        };
-
-        this._initialized = true;
-      }
+      this._initialized = true;
     }
-  }, {
-    key: "dispatch",
-    value: function dispatch(m) {
-      if (this._isInReducer) {
-        queueMicrotask(function () {
-          return _hooks__WEBPACK_IMPORTED_MODULE_4__["default"].appStateStore.dispatch(m);
-        });
-      } else {
-        _hooks__WEBPACK_IMPORTED_MODULE_4__["default"].appStateStore.dispatch(m);
-      }
-    }
-  }, {
-    key: "state",
-    get: function get() {
-      if (this._nextState) return this._nextState;
-      return _hooks__WEBPACK_IMPORTED_MODULE_4__["default"].appStateStore.getState();
-    }
-  }]);
+  }
 
-  return Redux;
-}(_event_target__WEBPACK_IMPORTED_MODULE_3__["default"]);
+  dispatch(m) {
+    if (this._isInReducer) {
+      queueMicrotask(() => _hooks__WEBPACK_IMPORTED_MODULE_4__["default"].appStateStore.dispatch(m));
+    } else {
+      _hooks__WEBPACK_IMPORTED_MODULE_4__["default"].appStateStore.dispatch(m);
+    }
+  }
 
-var getEditorMode = function getEditorMode() {
+  get state() {
+    if (this._nextState) return this._nextState;
+    return _hooks__WEBPACK_IMPORTED_MODULE_4__["default"].appStateStore.getState();
+  }
+
+}
+
+const getEditorMode = () => {
   // eslint-disable-next-line no-use-before-define
-  var mode = tabReduxInstance.state.scratchGui.mode;
+  const mode = tabReduxInstance.state.scratchGui.mode;
   if (mode.isEmbedded) return 'embed';
   if (mode.isFullScreen) return 'fullscreen';
   if (mode.isPlayerOnly) return 'projectpage';
   return 'editor';
 };
 
-var tabReduxInstance = new Redux();
-var language = tabReduxInstance.state.locales.locale.split('-')[0];
+const tabReduxInstance = new Redux();
+const language = tabReduxInstance.state.locales.locale.split('-')[0];
 
-var getTranslations = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    var localeMessages;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            if (!_generated_l10n_entries__WEBPACK_IMPORTED_MODULE_7__["default"][language]) {
-              _context.next = 5;
-              break;
-            }
+const getTranslations = async () => {
+  if (_generated_l10n_entries__WEBPACK_IMPORTED_MODULE_7__["default"][language]) {
+    const localeMessages = await _generated_l10n_entries__WEBPACK_IMPORTED_MODULE_7__["default"][language]();
+    Object.assign(_addons_l10n_en_json__WEBPACK_IMPORTED_MODULE_6__, localeMessages);
+  }
+};
 
-            _context.next = 3;
-            return _generated_l10n_entries__WEBPACK_IMPORTED_MODULE_7__["default"][language]();
+const addonMessagesPromise = getTranslations();
 
-          case 3:
-            localeMessages = _context.sent;
-            Object.assign(_addons_l10n_en_json__WEBPACK_IMPORTED_MODULE_6__, localeMessages);
-
-          case 5:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
-
-  return function getTranslations() {
-    return _ref.apply(this, arguments);
-  };
-}();
-
-var addonMessagesPromise = getTranslations();
-
-var untilInEditor = function untilInEditor() {
+const untilInEditor = () => {
   if (!tabReduxInstance.state.scratchGui.mode.isPlayerOnly) {
     return;
   }
 
-  return new Promise(function (resolve) {
-    var handler = function handler() {
+  return new Promise(resolve => {
+    const handler = () => {
       if (!tabReduxInstance.state.scratchGui.mode.isPlayerOnly) {
         resolve();
         tabReduxInstance.removeEventListener('statechanged', handler);
@@ -1436,48 +1108,28 @@ var untilInEditor = function untilInEditor() {
   });
 };
 
-var getDisplayNoneWhileDisabledClass = function getDisplayNoneWhileDisabledClass(id) {
-  return "addons-display-none-".concat(id);
-};
+const getDisplayNoneWhileDisabledClass = id => "addons-display-none-".concat(id);
 
-var parseArguments = function parseArguments(code) {
-  return code.split(/(?=[^\\]%[nbs])/g).map(function (i) {
-    return i.trim();
-  }).filter(function (i) {
-    return i.charAt(0) === '%';
-  }).map(function (i) {
-    return i.substring(0, 2);
-  });
-};
+const parseArguments = code => code.split(/(?=[^\\]%[nbs])/g).map(i => i.trim()).filter(i => i.charAt(0) === '%').map(i => i.substring(0, 2));
 
-var fixDisplayName = function fixDisplayName(displayName) {
-  return displayName.replace(/([^\s])(%[nbs])/g, function (_, before, arg) {
-    return "".concat(before, " ").concat(arg);
-  });
-};
+const fixDisplayName = displayName => displayName.replace(/([^\s])(%[nbs])/g, (_, before, arg) => "".concat(before, " ").concat(arg));
 
-var compareArrays = function compareArrays(a, b) {
-  return JSON.stringify(a) === JSON.stringify(b);
-};
+const compareArrays = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
-var _firstAddBlockRan = false;
-var contextMenuCallbacks = [];
-var CONTEXT_MENU_ORDER = ['editor-devtools', 'block-switching', 'blocks2image', 'swap-local-global'];
-var createdAnyBlockContextMenus = false;
+let _firstAddBlockRan = false;
+const contextMenuCallbacks = [];
+const CONTEXT_MENU_ORDER = ['editor-devtools', 'block-switching', 'blocks2image', 'swap-local-global'];
+let createdAnyBlockContextMenus = false;
 
-var getInternalKey = function getInternalKey(element) {
-  return Object.keys(element).find(function (key) {
-    return key.startsWith('__reactInternalInstance$');
-  });
-}; // Stylesheets are added at the start of <body> so that they have higher precedence
+const getInternalKey = element => Object.keys(element).find(key => key.startsWith('__reactInternalInstance$')); // Stylesheets are added at the start of <body> so that they have higher precedence
 // than those in <head>
 
 
-var stylesheetContainer = document.createElement('div');
+const stylesheetContainer = document.createElement('div');
 document.body.insertBefore(stylesheetContainer, document.body.firstChild);
 
-var getStylesheetPrecedence = function getStylesheetPrecedence(styleElement) {
-  var addonId = styleElement.dataset.addonId; // columns must have higher precedence than hide-flyout
+const getStylesheetPrecedence = styleElement => {
+  const addonId = styleElement.dataset.addonId; // columns must have higher precedence than hide-flyout
 
   if (addonId === 'columns') return 1; // editor-stage-left must have higher precedence than hide-stage
 
@@ -1485,778 +1137,522 @@ var getStylesheetPrecedence = function getStylesheetPrecedence(styleElement) {
   return 0;
 };
 
-var addStylesheet = function addStylesheet(styleElement) {
-  var priority = getStylesheetPrecedence(styleElement);
+const addStylesheet = styleElement => {
+  const priority = getStylesheetPrecedence(styleElement);
 
-  var _iterator4 = _createForOfIteratorHelper(stylesheetContainer.children),
-      _step4;
-
-  try {
-    for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-      var child = _step4.value;
-
-      if (getStylesheetPrecedence(child) >= priority) {
-        stylesheetContainer.insertBefore(styleElement, child);
-        return;
-      }
+  for (const child of stylesheetContainer.children) {
+    if (getStylesheetPrecedence(child) >= priority) {
+      stylesheetContainer.insertBefore(styleElement, child);
+      return;
     }
-  } catch (err) {
-    _iterator4.e(err);
-  } finally {
-    _iterator4.f();
   }
 
   stylesheetContainer.appendChild(styleElement);
 };
 
-var Tab = /*#__PURE__*/function (_EventTargetShim2) {
-  _inherits(Tab, _EventTargetShim2);
+class Tab extends _event_target__WEBPACK_IMPORTED_MODULE_3__["default"] {
+  constructor(id) {
+    super();
+    this._id = id;
+    this._seenElements = new WeakSet(); // traps is public API
 
-  var _super2 = _createSuper(Tab);
-
-  function Tab(id) {
-    var _this3;
-
-    _classCallCheck(this, Tab);
-
-    _this3 = _super2.call(this);
-    _this3._id = id;
-    _this3._seenElements = new WeakSet(); // traps is public API
-
-    _this3.traps = {
+    this.traps = {
       get vm() {
         return tabReduxInstance.state.scratchGui.vm;
       },
 
-      getBlockly: function getBlockly() {
+      getBlockly: () => {
         if (_hooks__WEBPACK_IMPORTED_MODULE_4__["default"].blockly) {
           return Promise.resolve(_hooks__WEBPACK_IMPORTED_MODULE_4__["default"].blockly);
         }
 
-        return new Promise(function (resolve) {
-          _hooks__WEBPACK_IMPORTED_MODULE_4__["default"].blocklyCallbacks.push(function () {
-            return resolve(_hooks__WEBPACK_IMPORTED_MODULE_4__["default"].blockly);
-          });
+        return new Promise(resolve => {
+          _hooks__WEBPACK_IMPORTED_MODULE_4__["default"].blocklyCallbacks.push(() => resolve(_hooks__WEBPACK_IMPORTED_MODULE_4__["default"].blockly));
         });
       },
-      getPaper: function () {
-        var _getPaper = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-          var modeSelector, reactInternalKey, internalState, toolState, tool, toolInstance, paperScope;
-          return regeneratorRuntime.wrap(function _callee2$(_context2) {
-            while (1) {
-              switch (_context2.prev = _context2.next) {
-                case 0:
-                  _context2.next = 2;
-                  return _this3.waitForElement("[class*='paint-editor_mode-selector']", {
-                    reduxCondition: function reduxCondition(state) {
-                      return state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly;
-                    }
-                  });
+      getPaper: async () => {
+        const modeSelector = await this.waitForElement("[class*='paint-editor_mode-selector']", {
+          reduxCondition: state => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly
+        });
+        const reactInternalKey = Object.keys(modeSelector).find(key => key.startsWith('__reactInternalInstance$'));
+        const internalState = modeSelector[reactInternalKey].child; // .tool or .blob.tool only exists on the selected tool
 
-                case 2:
-                  modeSelector = _context2.sent;
-                  reactInternalKey = Object.keys(modeSelector).find(function (key) {
-                    return key.startsWith('__reactInternalInstance$');
-                  });
-                  internalState = modeSelector[reactInternalKey].child; // .tool or .blob.tool only exists on the selected tool
+        let toolState = internalState;
+        let tool;
 
-                  toolState = internalState;
+        while (toolState) {
+          const toolInstance = toolState.child.stateNode;
 
-                case 6:
-                  if (!toolState) {
-                    _context2.next = 17;
-                    break;
-                  }
-
-                  toolInstance = toolState.child.stateNode;
-
-                  if (!toolInstance.tool) {
-                    _context2.next = 11;
-                    break;
-                  }
-
-                  tool = toolInstance.tool;
-                  return _context2.abrupt("break", 17);
-
-                case 11:
-                  if (!(toolInstance.blob && toolInstance.blob.tool)) {
-                    _context2.next = 14;
-                    break;
-                  }
-
-                  tool = toolInstance.blob.tool;
-                  return _context2.abrupt("break", 17);
-
-                case 14:
-                  toolState = toolState.sibling;
-                  _context2.next = 6;
-                  break;
-
-                case 17:
-                  if (!tool) {
-                    _context2.next = 20;
-                    break;
-                  }
-
-                  paperScope = tool._scope;
-                  return _context2.abrupt("return", paperScope);
-
-                case 20:
-                  throw new Error('cannot find paper :(');
-
-                case 21:
-                case "end":
-                  return _context2.stop();
-              }
-            }
-          }, _callee2);
-        }));
-
-        function getPaper() {
-          return _getPaper.apply(this, arguments);
-        }
-
-        return getPaper;
-      }(),
-      getInternalKey: getInternalKey
-    };
-    return _this3;
-  }
-
-  _createClass(Tab, [{
-    key: "redux",
-    get: function get() {
-      return tabReduxInstance;
-    }
-  }, {
-    key: "waitForElement",
-    value: function waitForElement(selector) {
-      var _this4 = this;
-
-      var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-          _ref2$markAsSeen = _ref2.markAsSeen,
-          markAsSeen = _ref2$markAsSeen === void 0 ? false : _ref2$markAsSeen,
-          condition = _ref2.condition,
-          reduxCondition = _ref2.reduxCondition,
-          reduxEvents = _ref2.reduxEvents;
-
-      var externalEventSatisfied = true;
-
-      var evaluateCondition = function evaluateCondition() {
-        if (!externalEventSatisfied) return false;
-        if (condition && !condition()) return false;
-        if (reduxCondition && !reduxCondition(tabReduxInstance.state)) return false;
-        return true;
-      };
-
-      if (evaluateCondition()) {
-        var firstQuery = document.querySelectorAll(selector);
-
-        var _iterator5 = _createForOfIteratorHelper(firstQuery),
-            _step5;
-
-        try {
-          for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
-            var element = _step5.value;
-            if (this._seenElements.has(element)) continue;
-            if (markAsSeen) this._seenElements.add(element);
-            return Promise.resolve(element);
-          }
-        } catch (err) {
-          _iterator5.e(err);
-        } finally {
-          _iterator5.f();
-        }
-      }
-
-      var reduxListener;
-
-      if (reduxEvents) {
-        externalEventSatisfied = false;
-
-        reduxListener = function reduxListener(_ref3) {
-          var detail = _ref3.detail;
-          var type = detail.action.type; // As addons can't run before DOM exists here, ignore fontsLoaded/SET_FONTS_LOADED
-          // Otherwise, as our font loading is very async, we could activate more often than required.
-
-          if (reduxEvents.includes(type) && type !== 'fontsLoaded/SET_FONTS_LOADED') {
-            externalEventSatisfied = true;
-          }
-        };
-
-        this.redux.initialize();
-        this.redux.addEventListener('statechanged', reduxListener);
-      }
-
-      return new Promise(function (resolve) {
-        var callback = function callback() {
-          if (!evaluateCondition()) {
-            return;
-          }
-
-          var elements = document.querySelectorAll(selector);
-
-          var _iterator6 = _createForOfIteratorHelper(elements),
-              _step6;
-
-          try {
-            for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-              var _element = _step6.value;
-              if (_this4._seenElements.has(_element)) continue;
-              resolve(_element);
-              removeMutationObserverCallback(callback);
-              if (markAsSeen) _this4._seenElements.add(_element);
-
-              if (reduxListener) {
-                _this4.redux.removeEventListener('statechanged', reduxListener);
-              }
-
-              break;
-            }
-          } catch (err) {
-            _iterator6.e(err);
-          } finally {
-            _iterator6.f();
-          }
-        };
-
-        addMutationObserverCallback(callback);
-      });
-    }
-  }, {
-    key: "appendToSharedSpace",
-    value: function appendToSharedSpace(_ref4) {
-      var _this5 = this;
-
-      var space = _ref4.space,
-          element = _ref4.element,
-          order = _ref4.order,
-          scope = _ref4.scope;
-      var SHARED_SPACES = {
-        stageHeader: {
-          element: function element() {
-            return document.querySelector("[class^='stage-header_stage-size-row']");
-          },
-          from: function from() {
-            return [];
-          },
-          until: function until() {
-            return [document.querySelector("[class^='stage-header_stage-size-toggle-group']"), document.querySelector("[class^='stage-header_stage-size-row']").lastChild];
-          }
-        },
-        fullscreenStageHeader: {
-          element: function element() {
-            return document.querySelector("[class^='stage-header_stage-menu-wrapper']");
-          },
-          from: function from() {
-            var emptyDiv = this.element().querySelector('.addon-spacer');
-
-            if (!emptyDiv) {
-              emptyDiv = document.createElement('div');
-              emptyDiv.style.marginLeft = 'auto';
-              emptyDiv.className = 'addon-spacer';
-              this.element().insertBefore(emptyDiv, this.element().lastChild);
-            }
-
-            return [emptyDiv];
-          },
-          until: function until() {
-            return [document.querySelector("[class^='stage-header_stage-menu-wrapper']").lastChild];
-          }
-        },
-        afterGreenFlag: {
-          element: function element() {
-            return document.querySelector("[class^='controls_controls-container']");
-          },
-          from: function from() {
-            return [];
-          },
-          until: function until() {
-            return [document.querySelector("[class^='stop-all_stop-all']")];
-          }
-        },
-        afterStopButton: {
-          element: function element() {
-            return document.querySelector("[class^='controls_controls-container']");
-          },
-          from: function from() {
-            return [document.querySelector("[class^='stop-all_stop-all']")];
-          },
-          until: function until() {
-            return [];
-          }
-        },
-        afterSoundTab: {
-          element: function element() {
-            return document.querySelector("[class^='react-tabs_react-tabs__tab-list']");
-          },
-          from: function from() {
-            return [document.querySelector("[class^='react-tabs_react-tabs__tab-list']").children[2]];
-          },
-          until: function until() {
-            return [document.querySelector('#s3devToolBar')];
-          }
-        },
-        assetContextMenuAfterExport: {
-          element: function element() {
-            return scope;
-          },
-          from: function from() {
-            return Array.prototype.filter.call(scope.children, function (c) {
-              return c.textContent === _this5.scratchMessage('gui.spriteSelectorItem.contextMenuExport');
-            });
-          },
-          until: function until() {
-            return Array.prototype.filter.call(scope.children, function (c) {
-              return c.textContent === _this5.scratchMessage('gui.spriteSelectorItem.contextMenuDelete');
-            });
-          }
-        },
-        assetContextMenuAfterDelete: {
-          element: function element() {
-            return scope;
-          },
-          from: function from() {
-            return Array.prototype.filter.call(scope.children, function (c) {
-              return c.textContent === _this5.scratchMessage('gui.spriteSelectorItem.contextMenuDelete');
-            });
-          },
-          until: function until() {
-            return [];
-          }
-        }
-      };
-      var spaceInfo = SHARED_SPACES[space];
-      var spaceElement = spaceInfo.element();
-      if (!spaceElement) return false;
-      var from = spaceInfo.from();
-      var until = spaceInfo.until();
-      element.dataset.saSharedSpaceOrder = order;
-      var foundFrom = false;
-      if (from.length === 0) foundFrom = true; // insertAfter = element whose nextSibling will be the new element
-      // -1 means append at beginning of space (prepend)
-      // This will stay null if we need to append at the end of space
-
-      var insertAfter = null;
-      var children = Array.from(spaceElement.children);
-
-      var _iterator7 = _createForOfIteratorHelper(children.keys()),
-          _step7;
-
-      try {
-        for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
-          var indexString = _step7.value;
-          var child = children[indexString];
-          var i = Number(indexString); // Find either element from "from" before doing anything
-
-          if (!foundFrom) {
-            if (from.includes(child)) {
-              foundFrom = true; // If this is the last child, insertAfter will stay null
-              // and the element will be appended at the end of space
-            }
-
-            continue;
-          }
-
-          if (until.includes(child)) {
-            // This is the first SA element appended to this space
-            // If from = [] then prepend, otherwise append after
-            // previous child (likely a "from" element)
-            if (i === 0) insertAfter = -1;else insertAfter = children[i - 1];
+          if (toolInstance.tool) {
+            tool = toolInstance.tool;
             break;
           }
 
-          if (child.dataset.addonSharedSpaceOrder) {
-            if (Number(child.dataset.addonSharedSpaceOrder) > order) {
-              // We found another SA element with higher order number
-              // If from = [] and this is the first child, prepend.
-              // Otherwise, append before this child.
-              if (i === 0) insertAfter = -1;else insertAfter = children[i - 1];
-              break;
-            }
+          if (toolInstance.blob && toolInstance.blob.tool) {
+            tool = toolInstance.blob.tool;
+            break;
           }
+
+          toolState = toolState.sibling;
         }
-      } catch (err) {
-        _iterator7.e(err);
-      } finally {
-        _iterator7.f();
-      }
 
-      if (!foundFrom) return false; // It doesn't matter if we didn't find an "until"
-
-      if (insertAfter === null) {
-        // This might happen with until = []
-        spaceElement.appendChild(element);
-      } else if (insertAfter === -1) {
-        // This might happen with from = []
-        spaceElement.prepend(element);
-      } else {
-        // Works like insertAfter but using insertBefore API.
-        // nextSibling cannot be null because insertAfter
-        // is always set to children[i-1], so it must exist
-        spaceElement.insertBefore(element, insertAfter.nextSibling);
-      }
-
-      return true;
-    }
-  }, {
-    key: "addBlock",
-    value: function addBlock(procedureCode, _ref5) {
-      var args = _ref5.args,
-          displayName = _ref5.displayName,
-          callback = _ref5.callback;
-      var procCodeArguments = parseArguments(procedureCode);
-
-      if (args.length !== procCodeArguments.length) {
-        throw new Error('Procedure code and argument list do not match');
-      }
-
-      if (displayName) {
-        displayName = fixDisplayName(displayName);
-        var displayNameArguments = parseArguments(displayName);
-
-        if (!compareArrays(procCodeArguments, displayNameArguments)) {
-          console.warn("displayName ".concat(displayName, " for ").concat(procedureCode, " has invalid arguments, ignoring it."));
-          displayName = procedureCode;
+        if (tool) {
+          const paperScope = tool._scope;
+          return paperScope;
         }
-      } else {
-        displayName = procedureCode;
-      }
 
-      var vm = this.traps.vm;
-      vm.addAddonBlock({
-        procedureCode: procedureCode,
-        arguments: args,
-        callback: callback,
-        color: '#29beb8',
-        secondaryColor: '#3aa8a4',
-        displayName: displayName
-      });
-
-      if (!_firstAddBlockRan) {
-        _firstAddBlockRan = true;
-        this.traps.getBlockly().then(function (ScratchBlocks) {
-          var BlockSvg = ScratchBlocks.BlockSvg;
-          var oldUpdateColour = BlockSvg.prototype.updateColour;
-
-          BlockSvg.prototype.updateColour = function () {
-            // procedures_prototype also has a procedure code but we do not want to color them.
-            if (this.type === 'procedures_call') {
-              var block = this.procCode_ && vm.runtime.getAddonBlock(this.procCode_);
-
-              if (block) {
-                this.colour_ = '#29beb8';
-                this.colourSecondary_ = '#3aa8a4';
-                this.colourTertiary_ = '#3aa8a4';
-                this.customContextMenu = null;
-              }
-            }
-
-            for (var _len = arguments.length, args2 = new Array(_len), _key = 0; _key < _len; _key++) {
-              args2[_key] = arguments[_key];
-            }
-
-            return oldUpdateColour.call.apply(oldUpdateColour, [this].concat(args2));
-          };
-
-          var originalCreateAllInputs = ScratchBlocks.Blocks.procedures_call.createAllInputs_;
-
-          ScratchBlocks.Blocks.procedures_call.createAllInputs_ = function () {
-            var block = this.procCode_ && vm.runtime.getAddonBlock(this.procCode_);
-
-            for (var _len2 = arguments.length, args2 = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-              args2[_key2] = arguments[_key2];
-            }
-
-            if (block && block.displayName) {
-              var originalProcCode = this.procCode_;
-              this.procCode_ = block.displayName;
-              var ret = originalCreateAllInputs.call.apply(originalCreateAllInputs, [this].concat(args2));
-              this.procCode_ = originalProcCode;
-              return ret;
-            }
-
-            return originalCreateAllInputs.call.apply(originalCreateAllInputs, [this].concat(args2));
-          };
-
-          if (vm.editingTarget) {
-            vm.emitWorkspaceUpdate();
-          }
-        });
-      }
-    }
-  }, {
-    key: "getCustomBlock",
-    value: function getCustomBlock(procedureCode) {
-      var vm = this.traps.vm;
-      return vm.getAddonBlock(procedureCode);
-    }
-  }, {
-    key: "createBlockContextMenu",
-    value: function createBlockContextMenu(callback) {
-      var _ref6 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-          _ref6$workspace = _ref6.workspace,
-          workspace = _ref6$workspace === void 0 ? false : _ref6$workspace,
-          _ref6$blocks = _ref6.blocks,
-          blocks = _ref6$blocks === void 0 ? false : _ref6$blocks,
-          _ref6$flyout = _ref6.flyout,
-          flyout = _ref6$flyout === void 0 ? false : _ref6$flyout,
-          _ref6$comments = _ref6.comments,
-          comments = _ref6$comments === void 0 ? false : _ref6$comments;
-
-      contextMenuCallbacks.push({
-        addonId: this._id,
-        callback: callback,
-        workspace: workspace,
-        blocks: blocks,
-        flyout: flyout,
-        comments: comments
-      });
-      contextMenuCallbacks.sort(function (b, a) {
-        return CONTEXT_MENU_ORDER.indexOf(b.addonId) - CONTEXT_MENU_ORDER.indexOf(a.addonId);
-      });
-      if (createdAnyBlockContextMenus) return;
-      createdAnyBlockContextMenus = true;
-      this.traps.getBlockly().then(function (ScratchBlocks) {
-        var oldShow = ScratchBlocks.ContextMenu.show;
-
-        ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
-          var gesture = ScratchBlocks.mainWorkspace.currentGesture_;
-          var block = gesture.targetBlock_; // eslint-disable-next-line no-shadow
-
-          var _iterator8 = _createForOfIteratorHelper(contextMenuCallbacks),
-              _step8;
-
-          try {
-            for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
-              var _step8$value = _step8.value,
-                  _callback = _step8$value.callback,
-                  _workspace = _step8$value.workspace,
-                  _blocks = _step8$value.blocks,
-                  _flyout = _step8$value.flyout,
-                  _comments = _step8$value.comments;
-              var injectMenu = // Workspace
-              _workspace && !block && !gesture.flyout_ && !gesture.startBubble_ || _blocks && block && !gesture.flyout_ || _flyout && gesture.flyout_ || _comments && gesture.startBubble_;
-
-              if (injectMenu) {
-                try {
-                  items = _callback(items, block);
-                } catch (e) {
-                  console.error('Error while calling context menu callback: ', e);
-                }
-              }
-            }
-          } catch (err) {
-            _iterator8.e(err);
-          } finally {
-            _iterator8.f();
-          }
-
-          oldShow.call(this, event, items, rtl);
-          var blocklyContextMenu = ScratchBlocks.WidgetDiv.DIV.firstChild;
-          items.forEach(function (item, i) {
-            if (i !== 0 && item.separator) {
-              var itemElt = blocklyContextMenu.children[i];
-              itemElt.style.paddingTop = '2px';
-              itemElt.classList.add('sa-blockly-menu-item-border');
-              itemElt.style.borderTop = '1px solid hsla(0, 0%, 0%, 0.15)';
-            }
-          });
-        };
-      });
-    }
-  }, {
-    key: "createEditorContextMenu",
-    value: function createEditorContextMenu(callback, options) {
-      Object(_contextmenu__WEBPACK_IMPORTED_MODULE_9__["addContextMenu"])(this, callback, options);
-    }
-  }, {
-    key: "copyImage",
-    value: function copyImage(dataURL) {
-      if (!navigator.clipboard.write) {
-        return Promise.reject(new Error('Clipboard API not supported'));
-      }
-
-      var items = [// eslint-disable-next-line no-undef
-      new ClipboardItem({
-        'image/png': Object(_lib_data_uri_to_blob__WEBPACK_IMPORTED_MODULE_2__["default"])(dataURL)
-      })];
-      return navigator.clipboard.write(items);
-    }
-  }, {
-    key: "scratchMessage",
-    value: function scratchMessage(id) {
-      return tabReduxInstance.state.locales.messages[id];
-    }
-  }, {
-    key: "scratchClass",
-    value: function scratchClass() {
-      var scratchClasses = getScratchClassNames();
-      var classes = [];
-
-      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        args[_key3] = arguments[_key3];
-      }
-
-      for (var _i = 0, _args3 = args; _i < _args3.length; _i++) {
-        var arg = _args3[_i];
-
-        if (typeof arg === 'string') {
-          var _iterator9 = _createForOfIteratorHelper(scratchClasses),
-              _step9;
-
-          try {
-            for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
-              var scratchClass = _step9.value;
-
-              if (scratchClass.startsWith("".concat(arg, "_")) && scratchClass.length === arg.length + 6) {
-                classes.push(scratchClass);
-                break;
-              }
-            }
-          } catch (err) {
-            _iterator9.e(err);
-          } finally {
-            _iterator9.f();
-          }
-        }
-      }
-
-      var options = args[args.length - 1];
-
-      if (_typeof(options) === 'object') {
-        var others = Array.isArray(options.others) ? options.others : [options.others];
-
-        var _iterator10 = _createForOfIteratorHelper(others),
-            _step10;
-
-        try {
-          for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
-            var className = _step10.value;
-            classes.push(className);
-          }
-        } catch (err) {
-          _iterator10.e(err);
-        } finally {
-          _iterator10.f();
-        }
-      }
-
-      return classes.join(' ');
-    }
-  }, {
-    key: "editorMode",
-    get: function get() {
-      return getEditorMode();
-    }
-  }, {
-    key: "displayNoneWhileDisabled",
-    value: function displayNoneWhileDisabled(el) {
-      el.classList.add(getDisplayNoneWhileDisabledClass(this._id));
-    }
-  }, {
-    key: "direction",
-    get: function get() {
-      return this.redux.state.locales.isRtl ? 'rtl' : 'ltr';
-    }
-  }, {
-    key: "createModal",
-    value: function createModal(title) {
-      var _ref7 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-          _ref7$isOpen = _ref7.isOpen,
-          isOpen = _ref7$isOpen === void 0 ? false : _ref7$isOpen;
-
-      return _modal__WEBPACK_IMPORTED_MODULE_10__["createEditorModal"](this, title, {
-        isOpen: isOpen
-      });
-    }
-  }, {
-    key: "confirm",
-    value: function confirm() {
-      for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-        args[_key4] = arguments[_key4];
-      }
-
-      return _modal__WEBPACK_IMPORTED_MODULE_10__["confirm"].apply(_modal__WEBPACK_IMPORTED_MODULE_10__, [this].concat(args));
-    }
-  }, {
-    key: "prompt",
-    value: function prompt() {
-      for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-        args[_key5] = arguments[_key5];
-      }
-
-      return _modal__WEBPACK_IMPORTED_MODULE_10__["prompt"].apply(_modal__WEBPACK_IMPORTED_MODULE_10__, [this].concat(args));
-    }
-  }]);
-
-  return Tab;
-}(_event_target__WEBPACK_IMPORTED_MODULE_3__["default"]);
-
-var Settings = /*#__PURE__*/function (_EventTargetShim3) {
-  _inherits(Settings, _EventTargetShim3);
-
-  var _super3 = _createSuper(Settings);
-
-  function Settings(addonId, manifest) {
-    var _this6;
-
-    _classCallCheck(this, Settings);
-
-    _this6 = _super3.call(this);
-    _this6._addonId = addonId;
-    _this6._manifest = manifest;
-    return _this6;
+        throw new Error('cannot find paper :(');
+      },
+      getInternalKey
+    };
   }
 
-  _createClass(Settings, [{
-    key: "get",
-    value: function get(id) {
-      return _settings_store_singleton__WEBPACK_IMPORTED_MODULE_1__["default"].getAddonSetting(this._addonId, id);
+  get redux() {
+    return tabReduxInstance;
+  }
+
+  waitForElement(selector, {
+    markAsSeen = false,
+    condition,
+    reduxCondition,
+    reduxEvents
+  } = {}) {
+    let externalEventSatisfied = true;
+
+    const evaluateCondition = () => {
+      if (!externalEventSatisfied) return false;
+      if (condition && !condition()) return false;
+      if (reduxCondition && !reduxCondition(tabReduxInstance.state)) return false;
+      return true;
+    };
+
+    if (evaluateCondition()) {
+      const firstQuery = document.querySelectorAll(selector);
+
+      for (const element of firstQuery) {
+        if (this._seenElements.has(element)) continue;
+        if (markAsSeen) this._seenElements.add(element);
+        return Promise.resolve(element);
+      }
     }
-  }]);
 
-  return Settings;
-}(_event_target__WEBPACK_IMPORTED_MODULE_3__["default"]);
+    let reduxListener;
 
-var Self = /*#__PURE__*/function (_EventTargetShim4) {
-  _inherits(Self, _EventTargetShim4);
+    if (reduxEvents) {
+      externalEventSatisfied = false;
 
-  var _super4 = _createSuper(Self);
+      reduxListener = ({
+        detail
+      }) => {
+        const type = detail.action.type; // As addons can't run before DOM exists here, ignore fontsLoaded/SET_FONTS_LOADED
+        // Otherwise, as our font loading is very async, we could activate more often than required.
 
-  function Self(id) {
-    var _this7;
+        if (reduxEvents.includes(type) && type !== 'fontsLoaded/SET_FONTS_LOADED') {
+          externalEventSatisfied = true;
+        }
+      };
 
-    _classCallCheck(this, Self);
+      this.redux.initialize();
+      this.redux.addEventListener('statechanged', reduxListener);
+    }
 
-    _this7 = _super4.call(this);
-    _this7.id = id;
-    _this7.disabled = false;
-    return _this7;
+    return new Promise(resolve => {
+      const callback = () => {
+        if (!evaluateCondition()) {
+          return;
+        }
+
+        const elements = document.querySelectorAll(selector);
+
+        for (const element of elements) {
+          if (this._seenElements.has(element)) continue;
+          resolve(element);
+          removeMutationObserverCallback(callback);
+          if (markAsSeen) this._seenElements.add(element);
+
+          if (reduxListener) {
+            this.redux.removeEventListener('statechanged', reduxListener);
+          }
+
+          break;
+        }
+      };
+
+      addMutationObserverCallback(callback);
+    });
+  }
+
+  appendToSharedSpace({
+    space,
+    element,
+    order,
+    scope
+  }) {
+    const SHARED_SPACES = {
+      stageHeader: {
+        element: () => document.querySelector("[class^='stage-header_stage-size-row']"),
+        from: () => [],
+        until: () => [document.querySelector("[class^='stage-header_stage-size-toggle-group']"), document.querySelector("[class^='stage-header_stage-size-row']").lastChild]
+      },
+      fullscreenStageHeader: {
+        element: () => document.querySelector("[class^='stage-header_stage-menu-wrapper']"),
+        from: function from() {
+          let emptyDiv = this.element().querySelector('.addon-spacer');
+
+          if (!emptyDiv) {
+            emptyDiv = document.createElement('div');
+            emptyDiv.style.marginLeft = 'auto';
+            emptyDiv.className = 'addon-spacer';
+            this.element().insertBefore(emptyDiv, this.element().lastChild);
+          }
+
+          return [emptyDiv];
+        },
+        until: () => [document.querySelector("[class^='stage-header_stage-menu-wrapper']").lastChild]
+      },
+      afterGreenFlag: {
+        element: () => document.querySelector("[class^='controls_controls-container']"),
+        from: () => [],
+        until: () => [document.querySelector("[class^='stop-all_stop-all']")]
+      },
+      afterStopButton: {
+        element: () => document.querySelector("[class^='controls_controls-container']"),
+        from: () => [document.querySelector("[class^='stop-all_stop-all']")],
+        until: () => []
+      },
+      afterSoundTab: {
+        element: () => document.querySelector("[class^='react-tabs_react-tabs__tab-list']"),
+        from: () => [document.querySelector("[class^='react-tabs_react-tabs__tab-list']").children[2]],
+        until: () => [document.querySelector('#s3devToolBar')]
+      },
+      assetContextMenuAfterExport: {
+        element: () => scope,
+        from: () => Array.prototype.filter.call(scope.children, c => c.textContent === this.scratchMessage('gui.spriteSelectorItem.contextMenuExport')),
+        until: () => Array.prototype.filter.call(scope.children, c => c.textContent === this.scratchMessage('gui.spriteSelectorItem.contextMenuDelete'))
+      },
+      assetContextMenuAfterDelete: {
+        element: () => scope,
+        from: () => Array.prototype.filter.call(scope.children, c => c.textContent === this.scratchMessage('gui.spriteSelectorItem.contextMenuDelete')),
+        until: () => []
+      }
+    };
+    const spaceInfo = SHARED_SPACES[space];
+    const spaceElement = spaceInfo.element();
+    if (!spaceElement) return false;
+    const from = spaceInfo.from();
+    const until = spaceInfo.until();
+    element.dataset.saSharedSpaceOrder = order;
+    let foundFrom = false;
+    if (from.length === 0) foundFrom = true; // insertAfter = element whose nextSibling will be the new element
+    // -1 means append at beginning of space (prepend)
+    // This will stay null if we need to append at the end of space
+
+    let insertAfter = null;
+    const children = Array.from(spaceElement.children);
+
+    for (const indexString of children.keys()) {
+      const child = children[indexString];
+      const i = Number(indexString); // Find either element from "from" before doing anything
+
+      if (!foundFrom) {
+        if (from.includes(child)) {
+          foundFrom = true; // If this is the last child, insertAfter will stay null
+          // and the element will be appended at the end of space
+        }
+
+        continue;
+      }
+
+      if (until.includes(child)) {
+        // This is the first SA element appended to this space
+        // If from = [] then prepend, otherwise append after
+        // previous child (likely a "from" element)
+        if (i === 0) insertAfter = -1;else insertAfter = children[i - 1];
+        break;
+      }
+
+      if (child.dataset.addonSharedSpaceOrder) {
+        if (Number(child.dataset.addonSharedSpaceOrder) > order) {
+          // We found another SA element with higher order number
+          // If from = [] and this is the first child, prepend.
+          // Otherwise, append before this child.
+          if (i === 0) insertAfter = -1;else insertAfter = children[i - 1];
+          break;
+        }
+      }
+    }
+
+    if (!foundFrom) return false; // It doesn't matter if we didn't find an "until"
+
+    if (insertAfter === null) {
+      // This might happen with until = []
+      spaceElement.appendChild(element);
+    } else if (insertAfter === -1) {
+      // This might happen with from = []
+      spaceElement.prepend(element);
+    } else {
+      // Works like insertAfter but using insertBefore API.
+      // nextSibling cannot be null because insertAfter
+      // is always set to children[i-1], so it must exist
+      spaceElement.insertBefore(element, insertAfter.nextSibling);
+    }
+
+    return true;
+  }
+
+  addBlock(procedureCode, {
+    args,
+    displayName,
+    callback
+  }) {
+    const procCodeArguments = parseArguments(procedureCode);
+
+    if (args.length !== procCodeArguments.length) {
+      throw new Error('Procedure code and argument list do not match');
+    }
+
+    if (displayName) {
+      displayName = fixDisplayName(displayName);
+      const displayNameArguments = parseArguments(displayName);
+
+      if (!compareArrays(procCodeArguments, displayNameArguments)) {
+        console.warn("displayName ".concat(displayName, " for ").concat(procedureCode, " has invalid arguments, ignoring it."));
+        displayName = procedureCode;
+      }
+    } else {
+      displayName = procedureCode;
+    }
+
+    const vm = this.traps.vm;
+    vm.addAddonBlock({
+      procedureCode,
+      arguments: args,
+      callback,
+      color: '#29beb8',
+      secondaryColor: '#3aa8a4',
+      displayName
+    });
+
+    if (!_firstAddBlockRan) {
+      _firstAddBlockRan = true;
+      this.traps.getBlockly().then(ScratchBlocks => {
+        const BlockSvg = ScratchBlocks.BlockSvg;
+        const oldUpdateColour = BlockSvg.prototype.updateColour;
+
+        BlockSvg.prototype.updateColour = function (...args2) {
+          // procedures_prototype also has a procedure code but we do not want to color them.
+          if (this.type === 'procedures_call') {
+            const block = this.procCode_ && vm.runtime.getAddonBlock(this.procCode_);
+
+            if (block) {
+              this.colour_ = '#29beb8';
+              this.colourSecondary_ = '#3aa8a4';
+              this.colourTertiary_ = '#3aa8a4';
+              this.customContextMenu = null;
+            }
+          }
+
+          return oldUpdateColour.call(this, ...args2);
+        };
+
+        const originalCreateAllInputs = ScratchBlocks.Blocks.procedures_call.createAllInputs_;
+
+        ScratchBlocks.Blocks.procedures_call.createAllInputs_ = function (...args2) {
+          const block = this.procCode_ && vm.runtime.getAddonBlock(this.procCode_);
+
+          if (block && block.displayName) {
+            const originalProcCode = this.procCode_;
+            this.procCode_ = block.displayName;
+            const ret = originalCreateAllInputs.call(this, ...args2);
+            this.procCode_ = originalProcCode;
+            return ret;
+          }
+
+          return originalCreateAllInputs.call(this, ...args2);
+        };
+
+        if (vm.editingTarget) {
+          vm.emitWorkspaceUpdate();
+        }
+      });
+    }
+  }
+
+  getCustomBlock(procedureCode) {
+    const vm = this.traps.vm;
+    return vm.getAddonBlock(procedureCode);
+  }
+
+  createBlockContextMenu(callback, {
+    workspace = false,
+    blocks = false,
+    flyout = false,
+    comments = false
+  } = {}) {
+    contextMenuCallbacks.push({
+      addonId: this._id,
+      callback,
+      workspace,
+      blocks,
+      flyout,
+      comments
+    });
+    contextMenuCallbacks.sort((b, a) => CONTEXT_MENU_ORDER.indexOf(b.addonId) - CONTEXT_MENU_ORDER.indexOf(a.addonId));
+    if (createdAnyBlockContextMenus) return;
+    createdAnyBlockContextMenus = true;
+    this.traps.getBlockly().then(ScratchBlocks => {
+      const oldShow = ScratchBlocks.ContextMenu.show;
+
+      ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
+        const gesture = ScratchBlocks.mainWorkspace.currentGesture_;
+        const block = gesture.targetBlock_; // eslint-disable-next-line no-shadow
+
+        for (const {
+          callback,
+          workspace,
+          blocks,
+          flyout,
+          comments
+        } of contextMenuCallbacks) {
+          const injectMenu = // Workspace
+          workspace && !block && !gesture.flyout_ && !gesture.startBubble_ || blocks && block && !gesture.flyout_ || flyout && gesture.flyout_ || comments && gesture.startBubble_;
+
+          if (injectMenu) {
+            try {
+              items = callback(items, block);
+            } catch (e) {
+              console.error('Error while calling context menu callback: ', e);
+            }
+          }
+        }
+
+        oldShow.call(this, event, items, rtl);
+        const blocklyContextMenu = ScratchBlocks.WidgetDiv.DIV.firstChild;
+        items.forEach((item, i) => {
+          if (i !== 0 && item.separator) {
+            const itemElt = blocklyContextMenu.children[i];
+            itemElt.style.paddingTop = '2px';
+            itemElt.classList.add('sa-blockly-menu-item-border');
+            itemElt.style.borderTop = '1px solid hsla(0, 0%, 0%, 0.15)';
+          }
+        });
+      };
+    });
+  }
+
+  createEditorContextMenu(callback, options) {
+    Object(_contextmenu__WEBPACK_IMPORTED_MODULE_9__["addContextMenu"])(this, callback, options);
+  }
+
+  copyImage(dataURL) {
+    if (!navigator.clipboard.write) {
+      return Promise.reject(new Error('Clipboard API not supported'));
+    }
+
+    const items = [// eslint-disable-next-line no-undef
+    new ClipboardItem({
+      'image/png': Object(_lib_data_uri_to_blob__WEBPACK_IMPORTED_MODULE_2__["default"])(dataURL)
+    })];
+    return navigator.clipboard.write(items);
+  }
+
+  scratchMessage(id) {
+    return tabReduxInstance.state.locales.messages[id];
+  }
+
+  scratchClass(...args) {
+    const scratchClasses = getScratchClassNames();
+    const classes = [];
+
+    for (const arg of args) {
+      if (typeof arg === 'string') {
+        for (const scratchClass of scratchClasses) {
+          if (scratchClass.startsWith("".concat(arg, "_")) && scratchClass.length === arg.length + 6) {
+            classes.push(scratchClass);
+            break;
+          }
+        }
+      }
+    }
+
+    const options = args[args.length - 1];
+
+    if (typeof options === 'object') {
+      const others = Array.isArray(options.others) ? options.others : [options.others];
+
+      for (const className of others) {
+        classes.push(className);
+      }
+    }
+
+    return classes.join(' ');
+  }
+
+  get editorMode() {
+    return getEditorMode();
+  }
+
+  displayNoneWhileDisabled(el) {
+    el.classList.add(getDisplayNoneWhileDisabledClass(this._id));
+  }
+
+  get direction() {
+    return this.redux.state.locales.isRtl ? 'rtl' : 'ltr';
+  }
+
+  createModal(title, {
+    isOpen = false
+  } = {}) {
+    return _modal__WEBPACK_IMPORTED_MODULE_10__["createEditorModal"](this, title, {
+      isOpen
+    });
+  }
+
+  confirm(...args) {
+    return _modal__WEBPACK_IMPORTED_MODULE_10__["confirm"](this, ...args);
+  }
+
+  prompt(...args) {
+    return _modal__WEBPACK_IMPORTED_MODULE_10__["prompt"](this, ...args);
+  }
+
+}
+
+class Settings extends _event_target__WEBPACK_IMPORTED_MODULE_3__["default"] {
+  constructor(addonId, manifest) {
+    super();
+    this._addonId = addonId;
+    this._manifest = manifest;
+  }
+
+  get(id) {
+    return _settings_store_singleton__WEBPACK_IMPORTED_MODULE_1__["default"].getAddonSetting(this._addonId, id);
+  }
+
+}
+
+class Self extends _event_target__WEBPACK_IMPORTED_MODULE_3__["default"] {
+  constructor(id) {
+    super();
+    this.id = id;
+    this.disabled = false;
   } // These are removed at build-time by pull.js. Throw if attempting to access them at runtime.
 
 
-  _createClass(Self, [{
-    key: "dir",
-    get: function get() {
-      throw new Error("Addon tried to access addon.self.dir");
-    }
-  }, {
-    key: "lib",
-    get: function get() {
-      throw new Error("Addon tried to access addon.self.lib");
-    }
-  }]);
+  get dir() {
+    throw new Error("Addon tried to access addon.self.dir");
+  }
 
-  return Self;
-}(_event_target__WEBPACK_IMPORTED_MODULE_3__["default"]);
+  get lib() {
+    throw new Error("Addon tried to access addon.self.lib");
+  }
 
-var AddonRunner = /*#__PURE__*/function () {
-  function AddonRunner(id) {
-    _classCallCheck(this, AddonRunner);
+}
 
+class AddonRunner {
+  constructor(id) {
     AddonRunner.instances.push(this);
-    var manifest = _generated_addon_manifests__WEBPACK_IMPORTED_MODULE_5__["default"][id];
+    const manifest = _generated_addon_manifests__WEBPACK_IMPORTED_MODULE_5__["default"][id];
     this.id = id;
     this.manifest = manifest;
     this.messageCache = {};
@@ -2264,8 +1660,8 @@ var AddonRunner = /*#__PURE__*/function () {
     this.disabledStylesheet = null;
     this.loading = true;
     this.publicAPI = {
-      global: global,
-      console: console,
+      global,
+      console,
       addon: {
         tab: new Tab(id),
         settings: new Settings(id, manifest),
@@ -2276,384 +1672,202 @@ var AddonRunner = /*#__PURE__*/function () {
     };
   }
 
-  _createClass(AddonRunner, [{
-    key: "_msg",
-    value: function _msg(key, vars, handler) {
-      var namespacedKey = "".concat(this.id, "/").concat(key);
+  _msg(key, vars, handler) {
+    const namespacedKey = "".concat(this.id, "/").concat(key);
 
-      if (this.messageCache[namespacedKey]) {
-        return this.messageCache[namespacedKey].format(vars);
-      }
-
-      var translation = _addons_l10n_en_json__WEBPACK_IMPORTED_MODULE_6__[namespacedKey];
-
-      if (!translation) {
-        return namespacedKey;
-      }
-
-      if (handler) {
-        translation = handler(translation);
-      }
-
-      var messageFormat = new intl_messageformat__WEBPACK_IMPORTED_MODULE_0___default.a(translation, language);
-      this.messageCache[namespacedKey] = messageFormat;
-      return messageFormat.format(vars);
+    if (this.messageCache[namespacedKey]) {
+      return this.messageCache[namespacedKey].format(vars);
     }
-  }, {
-    key: "msg",
-    value: function msg(key, vars) {
-      return this._msg(key, vars, null);
-    }
-  }, {
-    key: "safeMsg",
-    value: function safeMsg(key, vars) {
-      return this._msg(key, vars, escapeHTML);
-    }
-  }, {
-    key: "settingsChanged",
-    value: function settingsChanged() {
-      this.publicAPI.addon.settings.dispatchEvent(new CustomEvent('change'));
-      this.updateCSSVariables();
-    }
-  }, {
-    key: "updateCSSVariables",
-    value: function updateCSSVariables() {
-      if (this.manifest.settings) {
-        var kebabCaseId = kebabCaseToCamelCase(this.id);
 
-        var _iterator11 = _createForOfIteratorHelper(this.manifest.settings),
-            _step11;
+    let translation = _addons_l10n_en_json__WEBPACK_IMPORTED_MODULE_6__[namespacedKey];
 
-        try {
-          for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
-            var setting = _step11.value;
-            var settingId = setting.id;
-            var variable = "--".concat(kebabCaseId, "-").concat(kebabCaseToCamelCase(settingId));
-            var value = this.publicAPI.addon.settings.get(settingId);
-            document.documentElement.style.setProperty(variable, value);
-          }
-        } catch (err) {
-          _iterator11.e(err);
-        } finally {
-          _iterator11.f();
-        }
+    if (!translation) {
+      return namespacedKey;
+    }
+
+    if (handler) {
+      translation = handler(translation);
+    }
+
+    const messageFormat = new intl_messageformat__WEBPACK_IMPORTED_MODULE_0___default.a(translation, language);
+    this.messageCache[namespacedKey] = messageFormat;
+    return messageFormat.format(vars);
+  }
+
+  msg(key, vars) {
+    return this._msg(key, vars, null);
+  }
+
+  safeMsg(key, vars) {
+    return this._msg(key, vars, escapeHTML);
+  }
+
+  settingsChanged() {
+    this.publicAPI.addon.settings.dispatchEvent(new CustomEvent('change'));
+    this.updateCSSVariables();
+  }
+
+  updateCSSVariables() {
+    if (this.manifest.settings) {
+      const kebabCaseId = kebabCaseToCamelCase(this.id);
+
+      for (const setting of this.manifest.settings) {
+        const settingId = setting.id;
+        const variable = "--".concat(kebabCaseId, "-").concat(kebabCaseToCamelCase(settingId));
+        const value = this.publicAPI.addon.settings.get(settingId);
+        document.documentElement.style.setProperty(variable, value);
       }
     }
-  }, {
-    key: "meetsCondition",
-    value: function meetsCondition(condition) {
-      if (!condition) {
-        // No condition, so always active.
-        return true;
-      }
+  }
 
-      if (condition.settings) {
-        for (var _i2 = 0, _Object$entries = Object.entries(condition.settings); _i2 < _Object$entries.length; _i2++) {
-          var _Object$entries$_i = _slicedToArray(_Object$entries[_i2], 2),
-              settingId = _Object$entries$_i[0],
-              expectedValue = _Object$entries$_i[1];
-
-          if (this.publicAPI.addon.settings.get(settingId) !== expectedValue) {
-            return false;
-          }
-        }
-      }
-
+  meetsCondition(condition) {
+    if (!condition) {
+      // No condition, so always active.
       return true;
     }
-  }, {
-    key: "dynamicEnable",
-    value: function dynamicEnable() {
-      if (this.loading) {
-        return;
-      }
 
-      this.appendStylesheets();
-
-      if (this.disabledStylesheet) {
-        this.disabledStylesheet.remove();
-        this.disabledStylesheet = null;
-      }
-
-      this.publicAPI.addon.self.disabled = false;
-      this.publicAPI.addon.self.dispatchEvent(new CustomEvent('reenabled'));
-    }
-  }, {
-    key: "dynamicDisable",
-    value: function dynamicDisable() {
-      if (this.loading) {
-        return;
-      }
-
-      this.removeStylesheets();
-      var disabledCSS = ".".concat(getDisplayNoneWhileDisabledClass(this.id), "{display:none !important;}");
-      this.disabledStylesheet = createStylesheet(disabledCSS);
-      addStylesheet(this.disabledStylesheet);
-      this.publicAPI.addon.self.disabled = true;
-      this.publicAPI.addon.self.dispatchEvent(new CustomEvent('disabled'));
-    }
-  }, {
-    key: "removeStylesheets",
-    value: function removeStylesheets() {
-      var _iterator12 = _createForOfIteratorHelper(this.stylesheets),
-          _step12;
-
-      try {
-        for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
-          var style = _step12.value;
-          style.remove();
+    if (condition.settings) {
+      for (const [settingId, expectedValue] of Object.entries(condition.settings)) {
+        if (this.publicAPI.addon.settings.get(settingId) !== expectedValue) {
+          return false;
         }
-      } catch (err) {
-        _iterator12.e(err);
-      } finally {
-        _iterator12.f();
       }
     }
-  }, {
-    key: "appendStylesheets",
-    value: function appendStylesheets() {
-      var _iterator13 = _createForOfIteratorHelper(this.stylesheets),
-          _step13;
 
-      try {
-        for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
-          var style = _step13.value;
-          addStylesheet(style);
+    return true;
+  }
+
+  dynamicEnable() {
+    if (this.loading) {
+      return;
+    }
+
+    this.appendStylesheets();
+
+    if (this.disabledStylesheet) {
+      this.disabledStylesheet.remove();
+      this.disabledStylesheet = null;
+    }
+
+    this.publicAPI.addon.self.disabled = false;
+    this.publicAPI.addon.self.dispatchEvent(new CustomEvent('reenabled'));
+  }
+
+  dynamicDisable() {
+    if (this.loading) {
+      return;
+    }
+
+    this.removeStylesheets();
+    const disabledCSS = ".".concat(getDisplayNoneWhileDisabledClass(this.id), "{display:none !important;}");
+    this.disabledStylesheet = createStylesheet(disabledCSS);
+    addStylesheet(this.disabledStylesheet);
+    this.publicAPI.addon.self.disabled = true;
+    this.publicAPI.addon.self.dispatchEvent(new CustomEvent('disabled'));
+  }
+
+  removeStylesheets() {
+    for (const style of this.stylesheets) {
+      style.remove();
+    }
+  }
+
+  appendStylesheets() {
+    for (const style of this.stylesheets) {
+      addStylesheet(style);
+    }
+  }
+
+  async run() {
+    if (this.manifest.editorOnly) {
+      await untilInEditor();
+    }
+
+    const {
+      resources
+    } = await _generated_addon_entries__WEBPACK_IMPORTED_MODULE_8__["default"][this.id]();
+
+    if (!this.manifest.noTranslations) {
+      await addonMessagesPromise;
+    }
+
+    this.updateCSSVariables();
+
+    if (this.manifest.userstyles) {
+      for (const userstyle of this.manifest.userstyles) {
+        if (!this.meetsCondition(userstyle.if)) {
+          continue;
         }
-      } catch (err) {
-        _iterator13.e(err);
-      } finally {
-        _iterator13.f();
+
+        const m = resources[userstyle.url];
+        const source = m[0][1];
+        const style = createStylesheet(source);
+        style.className = 'scratch-addons-theme';
+        style.dataset.addonId = this.id;
+        this.stylesheets.push(style);
       }
     }
-  }, {
-    key: "run",
-    value: function () {
-      var _run = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-        var _yield$addonEntries$t, resources, _iterator14, _step14, userstyle, m, source, style, _iterator15, _step15, userscript, fn;
 
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                if (!this.manifest.editorOnly) {
-                  _context3.next = 3;
-                  break;
-                }
+    this.appendStylesheets();
 
-                _context3.next = 3;
-                return untilInEditor();
+    if (this.manifest.userscripts) {
+      for (const userscript of this.manifest.userscripts) {
+        if (!this.meetsCondition(userscript.if)) {
+          continue;
+        }
 
-              case 3:
-                _context3.next = 5;
-                return _generated_addon_entries__WEBPACK_IMPORTED_MODULE_8__["default"][this.id]();
-
-              case 5:
-                _yield$addonEntries$t = _context3.sent;
-                resources = _yield$addonEntries$t.resources;
-
-                if (this.manifest.noTranslations) {
-                  _context3.next = 10;
-                  break;
-                }
-
-                _context3.next = 10;
-                return addonMessagesPromise;
-
-              case 10:
-                this.updateCSSVariables();
-
-                if (!this.manifest.userstyles) {
-                  _context3.next = 35;
-                  break;
-                }
-
-                _iterator14 = _createForOfIteratorHelper(this.manifest.userstyles);
-                _context3.prev = 13;
-
-                _iterator14.s();
-
-              case 15:
-                if ((_step14 = _iterator14.n()).done) {
-                  _context3.next = 27;
-                  break;
-                }
-
-                userstyle = _step14.value;
-
-                if (this.meetsCondition(userstyle.if)) {
-                  _context3.next = 19;
-                  break;
-                }
-
-                return _context3.abrupt("continue", 25);
-
-              case 19:
-                m = resources[userstyle.url];
-                source = m[0][1];
-                style = createStylesheet(source);
-                style.className = 'scratch-addons-theme';
-                style.dataset.addonId = this.id;
-                this.stylesheets.push(style);
-
-              case 25:
-                _context3.next = 15;
-                break;
-
-              case 27:
-                _context3.next = 32;
-                break;
-
-              case 29:
-                _context3.prev = 29;
-                _context3.t0 = _context3["catch"](13);
-
-                _iterator14.e(_context3.t0);
-
-              case 32:
-                _context3.prev = 32;
-
-                _iterator14.f();
-
-                return _context3.finish(32);
-
-              case 35:
-                this.appendStylesheets();
-
-                if (!this.manifest.userscripts) {
-                  _context3.next = 56;
-                  break;
-                }
-
-                _iterator15 = _createForOfIteratorHelper(this.manifest.userscripts);
-                _context3.prev = 38;
-
-                _iterator15.s();
-
-              case 40:
-                if ((_step15 = _iterator15.n()).done) {
-                  _context3.next = 48;
-                  break;
-                }
-
-                userscript = _step15.value;
-
-                if (this.meetsCondition(userscript.if)) {
-                  _context3.next = 44;
-                  break;
-                }
-
-                return _context3.abrupt("continue", 46);
-
-              case 44:
-                fn = resources[userscript.url];
-                fn(this.publicAPI);
-
-              case 46:
-                _context3.next = 40;
-                break;
-
-              case 48:
-                _context3.next = 53;
-                break;
-
-              case 50:
-                _context3.prev = 50;
-                _context3.t1 = _context3["catch"](38);
-
-                _iterator15.e(_context3.t1);
-
-              case 53:
-                _context3.prev = 53;
-
-                _iterator15.f();
-
-                return _context3.finish(53);
-
-              case 56:
-                this.loading = false;
-
-              case 57:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, this, [[13, 29, 32, 35], [38, 50, 53, 56]]);
-      }));
-
-      function run() {
-        return _run.apply(this, arguments);
+        const fn = resources[userscript.url];
+        fn(this.publicAPI);
       }
+    }
 
-      return run;
-    }()
-  }]);
+    this.loading = false;
+  }
 
-  return AddonRunner;
-}();
+}
 
 AddonRunner.instances = [];
 
-var runAddon = function runAddon(addonId) {
-  var runner = new AddonRunner(addonId);
+const runAddon = addonId => {
+  const runner = new AddonRunner(addonId);
   runner.run();
 };
 
-var oldMode = getEditorMode();
+let oldMode = getEditorMode();
 
-var emitUrlChange = function emitUrlChange() {
+const emitUrlChange = () => {
   // In Scratch, URL changes usually mean someone went from editor to fullscreen or something like that.
   // This is not the case in TW -- the URL can change for many other reasons that addons probably aren't prepared
   // to handle.
-  var newMode = getEditorMode();
+  const newMode = getEditorMode();
 
   if (newMode !== oldMode) {
     oldMode = newMode;
-    setTimeout(function () {
-      var _iterator16 = _createForOfIteratorHelper(AddonRunner.instances),
-          _step16;
-
-      try {
-        for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {
-          var addon = _step16.value;
-          addon.publicAPI.addon.tab.dispatchEvent(new CustomEvent('urlChange'));
-        }
-      } catch (err) {
-        _iterator16.e(err);
-      } finally {
-        _iterator16.f();
+    setTimeout(() => {
+      for (const addon of AddonRunner.instances) {
+        addon.publicAPI.addon.tab.dispatchEvent(new CustomEvent('urlChange'));
       }
     });
   }
 };
 
-var originalReplaceState = history.replaceState;
+const originalReplaceState = history.replaceState;
 
-history.replaceState = function () {
-  for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-    args[_key6] = arguments[_key6];
-  }
-
+history.replaceState = function (...args) {
   originalReplaceState.apply(this, args);
   emitUrlChange();
 };
 
-var originalPushState = history.pushState;
+const originalPushState = history.pushState;
 
-history.pushState = function () {
-  for (var _len7 = arguments.length, args = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-    args[_key7] = arguments[_key7];
-  }
-
+history.pushState = function (...args) {
   originalPushState.apply(this, args);
   emitUrlChange();
 };
 
-_settings_store_singleton__WEBPACK_IMPORTED_MODULE_1__["default"].addEventListener('addon-changed', function (e) {
-  var addonId = e.detail.addonId;
-  var runner = AddonRunner.instances.find(function (i) {
-    return i.id === addonId;
-  });
+_settings_store_singleton__WEBPACK_IMPORTED_MODULE_1__["default"].addEventListener('addon-changed', e => {
+  const addonId = e.detail.addonId;
+  const runner = AddonRunner.instances.find(i => i.id === addonId);
 
   if (runner) {
     runner.settingsChanged();
@@ -2672,9 +1886,7 @@ _settings_store_singleton__WEBPACK_IMPORTED_MODULE_1__["default"].addEventListen
   }
 });
 
-for (var _i3 = 0, _Object$keys = Object.keys(_generated_addon_manifests__WEBPACK_IMPORTED_MODULE_5__["default"]); _i3 < _Object$keys.length; _i3++) {
-  var id = _Object$keys[_i3];
-
+for (const id of Object.keys(_generated_addon_manifests__WEBPACK_IMPORTED_MODULE_5__["default"])) {
   if (!_settings_store_singleton__WEBPACK_IMPORTED_MODULE_1__["default"].getAddonEnabled(id)) {
     continue;
   }
@@ -2695,12 +1907,6 @@ for (var _i3 = 0, _Object$keys = Object.keys(_generated_addon_manifests__WEBPACK
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addContextMenu", function() { return addContextMenu; });
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2711,124 +1917,93 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 // https://github.com/ScratchAddons/ScratchAddons/blob/master/addon-api/content-script/contextmenu.js
 
 /* eslint-disable */
-var initialized = false;
-var hasDynamicContextMenu = false;
-var contextMenus = [];
+let initialized = false;
+let hasDynamicContextMenu = false;
+let contextMenus = [];
 
-var onReactContextMenu = function onReactContextMenu(e) {
-  var _this = this,
-      _ctxTarget$this$traps10,
-      _ctxTarget$this$traps11,
-      _ctxTarget$this$traps12,
-      _ctxTarget$this$traps13,
-      _ctxTarget$this$traps14,
-      _ctxTarget$this$traps15;
+const onReactContextMenu = function onReactContextMenu(e) {
+  var _ctxTarget$this$traps10, _ctxTarget$this$traps11, _ctxTarget$this$traps12, _ctxTarget$this$traps13, _ctxTarget$this$traps14, _ctxTarget$this$traps15;
 
   if (!e.target) return;
-  var ctxTarget = e.target.closest(".react-contextmenu-wrapper");
+  const ctxTarget = e.target.closest(".react-contextmenu-wrapper");
   if (!ctxTarget) return;
-  var ctxMenu = ctxTarget.querySelector("nav.react-contextmenu");
-  var type;
-  var extra = {};
+  let ctxMenu = ctxTarget.querySelector("nav.react-contextmenu");
+  let type;
+  const extra = {};
 
-  if (false) { var props, mInternalId, _ctxTarget$this$traps, _ctxTarget$this$traps2, _ctxTarget$this$traps3, _ctxTarget$this$traps4, _ctxTarget$this$traps5, _ctxTarget$this$traps6, _ctxTarget$this$traps7, _ctxTarget$this$traps8, _ctxTarget$this$traps9; } else if ((_ctxTarget$this$traps10 = ctxTarget[this.traps.getInternalKey(ctxTarget)]) !== null && _ctxTarget$this$traps10 !== void 0 && (_ctxTarget$this$traps11 = _ctxTarget$this$traps10.return) !== null && _ctxTarget$this$traps11 !== void 0 && (_ctxTarget$this$traps12 = _ctxTarget$this$traps11.return) !== null && _ctxTarget$this$traps12 !== void 0 && (_ctxTarget$this$traps13 = _ctxTarget$this$traps12.return) !== null && _ctxTarget$this$traps13 !== void 0 && (_ctxTarget$this$traps14 = _ctxTarget$this$traps13.stateNode) !== null && _ctxTarget$this$traps14 !== void 0 && (_ctxTarget$this$traps15 = _ctxTarget$this$traps14.props) !== null && _ctxTarget$this$traps15 !== void 0 && _ctxTarget$this$traps15.dragType) {
+  if (false) { var _ctxTarget$this$traps, _ctxTarget$this$traps2, _ctxTarget$this$traps3, _ctxTarget$this$traps4, _ctxTarget$this$traps5, _ctxTarget$this$traps6, _ctxTarget$this$traps7, _ctxTarget$this$traps8, _ctxTarget$this$traps9; } else if ((_ctxTarget$this$traps10 = ctxTarget[this.traps.getInternalKey(ctxTarget)]) !== null && _ctxTarget$this$traps10 !== void 0 && (_ctxTarget$this$traps11 = _ctxTarget$this$traps10.return) !== null && _ctxTarget$this$traps11 !== void 0 && (_ctxTarget$this$traps12 = _ctxTarget$this$traps11.return) !== null && _ctxTarget$this$traps12 !== void 0 && (_ctxTarget$this$traps13 = _ctxTarget$this$traps12.return) !== null && _ctxTarget$this$traps13 !== void 0 && (_ctxTarget$this$traps14 = _ctxTarget$this$traps13.stateNode) !== null && _ctxTarget$this$traps14 !== void 0 && (_ctxTarget$this$traps15 = _ctxTarget$this$traps14.props) !== null && _ctxTarget$this$traps15 !== void 0 && _ctxTarget$this$traps15.dragType) {
     // SpriteSelectorItem which despite its name is used for costumes, sounds, backpacked script etc
-    var _props = ctxTarget[this.traps.getInternalKey(ctxTarget)].return.return.return.stateNode.props;
-    type = _props.dragType.toLowerCase();
-    extra.name = _props.name;
-    extra.itemId = _props.id;
-    extra.index = _props.index;
+    const props = ctxTarget[this.traps.getInternalKey(ctxTarget)].return.return.return.stateNode.props;
+    type = props.dragType.toLowerCase();
+    extra.name = props.name;
+    extra.itemId = props.id;
+    extra.index = props.index;
   } else {
     return;
   }
 
-  var ctx = _objectSpread({
+  const ctx = _objectSpread({
     menuItem: ctxMenu,
     target: ctxTarget,
-    type: type
+    type
   }, extra);
 
-  Array.from(ctxMenu.children).forEach(function (existing) {
+  Array.from(ctxMenu.children).forEach(existing => {
     if (existing.classList.contains("sa-ctx-menu")) existing.remove();
   });
 
-  var _iterator = _createForOfIteratorHelper(hasDynamicContextMenu ? contextMenus.flatMap(function (menu) {
-    return typeof menu === "function" ? menu(type, ctx) : menu;
-  }) : contextMenus),
-      _step;
-
-  try {
-    var _loop = function _loop() {
-      var item = _step.value;
-      if (!item) return "continue";
-      if (item.types && !item.types.some(function (itemType) {
-        return type === itemType;
-      })) return "continue";
-      if (item.condition && !item.condition(ctx)) return "continue";
-      var itemElem = document.createElement("div");
-      var classes = ["context-menu_menu-item"];
-      if (item.border) classes.push("context-menu_menu-item-bordered");
-      if (item.dangerous) classes.push("context-menu_menu-item-danger");
-      itemElem.className = _this.scratchClass.apply(_this, classes.concat([{
-        others: ["react-contextmenu-item", "sa-ctx-menu", item.className || ""]
-      }]));
-      var label = document.createElement("span");
-      label.textContent = item.label;
-      itemElem.append(label);
-
-      _this.displayNoneWhileDisabled(itemElem, {
-        display: "block"
-      });
-
-      itemElem.addEventListener("click", function (e) {
-        e.stopPropagation();
-        window.dispatchEvent(new CustomEvent("REACT_CONTEXTMENU_HIDE", {
-          detail: {
-            action: "REACT_CONTEXTMENU_HIDE"
-          }
-        }));
-        item.callback(ctx);
-      });
-
-      _this.appendToSharedSpace({
-        space: item.position,
-        order: item.order,
-        scope: ctxMenu,
-        element: itemElem
-      });
-    };
-
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var _ret = _loop();
-
-      if (_ret === "continue") continue;
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
+  for (const item of hasDynamicContextMenu ? contextMenus.flatMap(menu => typeof menu === "function" ? menu(type, ctx) : menu) : contextMenus) {
+    if (!item) continue;
+    if (item.types && !item.types.some(itemType => type === itemType)) continue;
+    if (item.condition && !item.condition(ctx)) continue;
+    const itemElem = document.createElement("div");
+    const classes = ["context-menu_menu-item"];
+    if (item.border) classes.push("context-menu_menu-item-bordered");
+    if (item.dangerous) classes.push("context-menu_menu-item-danger");
+    itemElem.className = this.scratchClass(...classes, {
+      others: ["react-contextmenu-item", "sa-ctx-menu", item.className || ""]
+    });
+    const label = document.createElement("span");
+    label.textContent = item.label;
+    itemElem.append(label);
+    this.displayNoneWhileDisabled(itemElem, {
+      display: "block"
+    });
+    itemElem.addEventListener("click", e => {
+      e.stopPropagation();
+      window.dispatchEvent(new CustomEvent("REACT_CONTEXTMENU_HIDE", {
+        detail: {
+          action: "REACT_CONTEXTMENU_HIDE"
+        }
+      }));
+      item.callback(ctx);
+    });
+    this.appendToSharedSpace({
+      space: item.position,
+      order: item.order,
+      scope: ctxMenu,
+      element: itemElem
+    });
   }
 
   return;
 };
 
-var initialize = function initialize(tab) {
+const initialize = tab => {
   if (initialized) return;
   initialized = true;
-  document.body.addEventListener("contextmenu", function (e) {
-    return onReactContextMenu.call(tab, e);
-  }, {
+  document.body.addEventListener("contextmenu", e => onReactContextMenu.call(tab, e), {
     capture: true
   });
 };
 
-var addContextMenu = function addContextMenu(tab, callback, opts) {
+const addContextMenu = (tab, callback, opts) => {
   if (typeof opts === "undefined") {
     contextMenus.push(callback);
     hasDynamicContextMenu = true;
   } else {
     contextMenus.push(_objectSpread(_objectSpread({}, opts), {}, {
-      callback: callback
+      callback
     }));
   }
 
@@ -2848,192 +2023,68 @@ var addContextMenu = function addContextMenu(tab, callback, opts) {
 __webpack_require__.r(__webpack_exports__);
 /* generated by pull.js */
 /* harmony default export */ __webpack_exports__["default"] = ({
-  "cat-blocks": function catBlocks() {
-    return __webpack_require__.e(/*! import() | addon-entry-cat-blocks */ "addon-entry-cat-blocks").then(__webpack_require__.bind(null, /*! ../addons/cat-blocks/_runtime_entry.js */ "./src/addons/addons/cat-blocks/_runtime_entry.js"));
-  },
-  "editor-devtools": function editorDevtools() {
-    return __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/editor-devtools/_runtime_entry.js */ "./src/addons/addons/editor-devtools/_runtime_entry.js"));
-  },
-  "editor-searchable-dropdowns": function editorSearchableDropdowns() {
-    return __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/editor-searchable-dropdowns/_runtime_entry.js */ "./src/addons/addons/editor-searchable-dropdowns/_runtime_entry.js"));
-  },
-  "data-category-tweaks-v2": function dataCategoryTweaksV2() {
-    return __webpack_require__.e(/*! import() | addon-entry-data-category-tweaks-v2 */ "addon-entry-data-category-tweaks-v2").then(__webpack_require__.bind(null, /*! ../addons/data-category-tweaks-v2/_runtime_entry.js */ "./src/addons/addons/data-category-tweaks-v2/_runtime_entry.js"));
-  },
-  "block-palette-icons": function blockPaletteIcons() {
-    return __webpack_require__.e(/*! import() | addon-entry-block-palette-icons */ "addon-entry-block-palette-icons").then(__webpack_require__.bind(null, /*! ../addons/block-palette-icons/_runtime_entry.js */ "./src/addons/addons/block-palette-icons/_runtime_entry.js"));
-  },
-  "hide-flyout": function hideFlyout() {
-    return __webpack_require__.e(/*! import() | addon-entry-hide-flyout */ "addon-entry-hide-flyout").then(__webpack_require__.bind(null, /*! ../addons/hide-flyout/_runtime_entry.js */ "./src/addons/addons/hide-flyout/_runtime_entry.js"));
-  },
-  "mediarecorder": function mediarecorder() {
-    return __webpack_require__.e(/*! import() | addon-entry-mediarecorder */ "addon-entry-mediarecorder").then(__webpack_require__.bind(null, /*! ../addons/mediarecorder/_runtime_entry.js */ "./src/addons/addons/mediarecorder/_runtime_entry.js"));
-  },
-  "drag-drop": function dragDrop() {
-    return __webpack_require__(/*! ../addons/drag-drop/_runtime_entry.js */ "./src/addons/addons/drag-drop/_runtime_entry.js");
-  },
-  "debugger": function _debugger() {
-    return __webpack_require__.e(/*! import() | addon-entry-debugger */ "addon-entry-debugger").then(__webpack_require__.bind(null, /*! ../addons/debugger/_runtime_entry.js */ "./src/addons/addons/debugger/_runtime_entry.js"));
-  },
-  "pause": function pause() {
-    return __webpack_require__(/*! ../addons/pause/_runtime_entry.js */ "./src/addons/addons/pause/_runtime_entry.js");
-  },
-  "mute-project": function muteProject() {
-    return __webpack_require__(/*! ../addons/mute-project/_runtime_entry.js */ "./src/addons/addons/mute-project/_runtime_entry.js");
-  },
-  "clones": function clones() {
-    return __webpack_require__.e(/*! import() | addon-entry-clones */ "addon-entry-clones").then(__webpack_require__.bind(null, /*! ../addons/clones/_runtime_entry.js */ "./src/addons/addons/clones/_runtime_entry.js"));
-  },
-  "mouse-pos": function mousePos() {
-    return __webpack_require__.e(/*! import() | addon-entry-mouse-pos */ "addon-entry-mouse-pos").then(__webpack_require__.bind(null, /*! ../addons/mouse-pos/_runtime_entry.js */ "./src/addons/addons/mouse-pos/_runtime_entry.js"));
-  },
-  "color-picker": function colorPicker() {
-    return __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/color-picker/_runtime_entry.js */ "./src/addons/addons/color-picker/_runtime_entry.js"));
-  },
-  "remove-sprite-confirm": function removeSpriteConfirm() {
-    return __webpack_require__.e(/*! import() | addon-entry-remove-sprite-confirm */ "addon-entry-remove-sprite-confirm").then(__webpack_require__.bind(null, /*! ../addons/remove-sprite-confirm/_runtime_entry.js */ "./src/addons/addons/remove-sprite-confirm/_runtime_entry.js"));
-  },
-  "block-count": function blockCount() {
-    return __webpack_require__.e(/*! import() | addon-entry-block-count */ "addon-entry-block-count").then(__webpack_require__.bind(null, /*! ../addons/block-count/_runtime_entry.js */ "./src/addons/addons/block-count/_runtime_entry.js"));
-  },
-  "onion-skinning": function onionSkinning() {
-    return __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/onion-skinning/_runtime_entry.js */ "./src/addons/addons/onion-skinning/_runtime_entry.js"));
-  },
-  "default-costume-editor-color": function defaultCostumeEditorColor() {
-    return __webpack_require__.e(/*! import() | addon-entry-default-costume-editor-color */ "addon-entry-default-costume-editor-color").then(__webpack_require__.bind(null, /*! ../addons/default-costume-editor-color/_runtime_entry.js */ "./src/addons/addons/default-costume-editor-color/_runtime_entry.js"));
-  },
-  "bitmap-copy": function bitmapCopy() {
-    return __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/bitmap-copy/_runtime_entry.js */ "./src/addons/addons/bitmap-copy/_runtime_entry.js"));
-  },
-  "2d-color-picker": function dColorPicker() {
-    return __webpack_require__.e(/*! import() | addon-entry-2d-color-picker */ "addon-entry-2d-color-picker").then(__webpack_require__.bind(null, /*! ../addons/2d-color-picker/_runtime_entry.js */ "./src/addons/addons/2d-color-picker/_runtime_entry.js"));
-  },
-  "better-img-uploads": function betterImgUploads() {
-    return __webpack_require__.e(/*! import() | addon-entry-better-img-uploads */ "addon-entry-better-img-uploads").then(__webpack_require__.bind(null, /*! ../addons/better-img-uploads/_runtime_entry.js */ "./src/addons/addons/better-img-uploads/_runtime_entry.js"));
-  },
-  "pick-colors-from-stage": function pickColorsFromStage() {
-    return __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/pick-colors-from-stage/_runtime_entry.js */ "./src/addons/addons/pick-colors-from-stage/_runtime_entry.js"));
-  },
-  "custom-block-shape": function customBlockShape() {
-    return __webpack_require__.e(/*! import() | addon-entry-custom-block-shape */ "addon-entry-custom-block-shape").then(__webpack_require__.bind(null, /*! ../addons/custom-block-shape/_runtime_entry.js */ "./src/addons/addons/custom-block-shape/_runtime_entry.js"));
-  },
-  "zebra-striping": function zebraStriping() {
-    return __webpack_require__.e(/*! import() | addon-entry-zebra-striping */ "addon-entry-zebra-striping").then(__webpack_require__.bind(null, /*! ../addons/zebra-striping/_runtime_entry.js */ "./src/addons/addons/zebra-striping/_runtime_entry.js"));
-  },
-  "editor-theme3": function editorTheme3() {
-    return __webpack_require__.e(/*! import() | addon-entry-editor-theme3 */ "addon-entry-editor-theme3").then(__webpack_require__.bind(null, /*! ../addons/editor-theme3/_runtime_entry.js */ "./src/addons/addons/editor-theme3/_runtime_entry.js"));
-  },
-  "custom-block-text": function customBlockText() {
-    return __webpack_require__.e(/*! import() | addon-entry-custom-block-text */ "addon-entry-custom-block-text").then(__webpack_require__.bind(null, /*! ../addons/custom-block-text/_runtime_entry.js */ "./src/addons/addons/custom-block-text/_runtime_entry.js"));
-  },
-  "editor-colored-context-menus": function editorColoredContextMenus() {
-    return __webpack_require__.e(/*! import() | addon-entry-editor-colored-context-menus */ "addon-entry-editor-colored-context-menus").then(__webpack_require__.bind(null, /*! ../addons/editor-colored-context-menus/_runtime_entry.js */ "./src/addons/addons/editor-colored-context-menus/_runtime_entry.js"));
-  },
-  "editor-stage-left": function editorStageLeft() {
-    return __webpack_require__.e(/*! import() | addon-entry-editor-stage-left */ "addon-entry-editor-stage-left").then(__webpack_require__.bind(null, /*! ../addons/editor-stage-left/_runtime_entry.js */ "./src/addons/addons/editor-stage-left/_runtime_entry.js"));
-  },
-  "editor-buttons-reverse-order": function editorButtonsReverseOrder() {
-    return __webpack_require__.e(/*! import() | addon-entry-editor-buttons-reverse-order */ "addon-entry-editor-buttons-reverse-order").then(__webpack_require__.bind(null, /*! ../addons/editor-buttons-reverse-order/_runtime_entry.js */ "./src/addons/addons/editor-buttons-reverse-order/_runtime_entry.js"));
-  },
-  "variable-manager": function variableManager() {
-    return __webpack_require__.e(/*! import() | addon-entry-variable-manager */ "addon-entry-variable-manager").then(__webpack_require__.bind(null, /*! ../addons/variable-manager/_runtime_entry.js */ "./src/addons/addons/variable-manager/_runtime_entry.js"));
-  },
-  "search-sprites": function searchSprites() {
-    return __webpack_require__.e(/*! import() | addon-entry-search-sprites */ "addon-entry-search-sprites").then(__webpack_require__.bind(null, /*! ../addons/search-sprites/_runtime_entry.js */ "./src/addons/addons/search-sprites/_runtime_entry.js"));
-  },
-  "gamepad": function gamepad() {
-    return __webpack_require__.e(/*! import() | addon-entry-gamepad */ "addon-entry-gamepad").then(__webpack_require__.bind(null, /*! ../addons/gamepad/_runtime_entry.js */ "./src/addons/addons/gamepad/_runtime_entry.js"));
-  },
-  "editor-sounds": function editorSounds() {
-    return __webpack_require__.e(/*! import() | addon-entry-editor-sounds */ "addon-entry-editor-sounds").then(__webpack_require__.bind(null, /*! ../addons/editor-sounds/_runtime_entry.js */ "./src/addons/addons/editor-sounds/_runtime_entry.js"));
-  },
-  "folders": function folders() {
-    return __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/folders/_runtime_entry.js */ "./src/addons/addons/folders/_runtime_entry.js"));
-  },
-  "block-switching": function blockSwitching() {
-    return __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/block-switching/_runtime_entry.js */ "./src/addons/addons/block-switching/_runtime_entry.js"));
-  },
-  "load-extensions": function loadExtensions() {
-    return __webpack_require__.e(/*! import() | addon-entry-load-extensions */ "addon-entry-load-extensions").then(__webpack_require__.bind(null, /*! ../addons/load-extensions/_runtime_entry.js */ "./src/addons/addons/load-extensions/_runtime_entry.js"));
-  },
-  "custom-zoom": function customZoom() {
-    return __webpack_require__.e(/*! import() | addon-entry-custom-zoom */ "addon-entry-custom-zoom").then(__webpack_require__.bind(null, /*! ../addons/custom-zoom/_runtime_entry.js */ "./src/addons/addons/custom-zoom/_runtime_entry.js"));
-  },
-  "initialise-sprite-position": function initialiseSpritePosition() {
-    return __webpack_require__.e(/*! import() | addon-entry-initialise-sprite-position */ "addon-entry-initialise-sprite-position").then(__webpack_require__.bind(null, /*! ../addons/initialise-sprite-position/_runtime_entry.js */ "./src/addons/addons/initialise-sprite-position/_runtime_entry.js"));
-  },
-  "blocks2image": function blocks2image() {
-    return __webpack_require__.e(/*! import() | addon-entry-blocks2image */ "addon-entry-blocks2image").then(__webpack_require__.bind(null, /*! ../addons/blocks2image/_runtime_entry.js */ "./src/addons/addons/blocks2image/_runtime_entry.js"));
-  },
-  "remove-curved-stage-border": function removeCurvedStageBorder() {
-    return __webpack_require__.e(/*! import() | addon-entry-remove-curved-stage-border */ "addon-entry-remove-curved-stage-border").then(__webpack_require__.bind(null, /*! ../addons/remove-curved-stage-border/_runtime_entry.js */ "./src/addons/addons/remove-curved-stage-border/_runtime_entry.js"));
-  },
-  "transparent-orphans": function transparentOrphans() {
-    return __webpack_require__.e(/*! import() | addon-entry-transparent-orphans */ "addon-entry-transparent-orphans").then(__webpack_require__.bind(null, /*! ../addons/transparent-orphans/_runtime_entry.js */ "./src/addons/addons/transparent-orphans/_runtime_entry.js"));
-  },
-  "paint-by-default": function paintByDefault() {
-    return __webpack_require__.e(/*! import() | addon-entry-paint-by-default */ "addon-entry-paint-by-default").then(__webpack_require__.bind(null, /*! ../addons/paint-by-default/_runtime_entry.js */ "./src/addons/addons/paint-by-default/_runtime_entry.js"));
-  },
-  "block-cherry-picking": function blockCherryPicking() {
-    return __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/block-cherry-picking/_runtime_entry.js */ "./src/addons/addons/block-cherry-picking/_runtime_entry.js"));
-  },
-  "hide-new-variables": function hideNewVariables() {
-    return __webpack_require__.e(/*! import() | addon-entry-hide-new-variables */ "addon-entry-hide-new-variables").then(__webpack_require__.bind(null, /*! ../addons/hide-new-variables/_runtime_entry.js */ "./src/addons/addons/hide-new-variables/_runtime_entry.js"));
-  },
-  "editor-extra-keys": function editorExtraKeys() {
-    return __webpack_require__.e(/*! import() | addon-entry-editor-extra-keys */ "addon-entry-editor-extra-keys").then(__webpack_require__.bind(null, /*! ../addons/editor-extra-keys/_runtime_entry.js */ "./src/addons/addons/editor-extra-keys/_runtime_entry.js"));
-  },
-  "hide-delete-button": function hideDeleteButton() {
-    return __webpack_require__.e(/*! import() | addon-entry-hide-delete-button */ "addon-entry-hide-delete-button").then(__webpack_require__.bind(null, /*! ../addons/hide-delete-button/_runtime_entry.js */ "./src/addons/addons/hide-delete-button/_runtime_entry.js"));
-  },
-  "no-script-bumping": function noScriptBumping() {
-    return __webpack_require__.e(/*! import() | addon-entry-no-script-bumping */ "addon-entry-no-script-bumping").then(__webpack_require__.bind(null, /*! ../addons/no-script-bumping/_runtime_entry.js */ "./src/addons/addons/no-script-bumping/_runtime_entry.js"));
-  },
-  "disable-stage-drag-select": function disableStageDragSelect() {
-    return __webpack_require__.e(/*! import() | addon-entry-disable-stage-drag-select */ "addon-entry-disable-stage-drag-select").then(__webpack_require__.bind(null, /*! ../addons/disable-stage-drag-select/_runtime_entry.js */ "./src/addons/addons/disable-stage-drag-select/_runtime_entry.js"));
-  },
-  "move-to-top-bottom": function moveToTopBottom() {
-    return __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/move-to-top-bottom/_runtime_entry.js */ "./src/addons/addons/move-to-top-bottom/_runtime_entry.js"));
-  },
-  "disable-paste-offset": function disablePasteOffset() {
-    return __webpack_require__.e(/*! import() | addon-entry-disable-paste-offset */ "addon-entry-disable-paste-offset").then(__webpack_require__.bind(null, /*! ../addons/disable-paste-offset/_runtime_entry.js */ "./src/addons/addons/disable-paste-offset/_runtime_entry.js"));
-  },
-  "block-duplicate": function blockDuplicate() {
-    return __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/block-duplicate/_runtime_entry.js */ "./src/addons/addons/block-duplicate/_runtime_entry.js"));
-  },
-  "swap-local-global": function swapLocalGlobal() {
-    return __webpack_require__.e(/*! import() | addon-entry-swap-local-global */ "addon-entry-swap-local-global").then(__webpack_require__.bind(null, /*! ../addons/swap-local-global/_runtime_entry.js */ "./src/addons/addons/swap-local-global/_runtime_entry.js"));
-  },
-  "editor-comment-previews": function editorCommentPreviews() {
-    return __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/editor-comment-previews/_runtime_entry.js */ "./src/addons/addons/editor-comment-previews/_runtime_entry.js"));
-  },
-  "columns": function columns() {
-    return __webpack_require__.e(/*! import() | addon-entry-columns */ "addon-entry-columns").then(__webpack_require__.bind(null, /*! ../addons/columns/_runtime_entry.js */ "./src/addons/addons/columns/_runtime_entry.js"));
-  },
-  "script-snap": function scriptSnap() {
-    return __webpack_require__.e(/*! import() | addon-entry-script-snap */ "addon-entry-script-snap").then(__webpack_require__.bind(null, /*! ../addons/script-snap/_runtime_entry.js */ "./src/addons/addons/script-snap/_runtime_entry.js"));
-  },
-  "fullscreen": function fullscreen() {
-    return __webpack_require__.e(/*! import() | addon-entry-fullscreen */ "addon-entry-fullscreen").then(__webpack_require__.bind(null, /*! ../addons/fullscreen/_runtime_entry.js */ "./src/addons/addons/fullscreen/_runtime_entry.js"));
-  },
-  "hide-stage": function hideStage() {
-    return __webpack_require__.e(/*! import() | addon-entry-hide-stage */ "addon-entry-hide-stage").then(__webpack_require__.bind(null, /*! ../addons/hide-stage/_runtime_entry.js */ "./src/addons/addons/hide-stage/_runtime_entry.js"));
-  },
-  "tw-straighten-comments": function twStraightenComments() {
-    return __webpack_require__.e(/*! import() | addon-entry-tw-straighten-comments */ "addon-entry-tw-straighten-comments").then(__webpack_require__.bind(null, /*! ../addons/tw-straighten-comments/_runtime_entry.js */ "./src/addons/addons/tw-straighten-comments/_runtime_entry.js"));
-  },
-  "tw-remove-backpack": function twRemoveBackpack() {
-    return __webpack_require__.e(/*! import() | addon-entry-tw-remove-backpack */ "addon-entry-tw-remove-backpack").then(__webpack_require__.bind(null, /*! ../addons/tw-remove-backpack/_runtime_entry.js */ "./src/addons/addons/tw-remove-backpack/_runtime_entry.js"));
-  },
-  "tw-remove-feedback": function twRemoveFeedback() {
-    return __webpack_require__.e(/*! import() | addon-entry-tw-remove-feedback */ "addon-entry-tw-remove-feedback").then(__webpack_require__.bind(null, /*! ../addons/tw-remove-feedback/_runtime_entry.js */ "./src/addons/addons/tw-remove-feedback/_runtime_entry.js"));
-  },
-  "tw-disable-compiler": function twDisableCompiler() {
-    return __webpack_require__.e(/*! import() | addon-entry-tw-disable-compiler */ "addon-entry-tw-disable-compiler").then(__webpack_require__.bind(null, /*! ../addons/tw-disable-compiler/_runtime_entry.js */ "./src/addons/addons/tw-disable-compiler/_runtime_entry.js"));
-  },
-  "editor-stepping": function editorStepping() {
-    return __webpack_require__.e(/*! import() | addon-entry-editor-stepping */ "addon-entry-editor-stepping").then(__webpack_require__.bind(null, /*! ../addons/editor-stepping/_runtime_entry.js */ "./src/addons/addons/editor-stepping/_runtime_entry.js"));
-  }
+  "cat-blocks": () => __webpack_require__.e(/*! import() | addon-entry-cat-blocks */ "addon-entry-cat-blocks").then(__webpack_require__.bind(null, /*! ../addons/cat-blocks/_runtime_entry.js */ "./src/addons/addons/cat-blocks/_runtime_entry.js")),
+  "editor-devtools": () => __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/editor-devtools/_runtime_entry.js */ "./src/addons/addons/editor-devtools/_runtime_entry.js")),
+  "editor-searchable-dropdowns": () => __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/editor-searchable-dropdowns/_runtime_entry.js */ "./src/addons/addons/editor-searchable-dropdowns/_runtime_entry.js")),
+  "data-category-tweaks-v2": () => __webpack_require__.e(/*! import() | addon-entry-data-category-tweaks-v2 */ "addon-entry-data-category-tweaks-v2").then(__webpack_require__.bind(null, /*! ../addons/data-category-tweaks-v2/_runtime_entry.js */ "./src/addons/addons/data-category-tweaks-v2/_runtime_entry.js")),
+  "block-palette-icons": () => __webpack_require__.e(/*! import() | addon-entry-block-palette-icons */ "addon-entry-block-palette-icons").then(__webpack_require__.bind(null, /*! ../addons/block-palette-icons/_runtime_entry.js */ "./src/addons/addons/block-palette-icons/_runtime_entry.js")),
+  "hide-flyout": () => __webpack_require__.e(/*! import() | addon-entry-hide-flyout */ "addon-entry-hide-flyout").then(__webpack_require__.bind(null, /*! ../addons/hide-flyout/_runtime_entry.js */ "./src/addons/addons/hide-flyout/_runtime_entry.js")),
+  "mediarecorder": () => __webpack_require__.e(/*! import() | addon-entry-mediarecorder */ "addon-entry-mediarecorder").then(__webpack_require__.bind(null, /*! ../addons/mediarecorder/_runtime_entry.js */ "./src/addons/addons/mediarecorder/_runtime_entry.js")),
+  "drag-drop": () => __webpack_require__(/*! ../addons/drag-drop/_runtime_entry.js */ "./src/addons/addons/drag-drop/_runtime_entry.js"),
+  "debugger": () => __webpack_require__.e(/*! import() | addon-entry-debugger */ "addon-entry-debugger").then(__webpack_require__.bind(null, /*! ../addons/debugger/_runtime_entry.js */ "./src/addons/addons/debugger/_runtime_entry.js")),
+  "pause": () => __webpack_require__(/*! ../addons/pause/_runtime_entry.js */ "./src/addons/addons/pause/_runtime_entry.js"),
+  "mute-project": () => __webpack_require__(/*! ../addons/mute-project/_runtime_entry.js */ "./src/addons/addons/mute-project/_runtime_entry.js"),
+  "clones": () => __webpack_require__.e(/*! import() | addon-entry-clones */ "addon-entry-clones").then(__webpack_require__.bind(null, /*! ../addons/clones/_runtime_entry.js */ "./src/addons/addons/clones/_runtime_entry.js")),
+  "mouse-pos": () => __webpack_require__.e(/*! import() | addon-entry-mouse-pos */ "addon-entry-mouse-pos").then(__webpack_require__.bind(null, /*! ../addons/mouse-pos/_runtime_entry.js */ "./src/addons/addons/mouse-pos/_runtime_entry.js")),
+  "color-picker": () => __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/color-picker/_runtime_entry.js */ "./src/addons/addons/color-picker/_runtime_entry.js")),
+  "remove-sprite-confirm": () => __webpack_require__.e(/*! import() | addon-entry-remove-sprite-confirm */ "addon-entry-remove-sprite-confirm").then(__webpack_require__.bind(null, /*! ../addons/remove-sprite-confirm/_runtime_entry.js */ "./src/addons/addons/remove-sprite-confirm/_runtime_entry.js")),
+  "block-count": () => __webpack_require__.e(/*! import() | addon-entry-block-count */ "addon-entry-block-count").then(__webpack_require__.bind(null, /*! ../addons/block-count/_runtime_entry.js */ "./src/addons/addons/block-count/_runtime_entry.js")),
+  "onion-skinning": () => __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/onion-skinning/_runtime_entry.js */ "./src/addons/addons/onion-skinning/_runtime_entry.js")),
+  "default-costume-editor-color": () => __webpack_require__.e(/*! import() | addon-entry-default-costume-editor-color */ "addon-entry-default-costume-editor-color").then(__webpack_require__.bind(null, /*! ../addons/default-costume-editor-color/_runtime_entry.js */ "./src/addons/addons/default-costume-editor-color/_runtime_entry.js")),
+  "bitmap-copy": () => __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/bitmap-copy/_runtime_entry.js */ "./src/addons/addons/bitmap-copy/_runtime_entry.js")),
+  "2d-color-picker": () => __webpack_require__.e(/*! import() | addon-entry-2d-color-picker */ "addon-entry-2d-color-picker").then(__webpack_require__.bind(null, /*! ../addons/2d-color-picker/_runtime_entry.js */ "./src/addons/addons/2d-color-picker/_runtime_entry.js")),
+  "better-img-uploads": () => __webpack_require__.e(/*! import() | addon-entry-better-img-uploads */ "addon-entry-better-img-uploads").then(__webpack_require__.bind(null, /*! ../addons/better-img-uploads/_runtime_entry.js */ "./src/addons/addons/better-img-uploads/_runtime_entry.js")),
+  "pick-colors-from-stage": () => __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/pick-colors-from-stage/_runtime_entry.js */ "./src/addons/addons/pick-colors-from-stage/_runtime_entry.js")),
+  "custom-block-shape": () => __webpack_require__.e(/*! import() | addon-entry-custom-block-shape */ "addon-entry-custom-block-shape").then(__webpack_require__.bind(null, /*! ../addons/custom-block-shape/_runtime_entry.js */ "./src/addons/addons/custom-block-shape/_runtime_entry.js")),
+  "zebra-striping": () => __webpack_require__.e(/*! import() | addon-entry-zebra-striping */ "addon-entry-zebra-striping").then(__webpack_require__.bind(null, /*! ../addons/zebra-striping/_runtime_entry.js */ "./src/addons/addons/zebra-striping/_runtime_entry.js")),
+  "editor-theme3": () => __webpack_require__.e(/*! import() | addon-entry-editor-theme3 */ "addon-entry-editor-theme3").then(__webpack_require__.bind(null, /*! ../addons/editor-theme3/_runtime_entry.js */ "./src/addons/addons/editor-theme3/_runtime_entry.js")),
+  "custom-block-text": () => __webpack_require__.e(/*! import() | addon-entry-custom-block-text */ "addon-entry-custom-block-text").then(__webpack_require__.bind(null, /*! ../addons/custom-block-text/_runtime_entry.js */ "./src/addons/addons/custom-block-text/_runtime_entry.js")),
+  "editor-colored-context-menus": () => __webpack_require__.e(/*! import() | addon-entry-editor-colored-context-menus */ "addon-entry-editor-colored-context-menus").then(__webpack_require__.bind(null, /*! ../addons/editor-colored-context-menus/_runtime_entry.js */ "./src/addons/addons/editor-colored-context-menus/_runtime_entry.js")),
+  "editor-stage-left": () => __webpack_require__.e(/*! import() | addon-entry-editor-stage-left */ "addon-entry-editor-stage-left").then(__webpack_require__.bind(null, /*! ../addons/editor-stage-left/_runtime_entry.js */ "./src/addons/addons/editor-stage-left/_runtime_entry.js")),
+  "editor-buttons-reverse-order": () => __webpack_require__.e(/*! import() | addon-entry-editor-buttons-reverse-order */ "addon-entry-editor-buttons-reverse-order").then(__webpack_require__.bind(null, /*! ../addons/editor-buttons-reverse-order/_runtime_entry.js */ "./src/addons/addons/editor-buttons-reverse-order/_runtime_entry.js")),
+  "variable-manager": () => __webpack_require__.e(/*! import() | addon-entry-variable-manager */ "addon-entry-variable-manager").then(__webpack_require__.bind(null, /*! ../addons/variable-manager/_runtime_entry.js */ "./src/addons/addons/variable-manager/_runtime_entry.js")),
+  "search-sprites": () => __webpack_require__.e(/*! import() | addon-entry-search-sprites */ "addon-entry-search-sprites").then(__webpack_require__.bind(null, /*! ../addons/search-sprites/_runtime_entry.js */ "./src/addons/addons/search-sprites/_runtime_entry.js")),
+  "gamepad": () => __webpack_require__.e(/*! import() | addon-entry-gamepad */ "addon-entry-gamepad").then(__webpack_require__.bind(null, /*! ../addons/gamepad/_runtime_entry.js */ "./src/addons/addons/gamepad/_runtime_entry.js")),
+  "editor-sounds": () => __webpack_require__.e(/*! import() | addon-entry-editor-sounds */ "addon-entry-editor-sounds").then(__webpack_require__.bind(null, /*! ../addons/editor-sounds/_runtime_entry.js */ "./src/addons/addons/editor-sounds/_runtime_entry.js")),
+  "folders": () => __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/folders/_runtime_entry.js */ "./src/addons/addons/folders/_runtime_entry.js")),
+  "block-switching": () => __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/block-switching/_runtime_entry.js */ "./src/addons/addons/block-switching/_runtime_entry.js")),
+  "load-extensions": () => __webpack_require__.e(/*! import() | addon-entry-load-extensions */ "addon-entry-load-extensions").then(__webpack_require__.bind(null, /*! ../addons/load-extensions/_runtime_entry.js */ "./src/addons/addons/load-extensions/_runtime_entry.js")),
+  "custom-zoom": () => __webpack_require__.e(/*! import() | addon-entry-custom-zoom */ "addon-entry-custom-zoom").then(__webpack_require__.bind(null, /*! ../addons/custom-zoom/_runtime_entry.js */ "./src/addons/addons/custom-zoom/_runtime_entry.js")),
+  "initialise-sprite-position": () => __webpack_require__.e(/*! import() | addon-entry-initialise-sprite-position */ "addon-entry-initialise-sprite-position").then(__webpack_require__.bind(null, /*! ../addons/initialise-sprite-position/_runtime_entry.js */ "./src/addons/addons/initialise-sprite-position/_runtime_entry.js")),
+  "blocks2image": () => __webpack_require__.e(/*! import() | addon-entry-blocks2image */ "addon-entry-blocks2image").then(__webpack_require__.bind(null, /*! ../addons/blocks2image/_runtime_entry.js */ "./src/addons/addons/blocks2image/_runtime_entry.js")),
+  "remove-curved-stage-border": () => __webpack_require__.e(/*! import() | addon-entry-remove-curved-stage-border */ "addon-entry-remove-curved-stage-border").then(__webpack_require__.bind(null, /*! ../addons/remove-curved-stage-border/_runtime_entry.js */ "./src/addons/addons/remove-curved-stage-border/_runtime_entry.js")),
+  "transparent-orphans": () => __webpack_require__.e(/*! import() | addon-entry-transparent-orphans */ "addon-entry-transparent-orphans").then(__webpack_require__.bind(null, /*! ../addons/transparent-orphans/_runtime_entry.js */ "./src/addons/addons/transparent-orphans/_runtime_entry.js")),
+  "paint-by-default": () => __webpack_require__.e(/*! import() | addon-entry-paint-by-default */ "addon-entry-paint-by-default").then(__webpack_require__.bind(null, /*! ../addons/paint-by-default/_runtime_entry.js */ "./src/addons/addons/paint-by-default/_runtime_entry.js")),
+  "block-cherry-picking": () => __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/block-cherry-picking/_runtime_entry.js */ "./src/addons/addons/block-cherry-picking/_runtime_entry.js")),
+  "hide-new-variables": () => __webpack_require__.e(/*! import() | addon-entry-hide-new-variables */ "addon-entry-hide-new-variables").then(__webpack_require__.bind(null, /*! ../addons/hide-new-variables/_runtime_entry.js */ "./src/addons/addons/hide-new-variables/_runtime_entry.js")),
+  "editor-extra-keys": () => __webpack_require__.e(/*! import() | addon-entry-editor-extra-keys */ "addon-entry-editor-extra-keys").then(__webpack_require__.bind(null, /*! ../addons/editor-extra-keys/_runtime_entry.js */ "./src/addons/addons/editor-extra-keys/_runtime_entry.js")),
+  "hide-delete-button": () => __webpack_require__.e(/*! import() | addon-entry-hide-delete-button */ "addon-entry-hide-delete-button").then(__webpack_require__.bind(null, /*! ../addons/hide-delete-button/_runtime_entry.js */ "./src/addons/addons/hide-delete-button/_runtime_entry.js")),
+  "no-script-bumping": () => __webpack_require__.e(/*! import() | addon-entry-no-script-bumping */ "addon-entry-no-script-bumping").then(__webpack_require__.bind(null, /*! ../addons/no-script-bumping/_runtime_entry.js */ "./src/addons/addons/no-script-bumping/_runtime_entry.js")),
+  "disable-stage-drag-select": () => __webpack_require__.e(/*! import() | addon-entry-disable-stage-drag-select */ "addon-entry-disable-stage-drag-select").then(__webpack_require__.bind(null, /*! ../addons/disable-stage-drag-select/_runtime_entry.js */ "./src/addons/addons/disable-stage-drag-select/_runtime_entry.js")),
+  "move-to-top-bottom": () => __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/move-to-top-bottom/_runtime_entry.js */ "./src/addons/addons/move-to-top-bottom/_runtime_entry.js")),
+  "disable-paste-offset": () => __webpack_require__.e(/*! import() | addon-entry-disable-paste-offset */ "addon-entry-disable-paste-offset").then(__webpack_require__.bind(null, /*! ../addons/disable-paste-offset/_runtime_entry.js */ "./src/addons/addons/disable-paste-offset/_runtime_entry.js")),
+  "block-duplicate": () => __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/block-duplicate/_runtime_entry.js */ "./src/addons/addons/block-duplicate/_runtime_entry.js")),
+  "swap-local-global": () => __webpack_require__.e(/*! import() | addon-entry-swap-local-global */ "addon-entry-swap-local-global").then(__webpack_require__.bind(null, /*! ../addons/swap-local-global/_runtime_entry.js */ "./src/addons/addons/swap-local-global/_runtime_entry.js")),
+  "editor-comment-previews": () => __webpack_require__.e(/*! import() | addon-default-entry */ "addon-default-entry").then(__webpack_require__.bind(null, /*! ../addons/editor-comment-previews/_runtime_entry.js */ "./src/addons/addons/editor-comment-previews/_runtime_entry.js")),
+  "columns": () => __webpack_require__.e(/*! import() | addon-entry-columns */ "addon-entry-columns").then(__webpack_require__.bind(null, /*! ../addons/columns/_runtime_entry.js */ "./src/addons/addons/columns/_runtime_entry.js")),
+  "script-snap": () => __webpack_require__.e(/*! import() | addon-entry-script-snap */ "addon-entry-script-snap").then(__webpack_require__.bind(null, /*! ../addons/script-snap/_runtime_entry.js */ "./src/addons/addons/script-snap/_runtime_entry.js")),
+  "fullscreen": () => __webpack_require__.e(/*! import() | addon-entry-fullscreen */ "addon-entry-fullscreen").then(__webpack_require__.bind(null, /*! ../addons/fullscreen/_runtime_entry.js */ "./src/addons/addons/fullscreen/_runtime_entry.js")),
+  "hide-stage": () => __webpack_require__.e(/*! import() | addon-entry-hide-stage */ "addon-entry-hide-stage").then(__webpack_require__.bind(null, /*! ../addons/hide-stage/_runtime_entry.js */ "./src/addons/addons/hide-stage/_runtime_entry.js")),
+  "tw-straighten-comments": () => __webpack_require__.e(/*! import() | addon-entry-tw-straighten-comments */ "addon-entry-tw-straighten-comments").then(__webpack_require__.bind(null, /*! ../addons/tw-straighten-comments/_runtime_entry.js */ "./src/addons/addons/tw-straighten-comments/_runtime_entry.js")),
+  "tw-remove-backpack": () => __webpack_require__.e(/*! import() | addon-entry-tw-remove-backpack */ "addon-entry-tw-remove-backpack").then(__webpack_require__.bind(null, /*! ../addons/tw-remove-backpack/_runtime_entry.js */ "./src/addons/addons/tw-remove-backpack/_runtime_entry.js")),
+  "tw-remove-feedback": () => __webpack_require__.e(/*! import() | addon-entry-tw-remove-feedback */ "addon-entry-tw-remove-feedback").then(__webpack_require__.bind(null, /*! ../addons/tw-remove-feedback/_runtime_entry.js */ "./src/addons/addons/tw-remove-feedback/_runtime_entry.js")),
+  "tw-disable-compiler": () => __webpack_require__.e(/*! import() | addon-entry-tw-disable-compiler */ "addon-entry-tw-disable-compiler").then(__webpack_require__.bind(null, /*! ../addons/tw-disable-compiler/_runtime_entry.js */ "./src/addons/addons/tw-disable-compiler/_runtime_entry.js")),
+  "editor-stepping": () => __webpack_require__.e(/*! import() | addon-entry-editor-stepping */ "addon-entry-editor-stepping").then(__webpack_require__.bind(null, /*! ../addons/editor-stepping/_runtime_entry.js */ "./src/addons/addons/editor-stepping/_runtime_entry.js"))
 });
 
 /***/ }),
@@ -3049,48 +2100,20 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* generated by pull.js */
 /* harmony default export */ __webpack_exports__["default"] = ({
-  "de": function de() {
-    return __webpack_require__.e(/*! import() | addon-l10n-de */ "addon-l10n-de").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/de.json */ "./src/addons/addons-l10n/de.json", 3));
-  },
-  "es": function es() {
-    return __webpack_require__.e(/*! import() | addon-l10n-es */ "addon-l10n-es").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/es.json */ "./src/addons/addons-l10n/es.json", 3));
-  },
-  "fr": function fr() {
-    return __webpack_require__.e(/*! import() | addon-l10n-fr */ "addon-l10n-fr").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/fr.json */ "./src/addons/addons-l10n/fr.json", 3));
-  },
-  "hu": function hu() {
-    return __webpack_require__.e(/*! import() | addon-l10n-hu */ "addon-l10n-hu").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/hu.json */ "./src/addons/addons-l10n/hu.json", 3));
-  },
-  "it": function it() {
-    return __webpack_require__.e(/*! import() | addon-l10n-it */ "addon-l10n-it").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/it.json */ "./src/addons/addons-l10n/it.json", 3));
-  },
-  "ja": function ja() {
-    return __webpack_require__.e(/*! import() | addon-l10n-ja */ "addon-l10n-ja").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/ja.json */ "./src/addons/addons-l10n/ja.json", 3));
-  },
-  "ko": function ko() {
-    return __webpack_require__.e(/*! import() | addon-l10n-ko */ "addon-l10n-ko").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/ko.json */ "./src/addons/addons-l10n/ko.json", 3));
-  },
-  "nl": function nl() {
-    return __webpack_require__.e(/*! import() | addon-l10n-nl */ "addon-l10n-nl").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/nl.json */ "./src/addons/addons-l10n/nl.json", 3));
-  },
-  "pl": function pl() {
-    return __webpack_require__.e(/*! import() | addon-l10n-pl */ "addon-l10n-pl").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/pl.json */ "./src/addons/addons-l10n/pl.json", 3));
-  },
-  "pt": function pt() {
-    return __webpack_require__.e(/*! import() | addon-l10n-pt */ "addon-l10n-pt").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/pt.json */ "./src/addons/addons-l10n/pt.json", 3));
-  },
-  "ro": function ro() {
-    return __webpack_require__.e(/*! import() | addon-l10n-ro */ "addon-l10n-ro").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/ro.json */ "./src/addons/addons-l10n/ro.json", 3));
-  },
-  "ru": function ru() {
-    return __webpack_require__.e(/*! import() | addon-l10n-ru */ "addon-l10n-ru").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/ru.json */ "./src/addons/addons-l10n/ru.json", 3));
-  },
-  "sl": function sl() {
-    return __webpack_require__.e(/*! import() | addon-l10n-sl */ "addon-l10n-sl").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/sl.json */ "./src/addons/addons-l10n/sl.json", 3));
-  },
-  "tr": function tr() {
-    return __webpack_require__.e(/*! import() | addon-l10n-tr */ "addon-l10n-tr").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/tr.json */ "./src/addons/addons-l10n/tr.json", 3));
-  }
+  "de": () => __webpack_require__.e(/*! import() | addon-l10n-de */ "addon-l10n-de").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/de.json */ "./src/addons/addons-l10n/de.json", 3)),
+  "es": () => __webpack_require__.e(/*! import() | addon-l10n-es */ "addon-l10n-es").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/es.json */ "./src/addons/addons-l10n/es.json", 3)),
+  "fr": () => __webpack_require__.e(/*! import() | addon-l10n-fr */ "addon-l10n-fr").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/fr.json */ "./src/addons/addons-l10n/fr.json", 3)),
+  "hu": () => __webpack_require__.e(/*! import() | addon-l10n-hu */ "addon-l10n-hu").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/hu.json */ "./src/addons/addons-l10n/hu.json", 3)),
+  "it": () => __webpack_require__.e(/*! import() | addon-l10n-it */ "addon-l10n-it").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/it.json */ "./src/addons/addons-l10n/it.json", 3)),
+  "ja": () => __webpack_require__.e(/*! import() | addon-l10n-ja */ "addon-l10n-ja").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/ja.json */ "./src/addons/addons-l10n/ja.json", 3)),
+  "ko": () => __webpack_require__.e(/*! import() | addon-l10n-ko */ "addon-l10n-ko").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/ko.json */ "./src/addons/addons-l10n/ko.json", 3)),
+  "nl": () => __webpack_require__.e(/*! import() | addon-l10n-nl */ "addon-l10n-nl").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/nl.json */ "./src/addons/addons-l10n/nl.json", 3)),
+  "pl": () => __webpack_require__.e(/*! import() | addon-l10n-pl */ "addon-l10n-pl").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/pl.json */ "./src/addons/addons-l10n/pl.json", 3)),
+  "pt": () => __webpack_require__.e(/*! import() | addon-l10n-pt */ "addon-l10n-pt").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/pt.json */ "./src/addons/addons-l10n/pt.json", 3)),
+  "ro": () => __webpack_require__.e(/*! import() | addon-l10n-ro */ "addon-l10n-ro").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/ro.json */ "./src/addons/addons-l10n/ro.json", 3)),
+  "ru": () => __webpack_require__.e(/*! import() | addon-l10n-ru */ "addon-l10n-ru").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/ru.json */ "./src/addons/addons-l10n/ru.json", 3)),
+  "sl": () => __webpack_require__.e(/*! import() | addon-l10n-sl */ "addon-l10n-sl").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/sl.json */ "./src/addons/addons-l10n/sl.json", 3)),
+  "tr": () => __webpack_require__.e(/*! import() | addon-l10n-tr */ "addon-l10n-tr").then(__webpack_require__.t.bind(null, /*! ../addons-l10n/tr.json */ "./src/addons/addons-l10n/tr.json", 3))
 });
 
 /***/ }),
@@ -3145,25 +2168,21 @@ __webpack_require__.r(__webpack_exports__);
 // https://github.com/ScratchAddons/ScratchAddons/blob/master/addon-api/content-script/modal.js
 
 
-var createEditorModal = function createEditorModal(tab, title) {
-  var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-      _ref$isOpen = _ref.isOpen,
-      isOpen = _ref$isOpen === void 0 ? false : _ref$isOpen;
-
-  var container = Object.assign(document.createElement('div'), {
+const createEditorModal = (tab, title, {
+  isOpen = false
+} = {}) => {
+  const container = Object.assign(document.createElement('div'), {
     className: tab.scratchClass('modal_modal-overlay'),
     dir: tab.direction
   });
   container.style.display = isOpen ? '' : 'none';
   document.body.appendChild(container);
-  var modal = Object.assign(document.createElement('div'), {
+  const modal = Object.assign(document.createElement('div'), {
     className: tab.scratchClass('modal_modal-content')
   });
-  modal.addEventListener('click', function (e) {
-    return e.stopPropagation();
-  });
+  modal.addEventListener('click', e => e.stopPropagation());
   container.appendChild(modal);
-  var header = Object.assign(document.createElement('div'), {
+  const header = Object.assign(document.createElement('div'), {
     className: tab.scratchClass('modal_header')
   });
   modal.appendChild(header);
@@ -3171,11 +2190,11 @@ var createEditorModal = function createEditorModal(tab, title) {
     className: tab.scratchClass('modal_header-item', 'modal_header-item-title'),
     innerText: title
   }));
-  var closeContainer = Object.assign(document.createElement('div'), {
+  const closeContainer = Object.assign(document.createElement('div'), {
     className: tab.scratchClass('modal_header-item', 'modal_header-item-close')
   });
   header.appendChild(closeContainer);
-  var closeButton = Object.assign(document.createElement('div'), {
+  const closeButton = Object.assign(document.createElement('div'), {
     className: tab.scratchClass('close-button_close-button', 'close-button_large')
   });
   closeContainer.appendChild(closeButton);
@@ -3183,63 +2202,61 @@ var createEditorModal = function createEditorModal(tab, title) {
     className: tab.scratchClass('close-button_close-icon'),
     src: _components_close_button_icon_close_svg__WEBPACK_IMPORTED_MODULE_0___default.a
   }));
-  var content = Object.assign(document.createElement('div'), {
+  const content = Object.assign(document.createElement('div'), {
     className: _modal_css__WEBPACK_IMPORTED_MODULE_1___default.a.modalContent
   });
   modal.appendChild(content);
   return {
     container: modal,
-    content: content,
+    content,
     backdrop: container,
-    closeButton: closeButton,
-    open: function open() {
+    closeButton,
+    open: () => {
       container.style.display = '';
     },
-    close: function close() {
+    close: () => {
       container.style.display = 'none';
     },
     remove: container.remove.bind(container)
   };
 };
 
-var createButtonRow = function createButtonRow(tab) {
-  var buttonRow = Object.assign(document.createElement('div'), {
+const createButtonRow = tab => {
+  const buttonRow = Object.assign(document.createElement('div'), {
     className: tab.scratchClass('prompt_button-row')
   });
-  var cancelButton = Object.assign(document.createElement('button'), {
+  const cancelButton = Object.assign(document.createElement('button'), {
     className: tab.scratchClass('prompt_cancel-button'),
     innerText: tab.scratchMessage('gui.prompt.cancel')
   });
   buttonRow.appendChild(cancelButton);
-  var okButton = Object.assign(document.createElement('button'), {
+  const okButton = Object.assign(document.createElement('button'), {
     className: tab.scratchClass('prompt_ok-button'),
     innerText: tab.scratchMessage('gui.prompt.ok')
   });
   buttonRow.appendChild(okButton);
   return {
-    buttonRow: buttonRow,
-    cancelButton: cancelButton,
-    okButton: okButton
+    buttonRow,
+    cancelButton,
+    okButton
   };
 };
 
-var confirm = function confirm(tab, title, message) {
-  var _ref2 = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {},
-      _ref2$useEditorClasse = _ref2.useEditorClasses,
-      useEditorClasses = _ref2$useEditorClasse === void 0 ? false : _ref2$useEditorClasse;
-
-  var _tab$createModal = tab.createModal(title, {
+const confirm = (tab, title, message, {
+  useEditorClasses = false
+} = {}) => {
+  const {
+    remove,
+    container,
+    content,
+    backdrop,
+    closeButton
+  } = tab.createModal(title, {
     isOpen: true,
     useEditorClasses: useEditorClasses,
     useSizesClass: true
-  }),
-      remove = _tab$createModal.remove,
-      container = _tab$createModal.container,
-      content = _tab$createModal.content,
-      backdrop = _tab$createModal.backdrop,
-      closeButton = _tab$createModal.closeButton;
-
-  var mode = tab.editorMode !== null && useEditorClasses ? 'editor' : tab.clientVersion;
+  });
+  const mode = tab.editorMode !== null && useEditorClasses ? 'editor' : tab.clientVersion;
 
   if (mode === 'editor') {
     container.classList.add(tab.scratchClass('prompt_modal-content'));
@@ -3250,21 +2267,20 @@ var confirm = function confirm(tab, title, message) {
     className: tab.scratchClass('prompt_label'),
     innerText: message
   }));
-
-  var _createButtonRow = createButtonRow(tab, mode),
-      buttonRow = _createButtonRow.buttonRow,
-      cancelButton = _createButtonRow.cancelButton,
-      okButton = _createButtonRow.okButton;
-
+  const {
+    buttonRow,
+    cancelButton,
+    okButton
+  } = createButtonRow(tab, mode);
   content.appendChild(buttonRow);
   okButton.focus();
-  return new Promise(function (resolve) {
-    var cancel = function cancel() {
+  return new Promise(resolve => {
+    const cancel = () => {
       remove();
       resolve(false);
     };
 
-    var ok = function ok() {
+    const ok = () => {
       remove();
       resolve(true);
     };
@@ -3273,57 +2289,52 @@ var confirm = function confirm(tab, title, message) {
     closeButton.addEventListener('click', cancel);
     cancelButton.addEventListener('click', cancel);
     okButton.addEventListener('click', ok);
-    container.addEventListener('keydown', function (e) {
+    container.addEventListener('keydown', e => {
       if (e.key === 'Enter') ok();
       if (e.key === 'Escape') cancel();
     });
   });
 };
-var prompt = function prompt(tab, title, message) {
-  var defaultValue = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
-
-  var _ref3 = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {},
-      _ref3$useEditorClasse = _ref3.useEditorClasses,
-      useEditorClasses = _ref3$useEditorClasse === void 0 ? false : _ref3$useEditorClasse;
-
-  var _tab$createModal2 = tab.createModal(title, {
+const prompt = (tab, title, message, defaultValue = '', {
+  useEditorClasses = false
+} = {}) => {
+  const {
+    remove,
+    container,
+    content,
+    backdrop,
+    closeButton
+  } = tab.createModal(title, {
     isOpen: true,
     useEditorClasses: useEditorClasses,
     useSizesClass: true
-  }),
-      remove = _tab$createModal2.remove,
-      container = _tab$createModal2.container,
-      content = _tab$createModal2.content,
-      backdrop = _tab$createModal2.backdrop,
-      closeButton = _tab$createModal2.closeButton;
-
+  });
   container.classList.add(tab.scratchClass('prompt_modal-content'));
   content.classList.add(tab.scratchClass('prompt_body'));
   content.appendChild(Object.assign(document.createElement('div'), {
     className: tab.scratchClass('prompt_label'),
     innerText: message
   }));
-  var input = Object.assign(document.createElement('input'), {
+  const input = Object.assign(document.createElement('input'), {
     className: tab.scratchClass('prompt_variable-name-text-input'),
     value: defaultValue
   });
   content.appendChild(input);
   input.focus();
   input.select();
-
-  var _createButtonRow2 = createButtonRow(tab),
-      buttonRow = _createButtonRow2.buttonRow,
-      cancelButton = _createButtonRow2.cancelButton,
-      okButton = _createButtonRow2.okButton;
-
+  const {
+    buttonRow,
+    cancelButton,
+    okButton
+  } = createButtonRow(tab);
   content.appendChild(buttonRow);
-  return new Promise(function (resolve) {
-    var cancel = function cancel() {
+  return new Promise(resolve => {
+    const cancel = () => {
       remove();
       resolve(null);
     };
 
-    var ok = function ok() {
+    const ok = () => {
       remove();
       resolve(input.value);
     };
@@ -3332,7 +2343,7 @@ var prompt = function prompt(tab, title, message) {
     closeButton.addEventListener('click', cancel);
     cancelButton.addEventListener('click', cancel);
     okButton.addEventListener('click', ok);
-    container.addEventListener('keydown', function (e) {
+    container.addEventListener('keydown', e => {
       if (e.key === 'Enter') ok();
       if (e.key === 'Escape') cancel();
     });
@@ -3348,71 +2359,37 @@ var prompt = function prompt(tab, title, message) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 /* eslint-disable no-extend-native */
 if (!Blob.prototype.text) {
   Blob.prototype.text = function () {
-    var _this = this;
+    return new Promise((resolve, reject) => {
+      const fr = new FileReader();
 
-    return new Promise(function (resolve, reject) {
-      var fr = new FileReader();
+      fr.onload = () => resolve(fr.result);
 
-      fr.onload = function () {
-        return resolve(fr.result);
-      };
+      fr.onerror = () => reject(new Error('Cannot read blob as text'));
 
-      fr.onerror = function () {
-        return reject(new Error('Cannot read blob as text'));
-      };
-
-      fr.readAsText(_this);
+      fr.readAsText(this);
     });
   };
 }
 
 if (!Array.prototype.flat) {
-  Array.prototype.flat = function () {
-    var depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-    var result = [];
+  Array.prototype.flat = function (depth = 1) {
+    const result = [];
 
-    var _iterator = _createForOfIteratorHelper(this),
-        _step;
-
-    try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var i = _step.value;
-
-        if (Array.isArray(i)) {
-          if (depth < 1) {
-            result.push(i);
-          } else {
-            var _iterator2 = _createForOfIteratorHelper(i.flat(depth - 1)),
-                _step2;
-
-            try {
-              for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-                var j = _step2.value;
-                result.push(j);
-              }
-            } catch (err) {
-              _iterator2.e(err);
-            } finally {
-              _iterator2.f();
-            }
-          }
-        } else {
+    for (const i of this) {
+      if (Array.isArray(i)) {
+        if (depth < 1) {
           result.push(i);
+        } else {
+          for (const j of i.flat(depth - 1)) {
+            result.push(j);
+          }
         }
+      } else {
+        result.push(i);
       }
-    } catch (err) {
-      _iterator.e(err);
-    } finally {
-      _iterator.f();
     }
 
     return result;
@@ -3420,7 +2397,7 @@ if (!Array.prototype.flat) {
 }
 
 if (typeof queueMicrotask !== 'function') {
-  window.queueMicrotask = function (callback) {
+  window.queueMicrotask = callback => {
     Promise.resolve().then(callback);
   };
 }
