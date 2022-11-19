@@ -77,7 +77,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const resources = {
+var resources = {
   "sprites.css": _css_loader_sprites_css__WEBPACK_IMPORTED_MODULE_0___default.a,
   "costumes.css": _css_loader_costumes_css__WEBPACK_IMPORTED_MODULE_1___default.a,
   "sounds.css": _css_loader_sounds_css__WEBPACK_IMPORTED_MODULE_2___default.a
