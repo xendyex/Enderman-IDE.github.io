@@ -1,5 +1,5 @@
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import musicIconURL from './music/music.png';
 import musicInsetIconURL from './music/music-small.svg';
@@ -49,6 +49,23 @@ import gdxforConnectionSmallIconURL from './gdxfor/gdxfor-small.svg';
 import twIcon from './tw/tw.svg';
 
 import customExtensionIcon from './custom/custom.svg';
+
+import filesExtensionIcon from './penguinmod/extensions/files.png';
+import jgWebsiteRequestsExtensionIcon from './penguinmod/extensions/websiteRequests.png'
+import jgJSONExtensionIcon from './penguinmod/extensions/json.png'
+import jgRuntimeExtensionIcon from './penguinmod/extensions/runtime.png'
+import jgPrismExtensionIcon from './penguinmod/extensions/prism.png'
+
+import jwUniteExtensionIcon from './penguinmod/extensions/Unite.png'
+import jwUniteInsetIcon from './penguinmod/extensions/UniteSmall.png'
+
+import jwProtoExtensionIcon from './penguinmod/extensions/Proto.svg'
+
+import jwStructsExtensionIcon from './penguinmod/extensions/Structs.png'
+
+// griffpatch stuff that hopefully we can keep pls plsplspl !!S!
+import griffpatchPhysicsThumb from './penguinmod/extensions/griffpatch_physics.png'
+import griffpatchPhysicsIcon from './penguinmod/extensions/griffpatch_physicsIcon.svg'
 
 export default [
     {
@@ -169,6 +186,207 @@ export default [
             />
         ),
         featured: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="File Blocks"
+                description="Name of Files extension"
+                id="jgFiles.jgFilesExtension.name"
+            />
+        ),
+        extensionId: 'jgFiles',
+        iconURL: filesExtensionIcon,
+        description: (
+            <FormattedMessage
+                defaultMessage="Blocks for reading and creating files."
+                description="Description of Files extension"
+                id="jgFiles.jgFilesExtension.description"
+            />
+        ),
+        featured: true,
+        incompatibleWithScratch: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Website Request Blocks"
+                description="Name of Website Requests extension"
+                id="jgWebsiteRequests.jgWebsiteRequestsExtension.name"
+            />
+        ),
+        extensionId: 'jgWebsiteRequests',
+        iconURL: jgWebsiteRequestsExtensionIcon,
+        description: (
+            <FormattedMessage
+                defaultMessage="Blocks to communicate with APIs and websites."
+                description="Description of Website Requests extension"
+                id="jgWebsiteRequests.jgWebsiteRequestsExtension.description"
+            />
+        ),
+        featured: true,
+        internetConnectionRequired: true,
+        incompatibleWithScratch: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="JSON Blocks"
+                description="Name of JSON extension"
+                id="jgJSON.jgJSONExtension.name"
+            />
+        ),
+        extensionId: 'jgJSON',
+        iconURL: jgJSONExtensionIcon,
+        description: (
+            <FormattedMessage
+                defaultMessage="Blocks for handling JSON objects. Arrays are not supported yet."
+                description="Description of JSON extension"
+                id="jgJSON.jgJSONExtension.description"
+            />
+        ),
+        featured: true,
+        incompatibleWithScratch: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Unite"
+                description="Name of Unite extension"
+                id="jwUnite.jwUniteExtension.name"
+            />
+        ),
+        extensionId: 'jwUnite',
+        iconURL: jwUniteExtensionIcon,
+        insetIconURL: jwUniteInsetIcon,
+        description: (
+            <FormattedMessage
+                defaultMessage="Useful blocks that should of been added to scratch already"
+                description="Description of Unite extension"
+                id="jwUnite.jwUniteExtension.description"
+            />
+        ),
+        featured: true,
+        incompatibleWithScratch: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Proto"
+                description="Name of Proto extension"
+                id="jwProto.jwProtoExtension.name"
+            />
+        ),
+        extensionId: 'jwProto',
+        iconURL: jwProtoExtensionIcon,
+        description: (
+            <FormattedMessage
+                defaultMessage="Labelling, Placeholders and Defenitions packed into one sweet extension"
+                description="Description of Proto extension"
+                id="jwProto.jwProtoExtension.description"
+            />
+        ),
+        featured: true,
+        incompatibleWithScratch: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Structs"
+                description="Name of Structs extension"
+                id="jwStructs.jwStructsExtension.name"
+            />
+        ),
+        extensionId: 'jwStructs',
+        iconURL: jwStructsExtensionIcon,
+        insetIconURL: jwStructsExtensionIcon,
+        description: (
+            <FormattedMessage
+                defaultMessage="Structs for struct things. Usful for oop"
+                description="Description of Structs extension"
+                id="jwStructs.jwStructsExtension.description"
+            />
+        ),
+        featured: true,
+        incompatibleWithScratch: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Prism"
+                description="Name of Prism extension"
+                id="jgPrism.jgPrismExtension.name"
+            />
+        ),
+        extensionId: 'jgPrism',
+        iconURL: jgPrismExtensionIcon,
+        description: (
+            <FormattedMessage
+                defaultMessage="Blocks for specific use-cases or major convenience."
+                description="Description of Prism extension"
+                id="jgPrism.jgPrismExtension.description"
+            />
+        ),
+        featured: true,
+        internetConnectionRequired: true,
+        incompatibleWithScratch: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Runtime tools"
+                description="Name of Runtime extension"
+                id="jgRuntime.jgRuntimeExtension.name"
+            />
+        ),
+        extensionId: 'jgRuntime',
+        iconURL: jgRuntimeExtensionIcon,
+        description: (
+            <FormattedMessage
+                defaultMessage="Blocks for updating Scratch objects like the stage."
+                description="Description of Runtime extension"
+                id="jgRuntime.jgRuntimeExtension.description"
+            />
+        ),
+        featured: true,
+        internetConnectionRequired: true,
+        incompatibleWithScratch: true
+    },
+    {
+        name: 'Physics',
+        extensionId: 'griffpatch',
+        collaborator: 'Griffpatch',
+        iconURL: griffpatchPhysicsThumb,
+        insetIconURL: griffpatchPhysicsIcon,
+        description: (
+            <FormattedMessage
+                defaultMessage="Box2D Physics extension created by Griffpatch."
+                description="Description for the 'Griffpatch' extension"
+                id="gui.extension.test.description"
+            />
+        ),
+        featured: true,
+        disabled: false
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="TurboWarp Blocks"
+                description="Name of TW extension"
+                id="tw.twExtension.name"
+            />
+        ),
+        extensionId: 'tw',
+        iconURL: twIcon,
+        description: (
+            <FormattedMessage
+                defaultMessage="Weird new blocks. Not compatible with Scratch."
+                description="Description of TW extension"
+                id="tw.twExtension.description"
+            />
+        ),
+        featured: true,
+        incompatibleWithScratch: true
     },
     {
         name: 'micro:bit',
@@ -321,26 +539,6 @@ export default [
             />
         ),
         helpLink: 'https://scratch.mit.edu/vernier'
-    },
-    {
-        name: (
-            <FormattedMessage
-                defaultMessage="TurboWarp Blocks"
-                description="Name of TW extension"
-                id="tw.twExtension.name"
-            />
-        ),
-        extensionId: 'tw',
-        iconURL: twIcon,
-        description: (
-            <FormattedMessage
-                defaultMessage="Weird new blocks. Not compatible with Scratch."
-                description="Description of TW extension"
-                id="tw.twExtension.description"
-            />
-        ),
-        featured: true,
-        incompatibleWithScratch: true
     },
     {
         name: (

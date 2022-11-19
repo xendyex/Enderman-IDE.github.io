@@ -150,11 +150,11 @@ const motion = function (isInitialSetup, isStage, targetId) {
 const xmlEscape = function (unsafe) {
     return unsafe.replace(/[<>&'"]/g, c => {
         switch (c) {
-        case '<': return '&lt;';
-        case '>': return '&gt;';
-        case '&': return '&amp;';
-        case '\'': return '&apos;';
-        case '"': return '&quot;';
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '&': return '&amp;';
+            case '\'': return '&apos;';
+            case '"': return '&quot;';
         }
     });
 };
@@ -355,6 +355,7 @@ const events = function (isInitialSetup, isStage) {
     return `
     <category name="%{BKY_CATEGORY_EVENTS}" id="events" colour="#FFD500" secondaryColour="#CC9900">
         <block type="event_whenflagclicked"/>
+        <block type="event_whenanything"/>
         <block type="event_whenkeypressed">
         </block>
         ${isStage ? `
@@ -702,6 +703,18 @@ const operators = function (isInitialSetup) {
                 </shadow>
             </value>
         </block>
+        <block type="operator_advlog">
+            <value name="NUM1">
+                <shadow type="math_number">
+                    <field name="NUM1"/>
+                </shadow>
+            </value>
+            <value name="NUM2">
+                <shadow type="math_number">
+                    <field name="NUM2"/>
+                </shadow>
+            </value>
+        </block>
         ${categorySeparator}
     </category>
     `;
@@ -734,7 +747,7 @@ const myBlocks = function () {
 // eslint-disable-next-line max-len
 const extraTurboWarpBlocks = `
 <block type="argument_reporter_boolean"><field name="VALUE">is compiled?</field></block>
-<block type="argument_reporter_boolean"><field name="VALUE">is TurboWarp?</field></block>
+<block type="argument_reporter_boolean"><field name="VALUE">is PenguinMod or TurboWarp?</field></block>
 `;
 /* eslint-enable no-unused-vars */
 

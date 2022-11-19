@@ -1,6 +1,6 @@
 # Mac OS
 .DS_Store
-
+.deploy.js
 # NPM
 /node_modules
 npm-*
@@ -10,9 +10,9 @@ npm-*
 /coverage
 
 # Build
-/build
-/dist
 /.opt-in
+!build/
+!dist/
 
 # Generated translation files
 /translations
