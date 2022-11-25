@@ -33551,13 +33551,13 @@ __webpack_require__.r(__webpack_exports__);
 }, {
   name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "JSON Blocks",
-    id: "jsonblocks.jsonblocksExtension.name"
+    id: "jgJSON.jgJSONExtension.name"
   }),
-  extensionId: 'jsonblocks',
+  extensionId: 'jgJSON',
   iconURL: _penguinmod_extensions_json_png__WEBPACK_IMPORTED_MODULE_35___default.a,
   description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "Blocks for handling JSON objects. Arrays are not supported yet.",
-    id: "jsonblocks.jsonblocksExtension.description"
+    id: "jgJSON.jgJSONExtension.description"
   }),
   featured: true,
   incompatibleWithScratch: true
