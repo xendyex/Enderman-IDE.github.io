@@ -33384,8 +33384,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _penguinmod_extensions_UniteSmall_png__WEBPACK_IMPORTED_MODULE_39___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_UniteSmall_png__WEBPACK_IMPORTED_MODULE_39__);
 /* harmony import */ var _penguinmod_extensions_Proto_svg__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./penguinmod/extensions/Proto.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/Proto.svg");
 /* harmony import */ var _penguinmod_extensions_Proto_svg__WEBPACK_IMPORTED_MODULE_40___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_Proto_svg__WEBPACK_IMPORTED_MODULE_40__);
-/* harmony import */ var _penguinmod_extensions_Structs_png__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./penguinmod/extensions/Structs.png */ "./src/lib/libraries/extensions/penguinmod/extensions/Structs.png");
-/* harmony import */ var _penguinmod_extensions_Structs_png__WEBPACK_IMPORTED_MODULE_41___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_Structs_png__WEBPACK_IMPORTED_MODULE_41__);
+/* harmony import */ var _penguinmod_extensions_ooplogo_png__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./penguinmod/extensions/ooplogo.png */ "./src/lib/libraries/extensions/penguinmod/extensions/ooplogo.png");
+/* harmony import */ var _penguinmod_extensions_ooplogo_png__WEBPACK_IMPORTED_MODULE_41___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_ooplogo_png__WEBPACK_IMPORTED_MODULE_41__);
 /* harmony import */ var _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./penguinmod/extensions/griffpatch_physics.png */ "./src/lib/libraries/extensions/penguinmod/extensions/griffpatch_physics.png");
 /* harmony import */ var _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_42___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_42__);
 /* harmony import */ var _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./penguinmod/extensions/griffpatch_physicsIcon.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/griffpatch_physicsIcon.svg");
@@ -33594,10 +33594,10 @@ __webpack_require__.r(__webpack_exports__);
     id: "jwStructs.jwStructsExtension.name"
   }),
   extensionId: 'jwStructs',
-  iconURL: _penguinmod_extensions_Structs_png__WEBPACK_IMPORTED_MODULE_41___default.a,
-  insetIconURL: _penguinmod_extensions_Structs_png__WEBPACK_IMPORTED_MODULE_41___default.a,
+  iconURL: _penguinmod_extensions_ooplogo_png__WEBPACK_IMPORTED_MODULE_41___default.a,
+  insetIconURL: _penguinmod_extensions_ooplogo_png__WEBPACK_IMPORTED_MODULE_41___default.a,
   description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "Structs for struct things. Usful for oop",
+    defaultMessage: "Structs for struct things. Useful for OOP.",
     id: "jwStructs.jwStructsExtension.description"
   }),
   featured: true,
@@ -33898,17 +33898,6 @@ module.exports = __webpack_require__.p + "static/assets/5c462658fc40281443c326ed
 
 /***/ }),
 
-/***/ "./src/lib/libraries/extensions/penguinmod/extensions/Structs.png":
-/*!************************************************************************!*\
-  !*** ./src/lib/libraries/extensions/penguinmod/extensions/Structs.png ***!
-  \************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "static/assets/195b65444703293e0624ff4e09c13c81.png";
-
-/***/ }),
-
 /***/ "./src/lib/libraries/extensions/penguinmod/extensions/Unite.png":
 /*!**********************************************************************!*\
   !*** ./src/lib/libraries/extensions/penguinmod/extensions/Unite.png ***!
@@ -33972,6 +33961,17 @@ module.exports = __webpack_require__.p + "static/assets/7cde88cd98adaaf1e911f68b
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "static/assets/44541df59fd6a8070d12e95c6c4b63bd.png";
+
+/***/ }),
+
+/***/ "./src/lib/libraries/extensions/penguinmod/extensions/ooplogo.png":
+/*!************************************************************************!*\
+  !*** ./src/lib/libraries/extensions/penguinmod/extensions/ooplogo.png ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/assets/c296552f9440b25b8225da38a14d9488.png";
 
 /***/ }),
 
