@@ -33605,21 +33605,29 @@ __webpack_require__.r(__webpack_exports__);
   }),
   featured: true,
   incompatibleWithScratch: true
-}, {
-  name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "Text",
-    id: "text.TextExtension.name"
-  }),
-  extensionId: 'text',
-  iconURL: _penguinmod_extensions_textext_png__WEBPACK_IMPORTED_MODULE_42___default.a,
-  insetIconURL: _penguinmod_extensions_textext_png__WEBPACK_IMPORTED_MODULE_42___default.a,
-  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "Use dynamic text for instructions, dialogue, and more!",
-    id: "text.textExtension.description"
-  }),
-  featured: true,
-  incompatibleWithScratch: true
-}, {
+},
+/*{
+    name: (
+        <FormattedMessage
+            defaultMessage="Text"
+            description="Name of Text extension"
+            id="text.TextExtension.name"
+        />
+    ),
+    extensionId: 'text',
+    iconURL: textExtensionIcon,
+    insetIconURL: textExtensionIcon,
+    description: (
+        <FormattedMessage
+            defaultMessage="Use dynamic text for instructions, dialogue, and more!"
+            description="Description of Text extension"
+            id="text.textExtension.description"
+        />
+    ),
+    featured: true,
+    incompatibleWithScratch: true
+},*/
+{
   name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "Prism",
     id: "jgPrism.jgPrismExtension.name"
