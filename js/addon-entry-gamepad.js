@@ -1,14 +1,14 @@
 (window["webpackJsonpGUI"] = window["webpackJsonpGUI"] || []).push([["addon-entry-gamepad"],{
 
-/***/ "./node_modules/css-loader/index.js!./src/addons/addons/gamepad/gamepadlib.css":
-/*!****************************************************************************!*\
-  !*** ./node_modules/css-loader!./src/addons/addons/gamepad/gamepadlib.css ***!
-  \****************************************************************************/
+/***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/gamepad/gamepadlib.css":
+/*!*******************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader!./src/addons/addons/gamepad/gamepadlib.css ***!
+  \*******************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var escape = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/url/escape.js */ "./node_modules/css-loader/lib/url/escape.js");
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+var escape = __webpack_require__(/*! ../../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/url/escape.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/url/escape.js");
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -20,14 +20,14 @@ exports.push([module.i, ".gamepadlib-selector {\n  width: 100%;\n  margin-bottom
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/addons/addons/gamepad/style.css":
-/*!***********************************************************************!*\
-  !*** ./node_modules/css-loader!./src/addons/addons/gamepad/style.css ***!
-  \***********************************************************************/
+/***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/gamepad/style.css":
+/*!**************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader!./src/addons/addons/gamepad/style.css ***!
+  \**************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -39,10 +39,10 @@ exports.push([module.i, "[dir=\"ltr\"] .sa-gamepad-container {\n  margin-right: 
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/active.png":
-/*!************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/active.png ***!
-  \************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/active.png":
+/*!***************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/active.png ***!
+  \***************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -52,10 +52,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/close.svg":
-/*!***********************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/close.svg ***!
-  \***********************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/close.svg":
+/*!**************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/close.svg ***!
+  \**************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -65,10 +65,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/cursor.png":
-/*!************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/cursor.png ***!
-  \************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/cursor.png":
+/*!***************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/cursor.png ***!
+  \***************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -78,10 +78,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/dot.svg":
-/*!*********************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/dot.svg ***!
-  \*********************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/dot.svg":
+/*!************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/dot.svg ***!
+  \************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -91,10 +91,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/gamepad.svg":
-/*!*************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/gamepad.svg ***!
-  \*************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/gamepad.svg":
+/*!****************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/gamepad.svg ***!
+  \****************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -115,9 +115,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resources", function() { return resources; });
 /* harmony import */ var _userscript_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./userscript.js */ "./src/addons/addons/gamepad/userscript.js");
-/* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./style.css */ "./node_modules/css-loader/index.js!./src/addons/addons/gamepad/style.css");
+/* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./style.css */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/gamepad/style.css");
 /* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _css_loader_gamepadlib_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! css-loader!./gamepadlib.css */ "./node_modules/css-loader/index.js!./src/addons/addons/gamepad/gamepadlib.css");
+/* harmony import */ var _css_loader_gamepadlib_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! css-loader!./gamepadlib.css */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/gamepad/gamepadlib.css");
 /* harmony import */ var _css_loader_gamepadlib_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_css_loader_gamepadlib_css__WEBPACK_IMPORTED_MODULE_2__);
 /* generated by pull.js */
 
@@ -1230,11 +1230,11 @@ class GamepadEditor extends _event_target_js__WEBPACK_IMPORTED_MODULE_0__["defau
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _url_loader_active_png__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./active.png */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/active.png");
-/* harmony import */ var _url_loader_close_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-loader!./close.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/close.svg");
-/* harmony import */ var _url_loader_cursor_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! url-loader!./cursor.png */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/cursor.png");
-/* harmony import */ var _url_loader_dot_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! url-loader!./dot.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/dot.svg");
-/* harmony import */ var _url_loader_gamepad_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! url-loader!./gamepad.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/gamepad.svg");
+/* harmony import */ var _url_loader_active_png__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./active.png */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/active.png");
+/* harmony import */ var _url_loader_close_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-loader!./close.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/close.svg");
+/* harmony import */ var _url_loader_cursor_png__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! url-loader!./cursor.png */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/cursor.png");
+/* harmony import */ var _url_loader_dot_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! url-loader!./dot.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/dot.svg");
+/* harmony import */ var _url_loader_gamepad_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! url-loader!./gamepad.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/gamepad/gamepad.svg");
 /* harmony import */ var _gamepadlib_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./gamepadlib.js */ "./src/addons/addons/gamepad/gamepadlib.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }

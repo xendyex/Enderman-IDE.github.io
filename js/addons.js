@@ -1,13 +1,13 @@
 (window["webpackJsonpGUI"] = window["webpackJsonpGUI"] || []).push([["addons"],{
 
-/***/ "./node_modules/css-loader/index.js!./src/addons/addons/drag-drop/dragged-over.css":
-/*!********************************************************************************!*\
-  !*** ./node_modules/css-loader!./src/addons/addons/drag-drop/dragged-over.css ***!
-  \********************************************************************************/
+/***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/drag-drop/dragged-over.css":
+/*!***********************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader!./src/addons/addons/drag-drop/dragged-over.css ***!
+  \***********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -19,14 +19,14 @@ exports.push([module.i, "/* Based on the `stage-selector_raised` class */\ndiv[c
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/addons/addons/pause/style.css":
-/*!*********************************************************************!*\
-  !*** ./node_modules/css-loader!./src/addons/addons/pause/style.css ***!
-  \*********************************************************************/
+/***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/pause/style.css":
+/*!************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader!./src/addons/addons/pause/style.css ***!
+  \************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -38,14 +38,14 @@ exports.push([module.i, ".pause-btn {\n  width: 2rem;\n  height: 2rem;\n  paddin
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./src/addons/modal.css":
-/*!*************************************************************************************************************!*\
-  !*** ./node_modules/css-loader??ref--5-1!./node_modules/postcss-loader/src??postcss!./src/addons/modal.css ***!
-  \*************************************************************************************************************/
+/***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js?!./node_modules/.pnpm/postcss-loader@3.0.0/node_modules/postcss-loader/src/index.js?!./src/addons/modal.css":
+/*!********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader??ref--5-1!./node_modules/.pnpm/postcss-loader@3.0.0/node_modules/postcss-loader/src??postcss!./src/addons/modal.css ***!
+  \********************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__(/*! ../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -60,10 +60,10 @@ exports.locals = {
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/mute-project/icon--mute.svg":
-/*!*********************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/mute-project/icon--mute.svg ***!
-  \*********************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/mute-project/icon--mute.svg":
+/*!************************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/mute-project/icon--mute.svg ***!
+  \************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -73,10 +73,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/pause/pause.svg":
-/*!*********************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/pause/pause.svg ***!
-  \*********************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/pause/pause.svg":
+/*!************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/pause/pause.svg ***!
+  \************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -86,10 +86,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/pause/play.svg":
-/*!********************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/pause/play.svg ***!
-  \********************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/pause/play.svg":
+/*!***********************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/pause/play.svg ***!
+  \***********************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -505,7 +505,7 @@ const setup = _vm => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resources", function() { return resources; });
 /* harmony import */ var _userscript_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./userscript.js */ "./src/addons/addons/drag-drop/userscript.js");
-/* harmony import */ var _css_loader_dragged_over_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./dragged-over.css */ "./node_modules/css-loader/index.js!./src/addons/addons/drag-drop/dragged-over.css");
+/* harmony import */ var _css_loader_dragged_over_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./dragged-over.css */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/drag-drop/dragged-over.css");
 /* harmony import */ var _css_loader_dragged_over_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_css_loader_dragged_over_css__WEBPACK_IMPORTED_MODULE_1__);
 /* generated by pull.js */
 
@@ -681,7 +681,7 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _url_loader_icon_mute_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./icon--mute.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/mute-project/icon--mute.svg");
+/* harmony import */ var _url_loader_icon_mute_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./icon--mute.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/mute-project/icon--mute.svg");
 /* inserted by pull.js */
 
 const _twGetAsset = path => {
@@ -747,7 +747,7 @@ const _twGetAsset = path => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resources", function() { return resources; });
 /* harmony import */ var _userscript_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./userscript.js */ "./src/addons/addons/pause/userscript.js");
-/* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./style.css */ "./node_modules/css-loader/index.js!./src/addons/addons/pause/style.css");
+/* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./style.css */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/pause/style.css");
 /* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__);
 /* generated by pull.js */
 
@@ -768,8 +768,8 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _url_loader_pause_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./pause.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/pause/pause.svg");
-/* harmony import */ var _url_loader_play_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-loader!./play.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/pause/play.svg");
+/* harmony import */ var _url_loader_pause_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./pause.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/pause/pause.svg");
+/* harmony import */ var _url_loader_play_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-loader!./play.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/pause/play.svg");
 /* harmony import */ var _debugger_module_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../debugger/module.js */ "./src/addons/addons/debugger/module.js");
 /* inserted by pull.js */
 
@@ -1689,7 +1689,7 @@ for (const id of Object.keys(_generated_addon_manifests__WEBPACK_IMPORTED_MODULE
   }
   runAddon(id);
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/.pnpm/webpack@4.46.0_webpack-cli@3.3.12/node_modules/webpack/buildin/global.js */ "./node_modules/.pnpm/webpack@4.46.0_webpack-cli@3.3.12/node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 
@@ -1912,7 +1912,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../node_modules/css-loader??ref--5-1!../../node_modules/postcss-loader/src??postcss!./modal.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./src/addons/modal.css");
+var content = __webpack_require__(/*! !../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader??ref--5-1!../../node_modules/.pnpm/postcss-loader@3.0.0/node_modules/postcss-loader/src??postcss!./modal.css */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js?!./node_modules/.pnpm/postcss-loader@3.0.0/node_modules/postcss-loader/src/index.js?!./src/addons/modal.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -1926,7 +1926,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+var update = __webpack_require__(/*! ../../node_modules/.pnpm/style-loader@0.23.1/node_modules/style-loader/lib/addStyles.js */ "./node_modules/.pnpm/style-loader@0.23.1/node_modules/style-loader/lib/addStyles.js")(content, options);
 
 if(content.locals) module.exports = content.locals;
 

@@ -1,14 +1,14 @@
 (window["webpackJsonpGUI"] = window["webpackJsonpGUI"] || []).push([["addon-entry-debugger"],{
 
-/***/ "./node_modules/css-loader/index.js!./src/addons/addons/debugger/style.css":
-/*!************************************************************************!*\
-  !*** ./node_modules/css-loader!./src/addons/addons/debugger/style.css ***!
-  \************************************************************************/
+/***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/debugger/style.css":
+/*!***************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader!./src/addons/addons/debugger/style.css ***!
+  \***************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var escape = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/url/escape.js */ "./node_modules/css-loader/lib/url/escape.js");
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+var escape = __webpack_require__(/*! ../../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/url/escape.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/url/escape.js");
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -20,10 +20,10 @@ exports.push([module.i, "[dir=\"ltr\"] .sa-debugger-container {\n  margin-right:
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/close.svg":
-/*!******************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/close.svg ***!
-  \******************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/close.svg":
+/*!*********************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/close.svg ***!
+  \*********************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -33,10 +33,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug-unread.svg":
-/*!*************************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug-unread.svg ***!
-  \*************************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug-unread.svg":
+/*!****************************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug-unread.svg ***!
+  \****************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -46,10 +46,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug.svg":
-/*!******************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug.svg ***!
-  \******************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug.svg":
+/*!*********************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug.svg ***!
+  \*********************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -59,10 +59,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/delete.svg":
-/*!*******************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/delete.svg ***!
-  \*******************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/delete.svg":
+/*!**********************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/delete.svg ***!
+  \**********************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -72,10 +72,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/download-white.svg":
-/*!***************************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/download-white.svg ***!
-  \***************************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/download-white.svg":
+/*!******************************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/download-white.svg ***!
+  \******************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -85,10 +85,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/error.svg":
-/*!******************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/error.svg ***!
-  \******************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/error.svg":
+/*!*********************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/error.svg ***!
+  \*********************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -98,10 +98,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/logs.svg":
-/*!*****************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/logs.svg ***!
-  \*****************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/logs.svg":
+/*!********************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/logs.svg ***!
+  \********************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -111,10 +111,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/performance.svg":
-/*!************************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/performance.svg ***!
-  \************************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/performance.svg":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/performance.svg ***!
+  \***************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -124,10 +124,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/play.svg":
-/*!*****************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/play.svg ***!
-  \*****************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/play.svg":
+/*!********************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/play.svg ***!
+  \********************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -137,10 +137,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/step.svg":
-/*!*****************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/step.svg ***!
-  \*****************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/step.svg":
+/*!********************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/step.svg ***!
+  \********************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -150,10 +150,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/subthread.svg":
-/*!**********************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/subthread.svg ***!
-  \**********************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/subthread.svg":
+/*!*************************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/subthread.svg ***!
+  \*************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -163,10 +163,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/threads.svg":
-/*!********************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/threads.svg ***!
-  \********************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/threads.svg":
+/*!***********************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/threads.svg ***!
+  \***********************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -176,10 +176,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/warning.svg":
-/*!********************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/warning.svg ***!
-  \********************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/warning.svg":
+/*!***********************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/warning.svg ***!
+  \***********************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -200,7 +200,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resources", function() { return resources; });
 /* harmony import */ var _userscript_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./userscript.js */ "./src/addons/addons/debugger/userscript.js");
-/* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./style.css */ "./node_modules/css-loader/index.js!./src/addons/addons/debugger/style.css");
+/* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./style.css */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/debugger/style.css");
 /* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__);
 /* generated by pull.js */
 
@@ -470,19 +470,19 @@ class LogView {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return createLogsTab; });
-/* harmony import */ var _url_loader_icons_close_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./icons/close.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/close.svg");
-/* harmony import */ var _url_loader_icons_debug_unread_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-loader!./icons/debug-unread.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug-unread.svg");
-/* harmony import */ var _url_loader_icons_debug_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! url-loader!./icons/debug.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug.svg");
-/* harmony import */ var _url_loader_icons_delete_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! url-loader!./icons/delete.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/delete.svg");
-/* harmony import */ var _url_loader_icons_download_white_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! url-loader!./icons/download-white.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/download-white.svg");
-/* harmony import */ var _url_loader_icons_error_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! url-loader!./icons/error.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/error.svg");
-/* harmony import */ var _url_loader_icons_logs_svg__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! url-loader!./icons/logs.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/logs.svg");
-/* harmony import */ var _url_loader_icons_performance_svg__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! url-loader!./icons/performance.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/performance.svg");
-/* harmony import */ var _url_loader_icons_play_svg__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! url-loader!./icons/play.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/play.svg");
-/* harmony import */ var _url_loader_icons_step_svg__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! url-loader!./icons/step.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/step.svg");
-/* harmony import */ var _url_loader_icons_subthread_svg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! url-loader!./icons/subthread.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/subthread.svg");
-/* harmony import */ var _url_loader_icons_threads_svg__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! url-loader!./icons/threads.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/threads.svg");
-/* harmony import */ var _url_loader_icons_warning_svg__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! url-loader!./icons/warning.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/warning.svg");
+/* harmony import */ var _url_loader_icons_close_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./icons/close.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/close.svg");
+/* harmony import */ var _url_loader_icons_debug_unread_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-loader!./icons/debug-unread.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug-unread.svg");
+/* harmony import */ var _url_loader_icons_debug_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! url-loader!./icons/debug.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug.svg");
+/* harmony import */ var _url_loader_icons_delete_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! url-loader!./icons/delete.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/delete.svg");
+/* harmony import */ var _url_loader_icons_download_white_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! url-loader!./icons/download-white.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/download-white.svg");
+/* harmony import */ var _url_loader_icons_error_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! url-loader!./icons/error.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/error.svg");
+/* harmony import */ var _url_loader_icons_logs_svg__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! url-loader!./icons/logs.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/logs.svg");
+/* harmony import */ var _url_loader_icons_performance_svg__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! url-loader!./icons/performance.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/performance.svg");
+/* harmony import */ var _url_loader_icons_play_svg__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! url-loader!./icons/play.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/play.svg");
+/* harmony import */ var _url_loader_icons_step_svg__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! url-loader!./icons/step.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/step.svg");
+/* harmony import */ var _url_loader_icons_subthread_svg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! url-loader!./icons/subthread.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/subthread.svg");
+/* harmony import */ var _url_loader_icons_threads_svg__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! url-loader!./icons/threads.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/threads.svg");
+/* harmony import */ var _url_loader_icons_warning_svg__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! url-loader!./icons/warning.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/warning.svg");
 /* harmony import */ var _libraries_common_cs_download_blob_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../libraries/common/cs/download-blob.js */ "./src/addons/libraries/common/cs/download-blob.js");
 /* harmony import */ var _log_view_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./log-view.js */ "./src/addons/addons/debugger/log-view.js");
 /* inserted by pull.js */
@@ -702,19 +702,19 @@ async function createLogsTab(_ref) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return createThreadsTab; });
-/* harmony import */ var _url_loader_icons_close_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./icons/close.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/close.svg");
-/* harmony import */ var _url_loader_icons_debug_unread_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-loader!./icons/debug-unread.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug-unread.svg");
-/* harmony import */ var _url_loader_icons_debug_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! url-loader!./icons/debug.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug.svg");
-/* harmony import */ var _url_loader_icons_delete_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! url-loader!./icons/delete.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/delete.svg");
-/* harmony import */ var _url_loader_icons_download_white_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! url-loader!./icons/download-white.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/download-white.svg");
-/* harmony import */ var _url_loader_icons_error_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! url-loader!./icons/error.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/error.svg");
-/* harmony import */ var _url_loader_icons_logs_svg__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! url-loader!./icons/logs.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/logs.svg");
-/* harmony import */ var _url_loader_icons_performance_svg__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! url-loader!./icons/performance.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/performance.svg");
-/* harmony import */ var _url_loader_icons_play_svg__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! url-loader!./icons/play.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/play.svg");
-/* harmony import */ var _url_loader_icons_step_svg__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! url-loader!./icons/step.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/step.svg");
-/* harmony import */ var _url_loader_icons_subthread_svg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! url-loader!./icons/subthread.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/subthread.svg");
-/* harmony import */ var _url_loader_icons_threads_svg__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! url-loader!./icons/threads.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/threads.svg");
-/* harmony import */ var _url_loader_icons_warning_svg__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! url-loader!./icons/warning.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/warning.svg");
+/* harmony import */ var _url_loader_icons_close_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./icons/close.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/close.svg");
+/* harmony import */ var _url_loader_icons_debug_unread_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-loader!./icons/debug-unread.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug-unread.svg");
+/* harmony import */ var _url_loader_icons_debug_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! url-loader!./icons/debug.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug.svg");
+/* harmony import */ var _url_loader_icons_delete_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! url-loader!./icons/delete.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/delete.svg");
+/* harmony import */ var _url_loader_icons_download_white_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! url-loader!./icons/download-white.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/download-white.svg");
+/* harmony import */ var _url_loader_icons_error_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! url-loader!./icons/error.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/error.svg");
+/* harmony import */ var _url_loader_icons_logs_svg__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! url-loader!./icons/logs.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/logs.svg");
+/* harmony import */ var _url_loader_icons_performance_svg__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! url-loader!./icons/performance.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/performance.svg");
+/* harmony import */ var _url_loader_icons_play_svg__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! url-loader!./icons/play.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/play.svg");
+/* harmony import */ var _url_loader_icons_step_svg__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! url-loader!./icons/step.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/step.svg");
+/* harmony import */ var _url_loader_icons_subthread_svg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! url-loader!./icons/subthread.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/subthread.svg");
+/* harmony import */ var _url_loader_icons_threads_svg__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! url-loader!./icons/threads.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/threads.svg");
+/* harmony import */ var _url_loader_icons_warning_svg__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! url-loader!./icons/warning.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/warning.svg");
 /* harmony import */ var _module_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./module.js */ "./src/addons/addons/debugger/module.js");
 /* harmony import */ var _log_view_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./log-view.js */ "./src/addons/addons/debugger/log-view.js");
 /* harmony import */ var _editor_stepping_highlighter_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../editor-stepping/highlighter.js */ "./src/addons/addons/editor-stepping/highlighter.js");
@@ -970,19 +970,19 @@ async function createThreadsTab(_ref) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _url_loader_icons_close_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./icons/close.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/close.svg");
-/* harmony import */ var _url_loader_icons_debug_unread_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-loader!./icons/debug-unread.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug-unread.svg");
-/* harmony import */ var _url_loader_icons_debug_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! url-loader!./icons/debug.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug.svg");
-/* harmony import */ var _url_loader_icons_delete_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! url-loader!./icons/delete.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/delete.svg");
-/* harmony import */ var _url_loader_icons_download_white_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! url-loader!./icons/download-white.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/download-white.svg");
-/* harmony import */ var _url_loader_icons_error_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! url-loader!./icons/error.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/error.svg");
-/* harmony import */ var _url_loader_icons_logs_svg__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! url-loader!./icons/logs.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/logs.svg");
-/* harmony import */ var _url_loader_icons_performance_svg__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! url-loader!./icons/performance.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/performance.svg");
-/* harmony import */ var _url_loader_icons_play_svg__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! url-loader!./icons/play.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/play.svg");
-/* harmony import */ var _url_loader_icons_step_svg__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! url-loader!./icons/step.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/step.svg");
-/* harmony import */ var _url_loader_icons_subthread_svg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! url-loader!./icons/subthread.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/subthread.svg");
-/* harmony import */ var _url_loader_icons_threads_svg__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! url-loader!./icons/threads.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/threads.svg");
-/* harmony import */ var _url_loader_icons_warning_svg__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! url-loader!./icons/warning.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/warning.svg");
+/* harmony import */ var _url_loader_icons_close_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./icons/close.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/close.svg");
+/* harmony import */ var _url_loader_icons_debug_unread_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-loader!./icons/debug-unread.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug-unread.svg");
+/* harmony import */ var _url_loader_icons_debug_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! url-loader!./icons/debug.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/debug.svg");
+/* harmony import */ var _url_loader_icons_delete_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! url-loader!./icons/delete.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/delete.svg");
+/* harmony import */ var _url_loader_icons_download_white_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! url-loader!./icons/download-white.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/download-white.svg");
+/* harmony import */ var _url_loader_icons_error_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! url-loader!./icons/error.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/error.svg");
+/* harmony import */ var _url_loader_icons_logs_svg__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! url-loader!./icons/logs.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/logs.svg");
+/* harmony import */ var _url_loader_icons_performance_svg__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! url-loader!./icons/performance.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/performance.svg");
+/* harmony import */ var _url_loader_icons_play_svg__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! url-loader!./icons/play.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/play.svg");
+/* harmony import */ var _url_loader_icons_step_svg__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! url-loader!./icons/step.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/step.svg");
+/* harmony import */ var _url_loader_icons_subthread_svg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! url-loader!./icons/subthread.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/subthread.svg");
+/* harmony import */ var _url_loader_icons_threads_svg__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! url-loader!./icons/threads.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/threads.svg");
+/* harmony import */ var _url_loader_icons_warning_svg__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! url-loader!./icons/warning.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/debugger/icons/warning.svg");
 /* harmony import */ var _module_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./module.js */ "./src/addons/addons/debugger/module.js");
 /* harmony import */ var _logs_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./logs.js */ "./src/addons/addons/debugger/logs.js");
 /* harmony import */ var _threads_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./threads.js */ "./src/addons/addons/debugger/threads.js");

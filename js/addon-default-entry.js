@@ -1,13 +1,13 @@
 (window["webpackJsonpGUI"] = window["webpackJsonpGUI"] || []).push([["addon-default-entry"],{
 
-/***/ "./node_modules/css-loader/index.js!./src/addons/addons/color-picker/style.css":
-/*!****************************************************************************!*\
-  !*** ./node_modules/css-loader!./src/addons/addons/color-picker/style.css ***!
-  \****************************************************************************/
+/***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/color-picker/style.css":
+/*!*******************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader!./src/addons/addons/color-picker/style.css ***!
+  \*******************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -19,14 +19,14 @@ exports.push([module.i, ".sa-color-picker {\n  display: flex;\n}\n\n.sa-color-pi
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/addons/addons/editor-comment-previews/userstyle.css":
-/*!*******************************************************************************************!*\
-  !*** ./node_modules/css-loader!./src/addons/addons/editor-comment-previews/userstyle.css ***!
-  \*******************************************************************************************/
+/***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/editor-comment-previews/userstyle.css":
+/*!**********************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader!./src/addons/addons/editor-comment-previews/userstyle.css ***!
+  \**********************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -38,14 +38,14 @@ exports.push([module.i, ".sa-comment-preview-outer {\n  position: fixed;\n  top:
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/addons/addons/editor-devtools/userscript.css":
-/*!************************************************************************************!*\
-  !*** ./node_modules/css-loader!./src/addons/addons/editor-devtools/userscript.css ***!
-  \************************************************************************************/
+/***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/editor-devtools/userscript.css":
+/*!***************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader!./src/addons/addons/editor-devtools/userscript.css ***!
+  \***************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -57,14 +57,14 @@ exports.push([module.i, "#s3devToolBar {\n  display: flex;\n  white-space: nowra
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/addons/addons/editor-searchable-dropdowns/userscript.css":
-/*!************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./src/addons/addons/editor-searchable-dropdowns/userscript.css ***!
-  \************************************************************************************************/
+/***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/editor-searchable-dropdowns/userscript.css":
+/*!***************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader!./src/addons/addons/editor-searchable-dropdowns/userscript.css ***!
+  \***************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -76,14 +76,14 @@ exports.push([module.i, ".u-dropdown-searchbar {\n  width: 100%;\n  box-sizing: 
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/addons/addons/folders/style.css":
-/*!***********************************************************************!*\
-  !*** ./node_modules/css-loader!./src/addons/addons/folders/style.css ***!
-  \***********************************************************************/
+/***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/folders/style.css":
+/*!**************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader!./src/addons/addons/folders/style.css ***!
+  \**************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -95,14 +95,14 @@ exports.push([module.i, ".sa-folders-contextmenu-item {\n  max-width: 250px;\n  
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/addons/addons/onion-skinning/style.css":
-/*!******************************************************************************!*\
-  !*** ./node_modules/css-loader!./src/addons/addons/onion-skinning/style.css ***!
-  \******************************************************************************/
+/***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/onion-skinning/style.css":
+/*!*********************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader!./src/addons/addons/onion-skinning/style.css ***!
+  \*********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -114,14 +114,14 @@ exports.push([module.i, ".sa-onion-controls-container {\n  display: flex;\n  fle
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/addons/addons/pick-colors-from-stage/style.css":
-/*!**************************************************************************************!*\
-  !*** ./node_modules/css-loader!./src/addons/addons/pick-colors-from-stage/style.css ***!
-  \**************************************************************************************/
+/***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/pick-colors-from-stage/style.css":
+/*!*****************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader!./src/addons/addons/pick-colors-from-stage/style.css ***!
+  \*****************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -133,10 +133,10 @@ exports.push([module.i, ".sa-stage-color-picker-picking [class^=\"stage_color-pi
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/editor-devtools/icon--close.svg":
-/*!*************************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/editor-devtools/icon--close.svg ***!
-  \*************************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/editor-devtools/icon--close.svg":
+/*!****************************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/editor-devtools/icon--close.svg ***!
+  \****************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -146,10 +146,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/folders/folder.svg":
-/*!************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/folders/folder.svg ***!
-  \************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/folders/folder.svg":
+/*!***************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/folders/folder.svg ***!
+  \***************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -159,10 +159,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/decrement.svg":
-/*!**********************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/decrement.svg ***!
-  \**********************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/decrement.svg":
+/*!*************************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/decrement.svg ***!
+  \*************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -172,10 +172,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/increment.svg":
-/*!**********************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/increment.svg ***!
-  \**********************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/increment.svg":
+/*!*************************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/increment.svg ***!
+  \*************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -185,10 +185,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/settings.svg":
-/*!*********************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/settings.svg ***!
-  \*********************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/settings.svg":
+/*!************************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/settings.svg ***!
+  \************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -198,10 +198,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/toggle.svg":
-/*!*******************************************************************************************!*\
-  !*** ./node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/toggle.svg ***!
-  \*******************************************************************************************/
+/***/ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/toggle.svg":
+/*!**********************************************************************************************************************************************************!*\
+  !*** ./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/toggle.svg ***!
+  \**********************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1356,7 +1356,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resources", function() { return resources; });
 /* harmony import */ var _userscript_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./userscript.js */ "./src/addons/addons/color-picker/userscript.js");
-/* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./style.css */ "./node_modules/css-loader/index.js!./src/addons/addons/color-picker/style.css");
+/* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./style.css */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/color-picker/style.css");
 /* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__);
 /* generated by pull.js */
 
@@ -1516,7 +1516,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resources", function() { return resources; });
 /* harmony import */ var _userscript_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./userscript.js */ "./src/addons/addons/editor-comment-previews/userscript.js");
-/* harmony import */ var _css_loader_userstyle_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./userstyle.css */ "./node_modules/css-loader/index.js!./src/addons/addons/editor-comment-previews/userstyle.css");
+/* harmony import */ var _css_loader_userstyle_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./userstyle.css */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/editor-comment-previews/userstyle.css");
 /* harmony import */ var _css_loader_userstyle_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_css_loader_userstyle_css__WEBPACK_IMPORTED_MODULE_1__);
 /* generated by pull.js */
 
@@ -4035,7 +4035,7 @@ class XML {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resources", function() { return resources; });
 /* harmony import */ var _userscript_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./userscript.js */ "./src/addons/addons/editor-devtools/userscript.js");
-/* harmony import */ var _css_loader_userscript_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./userscript.css */ "./node_modules/css-loader/index.js!./src/addons/addons/editor-devtools/userscript.css");
+/* harmony import */ var _css_loader_userscript_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./userscript.css */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/editor-devtools/userscript.css");
 /* harmony import */ var _css_loader_userscript_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_css_loader_userscript_css__WEBPACK_IMPORTED_MODULE_1__);
 /* generated by pull.js */
 
@@ -4399,7 +4399,7 @@ function distance(pos, next) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _url_loader_icon_close_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./icon--close.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/editor-devtools/icon--close.svg");
+/* harmony import */ var _url_loader_icon_close_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./icon--close.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/editor-devtools/icon--close.svg");
 /* harmony import */ var _DevTools_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DevTools.js */ "./src/addons/addons/editor-devtools/DevTools.js");
 /* inserted by pull.js */
 
@@ -4437,7 +4437,7 @@ const _twGetAsset = path => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resources", function() { return resources; });
 /* harmony import */ var _userscript_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./userscript.js */ "./src/addons/addons/editor-searchable-dropdowns/userscript.js");
-/* harmony import */ var _css_loader_userscript_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./userscript.css */ "./node_modules/css-loader/index.js!./src/addons/addons/editor-searchable-dropdowns/userscript.css");
+/* harmony import */ var _css_loader_userscript_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./userscript.css */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/editor-searchable-dropdowns/userscript.css");
 /* harmony import */ var _css_loader_userscript_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_css_loader_userscript_css__WEBPACK_IMPORTED_MODULE_1__);
 /* generated by pull.js */
 
@@ -4779,7 +4779,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resources", function() { return resources; });
 /* harmony import */ var _userscript_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./userscript.js */ "./src/addons/addons/folders/userscript.js");
-/* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./style.css */ "./node_modules/css-loader/index.js!./src/addons/addons/folders/style.css");
+/* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./style.css */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/folders/style.css");
 /* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__);
 /* generated by pull.js */
 
@@ -4800,7 +4800,7 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _url_loader_folder_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./folder.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/folders/folder.svg");
+/* harmony import */ var _url_loader_folder_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./folder.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/folders/folder.svg");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -6089,7 +6089,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resources", function() { return resources; });
 /* harmony import */ var _userscript_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./userscript.js */ "./src/addons/addons/onion-skinning/userscript.js");
-/* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./style.css */ "./node_modules/css-loader/index.js!./src/addons/addons/onion-skinning/style.css");
+/* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./style.css */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/onion-skinning/style.css");
 /* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__);
 /* generated by pull.js */
 
@@ -6110,10 +6110,10 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _url_loader_decrement_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./decrement.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/decrement.svg");
-/* harmony import */ var _url_loader_increment_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-loader!./increment.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/increment.svg");
-/* harmony import */ var _url_loader_settings_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! url-loader!./settings.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/settings.svg");
-/* harmony import */ var _url_loader_toggle_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! url-loader!./toggle.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/toggle.svg");
+/* harmony import */ var _url_loader_decrement_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./decrement.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/decrement.svg");
+/* harmony import */ var _url_loader_increment_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-loader!./increment.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/increment.svg");
+/* harmony import */ var _url_loader_settings_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! url-loader!./settings.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/settings.svg");
+/* harmony import */ var _url_loader_toggle_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! url-loader!./toggle.svg */ "./node_modules/.pnpm/url-loader@4.1.1_ieuce33bpzj3bajdc6nxeyng3a/node_modules/url-loader/dist/cjs.js!./src/addons/addons/onion-skinning/toggle.svg");
 /* inserted by pull.js */
 
 
@@ -6914,7 +6914,7 @@ const _twGetAsset = path => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resources", function() { return resources; });
 /* harmony import */ var _userscript_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./userscript.js */ "./src/addons/addons/pick-colors-from-stage/userscript.js");
-/* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./style.css */ "./node_modules/css-loader/index.js!./src/addons/addons/pick-colors-from-stage/style.css");
+/* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! css-loader!./style.css */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js!./src/addons/addons/pick-colors-from-stage/style.css");
 /* harmony import */ var _css_loader_style_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_css_loader_style_css__WEBPACK_IMPORTED_MODULE_1__);
 /* generated by pull.js */
 
