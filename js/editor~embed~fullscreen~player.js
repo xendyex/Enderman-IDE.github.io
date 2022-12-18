@@ -40849,6 +40849,17 @@ const updateMetrics = function updateMetrics(metrics) {
 /***/ }),
 
 /***/ 3:
+/*!*********************************!*\
+  !*** readable-stream (ignored) ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 4:
 /*!********************************!*\
   !*** ./node/self.js (ignored) ***!
   \********************************/
@@ -40859,7 +40870,7 @@ const updateMetrics = function updateMetrics(metrics) {
 
 /***/ }),
 
-/***/ 4:
+/***/ 5:
 /*!**********************************!*\
   !*** ./node/extend.js (ignored) ***!
   \**********************************/
