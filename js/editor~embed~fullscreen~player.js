@@ -2465,35 +2465,6 @@ exports.locals = {
 
 /***/ }),
 
-/***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js?!./node_modules/.pnpm/postcss-loader@3.0.0/node_modules/postcss-loader/src/index.js?!./src/components/tw-security-manager-modal/security-manager-modal.css":
-/*!*******************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader??ref--5-1!./node_modules/.pnpm/postcss-loader@3.0.0/node_modules/postcss-loader/src??postcss!./src/components/tw-security-manager-modal/security-manager-modal.css ***!
-  \*******************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "/* #E5F0FF */ /* #E9F1FC */ /* #D9E3F2 */ /* 90% transparent version of motion-primary */ /* #FFFFFF */ /* 25% transparent version of ui-white */ /* 25% transparent version of ui-white */ /* 25% transparent version of ui-white */ /* 15% transparent version of black */ /* #575E75 */ /* 35% transparent version of motion-primary */ /* 15% transparent version of motion-primary */ /* opt-in theme overrides */ /* #FF661A */ /* #E64D00 */ /* #CF63CF */ /* #BD42BD */ /* #FFAB19 */ /* #FF8C1A */ /* #0FBD8C */ /* #0FBD8C */ /* #FF8C1A */ /* #FFB366 */ /* #FF8C1A */ /* 35% transparent version of extensions-primary */ /* opaque version of extensions-transparent, on white bg */ /* lighter than motion-primary */ .security-manager-modal_modal-content_3qWwH {\n    width: 400px;\n} .security-manager-modal_body_Pn7qy {\n    background: hsla(0, 100%, 100%, 1);\n    padding: 1.5rem 2.25rem;\n} [theme=\"dark\"] .security-manager-modal_body_Pn7qy {\n    color: var(--text-primary, hsla(225, 15%, 40%, 1));\n    background: var(--ui-primary, hsla(215, 100%, 95%, 1));\n} .security-manager-modal_body_Pn7qy p {\n    margin: 8px 0;\n} .security-manager-modal_extension_1ASvZ {\n    font-family: monospace;\n    -webkit-user-select: text;\n       -moz-user-select: text;\n        -ms-user-select: text;\n            user-select: text;\n} .security-manager-modal_buttons_1LSKA {\n    display: flex;\n    justify-content: flex-end;\n} .security-manager-modal_deny-button_3Vd-R, .security-manager-modal_allow-button_3tcXk {\n    font: inherit;\n    color: inherit;\n    padding: 0.75rem 1rem;\n    border-radius: 0.25rem;\n    border: 1px solid var(--ui-black-transparent, hsla(0, 0%, 0%, 0.15));\n    font-weight: 600;\n    font-size: 0.85rem;\n    margin: 0 0 0 8px;\n} .security-manager-modal_deny-button_3Vd-R {\n    background-color: rgb(255, 92, 92);\n} .security-manager-modal_allow-button_3tcXk {\n    background-color: #24cd11;\n}\n", ""]);
-
-// exports
-exports.locals = {
-	"modal-content": "security-manager-modal_modal-content_3qWwH",
-	"modalContent": "security-manager-modal_modal-content_3qWwH",
-	"body": "security-manager-modal_body_Pn7qy",
-	"extension": "security-manager-modal_extension_1ASvZ",
-	"buttons": "security-manager-modal_buttons_1LSKA",
-	"deny-button": "security-manager-modal_deny-button_3Vd-R",
-	"denyButton": "security-manager-modal_deny-button_3Vd-R",
-	"allow-button": "security-manager-modal_allow-button_3tcXk",
-	"allowButton": "security-manager-modal_allow-button_3tcXk"
-};
-
-/***/ }),
-
 /***/ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js?!./node_modules/.pnpm/postcss-loader@3.0.0/node_modules/postcss-loader/src/index.js?!./src/components/tw-settings-modal/settings-modal.css":
 /*!***************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader??ref--5-1!./node_modules/.pnpm/postcss-loader@3.0.0/node_modules/postcss-loader/src??postcss!./src/components/tw-settings-modal/settings-modal.css ***!
@@ -8090,25 +8061,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _telemetry_modal_telemetry_modal_jsx__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ../telemetry-modal/telemetry-modal.jsx */ "./src/components/telemetry-modal/telemetry-modal.jsx");
 /* harmony import */ var _containers_tw_username_modal_jsx__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ../../containers/tw-username-modal.jsx */ "./src/containers/tw-username-modal.jsx");
 /* harmony import */ var _containers_tw_settings_modal_jsx__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ../../containers/tw-settings-modal.jsx */ "./src/containers/tw-settings-modal.jsx");
-/* harmony import */ var _containers_tw_security_manager_jsx__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ../../containers/tw-security-manager.jsx */ "./src/containers/tw-security-manager.jsx");
-/* harmony import */ var _lib_layout_constants__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ../../lib/layout-constants */ "./src/lib/layout-constants.js");
-/* harmony import */ var _lib_screen_utils__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ../../lib/screen-utils */ "./src/lib/screen-utils.js");
-/* harmony import */ var _lib_tw_environment_support_prober__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ../../lib/tw-environment-support-prober */ "./src/lib/tw-environment-support-prober.js");
-/* harmony import */ var _gui_css__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./gui.css */ "./src/components/gui/gui.css");
-/* harmony import */ var _gui_css__WEBPACK_IMPORTED_MODULE_37___default = /*#__PURE__*/__webpack_require__.n(_gui_css__WEBPACK_IMPORTED_MODULE_37__);
-/* harmony import */ var _icon_extensions_svg__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./icon--extensions.svg */ "./src/components/gui/icon--extensions.svg");
-/* harmony import */ var _icon_extensions_svg__WEBPACK_IMPORTED_MODULE_38___default = /*#__PURE__*/__webpack_require__.n(_icon_extensions_svg__WEBPACK_IMPORTED_MODULE_38__);
-/* harmony import */ var _icon_code_svg__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./icon--code.svg */ "./src/components/gui/icon--code.svg");
-/* harmony import */ var _icon_code_svg__WEBPACK_IMPORTED_MODULE_39___default = /*#__PURE__*/__webpack_require__.n(_icon_code_svg__WEBPACK_IMPORTED_MODULE_39__);
-/* harmony import */ var _icon_costumes_svg__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./icon--costumes.svg */ "./src/components/gui/icon--costumes.svg");
-/* harmony import */ var _icon_costumes_svg__WEBPACK_IMPORTED_MODULE_40___default = /*#__PURE__*/__webpack_require__.n(_icon_costumes_svg__WEBPACK_IMPORTED_MODULE_40__);
-/* harmony import */ var _icon_sounds_svg__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./icon--sounds.svg */ "./src/components/gui/icon--sounds.svg");
-/* harmony import */ var _icon_sounds_svg__WEBPACK_IMPORTED_MODULE_41___default = /*#__PURE__*/__webpack_require__.n(_icon_sounds_svg__WEBPACK_IMPORTED_MODULE_41__);
+/* harmony import */ var _lib_layout_constants__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ../../lib/layout-constants */ "./src/lib/layout-constants.js");
+/* harmony import */ var _lib_screen_utils__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ../../lib/screen-utils */ "./src/lib/screen-utils.js");
+/* harmony import */ var _lib_tw_environment_support_prober__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ../../lib/tw-environment-support-prober */ "./src/lib/tw-environment-support-prober.js");
+/* harmony import */ var _gui_css__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./gui.css */ "./src/components/gui/gui.css");
+/* harmony import */ var _gui_css__WEBPACK_IMPORTED_MODULE_36___default = /*#__PURE__*/__webpack_require__.n(_gui_css__WEBPACK_IMPORTED_MODULE_36__);
+/* harmony import */ var _icon_extensions_svg__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./icon--extensions.svg */ "./src/components/gui/icon--extensions.svg");
+/* harmony import */ var _icon_extensions_svg__WEBPACK_IMPORTED_MODULE_37___default = /*#__PURE__*/__webpack_require__.n(_icon_extensions_svg__WEBPACK_IMPORTED_MODULE_37__);
+/* harmony import */ var _icon_code_svg__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./icon--code.svg */ "./src/components/gui/icon--code.svg");
+/* harmony import */ var _icon_code_svg__WEBPACK_IMPORTED_MODULE_38___default = /*#__PURE__*/__webpack_require__.n(_icon_code_svg__WEBPACK_IMPORTED_MODULE_38__);
+/* harmony import */ var _icon_costumes_svg__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./icon--costumes.svg */ "./src/components/gui/icon--costumes.svg");
+/* harmony import */ var _icon_costumes_svg__WEBPACK_IMPORTED_MODULE_39___default = /*#__PURE__*/__webpack_require__.n(_icon_costumes_svg__WEBPACK_IMPORTED_MODULE_39__);
+/* harmony import */ var _icon_sounds_svg__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./icon--sounds.svg */ "./src/components/gui/icon--sounds.svg");
+/* harmony import */ var _icon_sounds_svg__WEBPACK_IMPORTED_MODULE_40___default = /*#__PURE__*/__webpack_require__.n(_icon_sounds_svg__WEBPACK_IMPORTED_MODULE_40__);
 const _excluded = ["accountNavOpen", "activeTabIndex", "alertsVisible", "authorId", "authorThumbnailUrl", "authorUsername", "basePath", "backdropLibraryVisible", "backpackHost", "backpackVisible", "blocksTabVisible", "cardsVisible", "canChangeLanguage", "canCreateNew", "canEditTitle", "canManageFiles", "canRemix", "canSave", "canCreateCopy", "canShare", "canUseCloud", "children", "connectionModalVisible", "costumeLibraryVisible", "costumesTabVisible", "customStageSize", "enableCommunity", "intl", "isCreating", "isDark", "isEmbedded", "isFullScreen", "isPlayerOnly", "isRtl", "isShared", "isWindowFullScreen", "isTelemetryEnabled", "loading", "logo", "renderLogin", "onClickAbout", "onClickAccountNav", "onCloseAccountNav", "onClickAddonSettings", "onClickTheme", "onClickPackager", "onLogOut", "onOpenRegistration", "onToggleLoginOpen", "onActivateCostumesTab", "onActivateSoundsTab", "onActivateTab", "onClickLogo", "onExtensionButtonClick", "onProjectTelemetryEvent", "onRequestCloseBackdropLibrary", "onRequestCloseCostumeLibrary", "onRequestCloseTelemetryModal", "onSeeCommunity", "onShare", "onShowPrivacyPolicy", "onStartSelectingFileUpload", "onTelemetryModalCancel", "onTelemetryModalOptIn", "onTelemetryModalOptOut", "showComingSoon", "soundsTabVisible", "stageSizeMode", "targetIsStage", "telemetryModalVisible", "tipsLibraryVisible", "usernameModalVisible", "settingsModalVisible", "vm"];
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-
 
 
 
@@ -8250,38 +8219,37 @@ const GUIComponent = props => {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_box_box_jsx__WEBPACK_IMPORTED_MODULE_17__["default"], componentProps, children);
   }
   const tabClassNames = {
-    tabs: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.tabs,
-    tab: classnames__WEBPACK_IMPORTED_MODULE_0___default()(react_tabs_style_react_tabs_css__WEBPACK_IMPORTED_MODULE_8___default.a.reactTabsTab, _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.tab),
-    tabList: classnames__WEBPACK_IMPORTED_MODULE_0___default()(react_tabs_style_react_tabs_css__WEBPACK_IMPORTED_MODULE_8___default.a.reactTabsTabList, _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.tabList),
-    tabPanel: classnames__WEBPACK_IMPORTED_MODULE_0___default()(react_tabs_style_react_tabs_css__WEBPACK_IMPORTED_MODULE_8___default.a.reactTabsTabPanel, _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.tabPanel),
-    tabPanelSelected: classnames__WEBPACK_IMPORTED_MODULE_0___default()(react_tabs_style_react_tabs_css__WEBPACK_IMPORTED_MODULE_8___default.a.reactTabsTabPanelSelected, _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.isSelected),
-    tabSelected: classnames__WEBPACK_IMPORTED_MODULE_0___default()(react_tabs_style_react_tabs_css__WEBPACK_IMPORTED_MODULE_8___default.a.reactTabsTabSelected, _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.isSelected)
+    tabs: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.tabs,
+    tab: classnames__WEBPACK_IMPORTED_MODULE_0___default()(react_tabs_style_react_tabs_css__WEBPACK_IMPORTED_MODULE_8___default.a.reactTabsTab, _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.tab),
+    tabList: classnames__WEBPACK_IMPORTED_MODULE_0___default()(react_tabs_style_react_tabs_css__WEBPACK_IMPORTED_MODULE_8___default.a.reactTabsTabList, _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.tabList),
+    tabPanel: classnames__WEBPACK_IMPORTED_MODULE_0___default()(react_tabs_style_react_tabs_css__WEBPACK_IMPORTED_MODULE_8___default.a.reactTabsTabPanel, _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.tabPanel),
+    tabPanelSelected: classnames__WEBPACK_IMPORTED_MODULE_0___default()(react_tabs_style_react_tabs_css__WEBPACK_IMPORTED_MODULE_8___default.a.reactTabsTabPanelSelected, _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.isSelected),
+    tabSelected: classnames__WEBPACK_IMPORTED_MODULE_0___default()(react_tabs_style_react_tabs_css__WEBPACK_IMPORTED_MODULE_8___default.a.reactTabsTabSelected, _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.isSelected)
   };
-  const minWidth = _lib_layout_constants__WEBPACK_IMPORTED_MODULE_34__["default"].fullSizeMinWidth + Math.max(0, customStageSize.width - _lib_layout_constants__WEBPACK_IMPORTED_MODULE_34__["default"].referenceWidth);
+  const minWidth = _lib_layout_constants__WEBPACK_IMPORTED_MODULE_33__["default"].fullSizeMinWidth + Math.max(0, customStageSize.width - _lib_layout_constants__WEBPACK_IMPORTED_MODULE_33__["default"].referenceWidth);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react_responsive__WEBPACK_IMPORTED_MODULE_6___default.a, {
     minWidth: minWidth
   }, isFullSize => {
-    const stageSize = Object(_lib_screen_utils__WEBPACK_IMPORTED_MODULE_35__["resolveStageSize"])(stageSizeMode, isFullSize);
-    const alwaysEnabledModals = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_3___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_tw_security_manager_jsx__WEBPACK_IMPORTED_MODULE_33__["default"], null), usernameModalVisible && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_tw_username_modal_jsx__WEBPACK_IMPORTED_MODULE_31__["default"], null), settingsModalVisible && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_tw_settings_modal_jsx__WEBPACK_IMPORTED_MODULE_32__["default"], null));
+    const stageSize = Object(_lib_screen_utils__WEBPACK_IMPORTED_MODULE_34__["resolveStageSize"])(stageSizeMode, isFullSize);
     return isPlayerOnly ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_3___default.a.Fragment, null, isWindowFullScreen ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
-      className: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.fullscreenBackground,
+      className: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.fullscreenBackground,
       style: {
         backgroundColor: fullscreenBackgroundColor
       }
     }) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_stage_wrapper_jsx__WEBPACK_IMPORTED_MODULE_15__["default"], {
       isFullScreen: isFullScreen,
       isEmbedded: isEmbedded,
-      isRendererSupported: Object(_lib_tw_environment_support_prober__WEBPACK_IMPORTED_MODULE_36__["isRendererSupported"])(),
+      isRendererSupported: Object(_lib_tw_environment_support_prober__WEBPACK_IMPORTED_MODULE_35__["isRendererSupported"])(),
       isRtl: isRtl,
       loading: loading,
-      stageSize: _lib_layout_constants__WEBPACK_IMPORTED_MODULE_34__["STAGE_SIZE_MODES"].large,
+      stageSize: _lib_layout_constants__WEBPACK_IMPORTED_MODULE_33__["STAGE_SIZE_MODES"].large,
       vm: vm
     }, alertsVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_alerts_jsx__WEBPACK_IMPORTED_MODULE_27__["default"], {
-      className: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.alertsContainer
-    }) : null), alwaysEnabledModals) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_box_box_jsx__WEBPACK_IMPORTED_MODULE_17__["default"], _extends({
-      className: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.pageWrapper,
+      className: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.alertsContainer
+    }) : null), usernameModalVisible && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_tw_username_modal_jsx__WEBPACK_IMPORTED_MODULE_31__["default"], null), settingsModalVisible && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_tw_settings_modal_jsx__WEBPACK_IMPORTED_MODULE_32__["default"], null)) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_box_box_jsx__WEBPACK_IMPORTED_MODULE_17__["default"], _extends({
+      className: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.pageWrapper,
       dir: isRtl ? 'rtl' : 'ltr'
-    }, componentProps), alwaysEnabledModals, telemetryModalVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_telemetry_modal_telemetry_modal_jsx__WEBPACK_IMPORTED_MODULE_30__["default"], {
+    }, componentProps), usernameModalVisible && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_tw_username_modal_jsx__WEBPACK_IMPORTED_MODULE_31__["default"], null), settingsModalVisible && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_tw_settings_modal_jsx__WEBPACK_IMPORTED_MODULE_32__["default"], null), telemetryModalVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_telemetry_modal_telemetry_modal_jsx__WEBPACK_IMPORTED_MODULE_30__["default"], {
       isRtl: isRtl,
       isTelemetryEnabled: isTelemetryEnabled,
       onCancel: onTelemetryModalCancel,
@@ -8294,12 +8262,12 @@ const GUIComponent = props => {
     }) : null, isCreating ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_loader_loader_jsx__WEBPACK_IMPORTED_MODULE_16__["default"], {
       isFullScreen: true,
       messageId: "gui.loader.creating"
-    }) : null, Object(_lib_tw_environment_support_prober__WEBPACK_IMPORTED_MODULE_36__["isRendererSupported"])() ? null : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_webgl_modal_jsx__WEBPACK_IMPORTED_MODULE_23__["default"], {
+    }) : null, Object(_lib_tw_environment_support_prober__WEBPACK_IMPORTED_MODULE_35__["isRendererSupported"])() ? null : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_webgl_modal_jsx__WEBPACK_IMPORTED_MODULE_23__["default"], {
       isRtl: isRtl
-    }), Object(_lib_tw_environment_support_prober__WEBPACK_IMPORTED_MODULE_36__["isBrowserSupported"])() ? null : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_browser_modal_browser_modal_jsx__WEBPACK_IMPORTED_MODULE_24__["default"], {
+    }), Object(_lib_tw_environment_support_prober__WEBPACK_IMPORTED_MODULE_35__["isBrowserSupported"])() ? null : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_browser_modal_browser_modal_jsx__WEBPACK_IMPORTED_MODULE_24__["default"], {
       isRtl: isRtl
     }), tipsLibraryVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_tips_library_jsx__WEBPACK_IMPORTED_MODULE_25__["default"], null) : null, cardsVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_cards_jsx__WEBPACK_IMPORTED_MODULE_26__["default"], null) : null, alertsVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_alerts_jsx__WEBPACK_IMPORTED_MODULE_27__["default"], {
-      className: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.alertsContainer
+      className: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.alertsContainer
     }) : null, connectionModalVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_connection_modal_jsx__WEBPACK_IMPORTED_MODULE_29__["default"], {
       vm: vm
     }) : null, costumeLibraryVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_costume_library_jsx__WEBPACK_IMPORTED_MODULE_19__["default"], {
@@ -8321,7 +8289,7 @@ const GUIComponent = props => {
       canRemix: canRemix,
       canSave: canSave,
       canShare: canShare,
-      className: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.menuBarPosition,
+      className: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.menuBarPosition,
       enableCommunity: enableCommunity,
       isShared: isShared,
       logo: logo,
@@ -8342,11 +8310,11 @@ const GUIComponent = props => {
       onStartSelectingFileUpload: onStartSelectingFileUpload,
       onToggleLoginOpen: onToggleLoginOpen
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_box_box_jsx__WEBPACK_IMPORTED_MODULE_17__["default"], {
-      className: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.bodyWrapper
+      className: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.bodyWrapper
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_box_box_jsx__WEBPACK_IMPORTED_MODULE_17__["default"], {
-      className: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.flexWrapper
+      className: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.flexWrapper
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_box_box_jsx__WEBPACK_IMPORTED_MODULE_17__["default"], {
-      className: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.editorWrapper
+      className: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.editorWrapper
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react_tabs__WEBPACK_IMPORTED_MODULE_7__["Tabs"], {
       forceRenderTabPanel: true,
       className: tabClassNames.tabs,
@@ -8360,7 +8328,7 @@ const GUIComponent = props => {
       className: tabClassNames.tab
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("img", {
       draggable: false,
-      src: _icon_code_svg__WEBPACK_IMPORTED_MODULE_39___default.a
+      src: _icon_code_svg__WEBPACK_IMPORTED_MODULE_38___default.a
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_4__["FormattedMessage"], {
       defaultMessage: "Code",
       id: "gui.gui.codeTab"
@@ -8369,7 +8337,7 @@ const GUIComponent = props => {
       onClick: onActivateCostumesTab
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("img", {
       draggable: false,
-      src: _icon_costumes_svg__WEBPACK_IMPORTED_MODULE_40___default.a
+      src: _icon_costumes_svg__WEBPACK_IMPORTED_MODULE_39___default.a
     }), targetIsStage ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_4__["FormattedMessage"], {
       defaultMessage: "Backdrops",
       id: "gui.gui.backdropsTab"
@@ -8381,14 +8349,14 @@ const GUIComponent = props => {
       onClick: onActivateSoundsTab
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("img", {
       draggable: false,
-      src: _icon_sounds_svg__WEBPACK_IMPORTED_MODULE_41___default.a
+      src: _icon_sounds_svg__WEBPACK_IMPORTED_MODULE_40___default.a
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_4__["FormattedMessage"], {
       defaultMessage: "Sounds",
       id: "gui.gui.soundsTab"
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react_tabs__WEBPACK_IMPORTED_MODULE_7__["TabPanel"], {
       className: tabClassNames.tabPanel
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_box_box_jsx__WEBPACK_IMPORTED_MODULE_17__["default"], {
-      className: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.blocksWrapper
+      className: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.blocksWrapper
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_blocks_jsx__WEBPACK_IMPORTED_MODULE_11__["default"], {
       canUseCloud: canUseCloud,
       grow: 1,
@@ -8399,17 +8367,17 @@ const GUIComponent = props => {
       stageSize: stageSize,
       vm: vm
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_box_box_jsx__WEBPACK_IMPORTED_MODULE_17__["default"], {
-      className: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.extensionButtonContainer
+      className: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.extensionButtonContainer
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("button", {
-      className: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.extensionButton,
+      className: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.extensionButton,
       title: intl.formatMessage(messages.addExtension),
       onClick: onExtensionButtonClick
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("img", {
-      className: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.extensionButtonIcon,
+      className: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.extensionButtonIcon,
       draggable: false,
-      src: _icon_extensions_svg__WEBPACK_IMPORTED_MODULE_38___default.a
+      src: _icon_extensions_svg__WEBPACK_IMPORTED_MODULE_37___default.a
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_box_box_jsx__WEBPACK_IMPORTED_MODULE_17__["default"], {
-      className: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.watermark
+      className: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.watermark
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_watermark_jsx__WEBPACK_IMPORTED_MODULE_21__["default"], null))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react_tabs__WEBPACK_IMPORTED_MODULE_7__["TabPanel"], {
       className: tabClassNames.tabPanel
     }, costumesTabVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_costume_tab_jsx__WEBPACK_IMPORTED_MODULE_12__["default"], {
@@ -8422,15 +8390,15 @@ const GUIComponent = props => {
     }) : null)), backpackVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_backpack_jsx__WEBPACK_IMPORTED_MODULE_22__["default"], {
       host: backpackHost
     }) : null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_box_box_jsx__WEBPACK_IMPORTED_MODULE_17__["default"], {
-      className: classnames__WEBPACK_IMPORTED_MODULE_0___default()(_gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.stageAndTargetWrapper, _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a[stageSize])
+      className: classnames__WEBPACK_IMPORTED_MODULE_0___default()(_gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.stageAndTargetWrapper, _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a[stageSize])
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_stage_wrapper_jsx__WEBPACK_IMPORTED_MODULE_15__["default"], {
       isFullScreen: isFullScreen,
-      isRendererSupported: Object(_lib_tw_environment_support_prober__WEBPACK_IMPORTED_MODULE_36__["isRendererSupported"])(),
+      isRendererSupported: Object(_lib_tw_environment_support_prober__WEBPACK_IMPORTED_MODULE_35__["isRendererSupported"])(),
       isRtl: isRtl,
       stageSize: stageSize,
       vm: vm
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_box_box_jsx__WEBPACK_IMPORTED_MODULE_17__["default"], {
-      className: _gui_css__WEBPACK_IMPORTED_MODULE_37___default.a.targetWrapper
+      className: _gui_css__WEBPACK_IMPORTED_MODULE_36___default.a.targetWrapper
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_containers_target_pane_jsx__WEBPACK_IMPORTED_MODULE_13__["default"], {
       stageSize: stageSize,
       vm: vm
@@ -8506,7 +8474,7 @@ GUIComponent.propTypes = {
   renderLogin: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func,
   showComingSoon: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.bool,
   soundsTabVisible: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.bool,
-  stageSizeMode: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.oneOf(Object.keys(_lib_layout_constants__WEBPACK_IMPORTED_MODULE_34__["STAGE_SIZE_MODES"])),
+  stageSizeMode: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.oneOf(Object.keys(_lib_layout_constants__WEBPACK_IMPORTED_MODULE_33__["STAGE_SIZE_MODES"])),
   targetIsStage: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.bool,
   telemetryModalVisible: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.bool,
   tipsLibraryVisible: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.bool,
@@ -8532,7 +8500,7 @@ GUIComponent.defaultProps = {
   isShared: false,
   loading: false,
   showComingSoon: false,
-  stageSizeMode: _lib_layout_constants__WEBPACK_IMPORTED_MODULE_34__["STAGE_SIZE_MODES"].large
+  stageSizeMode: _lib_layout_constants__WEBPACK_IMPORTED_MODULE_33__["STAGE_SIZE_MODES"].large
 };
 const mapStateToProps = state => ({
   customStageSize: state.scratchGui.customStageSize,
@@ -16820,113 +16788,6 @@ const Loading = () => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.
 
 /***/ }),
 
-/***/ "./src/components/tw-security-manager-modal/security-manager-modal.css":
-/*!*****************************************************************************!*\
-  !*** ./src/components/tw-security-manager-modal/security-manager-modal.css ***!
-  \*****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../../node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader??ref--5-1!../../../node_modules/.pnpm/postcss-loader@3.0.0/node_modules/postcss-loader/src??postcss!./security-manager-modal.css */ "./node_modules/.pnpm/css-loader@1.0.1_webpack@4.46.0/node_modules/css-loader/index.js?!./node_modules/.pnpm/postcss-loader@3.0.0/node_modules/postcss-loader/src/index.js?!./src/components/tw-security-manager-modal/security-manager-modal.css");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../../node_modules/.pnpm/style-loader@0.23.1/node_modules/style-loader/lib/addStyles.js */ "./node_modules/.pnpm/style-loader@0.23.1/node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
-
-/***/ }),
-
-/***/ "./src/components/tw-security-manager-modal/security-manager-modal.jsx":
-/*!*****************************************************************************!*\
-  !*** ./src/components/tw-security-manager-modal/security-manager-modal.jsx ***!
-  \*****************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react_intl__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-intl */ "./node_modules/react-intl/lib/index.es.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _box_box_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../box/box.jsx */ "./src/components/box/box.jsx");
-/* harmony import */ var _containers_modal_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../containers/modal.jsx */ "./src/containers/modal.jsx");
-/* harmony import */ var _security_manager_modal_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./security-manager-modal.css */ "./src/components/tw-security-manager-modal/security-manager-modal.css");
-/* harmony import */ var _security_manager_modal_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_security_manager_modal_css__WEBPACK_IMPORTED_MODULE_5__);
-
-
-
-
-
-
-const messages = Object(react_intl__WEBPACK_IMPORTED_MODULE_0__["defineMessages"])({
-  title: {
-    "id": "tw.securityManager.title",
-    "defaultMessage": "Custom Extensions"
-  }
-});
-const SecurityManagerModalComponent = props => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_containers_modal_jsx__WEBPACK_IMPORTED_MODULE_4__["default"], {
-  className: _security_manager_modal_css__WEBPACK_IMPORTED_MODULE_5___default.a.modalContent,
-  onRequestClose: props.onDenied,
-  contentLabel: props.intl.formatMessage(messages.title),
-  id: "securitymanagermodal"
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_box_box_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], {
-  className: _security_manager_modal_css__WEBPACK_IMPORTED_MODULE_5___default.a.body
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_0__["FormattedMessage"], {
-  defaultMessage: "The project wants to load the custom extension:",
-  id: "tw.securityManager.label"
-})), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("p", {
-  className: _security_manager_modal_css__WEBPACK_IMPORTED_MODULE_5___default.a.extension
-}, props.extensionURL), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_0__["FormattedMessage"]
-// eslint-disable-next-line max-len
-, {
-  defaultMessage: "If you allow this, the extension's code will be downloaded and run on your computer.",
-  id: "tw.securityManager.download"
-})), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_0__["FormattedMessage"]
-// eslint-disable-next-line max-len
-, {
-  defaultMessage: "While the code will be sandboxed, we can't guarantee this will be 100% safe. Make sure you trust the author of this extension before continuing.",
-  id: "tw.securityManager.sandbox"
-})), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_box_box_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], {
-  className: _security_manager_modal_css__WEBPACK_IMPORTED_MODULE_5___default.a.buttons
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
-  className: _security_manager_modal_css__WEBPACK_IMPORTED_MODULE_5___default.a.denyButton,
-  onClick: props.onDenied
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_0__["FormattedMessage"], {
-  defaultMessage: "Deny",
-  id: "tw.securityManager.deny"
-})), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
-  className: _security_manager_modal_css__WEBPACK_IMPORTED_MODULE_5___default.a.allowButton,
-  onClick: props.onAllowed
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_0__["FormattedMessage"], {
-  defaultMessage: "Allow",
-  id: "tw.securityManager.allow"
-})))));
-SecurityManagerModalComponent.propTypes = {
-  intl: react_intl__WEBPACK_IMPORTED_MODULE_0__["intlShape"],
-  extensionURL: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string.isRequired,
-  onAllowed: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired,
-  onDenied: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired
-};
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_intl__WEBPACK_IMPORTED_MODULE_0__["injectIntl"])(SecurityManagerModalComponent));
-
-/***/ }),
-
 /***/ "./src/components/tw-settings-modal/help-black.svg":
 /*!*********************************************************!*\
   !*** ./src/components/tw-settings-modal/help-black.svg ***!
@@ -20829,6 +20690,17 @@ class ExtensionLibrary extends react__WEBPACK_IMPORTED_MODULE_2___default.a.Pure
         const parsedURL = isCustomURL ? parseExtensionURL(url) : url;
         this.props.vm.extensionManager.loadExtensionURL(parsedURL).then(() => {
           this.props.onCategorySelected(id);
+          if (isCustomURL) {
+            let newUrl = location.pathname;
+            if (location.search) {
+              newUrl += location.search;
+              newUrl += '&';
+            } else {
+              newUrl += '?';
+            }
+            newUrl += "extension=".concat(encodeURIComponent(url));
+            history.replaceState('', '', newUrl);
+          }
         }).catch(err => {
           // eslint-disable-next-line no-alert
           alert(err);
@@ -26911,121 +26783,6 @@ const mapDispatchToProps = dispatch => ({
   onLoadingStarted: () => dispatch(Object(_reducers_modals__WEBPACK_IMPORTED_MODULE_7__["openLoadingProject"])())
 });
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_intl__WEBPACK_IMPORTED_MODULE_4__["injectIntl"])(Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapStateToProps, mapDispatchToProps)(RestorePointLoader)));
-
-/***/ }),
-
-/***/ "./src/containers/tw-security-manager.jsx":
-/*!************************************************!*\
-  !*** ./src/containers/tw-security-manager.jsx ***!
-  \************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _lib_log__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../lib/log */ "./src/lib/log.js");
-/* harmony import */ var lodash_bindall__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash.bindall */ "./node_modules/lodash.bindall/index.js");
-/* harmony import */ var lodash_bindall__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_bindall__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _components_tw_security_manager_modal_security_manager_modal_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/tw-security-manager-modal/security-manager-modal.jsx */ "./src/components/tw-security-manager-modal/security-manager-modal.jsx");
-
-
-
-
-
-
-const SAFE_EXTENSION_SITES = [
-// Extensions that start with these URLs will be loaded automatically and without a sandbox.
-// Be careful adding entries to this list.
-// Each entry MUST have a trailing / after the domain for this to provide any security.
-'https://extensions.turbowarp.org/',
-// For development.
-'http://localhost:8000/'];
-class TWSecurityManagerComponent extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
-  constructor(props) {
-    super(props);
-    lodash_bindall__WEBPACK_IMPORTED_MODULE_4___default()(this, ['getSandboxMode', 'canLoadExtensionFromProject', 'handleAllowed', 'handleDenied']);
-    this.state = {
-      modalVisible: false,
-      modalURL: '',
-      modalCallback: null
-    };
-  }
-  componentDidMount() {
-    const securityManager = this.props.vm.extensionManager.securityManager;
-    securityManager.getSandboxMode = this.getSandboxMode;
-    securityManager.canLoadExtensionFromProject = this.canLoadExtensionFromProject;
-  }
-
-  /**
-   * @param {string} url The extension's URL
-   * @returns {string} The VM worker mode to use
-   */
-  getSandboxMode(url) {
-    if (SAFE_EXTENSION_SITES.some(site => url.startsWith(site))) {
-      _lib_log__WEBPACK_IMPORTED_MODULE_3__["default"].info("Loading extension ".concat(url, " unsandboxed"));
-      return 'unsandboxed';
-    }
-    return 'iframe';
-  }
-
-  /**
-   * @param {string} url The extension's URL
-   * @returns {boolean} Whether the extension can be loaded
-   */
-  async canLoadExtensionFromProject(url) {
-    if (SAFE_EXTENSION_SITES.some(site => url.startsWith(site))) {
-      _lib_log__WEBPACK_IMPORTED_MODULE_3__["default"].info("Loading extension ".concat(url, " automatically"));
-      return true;
-    }
-    const isAllowed = await new Promise(resolve => {
-      this.setState({
-        modalVisible: true,
-        modalURL: url,
-        modalCallback: resolve
-      });
-    });
-    this.setState({
-      modalVisible: false
-    });
-    return isAllowed;
-  }
-  handleAllowed() {
-    this.state.modalCallback(true);
-  }
-  handleDenied() {
-    this.state.modalCallback(false);
-  }
-  render() {
-    if (this.state.modalVisible) {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_tw_security_manager_modal_security_manager_modal_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        extensionURL: this.state.modalURL,
-        onAllowed: this.handleAllowed,
-        onDenied: this.handleDenied
-      });
-    }
-    return null;
-  }
-}
-TWSecurityManagerComponent.propTypes = {
-  vm: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.shape({
-    extensionManager: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.shape({
-      securityManager: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.shape({
-        getSandboxMode: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired,
-        canLoadExtensionFromProject: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired
-      }).isRequired
-    }).isRequired
-  }).isRequired
-};
-const mapStateToProps = state => ({
-  vm: state.scratchGui.vm
-});
-const mapDispatchToProps = () => ({});
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, mapDispatchToProps)(TWSecurityManagerComponent));
 
 /***/ }),
 
@@ -33311,18 +33068,6 @@ const messages = Object(react_intl__WEBPACK_IMPORTED_MODULE_0__["defineMessages"
     "id": "gui.opcodeLabels.answer",
     "defaultMessage": "answer"
   },
-  sensing_mousedown: {
-    "id": "tw.opcode.mousedown",
-    "defaultMessage": "mouse down?"
-  },
-  sensing_mousex: {
-    "id": "tw.opcode.mousex",
-    "defaultMessage": "mouse x"
-  },
-  sensing_mousey: {
-    "id": "tw.opcode.mousey",
-    "defaultMessage": "mouse y"
-  },
   sensing_loudness: {
     "id": "gui.opcodeLabels.loudness",
     "defaultMessage": "loudness"
@@ -33362,10 +33107,6 @@ const messages = Object(react_intl__WEBPACK_IMPORTED_MODULE_0__["defineMessages"
   sensing_timer: {
     "id": "gui.opcodeLabels.timer",
     "defaultMessage": "timer"
-  },
-  sensing_dayssince2000: {
-    "id": "tw.opcode.2000",
-    "defaultMessage": "days since 2000"
   }
 });
 class OpcodeLabels {
@@ -33424,15 +33165,6 @@ class OpcodeLabels {
       sensing_answer: {
         category: 'sensing'
       },
-      sensing_mousedown: {
-        category: 'sensing'
-      },
-      sensing_mousex: {
-        category: 'sensing'
-      },
-      sensing_mousey: {
-        category: 'sensing'
-      },
       sensing_loudness: {
         category: 'sensing'
       },
@@ -33443,9 +33175,6 @@ class OpcodeLabels {
         category: 'sensing'
       },
       sensing_timer: {
-        category: 'sensing'
-      },
-      sensing_dayssince2000: {
         category: 'sensing'
       }
     };
@@ -33500,9 +33229,6 @@ class OpcodeLabels {
 
     // Sensing
     this._opcodeMap.sensing_answer.labelFn = () => this._translator(messages.sensing_answer);
-    this._opcodeMap.sensing_mousedown.labelFn = () => this._translator(messages.sensing_mousedown);
-    this._opcodeMap.sensing_mousex.labelFn = () => this._translator(messages.sensing_mousex);
-    this._opcodeMap.sensing_mousey.labelFn = () => this._translator(messages.sensing_mousey);
     this._opcodeMap.sensing_loudness.labelFn = () => this._translator(messages.sensing_loudness);
     this._opcodeMap.sensing_username.labelFn = () => this._translator(messages.sensing_username);
     this._opcodeMap.sensing_current.labelFn = params => {
@@ -33524,7 +33250,6 @@ class OpcodeLabels {
       }
     };
     this._opcodeMap.sensing_timer.labelFn = () => this._translator(messages.sensing_timer);
-    this._opcodeMap.sensing_dayssince2000.labelFn = () => this._translator(messages.sensing_dayssince2000);
   }
 
   /**
@@ -33571,7 +33296,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var scratch_vm__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! scratch-vm */ "./node_modules/scratch-vm/src/index.js");
 /* harmony import */ var scratch_vm__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(scratch_vm__WEBPACK_IMPORTED_MODULE_11__);
 /* harmony import */ var _components_loader_tw_progress_monitor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../components/loader/tw-progress-monitor */ "./src/components/loader/tw-progress-monitor.js");
-/* harmony import */ var _tw_project_meta_fetcher_hoc_jsx__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./tw-project-meta-fetcher-hoc.jsx */ "./src/lib/tw-project-meta-fetcher-hoc.jsx");
 const _excluded = ["assetHost", "intl", "isLoadingProject", "loadingState", "onActivateTab", "onError", "onFetchedProjectData", "onProjectUnchanged", "projectHost", "projectId", "reduxProjectId", "setProjectId", "isFetchingWithId"];
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
@@ -33590,29 +33314,31 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 
 
 
-
 // TW: Temporary hack for project tokens
-const fetchProjectToken = async projectId => {
+const fetchProjectToken = projectId => {
   if (projectId === '0') {
-    return null;
+    return Promise.resolve(null);
   }
   // Parse ?token=abcdef
   const searchParams = new URLSearchParams(location.search);
   if (searchParams.has('token')) {
-    return searchParams.get('token');
+    return Promise.resolve(searchParams.get('token'));
   }
   // Parse #1?token=abcdef
   const hashParams = new URLSearchParams(location.hash.split('?')[1]);
   if (hashParams.has('token')) {
-    return hashParams.get('token');
+    return Promise.resolve(hashParams.get('token'));
   }
-  try {
-    const metadata = await Object(_tw_project_meta_fetcher_hoc_jsx__WEBPACK_IMPORTED_MODULE_13__["fetchProjectMeta"])(projectId);
-    return metadata.project_token;
-  } catch (e) {
-    _log__WEBPACK_IMPORTED_MODULE_8__["default"].error(e);
-    throw new Error('Cannot access project token. Project is probably unshared. See https://docs.turbowarp.org/unshared-projects');
-  }
+  return fetch("https://trampoline.turbowarp.org/proxy/projects/".concat(projectId)).then(r => {
+    if (!r.ok) return null;
+    return r.json();
+  }).then(dataOrNull => {
+    const token = dataOrNull ? dataOrNull.project_token : null;
+    return token;
+  }).catch(err => {
+    _log__WEBPACK_IMPORTED_MODULE_8__["default"].error(err);
+    return null;
+  });
 };
 
 /* Higher Order Component to provide behavior for loading projects by id. If
@@ -33671,6 +33397,7 @@ const ProjectFetcherHOC = function ProjectFetcherHOC(WrappedComponent) {
           projectUrl = "https://".concat(projectUrl);
         }
         assetPromise = _components_loader_tw_progress_monitor__WEBPACK_IMPORTED_MODULE_12__["fetchWithProgress"](projectUrl).then(r => {
+          this.props.vm.runtime.renderer.setPrivateSkinAccess(false);
           if (!r.ok) {
             throw new Error("Request returned status ".concat(r.status));
           }
@@ -36111,149 +35838,6 @@ const setSearchParams = params => {
   if (location.search !== newSearch) {
     history.replaceState(null, null, "".concat(location.pathname).concat(newSearch).concat(location.hash));
   }
-};
-
-
-/***/ }),
-
-/***/ "./src/lib/tw-project-meta-fetcher-hoc.jsx":
-/*!*************************************************!*\
-  !*** ./src/lib/tw-project-meta-fetcher-hoc.jsx ***!
-  \*************************************************/
-/*! exports provided: fetchProjectMeta, default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchProjectMeta", function() { return fetchProjectMeta; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TWProjectMetaFetcherHOC; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./log */ "./src/lib/log.js");
-/* harmony import */ var _reducers_project_title__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../reducers/project-title */ "./src/reducers/project-title.js");
-/* harmony import */ var _reducers_tw__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../reducers/tw */ "./src/reducers/tw.js");
-const _excluded = ["projectId", "onSetAuthor", "onSetDescription", "onSetProjectTitle"];
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-
-
-
-
-
-
-const fetchProjectMeta = async projectId => {
-  const urls = ["https://trampoline.turbowarp.org/proxy/projects/".concat(projectId), "https://trampoline.turbowarp.xyz/proxy/projects/".concat(projectId)];
-  let firstError;
-  for (const url of urls) {
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      if (res.ok) {
-        return data;
-      }
-      if (res.status === 404) {
-        throw new Error('Project is probably unshared');
-      }
-      throw new Error("Unexpected status code: ".concat(res.status));
-    } catch (err) {
-      if (!firstError) {
-        firstError = err;
-      }
-    }
-  }
-  throw firstError;
-};
-const getNoIndexTag = () => document.querySelector('meta[name="robots"][content="noindex"]');
-const setIndexable = indexable => {
-  if (indexable) {
-    const tag = getNoIndexTag();
-    if (tag) {
-      tag.remove();
-    }
-  } else if (!getNoIndexTag()) {
-    const tag = document.createElement('meta');
-    tag.name = 'robots';
-    tag.content = 'noindex';
-    document.head.appendChild(tag);
-  }
-};
-const TWProjectMetaFetcherHOC = function TWProjectMetaFetcherHOC(WrappedComponent) {
-  class ProjectMetaFetcherComponent extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
-    shouldComponentUpdate(nextProps) {
-      return this.props.projectId !== nextProps.projectId;
-    }
-    componentDidUpdate() {
-      // project title resetting is handled in titled-hoc.jsx
-      this.props.onSetAuthor('', '');
-      this.props.onSetDescription('', '');
-      const projectId = this.props.projectId;
-      // Don't try to load metadata for empty projects.
-      if (projectId === '0') {
-        return;
-      }
-      fetchProjectMeta(projectId).then(data => {
-        // If project ID changed, ignore the results.
-        if (this.props.projectId !== projectId) {
-          return;
-        }
-        const title = data.title;
-        if (title) {
-          this.props.onSetProjectTitle(title);
-        }
-        const authorName = data.author.username;
-        const authorThumbnail = "https://trampoline.turbowarp.org/avatars/".concat(data.author.id);
-        this.props.onSetAuthor(authorName, authorThumbnail);
-        const instructions = data.instructions || '';
-        const credits = data.description || '';
-        if (instructions || credits) {
-          this.props.onSetDescription(instructions, credits);
-        }
-        setIndexable(true);
-      }).catch(err => {
-        setIndexable(false);
-        if ("".concat(err).includes('unshared')) {
-          this.props.onSetDescription('unshared', 'unshared');
-        }
-        _log__WEBPACK_IMPORTED_MODULE_3__["default"].warn('cannot fetch project meta', err);
-      });
-    }
-    render() {
-      const _this$props = this.props,
-        {
-          /* eslint-disable no-unused-vars */
-          projectId,
-          onSetAuthor,
-          onSetDescription,
-          onSetProjectTitle
-        } = _this$props,
-        props = _objectWithoutProperties(_this$props, _excluded);
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(WrappedComponent, props);
-    }
-  }
-  ProjectMetaFetcherComponent.propTypes = {
-    projectId: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string,
-    onSetAuthor: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func,
-    onSetDescription: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func,
-    onSetProjectTitle: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func
-  };
-  const mapStateToProps = state => ({
-    projectId: state.scratchGui.projectState.projectId
-  });
-  const mapDispatchToProps = dispatch => ({
-    onSetAuthor: (username, thumbnail) => dispatch(Object(_reducers_tw__WEBPACK_IMPORTED_MODULE_5__["setAuthor"])({
-      username,
-      thumbnail
-    })),
-    onSetDescription: (instructions, credits) => dispatch(Object(_reducers_tw__WEBPACK_IMPORTED_MODULE_5__["setDescription"])({
-      instructions,
-      credits
-    })),
-    onSetProjectTitle: title => dispatch(Object(_reducers_project_title__WEBPACK_IMPORTED_MODULE_4__["setProjectTitle"])(title))
-  });
-  return Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, mapDispatchToProps)(ProjectMetaFetcherComponent);
 };
 
 
@@ -41161,6 +40745,7 @@ __webpack_require__.r(__webpack_exports__);
 const SET_VM = 'scratch-gui/vm/SET_VM';
 const defaultVM = new scratch_vm__WEBPACK_IMPORTED_MODULE_0___default.a();
 defaultVM.setCompatibilityMode(true);
+defaultVM.extensionManager.workerMode = 'iframe';
 defaultVM.runtime.cloudOptions.limit = _lib_tw_cloud_limits__WEBPACK_IMPORTED_MODULE_2__["MAXIMUM_CLOUD_VARIABLES"];
 defaultVM.attachStorage(_lib_storage__WEBPACK_IMPORTED_MODULE_1__["default"]);
 const initialState = defaultVM;
