@@ -31561,12 +31561,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _penguinmod_extensions_Proto_svg__WEBPACK_IMPORTED_MODULE_40___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_Proto_svg__WEBPACK_IMPORTED_MODULE_40__);
 /* harmony import */ var _penguinmod_extensions_ooplogo_png__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./penguinmod/extensions/ooplogo.png */ "./src/lib/libraries/extensions/penguinmod/extensions/ooplogo.png");
 /* harmony import */ var _penguinmod_extensions_ooplogo_png__WEBPACK_IMPORTED_MODULE_41___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_ooplogo_png__WEBPACK_IMPORTED_MODULE_41__);
-/* harmony import */ var _penguinmod_extensions_textext_png__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./penguinmod/extensions/textext.png */ "./src/lib/libraries/extensions/penguinmod/extensions/textext.png");
-/* harmony import */ var _penguinmod_extensions_textext_png__WEBPACK_IMPORTED_MODULE_42___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_textext_png__WEBPACK_IMPORTED_MODULE_42__);
-/* harmony import */ var _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./penguinmod/extensions/griffpatch_physics.png */ "./src/lib/libraries/extensions/penguinmod/extensions/griffpatch_physics.png");
-/* harmony import */ var _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_43___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_43__);
-/* harmony import */ var _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./penguinmod/extensions/griffpatch_physicsIcon.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/griffpatch_physicsIcon.svg");
-/* harmony import */ var _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_44___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_44__);
+/* harmony import */ var _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./penguinmod/extensions/griffpatch_physics.png */ "./src/lib/libraries/extensions/penguinmod/extensions/griffpatch_physics.png");
+/* harmony import */ var _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_42___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_42__);
+/* harmony import */ var _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./penguinmod/extensions/griffpatch_physicsIcon.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/griffpatch_physicsIcon.svg");
+/* harmony import */ var _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_43___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_43__);
 
 
 
@@ -31615,6 +31613,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+//import BetterTextBlocksExtensionIcon from './penguinmod/extensions/textext.png'
 
 // griffpatch stuff that hopefully we can keep pls plsplspl !!S!
 
@@ -31739,20 +31738,30 @@ __webpack_require__.r(__webpack_exports__);
   }),
   featured: true,
   incompatibleWithScratch: true
-}, {
-  name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "Better text blocks",
-    id: "BetterTextBlocks.ExtensionName"
-  }),
-  extensionId: 'text',
-  iconURL: _penguinmod_extensions_textext_png__WEBPACK_IMPORTED_MODULE_42___default.a,
-  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "Adds better text drawing blocks to pm!",
-    id: "BetterTextBlocks.ExtensionDescription"
-  }),
-  featured: true,
-  incompatibleWithScratch: true
-}, {
+},
+/*
+{
+    name: (
+        <FormattedMessage
+            defaultMessage="Better text blocks"
+            description="Name of the extension"
+            id="BetterTextBlocks.ExtensionName"
+        />
+    ),
+    extensionId: 'text',
+    iconURL: BetterTextBlocksExtensionIcon,
+    description: (
+        <FormattedMessage
+            defaultMessage="Adds better text drawing blocks to pm!"
+            description="Description of the extension"
+            id="BetterTextBlocks.ExtensionDescription"
+        />
+    ),
+    featured: true,
+    incompatibleWithScratch: true
+},
+*/
+{
   name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "Unite",
     id: "jwUnite.jwUniteExtension.name"
@@ -31781,14 +31790,14 @@ __webpack_require__.r(__webpack_exports__);
   incompatibleWithScratch: true
 }, {
   name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "Structs",
+    defaultMessage: "OOP",
     id: "jwStructs.jwStructsExtension.name"
   }),
   extensionId: 'jwStructs',
   iconURL: _penguinmod_extensions_ooplogo_png__WEBPACK_IMPORTED_MODULE_41___default.a,
   insetIconURL: _penguinmod_extensions_ooplogo_png__WEBPACK_IMPORTED_MODULE_41___default.a,
   description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "Structs for struct things. Useful for OOP.",
+    defaultMessage: "OOP blocks. OOp is a programming paradigm that uses objects and their interactions to design applications and computer programs.",
     id: "jwStructs.jwStructsExtension.description"
   }),
   featured: true,
@@ -31847,8 +31856,8 @@ __webpack_require__.r(__webpack_exports__);
   name: 'Physics',
   extensionId: 'griffpatch',
   collaborator: 'Griffpatch',
-  iconURL: _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_43___default.a,
-  insetIconURL: _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_44___default.a,
+  iconURL: _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_42___default.a,
+  insetIconURL: _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_43___default.a,
   description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "Box2D Physics extension created by Griffpatch.",
     id: "gui.extension.test.description"
@@ -32207,17 +32216,6 @@ module.exports = __webpack_require__.p + "static/assets/4bfd8156fc8a4ea8f495c5da
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "static/assets/3eb1599270a7125b2240e7ddc0d5bda1.png";
-
-/***/ }),
-
-/***/ "./src/lib/libraries/extensions/penguinmod/extensions/textext.png":
-/*!************************************************************************!*\
-  !*** ./src/lib/libraries/extensions/penguinmod/extensions/textext.png ***!
-  \************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "static/assets/197523614eaff63c76494f71e4486ff8.png";
 
 /***/ }),
 
