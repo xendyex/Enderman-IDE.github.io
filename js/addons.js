@@ -31,7 +31,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/.pnp
 
 
 // module
-exports.push([module.i, ".pause-btn {\n  width: 2rem;\n  height: 2rem;\n  padding: 0.375rem;\n  border-radius: 0.25rem;\n  user-select: none;\n  user-drag: none;\n  cursor: pointer;\n}\n\n.pause-btn:hover {\n  background-color: hsla(0, 100%, 65%, 0.15);\n}\n", ""]);
+exports.push([module.i, ".pause-btn {\n  width: 2rem;\n  height: 2rem;\n  padding: 0.375rem;\n  border-radius: 0.25rem;\n  user-select: none;\n  user-drag: none;\n  cursor: pointer;\n}\n\n.pause-btn:hover {\n  background-color: hsla(194, 100%, 50%, 0.15);\n}\n", ""]);
 
 // exports
 
