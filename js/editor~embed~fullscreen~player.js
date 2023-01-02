@@ -8552,7 +8552,7 @@ module.exports = __webpack_require__.p + "static/assets/5f4208a6b7257c456c018d57
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "static/assets/357871fe5e1cae3058f917944e1ba3b9.svg";
+module.exports = __webpack_require__.p + "static/assets/4d0adfe4fa9f620d0f0eeed63d7dcc9d.svg";
 
 /***/ }),
 
