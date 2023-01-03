@@ -6819,6 +6819,13 @@ const CustomProcedures = props => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1_
 }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_4__["FormattedMessage"], {
   defaultMessage: "Run without screen refresh",
   id: "gui.customProcedures.runWithoutScreenRefresh"
+})), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+  checked: props.return,
+  type: "checkbox",
+  onChange: props.onToggleReturn
+}), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_4__["FormattedMessage"], {
+  defaultMessage: "Custom reporter",
+  id: "gui.customProcedures.customReporter"
 }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_box_box_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], {
   className: _custom_procedures_css__WEBPACK_IMPORTED_MODULE_8___default.a.buttonRow
 }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
@@ -6843,7 +6850,9 @@ CustomProcedures.propTypes = {
   onCancel: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.func.isRequired,
   onOk: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.func.isRequired,
   onToggleWarp: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.func.isRequired,
-  warp: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.bool.isRequired
+  onToggleReturn: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.func.isRequired,
+  warp: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.bool.isRequired,
+  return: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.bool.isRequired
 };
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_intl__WEBPACK_IMPORTED_MODULE_4__["injectIntl"])(CustomProcedures));
 
