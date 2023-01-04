@@ -31882,9 +31882,9 @@ __webpack_require__.r(__webpack_exports__);
   disabled: false
 }, {
   name: "CloudLink",
-  extensionId: 'cloudlink',
-  iconURL: _penguinmod_extensions_cloudlinkIcon_svg__WEBPACK_IMPORTED_MODULE_45___default.a,
-  insetIconURL: _penguinmod_extensions_cloudlinkThumb_png__WEBPACK_IMPORTED_MODULE_44___default.a,
+  extensionId: 'cl',
+  iconURL: _penguinmod_extensions_cloudlinkThumb_png__WEBPACK_IMPORTED_MODULE_44___default.a,
+  insetIconURL: _penguinmod_extensions_cloudlinkIcon_svg__WEBPACK_IMPORTED_MODULE_45___default.a,
   description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "An extension to communicate with webservers with tons of blocks",
     id: "gui.extension.cloudlink.description"
