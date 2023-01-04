@@ -31880,20 +31880,26 @@ __webpack_require__.r(__webpack_exports__);
   }),
   featured: true,
   disabled: false
-}, {
+},
+/*
+{
   name: "CloudLink",
   extensionId: 'cl',
-  iconURL: _penguinmod_extensions_cloudlinkThumb_png__WEBPACK_IMPORTED_MODULE_44___default.a,
-  insetIconURL: _penguinmod_extensions_cloudlinkIcon_svg__WEBPACK_IMPORTED_MODULE_45___default.a,
-  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "An extension to communicate with webservers with tons of blocks",
-    id: "gui.extension.cl.description"
-  }),
+  iconURL: cloudlinkThumb,
+  insetIconURL: cloudlinkIcon,
+  description: (
+      <FormattedMessage
+          defaultMessage="An extension to communicate with webservers with tons of blocks"
+          description="Scratch utilities"
+          id="gui.extension.cl.description"
+      />
+  ),
   featured: true,
   collaborator: 'MikeDev',
   internetConnectionRequired: true,
   incompatibleWithScratch: true
-}, {
+},*/
+{
   name: 'micro:bit',
   extensionId: 'microbit',
   collaborator: 'micro:bit',
