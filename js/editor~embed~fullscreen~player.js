@@ -31574,6 +31574,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_42___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_griffpatch_physics_png__WEBPACK_IMPORTED_MODULE_42__);
 /* harmony import */ var _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./penguinmod/extensions/griffpatch_physicsIcon.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/griffpatch_physicsIcon.svg");
 /* harmony import */ var _penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_43___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_griffpatch_physicsIcon_svg__WEBPACK_IMPORTED_MODULE_43__);
+/* harmony import */ var _penguinmod_extensions_cloudlinkThumb_png__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./penguinmod/extensions/cloudlinkThumb.png */ "./src/lib/libraries/extensions/penguinmod/extensions/cloudlinkThumb.png");
+/* harmony import */ var _penguinmod_extensions_cloudlinkThumb_png__WEBPACK_IMPORTED_MODULE_44___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_cloudlinkThumb_png__WEBPACK_IMPORTED_MODULE_44__);
+/* harmony import */ var _penguinmod_extensions_cloudlinkIcon_svg__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./penguinmod/extensions/cloudlinkIcon.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/cloudlinkIcon.svg");
+/* harmony import */ var _penguinmod_extensions_cloudlinkIcon_svg__WEBPACK_IMPORTED_MODULE_45___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_cloudlinkIcon_svg__WEBPACK_IMPORTED_MODULE_45__);
 
 
 
@@ -31625,6 +31629,9 @@ __webpack_require__.r(__webpack_exports__);
 //import BetterTextBlocksExtensionIcon from './penguinmod/extensions/textext.png'
 
 // griffpatch stuff that hopefully we can keep pls plsplspl !!S!
+
+
+//cl waw
 
 
 /* harmony default export */ __webpack_exports__["default"] = ([{
@@ -31874,17 +31881,17 @@ __webpack_require__.r(__webpack_exports__);
   featured: true,
   disabled: false
 }, {
-  name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "TurboWarp Blocks",
-    id: "tw.twExtension.name"
-  }),
-  extensionId: 'tw',
-  iconURL: _tw_tw_svg__WEBPACK_IMPORTED_MODULE_31___default.a,
+  name: "CloudLink",
+  extensionId: 'cloudlink',
+  iconURL: _penguinmod_extensions_cloudlinkIcon_svg__WEBPACK_IMPORTED_MODULE_45___default.a,
+  insetIconURL: _penguinmod_extensions_cloudlinkThumb_png__WEBPACK_IMPORTED_MODULE_44___default.a,
   description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "Weird new blocks. Not compatible with Scratch.",
-    id: "tw.twExtension.description"
+    defaultMessage: "An extension to communicate with webservers with tons of blocks",
+    id: "gui.extension.cloudlink.description"
   }),
   featured: true,
+  collaborator: 'MikeDev',
+  internetConnectionRequired: true,
   incompatibleWithScratch: true
 }, {
   name: 'micro:bit',
@@ -32148,6 +32155,28 @@ module.exports = __webpack_require__.p + "static/assets/195b65444703293e0624ff4e
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "static/assets/4b74f619cb959e9ca7d72de2c1797a54.png";
+
+/***/ }),
+
+/***/ "./src/lib/libraries/extensions/penguinmod/extensions/cloudlinkIcon.svg":
+/*!******************************************************************************!*\
+  !*** ./src/lib/libraries/extensions/penguinmod/extensions/cloudlinkIcon.svg ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/assets/930323f74179aa022fd87939b3b2999c.svg";
+
+/***/ }),
+
+/***/ "./src/lib/libraries/extensions/penguinmod/extensions/cloudlinkThumb.png":
+/*!*******************************************************************************!*\
+  !*** ./src/lib/libraries/extensions/penguinmod/extensions/cloudlinkThumb.png ***!
+  \*******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/assets/64213236c2ea6563c91f8e7ade172578.png";
 
 /***/ }),
 
