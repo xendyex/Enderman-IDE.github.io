@@ -31880,26 +31880,20 @@ __webpack_require__.r(__webpack_exports__);
   }),
   featured: true,
   disabled: false
-},
-/*
-{
-  name: "CloudLink",
-  extensionId: 'cl',
-  iconURL: cloudlinkThumb,
-  insetIconURL: cloudlinkIcon,
-  description: (
-      <FormattedMessage
-          defaultMessage="An extension to communicate with webservers with tons of blocks"
-          description="Scratch utilities"
-          id="gui.extension.cl.description"
-      />
-  ),
+}, {
+  name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "TurboWarp Blocks",
+    id: "tw.twExtension.name"
+  }),
+  extensionId: 'tw',
+  iconURL: _tw_tw_svg__WEBPACK_IMPORTED_MODULE_31___default.a,
+  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Weird new blocks. Not compatible with Scratch.",
+    id: "tw.twExtension.description"
+  }),
   featured: true,
-  collaborator: 'MikeDev',
-  internetConnectionRequired: true,
   incompatibleWithScratch: true
-},*/
-{
+}, {
   name: 'micro:bit',
   extensionId: 'microbit',
   collaborator: 'micro:bit',
