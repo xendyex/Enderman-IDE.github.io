@@ -1209,9 +1209,9 @@ const BlockType = {
    */
   BUTTON: 'button',
   /**
-   * A text lable (not an actual block) for adding comments or labling blocks 
+   * A text label (not an actual block) for adding comments or labling blocks 
    */
-  LABLE: 'Lable',
+  LABEL: 'Label',
   /**
    * Command block
    */
