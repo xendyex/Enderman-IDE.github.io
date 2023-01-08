@@ -2405,7 +2405,7 @@ const PackagerIntegrationHOC = function PackagerIntegrationHOC(WrappedComponent)
     }
     handleClickPackager() {
       if (this.props.canOpenPackager) {
-        window.open("".concat(PACKAGER, "/?import_from=penguinmod.github.io/PenguinMod-Gui"));
+        window.open("".concat(PACKAGER, "/?import_from=https://penguinmod.github.io/PenguinMod-Gui"));
       }
     }
     handleMessage(e) {
