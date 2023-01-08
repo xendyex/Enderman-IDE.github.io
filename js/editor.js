@@ -2409,7 +2409,7 @@ const PackagerIntegrationHOC = function PackagerIntegrationHOC(WrappedComponent)
       }
     }
     handleMessage(e) {
-      if (e.origin !== PACKAGER) {
+      if (e.origin !== "https://penguinmod.github.io") {
         return;
       }
       if (!this.props.canOpenPackager) {
