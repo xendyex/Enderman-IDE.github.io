@@ -2383,7 +2383,8 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 
 
 
-const PACKAGER = 'https://penguinmod.github.io/PenguinMod-Packager';
+const PACKAGER_URL = 'https://penguinmod.github.io/PenguinMod-Packager';
+const PACKAGER_ORIGIN = PACKAGER_URL;
 const readBlobAsArrayBuffer = blob => new Promise((resolve, reject) => {
   const fr = new FileReader();
   fr.onload = () => resolve(fr.result);
@@ -2405,14 +2406,18 @@ const PackagerIntegrationHOC = function PackagerIntegrationHOC(WrappedComponent)
     }
     handleClickPackager() {
       if (this.props.canOpenPackager) {
-        window.open("".concat(PACKAGER, "/?import_from=").concat(location.origin));
+        window.open("".concat(PACKAGER_URL, "/?import_from=").concat(location.origin));
       }
     }
     handleMessage(e) {
-      if (e.origin !== "https://penguinmod.github.io") {
+      if (e.origin !== PACKAGER_ORIGIN) {
         return;
       }
       if (!this.props.canOpenPackager) {
+        return;
+      }
+      const packagerData = e.data.p4;
+      if (packagerData.type !== 'ready-for-import') {
         return;
       }
 
@@ -2421,7 +2426,7 @@ const PackagerIntegrationHOC = function PackagerIntegrationHOC(WrappedComponent)
         p4: {
           type: 'start-import'
         }
-      }, "https://penguinmod.github.io");
+      }, e.origin);
       this.props.vm.saveProjectSb3().then(readBlobAsArrayBuffer).then(buffer => {
         const name = "".concat(this.props.reduxProjectTitle, ".sb3");
         e.source.postMessage({
@@ -2430,14 +2435,14 @@ const PackagerIntegrationHOC = function PackagerIntegrationHOC(WrappedComponent)
             data: buffer,
             name
           }
-        }, "https://penguinmod.github.io", [buffer]);
+        }, e.origin, [buffer]);
       }).catch(err => {
         _log__WEBPACK_IMPORTED_MODULE_3__["default"].error(err);
         e.source.postMessage({
           p4: {
             type: 'cancel-import'
           }
-        }, "https://penguinmod.github.io");
+        }, e.origin);
       });
     }
     render() {
