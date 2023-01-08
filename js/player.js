@@ -2430,14 +2430,14 @@ const PackagerIntegrationHOC = function PackagerIntegrationHOC(WrappedComponent)
             data: buffer,
             name
           }
-        }, PACKAGER, [buffer]);
+        }, "https://penguinmod.github.io", [buffer]);
       }).catch(err => {
         _log__WEBPACK_IMPORTED_MODULE_3__["default"].error(err);
         e.source.postMessage({
           p4: {
             type: 'cancel-import'
           }
-        }, PACKAGER);
+        }, "https://penguinmod.github.io");
       });
     }
     render() {
