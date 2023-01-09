@@ -2384,7 +2384,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 
 
 const PACKAGER_URL = 'https://penguinmod.github.io/PenguinMod-Packager';
-const PACKAGER_ORIGIN = PACKAGER_URL;
+const PACKAGER_ORIGIN = "https://penguinmod.github.io";
 const readBlobAsArrayBuffer = blob => new Promise((resolve, reject) => {
   const fr = new FileReader();
   fr.onload = () => resolve(fr.result);
