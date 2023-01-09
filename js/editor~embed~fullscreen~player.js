@@ -31571,6 +31571,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _penguinmod_extensions_cloudlinkThumb_png__WEBPACK_IMPORTED_MODULE_44___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_cloudlinkThumb_png__WEBPACK_IMPORTED_MODULE_44__);
 /* harmony import */ var _penguinmod_extensions_cloudlinkIcon_svg__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./penguinmod/extensions/cloudlinkIcon.svg */ "./src/lib/libraries/extensions/penguinmod/extensions/cloudlinkIcon.svg");
 /* harmony import */ var _penguinmod_extensions_cloudlinkIcon_svg__WEBPACK_IMPORTED_MODULE_45___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_cloudlinkIcon_svg__WEBPACK_IMPORTED_MODULE_45__);
+/* harmony import */ var _penguinmod_extensions_gp_png__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./penguinmod/extensions/gp.png */ "./src/lib/libraries/extensions/penguinmod/extensions/gp.png");
+/* harmony import */ var _penguinmod_extensions_gp_png__WEBPACK_IMPORTED_MODULE_46___default = /*#__PURE__*/__webpack_require__.n(_penguinmod_extensions_gp_png__WEBPACK_IMPORTED_MODULE_46__);
 
 
 
@@ -31625,6 +31627,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 //cl waw
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ([{
@@ -31870,6 +31873,16 @@ __webpack_require__.r(__webpack_exports__);
   description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "Box2D Physics extension created by Griffpatch.",
     id: "gui.extension.test.description"
+  }),
+  featured: true,
+  disabled: false
+}, {
+  name: 'GamePad',
+  extensionId: 'GamepadExtension',
+  iconURL: _penguinmod_extensions_gp_png__WEBPACK_IMPORTED_MODULE_46___default.a,
+  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "A cool extension to interact with gamepads(aka controllers) such as xbox controllers",
+    id: "GamepadExtension.GamepadExtension.description"
   }),
   featured: true,
   disabled: false
@@ -32181,6 +32194,17 @@ module.exports = __webpack_require__.p + "static/assets/64213236c2ea6563c91f8e7a
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "static/assets/333b5b49e1753ebb8908212c06a354a3.png";
+
+/***/ }),
+
+/***/ "./src/lib/libraries/extensions/penguinmod/extensions/gp.png":
+/*!*******************************************************************!*\
+  !*** ./src/lib/libraries/extensions/penguinmod/extensions/gp.png ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/assets/5b8017a3c693ce74a3aa4e07f08d93d1.png";
 
 /***/ }),
 
