@@ -1,8 +1,8 @@
 (window["webpackJsonpGUI"] = window["webpackJsonpGUI"] || []).push([["iframe-extension-worker"],{
 
-/***/ "./node_modules/.pnpm/github.com+PenguinMod+PenguinMod-Vm@921baa42eb5ad0_rue262te7j5ibnc7hem37hnipq/node_modules/scratch-vm/src/extension-support/tw-load-script-as-plain-text.js!./node_modules/scratch-vm/src/extension-support/tw-iframe-extension-worker-entry.js":
+/***/ "./node_modules/.pnpm/github.com+PenguinMod+PenguinMod-Vm@a35eb1dec48ec8_godj6frg25j7j5oxb6eoberwdi/node_modules/scratch-vm/src/extension-support/tw-load-script-as-plain-text.js!./node_modules/scratch-vm/src/extension-support/tw-iframe-extension-worker-entry.js":
 /*!****************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/.pnpm/github.com+PenguinMod+PenguinMod-Vm@921baa42eb5ad0_rue262te7j5ibnc7hem37hnipq/node_modules/scratch-vm/src/extension-support/tw-load-script-as-plain-text.js!./node_modules/scratch-vm/src/extension-support/tw-iframe-extension-worker-entry.js ***!
+  !*** ./node_modules/.pnpm/github.com+PenguinMod+PenguinMod-Vm@a35eb1dec48ec8_godj6frg25j7j5oxb6eoberwdi/node_modules/scratch-vm/src/extension-support/tw-load-script-as-plain-text.js!./node_modules/scratch-vm/src/extension-support/tw-iframe-extension-worker-entry.js ***!
   \****************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
@@ -19,7 +19,7 @@ module.exports = "/******/ (function(modules) { // webpackBootstrap\n/******/ \t
 /***/ (function(module, exports, __webpack_require__) {
 
 const uid = __webpack_require__(/*! ../util/uid */ "./node_modules/scratch-vm/src/util/uid.js");
-const frameSource = __webpack_require__(/*! ./tw-load-script-as-plain-text!./tw-iframe-extension-worker-entry */ "./node_modules/.pnpm/github.com+PenguinMod+PenguinMod-Vm@921baa42eb5ad0_rue262te7j5ibnc7hem37hnipq/node_modules/scratch-vm/src/extension-support/tw-load-script-as-plain-text.js!./node_modules/scratch-vm/src/extension-support/tw-iframe-extension-worker-entry.js");
+const frameSource = __webpack_require__(/*! ./tw-load-script-as-plain-text!./tw-iframe-extension-worker-entry */ "./node_modules/.pnpm/github.com+PenguinMod+PenguinMod-Vm@a35eb1dec48ec8_godj6frg25j7j5oxb6eoberwdi/node_modules/scratch-vm/src/extension-support/tw-load-script-as-plain-text.js!./node_modules/scratch-vm/src/extension-support/tw-iframe-extension-worker-entry.js");
 const none = "'none'";
 const featurePolicy = {
   'accelerometer': none,
