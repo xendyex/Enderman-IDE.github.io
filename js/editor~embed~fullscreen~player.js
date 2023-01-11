@@ -31750,30 +31750,20 @@ __webpack_require__.r(__webpack_exports__);
   }),
   featured: true,
   incompatibleWithScratch: true
-},
-/*
-{
-    name: (
-        <FormattedMessage
-            defaultMessage="Better text blocks"
-            description="Name of the extension"
-            id="BetterTextBlocks.ExtensionName"
-        />
-    ),
-    extensionId: 'text',
-    iconURL: BetterTextBlocksExtensionIcon,
-    description: (
-        <FormattedMessage
-            defaultMessage="Adds better text drawing blocks to pm!"
-            description="Description of the extension"
-            id="BetterTextBlocks.ExtensionDescription"
-        />
-    ),
-    featured: true,
-    incompatibleWithScratch: true
-},
-*/
-{
+}, {
+  name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Better text blocks",
+    id: "BetterTextBlocks.ExtensionName"
+  }),
+  extensionId: 'text',
+  iconURL: BetterTextBlocksExtensionIcon,
+  description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
+    defaultMessage: "Adds better text drawing blocks to pm!",
+    id: "BetterTextBlocks.ExtensionDescription"
+  }),
+  featured: true,
+  incompatibleWithScratch: true
+}, {
   name: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
     defaultMessage: "Unite",
     id: "jwUnite.jwUniteExtension.name"
