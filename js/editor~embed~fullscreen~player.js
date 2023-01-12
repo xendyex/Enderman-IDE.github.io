@@ -31759,7 +31759,7 @@ __webpack_require__.r(__webpack_exports__);
   extensionId: 'text',
   iconURL: _penguinmod_extensions_textext_png__WEBPACK_IMPORTED_MODULE_42___default.a,
   description: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_1__["FormattedMessage"], {
-    defaultMessage: "Adds better text drawing blocks to pm!",
+    defaultMessage: "Adds the ability to manipulate what the say block displays",
     id: "BetterTextBlocks.ExtensionDescription"
   }),
   featured: true,
