@@ -1399,6 +1399,14 @@ const myBlocks = function () {
     `;
 };
 
+const joetest = function (isInitialSetup) {
+    return `
+    <category name="JoeTest" colour="#f7e663" secondaryColour="#4a56ff">
+
+    </category>
+    `;
+};
+
 const liveTests = function () {
     return `
     <category name="Live Tests" id="liveTests" colour="#FF0000" secondaryColour="#FF0000">
@@ -1478,6 +1486,7 @@ const makeToolboxXML = function (isInitialSetup, isStage = true, targetId, categ
     const variablesXML = moveCategory('variables') || variables(isInitialSetup, isStage, targetId);
     const listsXML = moveCategory('lists') || lists(isInitialSetup, isStage, targetId);
     const myBlocksXML = moveCategory('procedures') || myBlocks(isInitialSetup, isStage, targetId);
+    const joetestXML = moveCategory('joetest') || joetest(isInitialSetup);
     const liveTestsXML = moveCategory('liveTests') || liveTests(isLiveTest);
 
     const everything = [
@@ -1491,7 +1500,8 @@ const makeToolboxXML = function (isInitialSetup, isStage = true, targetId, categ
         operatorsXML,
         variablesXML,
         listsXML,
-        myBlocksXML
+        myBlocksXML,
+        joetestXML
     ];
     if (isLiveTest) everything.push(liveTestsXML);
 
